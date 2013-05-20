@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :product do
     sequence(:title){|x| "Product #{x}"}
     sequence(:description ){|x| "Description #{x}"}
-    real_price '1.00'
+    price '1.00'
 
     trait :with_photo do
      sequence(:photo){|x| "http://Photo.com/#{x}"} 
