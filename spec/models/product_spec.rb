@@ -63,102 +63,99 @@ describe Product do
    end
  end
 
-    context "concerning categories" do
-      describe ".add_to_category" do
-        it "can take category name" do
-          @product.add_to_category "Category_1"
-          @product.list_categories.should include("Category_1")
-        end
-
-        it "can take category object" do 
-          category = double("Category")
-          category.stub(:name).and_return("Category_1")
-          category.stub(:class).and_return(Category)
-          @product.add_to_category category
-          @product.list_categories.should include("Category_1")
-        end
-      end
-
-      describe ".list_categories" do
-        it "gets only names of categories the product belongs to" do
-          @product.add_to_category "Category_1"
-          category_2 = Category.get "Category_2"
-          @product.list_categories.should include("Category_1")
-          @product.list_categories.should_not include("Category_2")
-        end
-      end
-
+ context "concerning categories" do
+  describe ".add_to_category" do
+    it "can take category name" do
+      @product.add_to_category "Category_1"
+      @product.list_categories.should include("Category_1")
     end
 
-    context "concerning reviews" do
-      describe "reviews" do
-        before(:each) do
-          @review_1 = double("Review")
-          @review_1.stub(:note).and_return(5)
-          @review_2 = double("Review")
-          @review_2.stub(:note).and_return(1)
-        end
-        it "has reviews" do
-         @product.add_review @review_1
-         @product.reviews.should include(@review_1)
-       end
-
-       it "has raiting, based on reviews" do
-        @product.rating.should == 0
-
-        @product.add_review @review_1
-        @product.rating.should == 5
-
-        @product.add_review @review_2
-        @product.rating.should == 3
-      end
-
-      it "rating can only by integer or half" do
-       @product.add_review @review_1
-       @product.add_review @review_1
-       @product.add_review @review_2
-       @product.rating.should == 3.5
-     end
-   end
-
-   describe ".on_sale" do
-    it "by default is not on sale" do
-      @product.should_not be_on_sale
-    end
-
-    it "can be set to sale" do
-      @product.start_selling
-      @product.should be_on_sale
-    end
-
-    it "can be retired from selling" do
-      @product.start_selling
-      @product.retire
-      @product.should_not be_on_sale
-    end
-
-    it "can be found be sale status" do
-      Product.find_on_sale.should_not include(@product)
-      @product.start_selling
-      Product.find_on_sale.should include(@product)
+    it "can take category object" do 
+      category = FactoryGirl.build(:category)
+      @product.add_to_category category
+      @product.list_categories.should include(category.name)
     end
   end
 
-  describe "discounts" do
-    it "can be discounted" do
-     @product.price.should == @product.real_price 
-     @product.on_discount 50
-     @product.price.should == 0.5*@product.real_price
+  describe ".list_categories" do
+    it "gets only names of categories the product belongs to" do
+      @product.add_to_category "Category_1"
+      category_2 = Category.get_by_name "Category_2"
+      @product.list_categories.should include("Category_1")
+      @product.list_categories.should_not include("Category_2")
+    end
+  end
+
+end
+
+context "concerning reviews" do
+  describe "reviews" do
+    before(:each) do
+      @review_1 = FactoryGirl.build(:review, note: 5)
+      @review_2 = FactoryGirl.build(:review, note: 1)
+    end
+
+    it "has reviews" do
+     @product.add_review @review_1
+     @product.reviews.should include(@review_1)
    end
 
-   it "can be put off discount" do
-     @product.price.should == @product.real_price 
-     @product.on_discount 50
-     @product.price.should == 0.5*@product.real_price
-     @product.off_discount
-     @product.price.should == @product.real_price
-   end
+   it "has raiting, based on reviews" do
+    @product.rating.should == 0
+
+    @product.add_review @review_1
+    @product.rating.should == 5
+
+    @product.add_review @review_2
+    @product.rating.should == 3
+  end
+
+  it "rating can only by integer or half" do
+   @product.add_review @review_1
+   @product.add_review @review_1
+   @product.add_review @review_2
+   @product.rating.should == 3.5
  end
+end
+
+describe ".on_sale" do
+  it "by default is not on sale" do
+    @product.should_not be_on_sale
+  end
+
+  it "can be set to sale" do
+    @product.start_selling
+    @product.should be_on_sale
+  end
+
+  it "can be retired from selling" do
+    @product.start_selling
+    @product.retire
+    @product.should_not be_on_sale
+  end
+
+  it "can be found be sale status" do
+    Product.find_on_sale.should_not include(@product)
+    @product.start_selling
+    Product.find_on_sale.should include(@product)
+  end
+end
+
+describe "discounts" do
+  it "can be discounted" do
+   @product.price.should == @product.real_price 
+   @product.on_discount 50
+   @product.price.should == 0.5*@product.real_price
+ end
+
+ it "can be put off discount" do
+   @product.price.should == @product.real_price 
+   @product.on_discount 50
+   @product.price.should == 0.5*@product.real_price
+   @product.off_discount
+   @product.price.should == @product.real_price
+ end
+end
 end
 end
 end
