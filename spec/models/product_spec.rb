@@ -134,26 +134,27 @@ describe ".on_sale" do
     @product.should_not be_on_sale
   end
 
-  it "can be found be sale status" do
+  it "can be found by sale status" do
     Product.find_on_sale.should_not include(@product)
     @product.start_selling
+    @product.save
     Product.find_on_sale.should include(@product)
   end
 end
 
 describe "discounts" do
   it "can be discounted" do
-   @product.price.should == @product.real_price 
+   @product.price.should == @product.price_with_discount 
    @product.on_discount 50
-   @product.price.should == 0.5*@product.real_price
+   @product.price_with_discount.should == 0.5*@product.price
  end
 
  it "can be put off discount" do
-   @product.price.should == @product.real_price 
+   @product.price_with_discount.should == @product.price
    @product.on_discount 50
-   @product.price.should == 0.5*@product.real_price
+   @product.price_with_discount.should == 0.5*@product.price
    @product.off_discount
-   @product.price.should == @product.real_price
+   @product.price_with_discount.should == @product.price
  end
 end
 end

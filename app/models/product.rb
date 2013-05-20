@@ -5,6 +5,8 @@ class Product < ActiveRecord::Base
   validates :price, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
   validates :photo, format: {with: %r{https?://(www\.)?\w+(\.\w+)+} }, allow_nil: true
 
+  scope :find_on_sale, ->{where(on_sale: true)}
+
   def categories
   	@categories ||= []
   end
@@ -27,6 +29,26 @@ class Product < ActiveRecord::Base
 
   def rating
   	reviews.size > 0 ? calculate_rating : 0
+  end
+
+  def start_selling
+  	self.on_sale = true
+  end
+
+  def retire
+  	self.on_sale = false
+  end
+
+  def price_with_discount
+  	self.price*self.discount.to_f/100.0
+  end
+
+  def on_discount discount
+  	self.discount = discount
+  end
+
+  def off_discount
+  	self.discount = 100
   end
 
   private
