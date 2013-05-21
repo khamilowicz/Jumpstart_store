@@ -18,11 +18,11 @@ class Order < ActiveRecord::Base
 	end
 
 	def total_price
-		self.products.reduce(0){|sum, product| sum+= product.price_with_discount}
+		self.products.reduce(0){|sum, product| sum+= product.price}
 	end
 
 	def total_discount
-		price_without_discount = self.products.reduce(0){|sum, product| sum+= product.price}
+		price_without_discount = self.products.reduce(0){|sum, product| sum+= product.base_price}
 		100*total_price/price_without_discount
 	end
 
@@ -48,6 +48,5 @@ class Order < ActiveRecord::Base
 	def update_status_date
 		self.status_change_date = Time.now
 	end
-  # attr_accessor :address
-  # attr_accessible :title, :body
+
 end

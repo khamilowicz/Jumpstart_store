@@ -138,17 +138,17 @@ end
 
 describe "discounts" do
   it "can be discounted" do
-   @product.price.should == @product.price_with_discount 
+   @product.price.should == @product.base_price
    @product.on_discount 50
-   @product.price_with_discount.should == 0.5*@product.price
+   @product.price.should == 0.5*@product.base_price
  end
 
  it "can be put off discount" do
-   @product.price_with_discount.should == @product.price
+   @product.price.should == @product.base_price
    @product.on_discount 50
-   @product.price_with_discount.should == 0.5*@product.price
+   @product.price.should == 0.5*@product.base_price
    @product.off_discount
-   @product.price_with_discount.should == @product.price
+   @product.price.should == @product.base_price
  end
 end
 end

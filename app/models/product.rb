@@ -2,7 +2,7 @@ class Product < ActiveRecord::Base
   # attr_accessible :title, :body
   validates :title, presence: true, uniqueness: true
   validates_presence_of :description
-  validates :price, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
+  validates :base_price, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
   validates :photo, format: {with: %r{https?://(www\.)?\w+(\.\w+)+} }, allow_nil: true
 
   scope :find_on_sale, ->{where(on_sale: true)}
@@ -35,17 +35,15 @@ class Product < ActiveRecord::Base
   	reviews.size > 0 ? calculate_rating : 0
   end
 
-  def start_selling
-  	self.on_sale = true
+  def start_selling; self.on_sale = true; end
+
+  def retire; self.on_sale = false; end
+
+  def price
+  	self.base_price ? self.base_price*self.discount.to_f/100.0 : nil
   end
 
-  def retire
-  	self.on_sale = false
-  end
-
-  def price_with_discount
-  	self.price*self.discount.to_f/100.0
-  end
+  alias_attribute :price= , :base_price=
 
   def on_discount discount
   	self.discount = discount
@@ -55,7 +53,8 @@ class Product < ActiveRecord::Base
   	self.discount = 100
   end
 
-  private
+
+   private
 
   def calculate_rating
   	sum_of_notes = reviews.reduce(0){|sum, review| sum+=review.note}
