@@ -61,26 +61,38 @@ describe Category do
     
   end
 
-  it "can be put on sale" do
-    product_1 = FactoryGirl.create(:product)
-    product_2 = FactoryGirl.create(:product)
-    product_3 = FactoryGirl.create(:product)
-    product_1.add_to_category "Category_11"
-    product_2.add_to_category "Category_11"
-    product_3.add_to_category "Category_2"
-    
-    category = Category.get "Category_11"
-    category.all_on_sale?.should be_false
-    category.put_on_sale
-    category.all_on_sale?.should be_true
+  describe "concerning putting on sale" do
+
+    before(:each) do
+      @category_name = "Category_1"
+      @product_1 = FactoryGirl.create(:product)
+      @product_2 = FactoryGirl.create(:product)
+      @product_3 = FactoryGirl.create(:product)
+      @product_1.add_to_category @category_name
+      @product_2.add_to_category @category_name 
+      @product_3.add_to_category "Category_2"
+      @category = Category.get(@category_name)
+    end
+
+    it ".all_on_sale? tells if every product in category is on sale" do
+      @category.all_on_sale?.should be_false
+      @category.products.each(&:start_selling)
+      @category.all_on_sale?.should be_true
+      @category.products.first.retire
+      @category.all_on_sale?.should be_false
+    end
+
+    it ".start_selling affects every product in category" do
+      @category.all_on_sale?.should be_false
+      @category.start_selling
+      @category.all_on_sale?.should be_true
+    end
   end
 
   it "can be discounted" do
     category = Category.get "discount"
-    product_1 = Product.new 
-    product_1.price = 1
-    product_2 = Product.new 
-    product_2.price = 2
+    product_1 = FactoryGirl.create(:product,price: 1) 
+    product_2 = FactoryGirl.create(:product,price: 2) 
     category.add_product product_1
     category.add_product product_2
     category.total_price.should == 3

@@ -29,7 +29,19 @@ class Category < ActiveRecord::Base
   end
 
   def total_price
-  	
+  	self.products.reduce(0){|sum, product| sum+=product.price_with_discount}
+  end
+
+  def all_on_sale?
+  	self.products.all?(&:on_sale?)
+  end
+
+  def start_selling
+  	self.products.each(&:start_selling)
+  end
+
+  def discount percent
+  	self.products.each{|product| product.on_discount percent}
   end
 
 end
