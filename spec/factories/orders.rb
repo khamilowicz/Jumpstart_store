@@ -2,6 +2,11 @@
 
 FactoryGirl.define do
   factory :order do
-    user nil
+
+  	address "Some address"
+    after(:build) do |order|
+    	order.user = FactoryGirl.build(:user)
+    	order.products << FactoryGirl.build(:product)
+    end
   end
 end
