@@ -68,13 +68,7 @@ describe Product do
     it "can take category name" do
       @product.add_to_category "Category_1"
       @product.list_categories.should include("Category_1")
-    end
-
-    it "can take category object" do 
-      category = FactoryGirl.build(:category)
-      @product.add_to_category category
-      @product.list_categories.should include(category.name)
-    end
+   end
   end
 
   describe ".list_categories" do

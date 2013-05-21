@@ -11,11 +11,41 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130520210407) do
+ActiveRecord::Schema.define(:version => 20130521094259) do
+
+  create_table "carts", :force => true do |t|
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "carts", ["user_id"], :name => "index_carts_on_user_id"
 
   create_table "categories", :force => true do |t|
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "name"
+  end
+
+  create_table "category_products", :force => true do |t|
+    t.integer "category_id"
+    t.integer "product_id"
+  end
+
+  create_table "orders", :force => true do |t|
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "orders", ["user_id"], :name => "index_orders_on_user_id"
+
+  create_table "product_users", :force => true do |t|
+    t.integer  "product_id"
+    t.integer  "user_id"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.boolean  "in_cart",    :default => false
   end
 
   create_table "products", :force => true do |t|
@@ -27,11 +57,23 @@ ActiveRecord::Schema.define(:version => 20130520210407) do
     t.string   "photo"
     t.boolean  "on_sale",                                   :default => false
     t.integer  "discount"
+    t.integer  "order_id"
   end
 
   create_table "reviews", :force => true do |t|
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "users", :force => true do |t|
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.string   "nick"
+    t.string   "email"
+    t.boolean  "admin",      :default => false
+    t.boolean  "guest",      :default => true
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
 end

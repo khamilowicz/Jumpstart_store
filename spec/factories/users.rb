@@ -2,18 +2,9 @@
 
 FactoryGirl.define do
   factory :user do
-    realname "John Smith"
-    
-    sequence(:nick){|n| "Nick_#{n}"}
+    first_name "John"
+    last_name "Smith"
     sequence(:email){|n| "#{n}@gmail.com"}
-    admin false
-    guest false
-
-    trait :guest do
-      guest true 
-    end
-    
-     
 
     trait :admin do
     	admin true 

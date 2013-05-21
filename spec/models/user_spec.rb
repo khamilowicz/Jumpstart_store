@@ -1,42 +1,15 @@
 require 'spec_helper'
-# require "rspec/autorun"
-# require "rspec/mocks"
-# require_relative '../../app/models/user.rb'
-# require_relative '../../app/models/order.rb'
-
 
 describe User do
   before(:each) do
-    @user = User.new
-    @user.email = "John.Smith@gmail.co.uk"
-    @user.first_name = "John"
-    @user.last_name = "Smith"
-
+    @user = FactoryGirl.build(:user)
   end
-  context "new" do
 
-    it "is created from hash" do
-      attributes = {first_name: "John"}
-      user = User.new(attributes)
-      user.first_name.should == 'John'
-    end
+  context "to be valid must have" do
 
-    it "prevents from creating malicious attributes" do
-      attributes = {first_name: "John", custom_attribute: "nil'; def danger; 'DANGER'; end; ' nil;"}
-      user = User.new(attributes)
-      user.first_name.should == "John"
-      expect{user.danger}.to raise_error
-      attributes = {first_name: "John", last_name:"nil'; def danger; 'DANGER'; end; ' nil;"}
-      user = User.new(attributes)
-      user.first_name.should == "John"
-      expect{user.danger}.to raise_error
-    end
-  end
-  context "to be valid" do
+    context "email that is" do
 
-    context "must have email that is" do
-
-      it "in email format" do
+      it "in right format" do
         @user.email = 'john.smith@gmail.co.uk'
         @user.should be_valid
 
@@ -45,16 +18,13 @@ describe User do
       end
 
       it "unique" do
-        pending "delete after implementing database"
-        user_2 = User.new 
-        user_2.email = 'John.Smith@gmail.co.uk'
-        user_2.first_name = 'John'
-        user_2.last_name = 'Smith'
+        user_2 = FactoryGirl.build(:user, email: @user.email) 
+        @user.save
         user_2.should_not be_valid
       end
     end
 
-    it "A user must have a full name that is not blank" do
+    it "a full name that is not blank" do
       @user.should be_valid
       @user.first_name = ''
       @user.should_not be_valid
@@ -64,9 +34,10 @@ describe User do
       @user.last_name = "Smith"
       @user.full_name.should == 'John Smith'
     end
+  end
     
 
-    it "A user may optionally provide a display name that must be no less than 2 characters long and no more than 32" do
+    it "may optionally provide a display name that must be no less than 2 characters long and no more than 32" do
       @user.display_name.should == 'John Smith'
       @user.display_name = "Jonesey"
       @user.should be_valid
@@ -75,18 +46,14 @@ describe User do
       @user.display_name = 'A'*33
       @user.should_not be_valid
     end
-  end
 
   context "concerning products" do
     before(:each) do
-      @product = double("Product")
-      @product.stub(:on_sale?).and_return(true)
-      @product_1 = double("Product")
-      @product_1.stub(:on_sale?).and_return(true)
-      @product_2 = double("Product")
-      @product_2.stub(:on_sale?).and_return(true)
-      @product_3 = double("Product")
-      @product_3.stub(:on_sale?).and_return(true)
+        @user.save
+      @product = FactoryGirl.build(:product, on_sale: true)
+      @product_1 = FactoryGirl.build(:product)
+      @product_2 = FactoryGirl.build(:product)
+      @product_3 = FactoryGirl.build(:product)
       @user.add_product @product 
     end
     
@@ -102,18 +69,17 @@ describe User do
       end
 
       it "cannot add product that is retired" do
-        product = double("Product")
-        product.stub(:on_sale?).and_return(false)
-        @user.add_product product
-        @user.products.should_not include(product)
+        @product_1.should_not be_on_sale
+        @user.add_product @product_1
+        @user.products.should_not include(@product_1)
       end
 
-      it "lets save user with product" do
-      end
     end
 
     context "which he has" do
       before(:each) do
+        @product_1.start_selling
+        @product_2.start_selling
        @user.add_product @product_1
        @user.add_product @product_2
      end
@@ -149,13 +115,20 @@ describe User do
 
   context "concerning orders" do
     before(:each) do
+      @product_1.save
+      @product_1.start_selling
+      @product_2.save
+      @product_2.start_selling
+      @product_3.save
+      @product_3.start_selling
      @user.add_product @product_1
      @user.add_product @product_2
      @user.add_product @product_3
    end
 
    it "can purchase products from his cart" do
-    @user.cart.products.should include(@product_1, @product_2, @product_3)
+   
+    @user.cart.products.should include(@product_1, @product_2,@product_3)
     @user.orders.should be_empty
     @user.make_purchase
     @user.cart.products.should be_empty
@@ -180,18 +153,8 @@ context "concerning status" do
   end
 
   it "can be changed to admin only by admin" do
-    expect{@user.admin = true}.to raise_error
     @user.should_not be_admin
-    
-    user = double("User")
-    user.stub(:admin?).and_return(false)
-    
-    @user.promote_to_admin(user)
-    @user.should_not be_admin
-    
-    user.stub(:admin?).and_return(true)
-    
-    @user.promote_to_admin(user)
+    @user.promote_to_admin
     @user.should be_admin
   end
 end

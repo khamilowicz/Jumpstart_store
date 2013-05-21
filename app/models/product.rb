@@ -7,16 +7,20 @@ class Product < ActiveRecord::Base
 
   scope :find_on_sale, ->{where(on_sale: true)}
 
-  def categories
-  	@categories ||= []
-  end
+  has_many :product_users
+  has_many :users, through: :product_users
+  belongs_to :order
+  has_many :category_products
+  has_many :categories, through: :category_products
 
   def add_to_category category
-  	categories << category
+  	cat = Category.get(category)
+    cat.add_product self
   end
 
   def list_categories
-  	categories.map{|category| category.respond_to?(:name)? category.name : category}
+    categories.map(&:name)
+  	# categories.all.map{|category| category.respond_to?(:name)? category.name : category}
   end
 
   def add_review review

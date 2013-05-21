@@ -2,27 +2,36 @@ require 'spec_helper'
 
 describe Category do
 
+  describe ".get" do
+    before(:each) do
+      @name = "Category name"
+      @c1 = Category.get @name
+    end
+
+    it "creates category by name" do
+      @c1.should be_kind_of(Category)
+      @c1.name.should == @name
+    end
+
+    it "retrieves existing category" do
+      c2 = Category.get @name
+      c2.should == @c1
+      Category.all.should have(1).item
+    end
+  end
+
   describe "class.list_categories" do
     it "lists all categories" do
       c1 = Category.get("C_1")
       c2 = Category.get("C_2")
       c3 = Category.get("C_3")
-      Category.all_categories.should include(c1)
-      Category.all_categories.should include(c2)
-      Category.all_categories.should include(c3)
+      Category.list_categories.should include(c1,c2,c3)
     end
-  end
-
-  it "has unique name" do
-    category_1 = Category.get("Category_1")
-    category_2 = Category.get("Category_1")
-    category_1.should eql(category_2)
-    Category.list_categories.should have(1).item
   end
 
   it "can have associated products" do
     c1 = Category.get("Category_1")
-product = FactoryGirl.create(:product, on_sale: true)    
+    product = FactoryGirl.create(:product, on_sale: true)    
     c1.add_product product
     c1.products.should include(product)
   end
@@ -36,7 +45,6 @@ product = FactoryGirl.create(:product, on_sale: true)
     product_3.add_to_category "Category_2"
 
     products_c_1 = Category.find_products_for("Category_1")
-    
     products_c_1.should include(product_1,product_2)
     products_c_1.should_not include(product_3)
     Category.find_products_for("Category_2").should include(product_3)
