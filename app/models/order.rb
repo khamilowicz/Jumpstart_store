@@ -1,21 +1,14 @@
 class Order < ActiveRecord::Base
+
 	belongs_to :user
-	has_many :products 
+	has_many :products
 
-
-	validates_presence_of :user
-	validates_presence_of :products
-	validates_presence_of :address
+	validates_presence_of :user, :products, :address
 
 	scope :all_by_status, lambda{|status| where(status: status).all}
 
-	def date_of_purchase
-		self.created_at.to_date
-	end
-
-	def time_of_status_change
-		self.status_change_date
-	end
+	alias_attribute :date_of_purchase, :created_at
+	alias_attribute :time_of_status_change, :status_change_date
 
 	def total_price
 		self.products.reduce(0){|sum, product| sum+= product.price}
@@ -41,12 +34,13 @@ class Order < ActiveRecord::Base
 	end
 
 	private
-	def status= stat
-		super
-	end
+	
+		def status= stat
+			super
+		end
 
-	def update_status_date
-		self.status_change_date = Time.now
-	end
+		def update_status_date
+			self.status_change_date = Time.now
+		end
 
 end

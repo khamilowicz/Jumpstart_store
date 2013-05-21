@@ -4,26 +4,10 @@ shared_examples_for "simple user" do
 
 	context "can" do
 
-		before do
-			@products = FactoryGirl.build_list(:product, 3, :on_sale, :with_category, category_name: "table")	
-			# FakeDatabaseSwitcher.save(Product, @products)
-			visit '/'
-		end
-
 		it "browse all products" do
-			visit '/products'
-			@products.each do |product|
-				page.should have_content(product.title)
-			end
 		end
 
 		it "browse products by category" do
-			product = FactoryGirl.build(:product, :on_sale, :with_category, category_name: "table")
-			FakeDatabaseSwitcher.save(Product, product)
-			Category.find_products_for('table').should_not be_empty
-			click_link "TABLE"
-			page.should have_content @products.first.title
-			page.should_not have_content product.title
 		end
 
 		it "add a product to his cart" do

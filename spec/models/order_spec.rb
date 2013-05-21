@@ -29,7 +29,7 @@ describe Order do
     it "has date of purchase" do
       @order.save
       time = Time.now
-      @order.date_of_purchase.should == time.to_date
+      @order.date_of_purchase.to_date.should == time.to_date
     end
 
     it "has total price" do

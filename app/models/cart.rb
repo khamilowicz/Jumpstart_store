@@ -4,5 +4,5 @@ class Cart < ActiveRecord::Base
 	def products
 		ProductUser.joins(:product).where(user_id: self.user, in_cart: true).all.collect(&:product)
 	end
-  # attr_accessible :title, :body
+	
 end

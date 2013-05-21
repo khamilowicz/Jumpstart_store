@@ -13,52 +13,56 @@ class Product < ActiveRecord::Base
   has_many :category_products
   has_many :categories, through: :category_products
 
+  alias_attribute :price= , :base_price=
+
   def add_to_category category
-  	cat = Category.get(category)
+    cat = Category.get(category)
     cat.add_product self
   end
 
   def list_categories
     categories.map(&:name)
-  	# categories.all.map{|category| category.respond_to?(:name)? category.name : category}
   end
 
   def add_review review
-  	reviews << review
+    reviews << review
   end
 
   def reviews
-  	@reviews ||= []
+    @reviews ||= []
   end
 
   def rating
-  	reviews.size > 0 ? calculate_rating : 0
+    reviews.empty? ? 0 : calculate_rating
   end
 
-  def start_selling; self.on_sale = true; end
+  def start_selling
+   self.on_sale = true
+ end
 
-  def retire; self.on_sale = false; end
+ def retire
+   self.on_sale = false
+ end
 
-  def price
-  	self.base_price ? self.base_price*self.discount.to_f/100.0 : nil
-  end
-
-  alias_attribute :price= , :base_price=
-
-  def on_discount discount
-  	self.discount = discount
-  end
-
-  def off_discount
-  	self.discount = 100
-  end
+ def price
+  self.base_price ? self.base_price*self.discount.to_f/100.0 : nil
+end
 
 
-   private
+def on_discount discount
+ self.discount = discount
+end
 
-  def calculate_rating
-  	sum_of_notes = reviews.reduce(0){|sum, review| sum+=review.note}
-  	note = sum_of_notes.to_f/reviews.size
+def off_discount
+ self.discount = 100
+end
+
+
+private
+
+def calculate_rating
+ sum_of_notes = reviews.reduce(0){|sum, review| sum+=review.note}
+ note = sum_of_notes.to_f/reviews.size
   	(2.0*note).round/2.0 # round to 0.5
   end
 
