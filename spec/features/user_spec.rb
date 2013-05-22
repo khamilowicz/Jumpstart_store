@@ -1,8 +1,39 @@
 require "spec_helper"
 
 RSpec::Matchers.define :have_short_product do |product|
-	match do |page|
-		page.should have_content(product.title)
+	match do |page_content|
+		selector = ".product.#{product.title_param}" 
+		page_content.should have_selector(selector)
+		within(selector){
+			page_content.should have_content(product.title)
+		}
+	end
+end
+
+RSpec::Matchers.define :have_review do |review|
+	match do |page_content|
+		page_content.find('.review'){|review_content|
+			review_content.should have_selector('.reviewer', text: review.reviewer_name)
+			review_content.should have_selector('.title', text: review.title)
+			review_content.should have_selector('.body', text: review.body)
+			review_content.should have_note(review.note)
+		}
+	end
+end
+
+RSpec::Matchers.define :have_note do |note|
+	match do |page_content|
+		page_content.find(".note"){|note_content|
+			note.floor.times{|i| note_content.should have_selector(".star.full##{i}")}
+			note_content.should have_selector(".star.half") if note != note.round
+		}
+	end
+end
+
+def add_products_to_cart products
+	visit '/products'
+	products.each do |product|
+		within(".product.#{product.title_param}") { click_link "Add to cart" }
 	end
 end
 
@@ -40,7 +71,8 @@ shared_examples_for "simple user" do
 			page.should have_short_product(products.last)
 			page.should_not have_short_product(products.first)
 		end
-		it "view his cart "
+
+		it "view his cart"
 
 		it "add a product to his cart" do
 			products = FactoryGirl.create_list(:product, 2, :on_sale)
@@ -53,26 +85,73 @@ shared_examples_for "simple user" do
 
 			page.should have_short_product(products.first)
 			page.should_not have_short_product(products.last)
-			
+
 		end
-		
-		it "remove a product from my cart "
+
+		it "remove a product from his cart " do 
+			product = FactoryGirl.create(:product, :on_sale)
+			add_products_to_cart [product]
+			visit '/cart'
+			within(".product#0.#{product.title_param}"){ click_link 'Remove from cart'}
+			page.should have_content("#{product.title} removed from cart")
+			page.should_not have_short_product(product)
+		end 
+
 		it "increase the quantity of a product in my cart "
 		it 'search for products in the whole site'
 		it 'search through "My Orders" for matches in the item name or description'
 
-		context "On any product " do
+		context "on every product " do
 
-			context "See the posted reviews including:" do
+			context "see the posted reviews including:" do
 
-				it "title, body, and a star rating 0-5"
-				it "the display name of the reviewer"
+				it "display name of reviewer, title, body, and a star rating 0-5" do 
+					product = FactoryGirl.create(:product, :on_sale)
+					review = FactoryGirl.create(:review)
+					product.add_review review
+
+					visit '/products'
+					within('.product#0'){
+						click_link "Show more"
+					}
+					page.should have_review(review)
+				end
 			end
 
-			it "see an average of the ratings broken down to half-stars"
+			it "see an average of the ratings broken down to half-stars" do
+				product = FactoryGirl.create(:product, :on_sale)
+				review = FactoryGirl.create_list(:review, 4)
+				review.each.with_index do |review, index| 
+					review.note = index+1
+					product.add_review review
+				end
+
+				visit '/products'
+
+				within(".#{product.title_param}"){
+					click_link "Show more"
+				}
+				within(".overall_note"){
+					page.should have_note(2.5)
+				}
+				
+			end
 		end
 	end
-	it "Sale prices are displayed in product listings alongside normal price and percentage savings"
+	it "Sale prices are displayed in product listings alongside normal price and percentage savings" do
+		price = 150.60
+		discount = 50
+		product = FactoryGirl.create(:product, price: price, on_sale: true)
+		product.on_discount discount
+		product.save
+
+		visit '/products'
+		within('.product .price'){ 
+			page.should have_content("$#{price}")
+			page.should have_content("$#{discount*price.to_f/100}")
+			page.should have_content("You save #{discount}%!")
+		}
+	end
 
 end
 
@@ -98,7 +177,7 @@ describe "User:" do
 	describe "Authenticated Non-Administrators" do
 
 		it_behaves_like 'simple user'
-		
+
 		context "is allowed to:" do
 
 			it "log out"

@@ -1,10 +1,10 @@
 class User < ActiveRecord::Base
 
 	
-		validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, unless: :guest?
-		validates_uniqueness_of :email, unless: :guest?
-		validates_presence_of :first_name, :last_name, unless: :guest?
-		validates :nick, length: {minimum: 2, maximum: 32}, allow_nil: true, unless: :guest?
+	validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, unless: :guest?
+	validates_uniqueness_of :email, unless: :guest?
+	validates_presence_of :first_name, :last_name, unless: :guest?
+	validates :nick, length: {minimum: 2, maximum: 32}, allow_nil: true, unless: :guest?
 
 	has_many :product_users
 	has_many :products, through: :product_users
@@ -15,6 +15,10 @@ class User < ActiveRecord::Base
 
 	def guest?
 		self.guest
+	end
+
+	def self.create_guest
+		user = User.create
 	end
 
 	def find_by_product product

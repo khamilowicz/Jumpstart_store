@@ -1,3 +1,11 @@
-.product{id: product_counter}
+.product{class: product.title_param, id: product_counter}
 	=product.title
-	=link_to "Add to cart", add_to_cart_path(product)
+	=link_to "Show more", product
+	-if product.users.include?(current_user)
+		=link_to "Remove from cart", remove_from_cart_path(product)
+	-else
+		=link_to "Add to cart", add_to_cart_path(product)
+	.price
+		.base="$#{product.base_price}"
+		.current="$#{product.price}"
+		.discount="You save #{product.discount}%!"

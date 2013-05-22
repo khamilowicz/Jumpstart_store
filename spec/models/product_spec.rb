@@ -68,7 +68,7 @@ describe Product do
     it "can take category name" do
       @product.add_to_category "Category_1"
       @product.list_categories.should include("Category_1")
-   end
+    end
   end
 
   describe ".list_categories" do
@@ -151,6 +151,23 @@ describe "discounts" do
    @product.price.should == @product.base_price
  end
 end
+
+# describe ".in_cart?" do
+#   it "tells if product is in user's cart" do
+#     user = FactoryGirl.create(:user)
+# user_2 = FactoryGirl.create(:user)
+#     product = FactoryGirl.create(:product, :on_sale)
+#     user.add_product product
+# product.in_cart?(user).should be_true
+# product.in_cart?(user_2).should be_false
+
 end
+end
+
+describe ".title_param" do
+  it 'returns title as param string' do
+    product = FactoryGirl.build(:product, title: "this is product")
+    product.title_param.should == 'this-is-product'
+  end
 end
 end

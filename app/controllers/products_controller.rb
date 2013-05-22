@@ -9,22 +9,19 @@ class ProductsController < ApplicationController
 	end
 
 	def add_to_cart
-		@product = Product.find(params[:id])
-		current_user.add_product @product
+		product = Product.find(params[:id])
+		current_user.add_product product
 
-		redirect_to products_path
+		redirect_to products_path, notice: "#{product.title} added to cart"
 	end
 
-	private
+	def remove_from_cart
+		product = Product.find(params[:id])
+		current_user.remove_product product
+		
+		redirect_to cart_path, notice: "#{product.title} removed from cart"
+	end
 
- def current_user
- 	if session[:user_id]
- 		return User.find(session[:user_id])
- 	else
- 		user = User.create_guest
- 		session[:user_id] = user.id
- 		return user
- 	end
- end
+
 
 end

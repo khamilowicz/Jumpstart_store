@@ -6,6 +6,7 @@ FactoryGirl.define do
 
 		after(:build) do |review|
 			review.product = FactoryGirl.create(:product)
+			review.user = FactoryGirl.create(:user)
 		end
 	end
 end

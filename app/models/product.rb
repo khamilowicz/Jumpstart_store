@@ -13,7 +13,13 @@ class Product < ActiveRecord::Base
   has_many :category_products
   has_many :categories, through: :category_products
 
+  has_many :reviews
+
   alias_attribute :price= , :base_price=
+
+  # def in_cart? user
+  #   ProductUser.where(user: user.id, product: self.id).first.in_cart?
+  # end
 
   def add_to_category category
     cat = Category.get(category)
@@ -26,10 +32,6 @@ class Product < ActiveRecord::Base
 
   def add_review review
     reviews << review
-  end
-
-  def reviews
-    @reviews ||= []
   end
 
   def rating
@@ -55,6 +57,10 @@ end
 
 def off_discount
  self.discount = 100
+end
+
+def title_param
+  self.title.parameterize
 end
 
 

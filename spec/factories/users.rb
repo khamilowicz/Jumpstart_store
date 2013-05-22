@@ -20,18 +20,15 @@ FactoryGirl.define do
     end
     
     trait :with_order do
-    	 after(:build) do |instance|
-    	 	instance.orders << FactoryGirl.build(:order, :with_products)
-    	 end
-    end
+      after(:build) do |instance|
+       instance.orders << FactoryGirl.build(:order, :with_products)
+   end
+end
 
-    trait :with_empty_order do
-    	 after(:build) do |instance|
-    	 	instance.orders << FactoryGirl.build(:order)
-    	 end
-    end
-    
-     
-     
-  end
+trait :with_empty_order do
+  after(:build) do |instance|
+   instance.orders << FactoryGirl.build(:order)
+end
+end
+end
 end

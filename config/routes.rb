@@ -1,13 +1,15 @@
 NewStore::Application.routes.draw do
 
   get '/products' => 'products#index'
-  get '/products/:id' => 'products#show'
+  get '/products/:id' => 'products#show', as: 'product'
   get '/products/:id/to_cart' => 'products#add_to_cart', as: "add_to_cart"
+  get '/products/:id/remove_from_cart' => 'products#remove_from_cart', as: 'remove_from_cart'
 
 
   get '/categories' => 'categories#index'
   get '/categories/:id' => 'categories#show', as: 'category'
 
+get '/cart' => 'carts#show', as: 'cart'
 
 
   # The priority is based upon order of creation:
