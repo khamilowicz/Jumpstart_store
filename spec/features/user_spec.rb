@@ -1,5 +1,11 @@
 require "spec_helper"
 
+RSpec::Matchers.define :have_short_product do |product|
+	match do |page|
+		page.should have_content(product.title)
+	end
+end
+
 shared_examples_for "simple user" do
 
 	context "can" do
@@ -7,7 +13,7 @@ shared_examples_for "simple user" do
 		it "browse all products" do
 			products = FactoryGirl.create_list(:product, 2, :on_sale)
 			visit '/products'
-			products.each {|product| page.should have_content(product.title)}
+			products.each {|product| page.should have_short_product(product)}
 		end
 
 		it "browse products by category" do
@@ -20,10 +26,10 @@ shared_examples_for "simple user" do
 			click_link categories.first
 
 			page.should have_content(categories.first)
-			page.should have_content(products.first.title)
+			page.should have_short_product(products.first)
 
 			page.should_not have_content(categories.last)
-			page.should have_content(products.last.title)
+			page.should have_short_product(products.last)
 
 			visit '/categories'
 			click_link categories.last
@@ -31,14 +37,25 @@ shared_examples_for "simple user" do
 			page.should have_content(categories.last)
 			page.should_not have_content(categories.first)
 
-			page.should have_content(products.last.title)
-			page.should_not have_content(products.first.title)
+			page.should have_short_product(products.last)
+			page.should_not have_short_product(products.first)
 		end
+		it "view his cart "
 
 		it "add a product to his cart" do
+			products = FactoryGirl.create_list(:product, 2, :on_sale)
+			visit '/products'
+
+			within('.product#0'){click_link 'Add to cart'}
+			page.should have_content("#{products.first.title} added to cart")
+
+			visit '/cart'
+
+			page.should have_short_product(products.first)
+			page.should_not have_short_product(products.last)
+			
 		end
 		
-		it "view his cart "
 		it "remove a product from my cart "
 		it "increase the quantity of a product in my cart "
 		it 'search for products in the whole site'

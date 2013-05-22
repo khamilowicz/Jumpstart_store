@@ -2,6 +2,7 @@ NewStore::Application.routes.draw do
 
   get '/products' => 'products#index'
   get '/products/:id' => 'products#show'
+  get '/products/:id/to_cart' => 'products#add_to_cart', as: "add_to_cart"
 
 
   get '/categories' => 'categories#index'

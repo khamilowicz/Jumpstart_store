@@ -2,9 +2,11 @@ require 'spec_helper'
 
 describe User do
   before(:each) do
-    @user = FactoryGirl.build(:user)
+    @user = FactoryGirl.build(:user, :logged)
   end
 
+  context "who is registered" do
+    
   context "to be valid must have" do
 
     context "email that is" do
@@ -18,7 +20,7 @@ describe User do
       end
 
       it "unique" do
-        user_2 = FactoryGirl.build(:user, email: @user.email) 
+        user_2 = FactoryGirl.build(:user, :logged, email: @user.email) 
         @user.save
         user_2.should_not be_valid
       end
@@ -35,7 +37,21 @@ describe User do
       @user.full_name.should == 'John Smith'
     end
   end
+end
+
+context "who is guest" do
+
+  context "to be valid" do
+    it "needs only nick" do
+      guest = FactoryGirl.create(:user, :guest)
+      guest.first_name = nil
+      guest.last_name = nil
+      guest.email = nil
+      guest.should be_valid
+    end
     
+  end
+end
 
     it "may optionally provide a display name that must be no less than 2 characters long and no more than 32" do
       @user.display_name.should == 'John Smith'
@@ -149,7 +165,8 @@ end
 end
 context "concerning status" do
   it "by default is guest" do
-    @user.should be_guest
+    user = FactoryGirl.build(:user)
+    user.should be_guest
   end
 
   it "can be changed to admin only by admin" do

@@ -6,8 +6,17 @@ FactoryGirl.define do
     last_name "Smith"
     sequence(:email){|n| "#{n}@gmail.com"}
 
+    trait :guest do
+        guest true
+    end
+
+    trait :logged do
+        guest false
+    end
+
     trait :admin do
     	admin true 
+        guest false
     end
     
     trait :with_order do
