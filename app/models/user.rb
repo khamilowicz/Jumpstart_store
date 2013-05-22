@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
 	validates_uniqueness_of :email, unless: :guest?
 	validates_presence_of :first_name, :last_name, unless: :guest?
 	validates :nick, length: {minimum: 2, maximum: 32}, allow_nil: true, unless: :guest?
+	validates_presence_of :password, unless: :guest?
 
 	has_many :product_users
 	has_many :products, through: :product_users
@@ -18,7 +19,10 @@ class User < ActiveRecord::Base
 	end
 
 	def self.create_guest
-		user = User.create
+		user = User.new
+		user.guest = true
+		user.save
+		user
 	end
 
 	def find_by_product product
@@ -30,6 +34,7 @@ class User < ActiveRecord::Base
 	end
 
 	def display_name
+		return 'Guest' if guest?
 		self.nick || full_name
 	end
 
@@ -50,7 +55,9 @@ class User < ActiveRecord::Base
 	end
 
 	def remove_product product
-		products.delete product
+		pu = self.product_users.where(product_id: product.id).first
+		self.products.delete product
+		pu.destroy
 	end
 
 	def make_purchase

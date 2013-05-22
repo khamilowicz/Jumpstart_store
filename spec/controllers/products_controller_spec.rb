@@ -39,7 +39,7 @@ describe ProductsController do
 		end
 
 		it "should redirect to products index if product not found" do
-			# pending
+			pending
 			get :show, id: 1
 			# assert_response :not_found	
 			# flash[:error].should == 'Product not found'

@@ -7,10 +7,15 @@ FactoryGirl.define do
     price '1.00'
     discount 100
     quantity 1
+    on_sale true
 
     trait :with_photo do
      sequence(:photo){|x| "http://Photo.com/#{x}"} 
    end
+
+   trait :not_on_sale do
+    on_sale false
+  end
 
    trait :on_sale do
     after(:build) do |product|

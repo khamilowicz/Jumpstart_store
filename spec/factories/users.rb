@@ -5,6 +5,7 @@ FactoryGirl.define do
     first_name "John"
     last_name "Smith"
     sequence(:email){|n| "#{n}@gmail.com"}
+    password 'secret'
 
     trait :guest do
         guest true

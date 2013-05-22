@@ -53,7 +53,7 @@ describe Product do
 
    it "quantity, which is by default 1" do
     @product.quantity = nil
-    @product.should_not be_valid
+    @product.should be_valid
     @product.quantity = -2
     @product.should_not be_valid
     @product.quantity = 2.3
@@ -125,7 +125,8 @@ end
 
 describe ".on_sale" do
   it "by default is not on sale" do
-    @product.should_not be_on_sale
+    product = Product.new
+    product.should_not be_on_sale
   end
 
   it "can be set to sale" do
@@ -140,6 +141,8 @@ describe ".on_sale" do
   end
 
   it "can be found by sale status" do
+    @product.retire
+    @product.save
     Product.find_on_sale.should_not include(@product)
     @product.start_selling
     @product.save

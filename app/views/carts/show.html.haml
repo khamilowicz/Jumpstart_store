@@ -3,4 +3,7 @@
 .products
 	=render partial: 'products/short', collection: @products, as: :product
 .order_menu
-	=link_to 'Buy'
+	-if current_user.guest?
+		"You need to log in to purchase products"
+	-else
+		=link_to 'Order', order_new_path

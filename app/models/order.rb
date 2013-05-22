@@ -19,6 +19,14 @@ class Order < ActiveRecord::Base
 		100*total_price/price_without_discount
 	end
 
+	def transfer_products
+		self.user.products.all.each do |product|
+			self.products << product
+			self.user.remove_product product
+			product.retire
+		end
+	end
+
 	STATUSES = {
 		:cancel => 'cancelled',
 		:pay => 'paid', 

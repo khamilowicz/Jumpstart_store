@@ -22,6 +22,7 @@ describe Order do
     it "has address" do
       @order.address = nil
       @order.should_not be_valid
+      binding.pry
       @order.address = "Other address"
       @order.should be_valid
     end
@@ -29,6 +30,7 @@ describe Order do
     it "has date of purchase" do
       @order.save
       time = Time.now
+      binding.pry
       @order.date_of_purchase.to_date.should == time.to_date
     end
 
@@ -65,8 +67,8 @@ end
 
 it "can be found by status" do
   order_can = FactoryGirl.create(:order)
- order_can.cancel
- order_can.save
+  order_can.cancel
+  order_can.save
   order_sent = FactoryGirl.create(:order)
   order_sent.is_sent
   order_sent.save
@@ -77,13 +79,26 @@ end
 it "can calculate total discount" do
   products = FactoryGirl.create_list(:product,3, price: 1)
   @order.products = products
- tp = @order.total_price
+  tp = @order.total_price
   products.each{|p| p.on_discount(50) }
- @order.total_price.should == 0.5*tp
- @order.total_discount.should == 50
+  @order.total_price.should == 0.5*tp
+  @order.total_discount.should == 50
 
 end
 
 end
+it "can transfer products from user" do
+  user = FactoryGirl.create(:user)
+  product = FactoryGirl.create(:product)
+
+  user.add_product product
+
+  order = user.orders.new
+  order.transfer_products
+  order.products.should include(product)
+  user.products.should be_empty
+  
+end
+
 end
 

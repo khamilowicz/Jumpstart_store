@@ -32,9 +32,17 @@ end
 
 def add_products_to_cart products
 	visit '/products'
+	products = [products] unless products.kind_of? Array
 	products.each do |product|
 		within(".product.#{product.title_param}") { click_link "Add to cart" }
 	end
+end
+
+def login user 
+	click_link 'Log in'
+	fill_in 'session[email]', with: user.email
+	fill_in 'session[password]', with: user.password
+	click_button "Sign in"
 end
 
 shared_examples_for "simple user" do
@@ -76,7 +84,6 @@ shared_examples_for "simple user" do
 			visit '/cart'
 
 			page.should have_content("My cart")
-			page.should have_link("Buy")
 		end
 
 		it "add a product to his cart" do
@@ -180,8 +187,26 @@ end
 
 shared_examples_for "simple user who can't" do
 
-	it "View another user’s private data (such as current shopping cart, etc.)"
-	it "Checkout (until they log in)"
+	it "View another user’s private data (such as current shopping cart, etc.)" do
+		pending
+		user = FactoryGirl.create(:user)
+		product = FactoryGirl.create(:product, :on_sale)
+		user.add_product product
+
+		visit user_path(user)
+	end
+
+	it "Checkout (until they log in)" do 
+		user = FactoryGirl.create(:user)
+		product = FactoryGirl.create(:product)
+
+		add_products_to_cart product 
+
+		visit '/cart'
+		page.should_not have_link "Order"
+		page.should have_content "You need to log in to purchase products"
+	end
+
 	it "View the administrator screens or use administrator functionality"
 	it "Make themselves an administrator"
 
@@ -193,8 +218,31 @@ describe "User:" do
 	describe "unauthenticated user" do
 		it_behaves_like 'simple user'
 		it_behaves_like "simple user who can't"
-		it "Log in, which should not clear the cart "
+		it "logs in, which should not clear the cart " do
 
+			user = FactoryGirl.create(:user)
+			product = FactoryGirl.create(:product, :on_sale)
+			
+			add_products_to_cart product
+			
+			visit '/cart'
+
+			page.should have_content("Guest")
+			page.should have_link("Log in")
+			page.should_not have_link("Log out")
+			page.should have_short_product(product)
+
+			login user
+
+			page.should have_content( "Successfully logged in")
+			page.should have_content(user.display_name)
+			page.should_not have_link("Log in")
+			page.should have_link("Log out")
+
+			visit '/cart'
+			page.should have_short_product(product)
+
+		end
 	end
 
 	describe "Authenticated Non-Administrators" do
@@ -203,8 +251,42 @@ describe "User:" do
 
 		context "is allowed to:" do
 
-			it "log out"
+			it "log out" do 
+				user = FactoryGirl.create(:user)
+				visit '/'
+				login user
+				click_link "Log out"
+				page.should_not have_content(user.display_name)
+				page.should_not have_content("Log out")
+				page.should have_content("Guest")
+				page.should have_link("Log in")
+			end
+
+			it "make an order" do
+
+				user = FactoryGirl.create(:user)
+				products = FactoryGirl.create_list(:product, 3)
+				add_products_to_cart products
+				login user
+
+				visit '/cart'
+				products.each do |product|
+					page.should have_short_product( product)
+				end
+				click_link "Order"
+				page.should have_content("Order page")
+				click_link "Buy"
+				page.should have_content("Order is processed")
+				user.products.should be_empty
+				user.orders.first.products.should include(products.first, products.last)
+				visit '/cart'
+				products.each do |product|
+					page.should_not have_short_product( product)
+				end
+			end
+
 			it "view their past orders with links to display each order"
+			
 			context "on that order display page there are:" do
 				it "products with quantity ordered and line-item subtotals"
 				it "links to each product page"

@@ -85,6 +85,7 @@ end
       end
 
       it "cannot add product that is retired" do
+        @product_1.retire
         @product_1.should_not be_on_sale
         @user.add_product @product_1
         @user.products.should_not include(@product_1)
@@ -143,6 +144,12 @@ end
         @user.cart.products.should_not include(@product_1)
         @user.cart.products.should include(@product_2)
       end
+
+      it "returns product to magazine" do
+        expect{
+          @user.remove_product @product_1
+          }.to change{@product_1.quantity}.by(1)
+      end
     end
   end
 
@@ -181,10 +188,6 @@ end
 end
 end
 context "concerning status" do
-  it "by default is guest" do
-    user = FactoryGirl.build(:user)
-    user.should be_guest
-  end
 
   it "can be changed to admin only by admin" do
     @user.should_not be_admin

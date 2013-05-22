@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130522174813) do
+ActiveRecord::Schema.define(:version => 20130522185427) do
 
   create_table "carts", :force => true do |t|
     t.integer  "user_id"
@@ -80,9 +80,10 @@ ActiveRecord::Schema.define(:version => 20130522174813) do
     t.string   "nick"
     t.string   "email"
     t.boolean  "admin",      :default => false
-    t.boolean  "guest",      :default => true
+    t.boolean  "guest",      :default => false
     t.string   "first_name"
     t.string   "last_name"
+    t.string   "password"
   end
 
 end

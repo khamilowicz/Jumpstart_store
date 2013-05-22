@@ -65,9 +65,9 @@ describe Category do
 
     before(:each) do
       @category_name = "Category_1"
-      @product_1 = FactoryGirl.create(:product)
-      @product_2 = FactoryGirl.create(:product)
-      @product_3 = FactoryGirl.create(:product)
+      @product_1 = FactoryGirl.create(:product, :not_on_sale)
+      @product_2 = FactoryGirl.create(:product, :not_on_sale)
+      @product_3 = FactoryGirl.create(:product, :not_on_sale)
       @product_1.add_to_category @category_name
       @product_2.add_to_category @category_name 
       @product_3.add_to_category "Category_2"

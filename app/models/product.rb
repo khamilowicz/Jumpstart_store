@@ -70,7 +70,7 @@ end
 
 def quantity
   in_carts = self.product_users.count
-  return(super - in_carts)
+  return(super.to_i - in_carts)
 end
 
 

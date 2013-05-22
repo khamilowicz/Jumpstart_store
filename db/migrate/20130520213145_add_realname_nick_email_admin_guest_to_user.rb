@@ -4,6 +4,6 @@ class AddRealnameNickEmailAdminGuestToUser < ActiveRecord::Migration
     add_column :users, :nick, :string
     add_column :users, :email, :string
     add_column :users, :admin, :boolean, default: false
-    add_column :users, :guest, :boolean, default: true
+    add_column :users, :guest, :boolean, default: false
   end
 end
