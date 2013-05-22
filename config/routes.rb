@@ -1,6 +1,11 @@
 NewStore::Application.routes.draw do
 
   get '/products' => 'products#index'
+  get '/products/:id' => 'products#show'
+
+
+  get '/categories' => 'categories#index'
+  get '/categories/:id' => 'categories#show', as: 'category'
 
 
 

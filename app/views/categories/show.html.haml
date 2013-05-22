@@ -1,0 +1,3 @@
+.catgory
+	= @category.name
+	= render partial: 'products/short', collection: @category.products, as: :product

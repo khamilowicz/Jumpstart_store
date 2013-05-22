@@ -5,15 +5,40 @@ shared_examples_for "simple user" do
 	context "can" do
 
 		it "browse all products" do
+			products = FactoryGirl.create_list(:product, 2, :on_sale)
+			visit '/products'
+			products.each {|product| page.should have_content(product.title)}
 		end
 
 		it "browse products by category" do
+			categories =['Category_1', 'Category_2'] 
+			products = FactoryGirl.create_list(:product, 2, :with_category, category_name: categories.first)
+			products.last.add_to_category categories.last
+			visit '/categories'
+
+			categories.each {|category| page.should have_link(category) }
+			click_link categories.first
+
+			page.should have_content(categories.first)
+			page.should have_content(products.first.title)
+
+			page.should_not have_content(categories.last)
+			page.should have_content(products.last.title)
+
+			visit '/categories'
+			click_link categories.last
+
+			page.should have_content(categories.last)
+			page.should_not have_content(categories.first)
+
+			page.should have_content(products.last.title)
+			page.should_not have_content(products.first.title)
 		end
 
 		it "add a product to his cart" do
 		end
 		
-		it "view my cart "
+		it "view his cart "
 		it "remove a product from my cart "
 		it "increase the quantity of a product in my cart "
 		it 'search for products in the whole site'
