@@ -2,7 +2,9 @@
 	=product.title
 	=link_to "Show more", product
 	-if product.users.include?(current_user)
+		.quantity= "#{product.quantity_for(current_user)} in cart"
 		=link_to "Remove from cart", remove_from_cart_path(product)
+		=link_to "Add more", add_to_cart_path(product)
 	-else
 		=link_to "Add to cart", add_to_cart_path(product)
 	.price

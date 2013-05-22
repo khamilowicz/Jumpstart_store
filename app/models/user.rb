@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
 	end
 
 	def add_product product
-		if product.on_sale?
+		if product.on_sale? && product.quantity > 0
 			pu = self.product_users.new
 			pu.product = product
 			pu.save

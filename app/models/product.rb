@@ -4,6 +4,7 @@ class Product < ActiveRecord::Base
   validates_presence_of :description
   validates :base_price, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
   validates :photo, format: {with: %r{https?://(www\.)?\w+(\.\w+)+} }, allow_nil: true
+  validates :quantity, presence: true, numericality: {greater_than_or_equal_to: 0, integer: true}
 
   scope :find_on_sale, ->{where(on_sale: true)}
 
@@ -61,6 +62,15 @@ end
 
 def title_param
   self.title.parameterize
+end
+
+def quantity_for user
+  self.users.where(id: user.id).count
+end
+
+def quantity
+  in_carts = self.product_users.count
+  return(super - in_carts)
 end
 
 

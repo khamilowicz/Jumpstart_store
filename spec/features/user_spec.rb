@@ -72,7 +72,12 @@ shared_examples_for "simple user" do
 			page.should_not have_short_product(products.first)
 		end
 
-		it "view his cart"
+		it "view his cart" do 
+			visit '/cart'
+
+			page.should have_content("My cart")
+			page.should have_link("Buy")
+		end
 
 		it "add a product to his cart" do
 			products = FactoryGirl.create_list(:product, 2, :on_sale)
@@ -97,7 +102,25 @@ shared_examples_for "simple user" do
 			page.should_not have_short_product(product)
 		end 
 
-		it "increase the quantity of a product in my cart "
+		it "increase the quantity of a product in my cart " do
+			product = FactoryGirl.create(:product, :on_sale, quantity: 3)
+			visit '/products'
+
+			within(".product"){
+				page.should_not have_selector(".quantity")
+				click_link "Add to cart"
+			}
+
+			within(".product"){
+				page.should have_selector(".quantity", text: '1 in cart')
+				click_link "Add more"
+			}
+
+			within(".product"){
+				page.should have_selector(".quantity", text: '2 in cart')
+			}
+		end
+
 		it 'search for products in the whole site'
 		it 'search through "My Orders" for matches in the item name or description'
 

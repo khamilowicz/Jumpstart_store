@@ -6,6 +6,7 @@ FactoryGirl.define do
     sequence(:description ){|x| "Description #{x}"}
     price '1.00'
     discount 100
+    quantity 1
 
     trait :with_photo do
      sequence(:photo){|x| "http://Photo.com/#{x}"} 

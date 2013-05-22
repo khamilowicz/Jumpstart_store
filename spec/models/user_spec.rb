@@ -66,7 +66,7 @@ end
   context "concerning products" do
     before(:each) do
         @user.save
-      @product = FactoryGirl.build(:product, on_sale: true)
+      @product = FactoryGirl.build(:product, :on_sale, quantity: 2)
       @product_1 = FactoryGirl.build(:product)
       @product_2 = FactoryGirl.build(:product)
       @product_3 = FactoryGirl.build(:product)
@@ -88,6 +88,23 @@ end
         @product_1.should_not be_on_sale
         @user.add_product @product_1
         @user.products.should_not include(@product_1)
+      end
+
+      it "cannot add products beyond its quantity" do
+        product = FactoryGirl.create(:product, :on_sale, quantity: 2)
+        user = FactoryGirl.create(:user)
+        user.product_quantity(product).should == 0
+        user.add_product product
+        product.quantity.should == 1
+        user.product_quantity(product).should == 1
+        user.add_product product
+        product.quantity.should == 0
+        user.product_quantity(product).should == 2
+
+        user.add_product product
+        product.quantity.should == 0
+        user.product_quantity(product).should == 2
+        
       end
 
     end

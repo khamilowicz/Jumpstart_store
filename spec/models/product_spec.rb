@@ -50,6 +50,17 @@ describe Product do
      @product.price.should == 19.43
      @product.should be_valid
    end
+
+   it "quantity, which is by default 1" do
+    @product.quantity = nil
+    @product.should_not be_valid
+    @product.quantity = -2
+    @product.should_not be_valid
+    @product.quantity = 2.3
+    @product.quantity.should == 2
+    @product.quantity = 2
+    @product.should be_valid
+   end
  end
 
  describe "may have" do
@@ -164,10 +175,31 @@ end
 end
 end
 
+describe ".users" do
+  it "show users having it in theirs carts" do
+    product = FactoryGirl.create(:product, :on_sale)
+    user = FactoryGirl.create(:user)
+    user.add_product product
+    product.users.first.should == user
+  end
+end
+
 describe ".title_param" do
   it 'returns title as param string' do
     product = FactoryGirl.build(:product, title: "this is product")
     product.title_param.should == 'this-is-product'
+  end
+end
+
+describe ".quantity_for" do
+  it "returns quantity of product for given user" do
+    product = FactoryGirl.create(:product, :on_sale, quantity: 3)
+    user = FactoryGirl.create(:user)
+    product.quantity_for(user).should == 0
+    user.add_product product
+    product.quantity_for(user).should == 1
+    user.add_product product
+    product.quantity_for(user).should == 2
   end
 end
 end
