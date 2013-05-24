@@ -5,7 +5,7 @@ class Order < ActiveRecord::Base
 	# has_many :products, through: :order_products 
 
 	def products
-		self.order_products.collect(&:product)
+		self.order_products #.collect(&:product)
 	end
 
 	def products= prods
@@ -44,14 +44,10 @@ class Order < ActiveRecord::Base
 	end
 
 	def transfer_products
-		self.user.products.all.each do |product|
-			# op = self.order_products.create
-			# op.product = product
-			self.order_products << OrderProduct.convert(product)
+		self.user.products.all.uniq.each do |product|
+			self.order_products << OrderProduct.convert(product, product.quantity_for(self.user))
 			self.user.remove_product product
 			product.retire
-			# binding.pry
-			
 		end
 	end
 

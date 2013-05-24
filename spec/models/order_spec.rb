@@ -95,9 +95,7 @@ it "can transfer products from user" do
   order.transfer_products
   user.products.should be_empty
   # binding.pry
-  order.products.should include(product)
-
-  
+  order.products.first.title.should == product.title
 end
 
 describe ".products" do
@@ -113,7 +111,7 @@ describe ".products" do
   end
 
   it "is product" do
-    @order.products.first.should be_kind_of(Product)
+    @order.products.first.should be_kind_of(OrderProduct)
   end
 
   it "responds to quantity with quantity of product in order" do

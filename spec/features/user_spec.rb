@@ -47,7 +47,16 @@ RSpec::Matchers.define :have_short_order do |order|
 		
 		"Expected #{page_content.find(".order").native} to have #{order.date_of_purchase}, #{order.total_price}, and link 'Show order'"
 	end
+end
 
+RSpec::Matchers.define :include_products do |*products|
+	match do |arr|
+		titles = arr.collect(&:title)
+		products.collect(&:title).each do |title|
+			titles.include?(title).should be_true
+		end
+	end
+	
 end
 
 def add_products_to_cart products
@@ -306,7 +315,7 @@ describe "User:" do
 				it "place an order" do
 					visit '/cart'
 					@user.products.should be_empty
-					@user.orders.first.products.should include(@products.first, @products.last)
+					@user.orders.first.products.should include_products(@products.first, @products.last)
 					@products.each do |product|
 						page.should_not have_short_product(product)
 					end
