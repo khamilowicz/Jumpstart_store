@@ -1,0 +1,13 @@
+.heading
+	My cart
+.products
+	=render partial: 'products/short', collection: @products, as: :product
+.order_menu
+	-if current_user.guest?
+		"You need to log in to purchase products"
+	-else
+<<<<<<< HEAD
+		=link_to 'Order', order_new_path
+=======
+		=link_to 'Order', orders_new_path
+>>>>>>> FETCH_HEAD

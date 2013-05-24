@@ -15,7 +15,11 @@ describe Order do
     it "is for one or more products currently being sold" do
       @order.products = []
       @order.should_not be_valid
+<<<<<<< HEAD
+      @order.products << FactoryGirl.create(:product)
+=======
       @order.products = FactoryGirl.create(:product)
+>>>>>>> FETCH_HEAD
       @order.should be_valid
     end
 
@@ -91,6 +95,13 @@ it "can transfer products from user" do
 
   user.add_product product
 
+<<<<<<< HEAD
+  order = user.orders.new
+  order.transfer_products
+  order.products.should include(product)
+  user.products.should be_empty
+  
+=======
   order = user.orders.create
   order.transfer_products
   user.products.should be_empty
@@ -120,6 +131,7 @@ describe ".products" do
     
   end
 
+>>>>>>> FETCH_HEAD
 end
 
 end

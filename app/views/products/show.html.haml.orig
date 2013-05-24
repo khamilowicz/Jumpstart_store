@@ -1,0 +1,8 @@
+<<<<<<< HEAD
+=======
+.title= @product.title
+.add_to_cart= link_to("Add to cart", add_to_cart_path(@product)) if @product.on_sale?
+.description= @product.description
+>>>>>>> FETCH_HEAD
+.overall_note= note_in_stars(@product.rating)
+.reviews=render @product.reviews
