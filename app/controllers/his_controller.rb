@@ -1,0 +1,2 @@
+class HisController < ApplicationController
+end
