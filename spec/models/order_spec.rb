@@ -15,7 +15,7 @@ describe Order do
     it "is for one or more products currently being sold" do
       @order.products = []
       @order.should_not be_valid
-      @order.products << FactoryGirl.create(:product)
+      @order.products = FactoryGirl.create(:product)
       @order.should be_valid
     end
 
@@ -91,11 +91,43 @@ it "can transfer products from user" do
 
   user.add_product product
 
+<<<<<<< HEAD
   order = user.orders.new
   order.transfer_products
   order.products.should include(product)
   user.products.should be_empty
   
+=======
+  order = user.orders.create
+  order.transfer_products
+  user.products.should be_empty
+  # binding.pry
+  order.products.first.title.should == product.title
+end
+
+describe ".products" do
+  before(:each) do
+    user = FactoryGirl.create(:user)
+    @products = FactoryGirl.create_list(:product, 2, quantity: 3)
+    @products.each do |product|
+      user.add_product product
+    end
+    @order = user.orders.new
+    @order.transfer_products
+    @order.save
+  end
+
+  it "is product" do
+    @order.products.first.should be_kind_of(OrderProduct)
+  end
+
+  it "responds to quantity with quantity of product in order" do
+    @order.products.first.quantity.should_not == 3
+    @order.products.first.quantity.should == 1
+    
+  end
+
+>>>>>>> FETCH_HEAD
 end
 
 end

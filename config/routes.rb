@@ -1,9 +1,10 @@
 NewStore::Application.routes.draw do
 
-  get "order/new"
-  get "order/create"
-  get "order/index"
-  get "order/show"
+  get "orders/new"
+  get "orders/create"
+  get "orders/index"
+  get "orders/:id" => 'orders#show', as: 'order'
+  get 'orders' => 'orders#index', as: 'orders'
 
   get "session/new"
   delete "session/delete"

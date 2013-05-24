@@ -12,22 +12,51 @@ end
 
 RSpec::Matchers.define :have_review do |review|
 	match do |page_content|
-		page_content.find('.review'){|review_content|
-			review_content.should have_selector('.reviewer', text: review.reviewer_name)
-			review_content.should have_selector('.title', text: review.title)
-			review_content.should have_selector('.body', text: review.body)
-			review_content.should have_note(review.note)
+		within('.review'){
+			page_content.should have_selector('.reviewer', text: review.reviewer_name)
+			page_content.should have_selector('.title', text: review.title)
+			page_content.should have_selector('.body', text: review.body)
+			page_content.should have_note(review.note)
 		}
+	end
+
+	failure_message_for_should do |page_content|
+		"Expected #{page_content.find('.review').native} to have #{review.reviewer_name}, #{review.title}, #{review.body} and #{review.note} stars"
 	end
 end
 
 RSpec::Matchers.define :have_note do |note|
 	match do |page_content|
-		page_content.find(".note"){|note_content|
-			note.floor.times{|i| note_content.should have_selector(".star.full##{i}")}
-			note_content.should have_selector(".star.half") if note != note.round
+		within(".note"){
+			note.floor.times{|i| page_content.should have_selector(".star.full##{i}")}
+			page_content.should have_selector(".star.half") if note != note.round
 		}
 	end
+end
+
+RSpec::Matchers.define :have_short_order do |order|
+	match do |page_content|
+		within('.order'){
+			page_content.should have_content(order.date_of_purchase)
+			page_content.should have_content(order.total_price)
+			page_content.should have_link("Show order")
+		}
+	end
+
+	failure_message_for_should do |page_content|
+		
+		"Expected #{page_content.find(".order").native} to have #{order.date_of_purchase}, #{order.total_price}, and link 'Show order'"
+	end
+end
+
+RSpec::Matchers.define :include_products do |*products|
+	match do |arr|
+		titles = arr.collect(&:title)
+		products.collect(&:title).each do |title|
+			titles.include?(title).should be_true
+		end
+	end
+	
 end
 
 def add_products_to_cart products
@@ -170,6 +199,7 @@ shared_examples_for "simple user" do
 				}
 				within(".overall_note"){
 					page.should have_note(2.5)
+					page.should_not have_note(3.5)
 				}
 				
 			end
@@ -274,37 +304,85 @@ describe "User:" do
 			context "concerning orders" do
 				before(:each) do
 					@user = FactoryGirl.create(:user)
-					@products = FactoryGirl.create_list(:product, 3)
+					@products = FactoryGirl.create_list(:product, 3, quantity: 3)
 					visit '/'
 					login @user
 					order_some_products @products
+					@quantity_of_products_in_order = 1
+					@order = @user.orders.first
 				end
+				
 				it "place an order" do
-					@user.products.should be_empty
-					@user.orders.first.products.should include(@products.first, @products.last)
 					visit '/cart'
+					@user.products.should be_empty
+					@user.orders.first.products.should include_products(@products.first, @products.last)
 					@products.each do |product|
 						page.should_not have_short_product(product)
 					end
 				end
 
 				it "view their past orders with links to display each order" do
-					pending
-					# visit '/orders'
-					# page.should have_link(@user.order)
+					visit '/orders'
+					page.should have_content("Previous orders")
+					page.should have_short_order(@order)
 				end
 
 				context "on that order display page there are:" do
-					it "products with quantity ordered and line-item subtotals"
-					it "links to each product page"
-					it "the current status"
-					it "order total price"
-					it "date/time order was submitted"
-					it "if shipped or cancelled, display a timestamp when that action took place"
+
+					before(:each) do
+						visit order_path(@order)
+					end
+
+					it "products with quantity ordered and line-item subtotals" do
+						@order.products.each do |product|
+							within('.products'){
+								page.should have_selector('.product', text: product.title)
+								page.should have_selector(".product .quantity", text: @quantity_of_products_in_order.to_s)
+							}
+						end
+					end
+
+					it "links to each product page" do 
+						@order.products.each do |product|
+							within('.products'){
+								page.should have_link(product.title)
+							}
+						end
+					end
+
+					it "the current status" do
+						page.should have_selector(".status", content: @order.status)
+					end
+
+					it "order total price" do 
+						page.should have_selector(".total_price", content: @order.total_price)
+					end
+
+					it "date/time order was submitted" do
+						page.should have_selector(".submit_date", content: @order.date_of_purchase)
+					end
+
+					it "if shipped or cancelled, display a timestamp when that action took place" do
+						page.should have_selector(".status", content: @order.status_change_date)
+					end
+
 
 					context "if any product is retired:" do
-						it "they can still access the product page"
-						it "they cannot add it to a new cart"
+						before(:each) do
+							@product = @order.products.first
+							@product.retire 
+							@product.product.save
+							click_link @product.title
+						end
+
+						it "they can still access the product page" do
+							page.should have_content(@product.title)
+							page.should have_content(@product.description)
+						end
+
+						it "they cannot add it to a new cart" do 
+							page.should_not have_link "Add to cart"
+						end
 					end
 
 				end

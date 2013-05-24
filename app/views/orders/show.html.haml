@@ -1,0 +1,6 @@
+Order page
+.products
+  =render partial: 'orders/product', collection: @order.products, as: :product
+.status= "Product is #{@order.status} since #{@order.status_change_date}"
+.total_price= @order.total_price
+.submit_date= @order.date_of_purchase
