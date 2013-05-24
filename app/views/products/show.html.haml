@@ -2,4 +2,5 @@
 .add_to_cart= link_to("Add to cart", add_to_cart_path(@product)) if @product.on_sale?
 .description= @product.description
 .overall_note= note_in_stars(@product.rating)
+=render partial: 'reviews/new', locals: {product: @product}
 .reviews=render @product.reviews

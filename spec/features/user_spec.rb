@@ -75,8 +75,8 @@ end
 
 def login user 
 	click_link 'Log in'
-	fill_in 'session[email]', with: user.email
-	fill_in 'session[password]', with: user.password
+	fill_in 'Email', with: user.email
+	fill_in 'Password', with: user.password
 	click_button "Sign in"
 end
 
@@ -409,23 +409,37 @@ describe "User:" do
 
 		context " On products he has purchased" do
 			before(:each) do
+				user = FactoryGirl.create(:user)
 				products = FactoryGirl.create_list(:product, 2)
-				@purchased_product = product.first
-				@other_product = product.last
+				@purchased_product = products.first
+				@other_product = products.last
+				visit '/'
+				login user
 				order_some_products @purchased_product
 
 				visit '/products'
 			end	
 			context "he can" do
 				before(:each) do
-					visit @purchased_product.title
+					click_link @purchased_product.title
 				end
 
 				context "Add a rating including:" do
 					it "Star rating 0-5" do
-						find(".new_review.note").select('2')
-						click_link "Submit"
-						@purchased_product.rating.should == 2
+						review = FactoryGirl.create(:review)
+						within(".new_review"){
+							fill_in 'Title', with: review.title
+							fill_in 'Body', with: review.body
+							select(review.note.to_s, from: 'review_note')
+						}
+						click_button "Send review"
+						page.should_not have_content("Error")
+						page.should have_content(@purchased_product.description)
+						@purchased_product.rating.should == review.note
+
+						within(".overall_note"){
+							page.should have_note(review.note)
+						}
 					end
 					
 					it "Title"
