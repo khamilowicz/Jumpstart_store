@@ -341,15 +341,48 @@ describe "User:" do
 							}
 						end
 					end
-					it "links to each product page"
-					it "the current status"
-					it "order total price"
-					it "date/time order was submitted"
-					it "if shipped or cancelled, display a timestamp when that action took place"
+
+					it "links to each product page" do 
+						@order.products.each do |product|
+							within('.products'){
+								page.should have_link(product.title)
+							}
+						end
+					end
+
+					it "the current status" do
+						page.should have_selector(".status", content: @order.status)
+					end
+
+					it "order total price" do 
+						page.should have_selector(".total_price", content: @order.total_price)
+					end
+
+					it "date/time order was submitted" do
+						page.should have_selector(".submit_date", content: @order.date_of_purchase)
+					end
+
+					it "if shipped or cancelled, display a timestamp when that action took place" do
+						page.should have_selector(".status", content: @order.status_change_date)
+					end
+
 
 					context "if any product is retired:" do
-						it "they can still access the product page"
-						it "they cannot add it to a new cart"
+						before(:each) do
+							@product = @order.products.first
+							@product.retire 
+							@product.product.save
+							click_link @product.title
+						end
+
+						it "they can still access the product page" do
+							page.should have_content(@product.title)
+							page.should have_content(@product.description)
+						end
+
+						it "they cannot add it to a new cart" do 
+							page.should_not have_link "Add to cart"
+						end
 					end
 
 				end

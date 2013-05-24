@@ -12,7 +12,7 @@ class OrderProduct < ActiveRecord::Base
     end
   end
 
-  def self.convert prod, quantity
+  def self.convert prod, quantity=1
     op = self.create
     op.product = prod
     op.quantity = quantity

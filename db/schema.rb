@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(:version => 20130524171520) do
   add_index "carts", ["user_id"], :name => "index_carts_on_user_id"
 
   create_table "categories", :force => true do |t|
-    t.datetime "created_at", :null => false
+   t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.string   "name"
   end
