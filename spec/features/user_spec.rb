@@ -28,8 +28,14 @@ end
 RSpec::Matchers.define :have_note do |note|
 	match do |page_content|
 		within(".note"){
-			note.floor.times{|i| page_content.should have_selector(".star.full##{i}")}
-			page_content.should have_selector(".star.half") if note != note.round
+			page_content.all(".star").size.should == 5
+			page_content.all(".star.full").size.should == note.floor
+
+			if note.round != note
+				page_content.all(".star.half").size.should == 1 
+			else
+				page_content.all(".star.half").size.should == 0
+			end
 		}
 	end
 end
