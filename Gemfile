@@ -30,6 +30,8 @@ end
 
 gem 'simplecov', require: false, group: :test
 gem 'pry-rails'
+gem 'pry-debugger'
+gem 'pry-rescue'
 
 
 gem 'jquery-rails'

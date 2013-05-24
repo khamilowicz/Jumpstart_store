@@ -12,22 +12,42 @@ end
 
 RSpec::Matchers.define :have_review do |review|
 	match do |page_content|
-		page_content.find('.review'){|review_content|
-			review_content.should have_selector('.reviewer', text: review.reviewer_name)
-			review_content.should have_selector('.title', text: review.title)
-			review_content.should have_selector('.body', text: review.body)
-			review_content.should have_note(review.note)
+		within('.review'){
+			page_content.should have_selector('.reviewer', text: review.reviewer_name)
+			page_content.should have_selector('.title', text: review.title)
+			page_content.should have_selector('.body', text: review.body)
+			page_content.should have_note(review.note)
 		}
+	end
+
+	failure_message_for_should do |page_content|
+		"Expected #{page_content.find('.review').native} to have #{review.reviewer_name}, #{review.title}, #{review.body} and #{review.note} stars"
 	end
 end
 
 RSpec::Matchers.define :have_note do |note|
 	match do |page_content|
-		page_content.find(".note"){|note_content|
-			note.floor.times{|i| note_content.should have_selector(".star.full##{i}")}
-			note_content.should have_selector(".star.half") if note != note.round
+		within(".note"){
+			note.floor.times{|i| page_content.should have_selector(".star.full##{i}")}
+			page_content.should have_selector(".star.half") if note != note.round
 		}
 	end
+end
+
+RSpec::Matchers.define :have_short_order do |order|
+	match do |page_content|
+		within('.order'){
+			page_content.should have_content(order.date_of_purchase)
+			page_content.should have_content(order.total_price)
+			page_content.should have_link("Show order")
+		}
+	end
+
+	failure_message_for_should do |page_content|
+		
+		"Expected #{page_content.find(".order").native} to have #{order.date_of_purchase}, #{order.total_price}, and link 'Show order'"
+	end
+
 end
 
 def add_products_to_cart products
@@ -43,6 +63,13 @@ def login user
 	fill_in 'session[email]', with: user.email
 	fill_in 'session[password]', with: user.password
 	click_button "Sign in"
+end
+
+def order_some_products products
+	add_products_to_cart products
+	visit '/cart'
+	click_link "Order"
+	click_link "Buy"
 end
 
 shared_examples_for "simple user" do
@@ -163,6 +190,7 @@ shared_examples_for "simple user" do
 				}
 				within(".overall_note"){
 					page.should have_note(2.5)
+					page.should_not have_note(3.5)
 				}
 				
 			end
@@ -262,49 +290,65 @@ describe "User:" do
 				page.should have_link("Log in")
 			end
 
-			it "make an order" do
-
-				user = FactoryGirl.create(:user)
-				products = FactoryGirl.create_list(:product, 3)
-				add_products_to_cart products
-				login user
-
-				visit '/cart'
-				products.each do |product|
-					page.should have_short_product( product)
-				end
-				click_link "Order"
-				page.should have_content("Order page")
-				click_link "Buy"
-				page.should have_content("Order is processed")
-				user.products.should be_empty
-				user.orders.first.products.should include(products.first, products.last)
-				visit '/cart'
-				products.each do |product|
-					page.should_not have_short_product( product)
-				end
-			end
-
-			it "view their past orders with links to display each order"
 			
-			context "on that order display page there are:" do
-				it "products with quantity ordered and line-item subtotals"
-				it "links to each product page"
-				it "the current status"
-				it "order total price"
-				it "date/time order was submitted"
-				it "if shipped or cancelled, display a timestamp when that action took place"
 
-				context "if any product is retired:" do
-					it "they can still access the product page"
-					it "they cannot add it to a new cart"
+			context "concerning orders" do
+				before(:each) do
+					@user = FactoryGirl.create(:user)
+					@products = FactoryGirl.create_list(:product, 3, quantity: 3)
+					visit '/'
+					login @user
+					order_some_products @products
+					@quantity_of_products_in_order = 1
+					@order = @user.orders.first
+				end
+				
+				it "place an order" do
+					visit '/cart'
+					@user.products.should be_empty
+					@user.orders.first.products.should include(@products.first, @products.last)
+					@products.each do |product|
+						page.should_not have_short_product(product)
+					end
 				end
 
-			end
+				it "view their past orders with links to display each order" do
+					visit '/orders'
+					page.should have_content("Previous orders")
+					page.should have_short_order(@order)
+				end
 
-			it "Place a 'Two-Click' order from any active product page."
-			it "The first click asks 'Place an order for ‘X’? and if you then click 'OK', the order is completed."
-			it "Handle this in JavaScript or plain HTML at your discretion."
+				context "on that order display page there are:" do
+
+					before(:each) do
+						visit order_path(@order)
+					end
+
+					it "products with quantity ordered and line-item subtotals" do
+						@order.products.each do |product|
+							within('.products'){
+								page.should have_selector('.product', text: product.title)
+								page.should have_selector(".product .quantity", text: @quantity_of_products_in_order.to_s)
+							}
+						end
+					end
+					it "links to each product page"
+					it "the current status"
+					it "order total price"
+					it "date/time order was submitted"
+					it "if shipped or cancelled, display a timestamp when that action took place"
+
+					context "if any product is retired:" do
+						it "they can still access the product page"
+						it "they cannot add it to a new cart"
+					end
+
+				end
+
+				it "Place a 'Two-Click' order from any active product page."
+				it "The first click asks 'Place an order for ‘X’? and if you then click 'OK', the order is completed."
+				it "Handle this in JavaScript or plain HTML at your discretion."
+			end
 		end
 
 		context "is NOT allowed to:" do
@@ -317,8 +361,6 @@ describe "User:" do
 
 		context " On products I’ve purchased" do
 			context "he can" do
-
-
 				context "Add a rating including:" do
 					it "Star rating 0-5"
 					it "Title"
