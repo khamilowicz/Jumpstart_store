@@ -407,10 +407,27 @@ describe "User:" do
 
 		end
 
-		context " On products I’ve purchased" do
+		context " On products he has purchased" do
+			before(:each) do
+				products = FactoryGirl.create_list(:product, 2)
+				@purchased_product = product.first
+				@other_product = product.last
+				order_some_products @purchased_product
+
+				visit '/products'
+			end	
 			context "he can" do
+				before(:each) do
+					visit @purchased_product.title
+				end
+
 				context "Add a rating including:" do
-					it "Star rating 0-5"
+					it "Star rating 0-5" do
+						find(".new_review.note").select('2')
+						click_link "Submit"
+						@purchased_product.rating.should == 2
+					end
+					
 					it "Title"
 					it "Body text"
 				end
