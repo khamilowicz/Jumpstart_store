@@ -1,8 +1,3 @@
-# Rspec::Matchers.define :have_product do |expected|
-#   match do |actual|
-#     actual.should have_content(expected.title)
-#   end
-# end
 RSpec::Matchers.define :have_short_product do |product|
   match do |page_content|
     selector = ".product.#{product.title_param}" 
