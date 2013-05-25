@@ -55,6 +55,16 @@ RSpec::Matchers.define :have_short_order do |order|
 	end
 end
 
+RSpec::Matchers.define :show_its_content do 
+	match do |page_content|
+		page_content.should == 'lolo'
+	end
+
+	failure_message_for_should do |page_content|
+		"#{page_content.find("body").native}"
+	end
+end
+
 RSpec::Matchers.define :include_products do |*products|
 	match do |arr|
 		titles = arr.collect(&:title)
@@ -85,6 +95,15 @@ def order_some_products products
 	visit '/cart'
 	click_link "Order"
 	click_link "Buy"
+end
+
+def add_a_review review 
+	within(".new_review"){
+		fill_in 'Title', with: review.title
+		fill_in 'Body', with: review.body
+		select(review.note.to_s, from: 'review_note')
+	}
+	click_button "Send review"
 end
 
 shared_examples_for "simple user" do
@@ -204,6 +223,7 @@ shared_examples_for "simple user" do
 					click_link "Show more"
 				}
 				within(".overall_note"){
+					# page.should show_its_content
 					page.should have_note(2.5)
 					page.should_not have_note(3.5)
 				}
@@ -420,36 +440,38 @@ describe "User:" do
 				visit '/products'
 			end	
 			context "he can" do
+
 				before(:each) do
 					click_link @purchased_product.title
+					@review = FactoryGirl.build(:review)
+					add_a_review @review 
 				end
 
-				context "Add a rating including:" do
-					it "Star rating 0-5" do
-						review = FactoryGirl.create(:review)
-						within(".new_review"){
-							fill_in 'Title', with: review.title
-							fill_in 'Body', with: review.body
-							select(review.note.to_s, from: 'review_note')
-						}
-						click_button "Send review"
-						page.should_not have_content("Error")
-						page.should have_content(@purchased_product.description)
-						@purchased_product.rating.should == review.note
+				context "Add a review including:" do
 
-						within(".overall_note"){
-							page.should have_note(review.note)
-						}
+					it "Star rating 0-5, title, body " do
+						within(".overall_note"){page.should have_note(@review.note) }
+						page.should have_review(@review)
 					end
 					
-					it "Title"
-					it "Body text"
 				end
-				it "Edit a review I’ve previously submitted until 15 minutes after I first submitted it"
+				it "Edit a review I’ve previously submitted until 15 minutes after I first submitted it" do
+					review_2 = FactoryGirl.build(:review)
+					review_2.note = 3
+					click_link "Edit review"
+					add_a_review review_2
+					page.should have_content("Successfully updated")
+					page.should have_review(review_2)
+					page.should_not have_review(@review)
+
+					Delorean.jump(16*60) do
+						visit product_path(@purchased_product)
+						page.should_not have_link "Edit review"
+						page.should have_review(review_2)
+					end
+				end
 			end
-
 		end
-
 	end
 
 	describe "As an authenticated Administrator" do

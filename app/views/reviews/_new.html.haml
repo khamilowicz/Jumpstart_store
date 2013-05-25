@@ -1,8 +1,9 @@
-=form_for [product, Review.new] do |f|
-  = f.label :title
-  = f.text_field :title
-  = f.label :body
-  = f.text_area :body
-  = f.label :note
-  .note= f.select :note, options_for_select((1..5).zip((1..5)) )
-  = f.submit "Send review"
+.new_review
+  =form_for [product, review] do |f|
+    = f.label :title
+    = f.text_field :title
+    = f.label :body
+    = f.text_area :body
+    = f.label :note
+    .note= f.select :note, options_for_select((1..5).zip((1..5)) )
+    = f.submit "Send review"

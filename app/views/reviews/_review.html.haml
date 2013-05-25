@@ -1,4 +1,6 @@
 .review
+  =link_to "Edit review", edit_review_path(review.product, review) if review.created_at > 15.minutes.ago
+  = "Review submitted #{Time.zone.at(review.created_at)}"
   .reviewer=review.reviewer_name
   .title=review.title
   .body=review.body
