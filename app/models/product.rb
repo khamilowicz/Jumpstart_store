@@ -1,9 +1,12 @@
 class Product < ActiveRecord::Base
   # attr_accessible :title, :body
+
+  attr_accessible :title, :description, :price, :photo
   validates :title, presence: true, uniqueness: true
   validates_presence_of :description
   validates :base_price, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
-  validates :photo, format: {with: %r{https?://(www\.)?\w+(\.\w+)+} }, allow_nil: true
+  # validates :photo, format: {with: %r{https?://(www\.)?\w+(\.\w+)+} }, allow_nil: true
+
   validates :quantity, presence: true, numericality: {greater_than_or_equal_to: 0, integer: true}
 
   scope :find_on_sale, ->{where(on_sale: true)}
@@ -13,8 +16,9 @@ class Product < ActiveRecord::Base
   belongs_to :order
   has_many :category_products
   has_many :categories, through: :category_products
-
   has_many :reviews
+
+  has_attached_file :photo
 
   alias_attribute :price= , :base_price=
 

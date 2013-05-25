@@ -1,11 +1,65 @@
  require "spec_helper"
 
- describe "Administrator" do
- 	context "can" do
+ def some_photo
+ 	"./spec/files/sean.jpeg"
+ end 
+ def create_new_product product
+ 	fill_in "Title", with: product.title
+ 	fill_in "Description", with: product.description
+ 	fill_in "Price", with: product.price
+ 	attach_file("Photo", some_photo)
+ 	click_button "Submit"
+ end
 
- 		it "Create product listings including a title, description, price, and a photo"
- 		it "Modify existing products title, description, price, and photo"
- 		it "Create named categories for products"
+ def add_to_category product, category_name
+ 	visit product_path(product)
+ 	click_link "Add to category"
+ 	fill_in "New category", with: category_name
+ 	click_button "Submit"
+ end
+
+ describe "Administrator" do
+ 	subject {page}
+ 	context "managing products" do
+ 		describe "creates product" do
+ 			before(:each) do
+ 				@product = FactoryGirl.build(:product)
+ 				visit new_product_path
+ 				create_new_product @product
+ 			end
+
+ 			it { should have_content("Successfully created product")}
+ 			it { should have_short_product(@product)}
+ 			it {@product.photo.should_not be_nil}
+
+ 			describe "and modifies them" do 
+ 				before(:each) do
+ 					@product_2 = FactoryGirl.build(:product)
+ 					pro = Product.where(title: @product.title).first
+ 					visit edit_product_path(pro)
+ 					create_new_product @product_2
+ 				end
+
+ 				it { should have_content("Successfully updated product")}
+ 				it { should_not have_short_product(@product)}
+ 				it { should have_short_product(@product_2)}
+ 			end
+ 		end
+
+ 		describe "creates categories" do 
+ 			before(:each) do
+ 				@category_name = "Category_1"
+ 				@product = FactoryGirl.create(:product)
+ 				add_to_category @product, @category_name
+ 				visit '/categories'
+ 				click_link @category_name
+ 			end
+
+ 			it {should have_content(@category_name)}
+ 			it {should have_short_product(@product)}
+ 		end
+
+
  		it "Assign products to categories or remove them from categories. Products can belong to more than one category."
  		it "Retire a product from being sold, which hides it from browsing by any non-administrator"
  		it "As an Administrator, I can also view an order 'dashboard' where I can:"
