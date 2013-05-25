@@ -23,13 +23,14 @@ group :test, :development do
 	gem 'factory_girl_rails'
 	gem 'capybara'
 	gem 'capybara_rails'
+  gem 'delorean'
 end
 	gem 'launchy'
 
 gem 'simplecov', require: false, group: :test
 gem 'pry-rails'
-gem 'pry-debugger'
-gem 'pry-rescue'
+gem 'pry-plus'
+gem 'pry-stack_explorer'
 
 
 gem 'jquery-rails'

@@ -1,4 +1,7 @@
 class Review < ActiveRecord::Base
+
+
+  attr_accessible :title, :body, :note
 	validates_presence_of :title, :body, :note, :product
 	validates :note, numericality: {greater_than_or_equal_to: 1, less_than_or_equal_to: 5, only_integer: true}
 	belongs_to :user

@@ -1,5 +1,5 @@
 .product{class: product.title_param, id: product_counter}
-	=product.title
+	=link_to product.title, product_path(product)
 	=link_to "Show more", product
 	-if product.users.include?(current_user)
 		.quantity= "#{product.quantity_for(current_user)} in cart"

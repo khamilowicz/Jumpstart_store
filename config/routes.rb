@@ -15,6 +15,11 @@ NewStore::Application.routes.draw do
   get '/products/:id/to_cart' => 'products#add_to_cart', as: "add_to_cart"
   get '/products/:id/remove_from_cart' => 'products#remove_from_cart', as: 'remove_from_cart'
 
+  post '/products/:id/review' => 'reviews#create', as: 'product_reviews'
+  put '/products/:product_id/review/:id' => 'reviews#update', as: 'product_review'
+  get '/products/:product_id/review/:id/edit' => 'reviews#edit', as: 'edit_review'
+  # post '/products/:product_id/review/:id/update' => 'reviews#update', as: 'update_review'
+
 
   get '/categories' => 'categories#index'
   get '/categories/:id' => 'categories#show', as: 'category'
