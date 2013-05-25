@@ -1,4 +1,5 @@
  require "spec_helper"
+ require_relative './user_helper_spec.rb'
 
  def some_photo
  	"./spec/files/sean.jpeg"
@@ -75,15 +76,29 @@
 
  		end
  		context "Access details of an individual order, including:" do
- 			it 'Order date and time'
- 			it 'Purchaser full name and email address'
- 			it 'For each product on the order'
- 			it 'Name with link to product page'
- 			it 'Quantity'
- 			it 'Price'
- 			it 'Line item subtotal'
- 			it 'Total for the order'
- 			it 'Status of the order'
+ 			before(:each) do
+ 				@products =  FactoryGirl.create_list(:product, 2)
+        @user = FactoryGirl.create(:user)
+        visit '/'
+        login @user
+ 				order_some_products @products
+ 				@order = Order.first
+        visit order_path(@order)
+        @product = @order.products.first
+ 			end
+
+ 			it { should have_selector(".order .submit_date", text: @order.date_of_purchase.to_s )}
+ 			it { should have_selector(".order .purchaser", text: @user.full_name)}
+ 			it { should have_selector(".order .purchaser", text: @user.email)}
+
+
+ 			it { within(".products .product .title"){ should have_link(@product.title)}}
+ 			it { should have_selector( ".products .product .quantity", text: @product.quantity.to_s)}
+ 			it { should have_selector( ".products .product .price", text: @product.price.to_s)}
+ 			it { should have_selector( ".products .product .subtotal", text: @product.subtotal.to_s)}
+ 			it { should have_selector('.order .total_price', text: @order.total_price.to_s )}
+ 			it { should have_selector('.order .status', text: @order.status )}
+
  			it 'Update an individual order'
  			it 'View and edit orders; may change quantity or remove products from orders with the status of pending or paid'
  			it 'Change the status of an order according to the rules as outlined above'

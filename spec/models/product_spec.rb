@@ -65,6 +65,7 @@ describe Product do
 
  describe "may have" do
    it "photo. If present it must be a valid URL format." do
+    pending "now it's rather obsolete requirement"
      @product.photo.should be_nil 
      @product.should be_valid
      @product.photo = 'shabada'
