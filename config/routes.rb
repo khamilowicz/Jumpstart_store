@@ -14,6 +14,7 @@ NewStore::Application.routes.draw do
   get '/products/:id' => 'products#show', as: 'product'
   get '/products/:id/to_cart' => 'products#add_to_cart', as: "add_to_cart"
   get '/products/:id/remove_from_cart' => 'products#remove_from_cart', as: 'remove_from_cart'
+  get '/products/new' => 'products#new', as: "new_product"
 
   post '/products/:id/review' => 'reviews#create', as: 'product_reviews'
   put '/products/:product_id/review/:id' => 'reviews#update', as: 'product_review'

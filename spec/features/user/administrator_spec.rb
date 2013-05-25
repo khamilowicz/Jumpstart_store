@@ -1,9 +1,32 @@
  require "spec_helper"
 
- describe "Administrator" do
- 	context "can" do
+ def create_new_product product
+ 	visit new_product_path
+ 	fill_in "Title", with: product.title
+ 	fill_in "Description", with: product.description
+ 	fill_in "Price", with: product.price
+ 	attach_file(product.photo)
+ 	click_button "Submit"
+ end
 
- 		it "Create product listings including a title, description, price, and a photo"
+ describe "Administrator" do
+ 	subject{page}
+ 	context "managing products" do
+ 		describe "creates products list" do 
+
+ 			before(:each) do
+ 				@new_product = FactoryGirl.build(:product)
+ 				create_new_product @new_product
+ 			end
+
+ 			it {should have_content("Successfully created product")}
+ 			it{ should have_selector('.product .title', text: @new_product.title)}
+ 			it{ should have_selector('.product .description', text: @new_product.description)}
+ 			it{ should have_selector('.product .price', text: @new_product.price.to_s)}
+ 			it{ find(".product .photo img").should have_link(@new_product.photo_url)}
+
+ 		end
+
  		it "Modify existing products title, description, price, and photo"
  		it "Create named categories for products"
  		it "Assign products to categories or remove them from categories. Products can belong to more than one category."
