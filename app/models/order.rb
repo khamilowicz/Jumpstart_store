@@ -73,6 +73,7 @@ class Order < ActiveRecord::Base
 		define_method method_name do
 			self.status = stat
 			update_status_date
+			save
 		end
 	end
 
