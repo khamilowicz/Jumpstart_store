@@ -2,6 +2,12 @@ class OrdersController < ApplicationController
 	def new
 	end
 
+	def filter
+		status = params[:status]
+		@orders = Order.find_by_status(status)
+		render 'index'
+	end
+
 	def create
 		@order = current_user.orders.new
 		@order.transfer_products

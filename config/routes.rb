@@ -5,6 +5,7 @@ NewStore::Application.routes.draw do
   get "orders/index"
   get "orders/:id" => 'orders#show', as: 'order'
   get 'orders' => 'orders#index', as: 'orders'
+  get 'orders/filter/:status' => 'orders#filter', as: 'filter_orders'
 
   get "session/new"
   delete "session/delete"

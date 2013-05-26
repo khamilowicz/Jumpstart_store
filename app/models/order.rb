@@ -50,12 +50,24 @@ class Order < ActiveRecord::Base
 		end
 	end
 
+	def self.statuses
+		STATUSES
+	end
+
 	STATUSES = {
 		:cancel => 'cancelled',
 		:pay => 'paid', 
 		:is_sent => 'shipped', 
 		:is_returned => 'returned'
 	}
+
+	def self.find_by_status status
+		self.where(status: status).all
+	end
+
+	def self.count_by_status status
+		self.where(status: status).count
+	end
 
 	STATUSES.each do |method_name, stat|
 		define_method method_name do
