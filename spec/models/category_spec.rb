@@ -98,6 +98,9 @@ describe Category do
     category.total_price.should == 3
     category.discount 50
     category.total_price.should == 1.5
+    category.products.each do |product|
+      product.discount.should == 50
+    end
   end
 
 end

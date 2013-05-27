@@ -1,9 +1,12 @@
 class Product < ActiveRecord::Base
   # attr_accessible :title, :body
+
+  attr_accessible :title, :description, :price, :photo
   validates :title, presence: true, uniqueness: true
   validates_presence_of :description
   validates :base_price, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
-  validates :photo, format: {with: %r{https?://(www\.)?\w+(\.\w+)+} }, allow_nil: true
+  # validates :photo, format: {with: %r{https?://(www\.)?\w+(\.\w+)+} }, allow_nil: true
+
   validates :quantity, presence: true, numericality: {greater_than_or_equal_to: 0, integer: true}
 
   scope :find_on_sale, ->{where(on_sale: true)}
@@ -13,8 +16,9 @@ class Product < ActiveRecord::Base
   belongs_to :order
   has_many :category_products
   has_many :categories, through: :category_products
-
   has_many :reviews
+
+  has_attached_file :photo
 
   alias_attribute :price= , :base_price=
 
@@ -22,9 +26,11 @@ class Product < ActiveRecord::Base
   #   ProductUser.where(user: user.id, product: self.id).first.in_cart?
   # end
 
-  def add_to_category category
-    cat = Category.get(category)
-    cat.add_product self
+  def add_to_category categories
+    categories = [categories] unless categories.kind_of?(Array)
+    categories.each do |category|
+      Category.get(category).add_product self
+    end
   end
 
   def list_categories
@@ -54,10 +60,12 @@ end
 
 def on_discount discount
  self.discount = discount
+ self.save
 end
 
 def off_discount
  self.discount = 100
+ self.save
 end
 
 def title_param

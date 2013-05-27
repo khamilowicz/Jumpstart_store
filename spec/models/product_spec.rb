@@ -65,6 +65,7 @@ describe Product do
 
  describe "may have" do
    it "photo. If present it must be a valid URL format." do
+    pending "now it's rather obsolete requirement"
      @product.photo.should be_nil 
      @product.should be_valid
      @product.photo = 'shabada'
@@ -80,6 +81,7 @@ describe Product do
       @product.add_to_category "Category_1"
       @product.list_categories.should include("Category_1")
     end
+
   end
 
   describe ".list_categories" do

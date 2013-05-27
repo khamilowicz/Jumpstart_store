@@ -18,4 +18,8 @@ class OrderProduct < ActiveRecord::Base
     op.quantity = quantity
     op
   end
+
+  def subtotal
+    self.quantity*self.price
+  end
 end

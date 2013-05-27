@@ -1,19 +1,32 @@
 NewStore::Application.routes.draw do
 
+  get 'sales/new'
+  post 'sales/create'
+  get 'sales' => 'sales#index'
+  delete 'sales' => 'sales#delete'
+
   get "orders/new"
   get "orders/create"
   get "orders/index"
   get "orders/:id" => 'orders#show', as: 'order'
   get 'orders' => 'orders#index', as: 'orders'
+  get 'orders/filter/:status' => 'orders#filter', as: 'filter_orders'
+  get 'orders/:id/change_status/:status' => 'orders#change_status', as: 'change_order_status'
 
   get "session/new"
   delete "session/delete"
   post "session/create"
 
   get '/products' => 'products#index'
+  get '/products/new' => 'products#new', as: 'new_product'
+  get '/products/:id/edit' => 'products#edit', as: 'edit_product'
+  put '/products/:id' => 'products#update', as: 'product'
+  post '/products' => 'products#create', as: 'products'
   get '/products/:id' => 'products#show', as: 'product'
   get '/products/:id/to_cart' => 'products#add_to_cart', as: "add_to_cart"
   get '/products/:id/remove_from_cart' => 'products#remove_from_cart', as: 'remove_from_cart'
+  get '/products/:id/add_to_category' => 'products#new_add_to_category', as: 'new_add_product_to_category'
+  post '/products/:id/category' => 'products#add_to_category', as: 'add_product_to_category'
 
   post '/products/:id/review' => 'reviews#create', as: 'product_reviews'
   put '/products/:product_id/review/:id' => 'reviews#update', as: 'product_review'

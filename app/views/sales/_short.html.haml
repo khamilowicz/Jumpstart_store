@@ -1,0 +1,3 @@
+.sale
+  =render partial: 'products/short', collection: [product], as: :product
+  = link_to "End sale", sales_path(product: product.id), method: :delete

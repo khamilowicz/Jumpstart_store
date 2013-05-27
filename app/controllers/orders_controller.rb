@@ -2,6 +2,26 @@ class OrdersController < ApplicationController
 	def new
 	end
 
+	def change_status
+		new_status = params[:status]
+		order = Order.find(params[:id])
+		case new_status
+		when 'ship' then order.is_sent
+		when 'cancel' then order.cancel
+		when 'return' then order.is_returned
+		end
+
+		@orders = Order.all
+
+		redirect_to orders_path, notice: "Successfully updated order status to '#{order.status}'"
+	end
+
+	def filter
+		status = params[:status]
+		@orders = Order.find_by_status(status)
+		render 'index'
+	end
+
 	def create
 		@order = current_user.orders.new
 		@order.transfer_products

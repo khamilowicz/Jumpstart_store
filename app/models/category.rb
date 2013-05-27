@@ -25,7 +25,7 @@ class Category < ActiveRecord::Base
 
 
   def add_product product
-  	self.products << product
+    self.products << product
   end
 
   def total_price
