@@ -50,11 +50,13 @@ def add_to_category product, category_name
   click_button "Submit"
 end
 
-def put_on_sale products
-  products = [products] unless products.kind_of?(Array)
+def put_on_sale stuff
+  stuff = [stuff] unless stuff.kind_of?(Array)
+  names = stuff.first.kind_of?(Product) ? stuff.map(&:title) : stuff
+  visit sales_new_path
   fill_in "discount", with: '50'
-  products.each do |p|
-    check p.title
+  names.each do |name|
+    check name 
   end
   click_button "Submit"
 end
