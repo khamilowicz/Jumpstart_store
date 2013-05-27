@@ -1,5 +1,5 @@
 .heading
-	My cart
+	= "#{current_user.display_name} cart"
 .products
 	=render partial: 'products/short', collection: @products, as: :product
 .order_menu

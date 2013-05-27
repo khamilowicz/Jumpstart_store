@@ -25,7 +25,8 @@ describe Product do
 
      it "price" do
       @product.should_not be_nil
-    end
+
+     end
 
 
     it "unique title" do
@@ -60,22 +61,22 @@ describe Product do
     @product.quantity.should == 2
     @product.quantity = 2
     @product.should be_valid
-   end
- end
+  end
+end
 
- describe "may have" do
-   it "photo. If present it must be a valid URL format." do
-    pending "now it's rather obsolete requirement"
-     @product.photo.should be_nil 
-     @product.should be_valid
-     @product.photo = 'shabada'
-     @product.should_not be_valid
-     @product.photo = 'http://google.pl/image'
-     @product.should be_valid
-   end
- end
+describe "may have" do
+ it "photo. If present it must be a valid URL format." do
+  pending "now it's rather obsolete requirement"
+  @product.photo.should be_nil 
+  @product.should be_valid
+  @product.photo = 'shabada'
+  @product.should_not be_valid
+  @product.photo = 'http://google.pl/image'
+  @product.should be_valid
+end
+end
 
- context "concerning categories" do
+context "concerning categories" do
   describe ".add_to_category" do
     it "can take category name" do
       @product.add_to_category "Category_1"
@@ -177,8 +178,7 @@ end
 # product.in_cart?(user).should be_true
 # product.in_cart?(user_2).should be_false
 
-en
-d
+end
 end
 
 describe ".users" do

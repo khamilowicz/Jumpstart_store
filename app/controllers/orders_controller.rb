@@ -1,4 +1,6 @@
 class OrdersController < ApplicationController
+	before_filter :authorize_user
+
 	def new
 	end
 
@@ -40,5 +42,13 @@ class OrdersController < ApplicationController
 
 	def show
 		@order = current_user.orders.find(params[:id])
+	end
+
+	private
+
+	def authorize_user
+		if current_user.guest?
+			redirect_to root_url, notice: "You can't see other user's orders"
+		end
 	end
 end

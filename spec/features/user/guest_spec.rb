@@ -1,4 +1,5 @@
 require "spec_helper"
+
 shared_examples_for "user" do
 
   subject{page}
@@ -10,7 +11,6 @@ shared_examples_for "user" do
   end
 
   context "while browsing products" do
-
 
     it {should have_short_product(@products.first)}
     it {should_not have_selector(".product .quantity")}
@@ -102,6 +102,7 @@ shared_examples_for "user" do
      before(:each) do
       click_link @categories.last 
     end 
+
     it {should have_content(@categories.last)}
     it {should_not have_content(@categories.first)}
     it {should have_short_product(@products.last)}
@@ -116,7 +117,7 @@ context "while viewing his cart" do
     visit '/cart'
   end
 
-  it {should have_content("My cart")}
+  it {should have_content("cart")}
   it {should have_short_product(@product)}
 
   context "removes a product from his cart" do 
@@ -135,13 +136,43 @@ end
 
 shared_examples_for "user who can't" do
 
-  it "View another user’s private data (such as current shopping cart, etc.)" do
-    pending
-    user = FactoryGirl.create(:user)
-    product = FactoryGirl.create(:product, :on_sale)
-    user.add_product product
+  describe "View another user’s"  do
+    before(:each) do
+      @user = FactoryGirl.create(:user)
+      @product = FactoryGirl.create(:product, :on_sale)
+      @user.add_product @product 
+    end
 
-    visit user_path(user)
+    describe "profie" do
+      before(:each) do
+        visit user_path(@user)
+      end
+
+      it{ should have_content("You can't see other user's profile")}
+      it{ should_not have_content(@user.full_name)}
+    end
+
+    describe 'cart' do
+      before(:each) do
+        visit cart_path(@user.cart)
+      end
+
+      it{ should have_content("You can't see other user's cart")}
+      it{ should_not have_short_product(@product)}
+    end
+
+    describe 'order' do 
+      before(:each) do
+        @order = @user.orders.new
+        @order.transfer_products
+        @order.address = 'lala'
+        @order.save
+        visit order_path(@order)
+      end
+
+      it{ should have_content("You can't see other user's order"), "#{page.find("body").native}"}
+      it{ should_not have_content(@user.display_name)}
+    end
   end
 
   it "Checkout (until they log in)" do 

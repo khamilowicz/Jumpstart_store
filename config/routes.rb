@@ -1,5 +1,7 @@
 NewStore::Application.routes.draw do
 
+  get 'users/:id' => 'users#show', as: 'user'
+
   get 'sales/new'
   post 'sales/create'
   get 'sales' => 'sales#index'
