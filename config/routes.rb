@@ -1,7 +1,5 @@
 NewStore::Application.routes.draw do
 
-  get 'users/:id' => 'users#show', as: 'user'
-
   get 'sales/new'
   post 'sales/create'
   get 'sales' => 'sales#index'
@@ -19,27 +17,31 @@ NewStore::Application.routes.draw do
   delete "session/delete"
   post "session/create"
 
-  get '/products' => 'products#index'
-  get '/products/new' => 'products#new', as: 'new_product'
-  get '/products/:id/edit' => 'products#edit', as: 'edit_product'
-  put '/products/:id' => 'products#update', as: 'product'
-  post '/products' => 'products#create', as: 'products'
-  get '/products/:id' => 'products#show', as: 'product'
-  get '/products/:id/to_cart' => 'products#add_to_cart', as: "add_to_cart"
-  get '/products/:id/remove_from_cart' => 'products#remove_from_cart', as: 'remove_from_cart'
-  get '/products/:id/add_to_category' => 'products#new_add_to_category', as: 'new_add_product_to_category'
-  post '/products/:id/category' => 'products#add_to_category', as: 'add_product_to_category'
+  resources :products do
+    get 'add_to_category' => 'products#new_add_to_category'
+    post 'category' => 'products#add_to_category'
+    resources :reviews, only: [:edit, :update]
+    post 'reviews' => 'reviews#create'
+  end
 
-  post '/products/:id/review' => 'reviews#create', as: 'product_reviews'
-  put '/products/:product_id/review/:id' => 'reviews#update', as: 'product_review'
-  get '/products/:product_id/review/:id/edit' => 'reviews#edit', as: 'edit_review'
-  # post '/products/:product_id/review/:id/update' => 'reviews#update', as: 'update_review'
+  get '/cart' => 'carts#show'
+  
+  resources :users do 
+    member do
+      get 'cart' => 'carts#show', as: 'cart'
+    end
+    resources :products, only: [] do 
+      member do 
+        get 'add_to_cart' 
+        get 'remove_from_cart' 
+      end
+    end
+  end
 
 
   get '/categories' => 'categories#index'
   get '/categories/:id' => 'categories#show', as: 'category'
 
-  get '/cart' => 'carts#show', as: 'cart'
 
   root to: 'products#index'
 

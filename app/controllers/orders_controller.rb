@@ -2,6 +2,7 @@ class OrdersController < ApplicationController
 	before_filter :authorize_user
 
 	def new
+
 	end
 
 	def change_status
@@ -42,13 +43,20 @@ class OrdersController < ApplicationController
 
 	def show
 		@order = current_user.orders.find(params[:id])
+		# binding.pry
 	end
 
 	private
 
 	def authorize_user
-		if current_user.guest?
-			redirect_to root_url, notice: "You can't see other user's orders"
+		# binding.pry
+		if params[:id]
+			@order = Order.find(params[:id])
+			unless current_user.admin?
+				if current_user.id != @order.user.id
+					redirect_to root_url, notice: "You can't see other user's order"
+				end
+			end
 		end
 	end
 end

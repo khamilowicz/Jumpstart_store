@@ -16,7 +16,7 @@ def update
 end
 
 def create
-  @product = Product.find(params[:id])
+  @product = Product.find(params[:product_id])
   review  = @product.reviews.new(params[:review])
   review.user = current_user
 

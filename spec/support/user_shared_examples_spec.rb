@@ -170,7 +170,7 @@ shared_examples_for "user who can't" do
         visit order_path(@order)
       end
 
-      it{ should have_content("You can't see other user's order"), "#{page.find("body").native}"}
+      it{ should have_selector('.notice', text: "You can't see other user's order")}
       it{ should_not have_content(@other_user.display_name)}
       it {should_not have_content("Order page")}
     end
