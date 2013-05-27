@@ -19,6 +19,16 @@ def add_to_category product, category_name
 	click_button "Submit"
 end
 
+def put_on_sale products
+  products = [products] unless products.kind_of?(Array)
+  visit sales_new_path
+  fill_in "discount", with: '50'
+  products.each do |p|
+    check p.title
+  end
+  click_button "Submit"
+end
+
 describe "Administrator" do
 	subject {page}
 	context "managing products" do
@@ -61,8 +71,30 @@ describe "Administrator" do
 		end
 
 
-		it "Assign products to categories or remove them from categories. Products can belong to more than one category."
-		it "Retire a product from being sold, which hides it from browsing by any non-administrator"
+    describe "assigns prdocuts to catgories" do
+      before(:each) do
+        categories = FactoryGirl.create_list(:category, 3)
+        @add_to_product = categories[0,2]
+        @not_added = categories[2]
+
+        @product = FactoryGirl.create(:product)
+        visit new_add_product_to_category_path(@product)
+      end
+
+      it "assign to more than one category" do
+        @add_to_product.each do |category|
+          check category.name 
+        end
+        click_button 'Submit'
+        visit product_path(@product)
+        @add_to_product.each do |category|
+          should have_content(category.name)
+        end
+        should_not have_content(@not_added.name)
+      end
+    end
+
+    it "Retire a product from being sold, which hides it from browsing by any non-administrator"
 
     context "sees a listing of all orders" do
       before(:each) do
@@ -86,7 +118,6 @@ describe "Administrator" do
         within(".orders .stats .#{status}"){ should have_content Order.count_by_status(status)}
       end
       # end
-
       # it {
       should have_link("Show order")
       # }
@@ -147,6 +178,7 @@ describe "Administrator" do
         # it {
         should have_selector( ".products .product .subtotal", text: @product.subtotal.to_s)
        # }
+       # should have_selector(".products .product .discount", text: @product.discount)
         # it {
         should have_selector('.order .total_price', text: @order.total_price.to_s )
        # }
@@ -155,6 +187,16 @@ describe "Administrator" do
        # }
 
         # it 'Update an individual order'
+
+# context "On the order 'dashboard' they can:" do
+#   context "View details of an individual order, including:" do
+
+#    it "If purchased on sale, original price, sale percentage and adjusted price"
+#    it "Subtotal for the order"
+#    it "Discount for the order"
+#    it "Total for the order reflecting any discounts from applicable sales"
+#  end 
+# end
         # it 'View and edit orders; may change quantity or remove products from orders with the status of pending or paid'
         # it 'Change the status of an order according to the rules as outlined above'
       # end
@@ -167,23 +209,51 @@ context "not allowed to" do
 end
 
 context "he may" do
- context "put products or entire categories of products on sale. They can:" do
+ context "create a sale" do
 
-  it "Create a 'sale' and connect it with individual products or entire categories"
-  it "Sales are created as a percentage off the normal price"
-  it "View a list of all active sales"
-  it "End a sale"
+  before(:each) do
+    @products = FactoryGirl.create_list(:product, 3)
+    @category = ['Category_1']
+    @products_in_category = @products[0,2]
+    @products_in_category.each {|p| p.add_to_category @category.first}
+    @product = @products.last
 
+    visit sales_new_path
+    fill_in "discount", with: '50'
+  end
+
+  it "for products" do
+    @products_in_category.each do |p|
+      check p.title
+    end
+    click_button "Submit"
+    visit product_path(@products_in_category.last) 
+    should have_selector(".price", text: (0.5*@products_in_category.last.price).to_s)
+  end
+
+  it "for categories" do
+    check @category.first
+    click_button "Submit"
+    @products_in_category.each do |product| 
+     visit product_path(product) 
+     should have_selector(".price", text: (0.5*product.price).to_s), "#{page.find('body').native}"
+   end
+ end
+
+ it "View a list of all active sales" do 
+  put_on_sale @products_in_category
+  visit sales_path
+  should have_short_product(@products_in_category.first)
+  should_not have_short_product(@product) 
 end
 
-context "On the order 'dashboard' they can:" do
-  context "View details of an individual order, including:" do
-
-   it "If purchased on sale, original price, sale percentage and adjusted price"
-   it "Subtotal for the order"
-   it "Discount for the order"
-   it "Total for the order reflecting any discounts from applicable sales"
- end 
+it "End a sale" do
+  put_on_sale @product
+  visit sales_path
+  within('.sale'){ click_link 'End sale'}
+  visit sales_path
+  should_not have_short_product(@product)
+end
 end
 
 context "search orders using a builder-style interface (like Google’s 'Advanced Search;) allowing them to specify any of these:" do
@@ -192,7 +262,7 @@ context "search orders using a builder-style interface (like Google’s 'Advance
   it 'Order total (drop-down for >, <, = and a text field for dollar-with-cents)'
   it 'Order date (drop-down for >, <, = and a text field for a date)'
   it 'Email address of purchaser'
-end 
+end
 
 end 
 end

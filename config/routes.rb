@@ -1,5 +1,10 @@
 NewStore::Application.routes.draw do
 
+  get 'sales/new'
+  post 'sales/create'
+  get 'sales' => 'sales#index'
+  delete 'sales' => 'sales#delete'
+
   get "orders/new"
   get "orders/create"
   get "orders/index"

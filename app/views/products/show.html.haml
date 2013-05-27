@@ -1,4 +1,8 @@
 .title= @product.title
+.price= @product.price
+.categories
+  Categories:
+  = @product.list_categories.join(' ')
 .add_to_category= link_to "Add to category", new_add_product_to_category_path(@product)
 .add_to_cart= link_to("Add to cart", add_to_cart_path(@product)) if @product.on_sale?
 .description= @product.description

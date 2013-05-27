@@ -81,6 +81,7 @@ describe Product do
       @product.add_to_category "Category_1"
       @product.list_categories.should include("Category_1")
     end
+
   end
 
   describe ".list_categories" do

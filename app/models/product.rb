@@ -26,9 +26,11 @@ class Product < ActiveRecord::Base
   #   ProductUser.where(user: user.id, product: self.id).first.in_cart?
   # end
 
-  def add_to_category category
-    cat = Category.get(category)
-    cat.add_product self
+  def add_to_category categories
+    categories = [categories] unless categories.kind_of?(Array)
+    categories.each do |category|
+      Category.get(category).add_product self
+    end
   end
 
   def list_categories
@@ -58,10 +60,12 @@ end
 
 def on_discount discount
  self.discount = discount
+ self.save
 end
 
 def off_discount
  self.discount = 100
+ self.save
 end
 
 def title_param

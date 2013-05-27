@@ -1,0 +1,10 @@
+Sales
+=form_tag sales_create_path do
+  = number_field_tag :discount, "Discount"
+  - Category.all.each do |category|
+    = label_tag "categories[#{category.id}]", category.name
+    = check_box_tag "categories[#{category.id}]", category.name
+  - Product.all.each do |product|
+    = label_tag "products[#{product.id}]", product.title
+    = check_box_tag "products[#{product.id}]", product.title
+  = submit_tag "Submit"

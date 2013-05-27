@@ -2,8 +2,8 @@ Add product to category
 = @product.title
 = form_tag add_product_to_category_path(@product), html: {multipart: true}  do 
   -@categories.each do |category|
-    =label_tag category.id, category.name
-    =check_box_tag category.id, category.name
+    =label_tag "categories[#{category.id}]", category.name
+    =check_box_tag "categories[#{category.id}]", category.name
   = label_tag :new_category 
   = text_field_tag :new_category
   =submit_tag 'Submit'

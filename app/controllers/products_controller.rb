@@ -19,14 +19,9 @@ class ProductsController < ApplicationController
 
 	def add_to_category
 		@product = Product.find(params[:id])
-		@product.add_to_category params[:new_category]
-
+		@product.add_to_category params[:new_category] unless params[:new_category].empty?
+		@product.add_to_category params[:categories].values if  params[:categories]
 		redirect_to product_path(@product)
-
-
-
-		# categories = Category.find
-		
 	end
 
 	def update
