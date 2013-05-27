@@ -44,37 +44,38 @@ describe Product do
      @product.should_not be_valid
      @product.price = 19.432
      @product.should_not be_valid
-     @product.price = -10.01
-     @product.should_not be_valid
-     @product.price = 19.43
-     @product.price.should == 19.43
-     @product.should be_valid
    end
+     it "should redirect to products index if product not found" do
+       @product.price = -10.01
+       @product.should_not be_valid
+       @product.price = 19.43
+       @product.price.should == 19.43
+       @product.should be_valid
+     end
 
-   it "quantity, which is by default 1" do
-    @product.quantity = nil
-    @product.should be_valid
-    @product.quantity = -2
-    @product.should_not be_valid
-    @product.quantity = 2.3
-    @product.quantity.should == 2
-    @product.quantity = 2
-    @product.should be_valid
-   end
- end
+     it "quantity, which is by default 1" do
+      @product.quantity = nil
+      @product.should be_valid
+      @product.quantity = -2
+      @product.should_not be_valid
+      @product.quantity = 2.3
+      @product.quantity.should == 2
+      @product.quantity = 2
+      @product.should be_valid
+    end
+  end
 
- describe "may have" do
-   it "photo. If present it must be a valid URL format." do
-    pending "now it's rather obsolete requirement"
-     @product.photo.should be_nil 
-     @product.should be_valid
-     @product.photo = 'shabada'
-     @product.should_not be_valid
-     @product.photo = 'http://google.pl/image'
-     @product.should be_valid
-   end
- end
-
+ # describe "may have" do
+   # it "photo. If present it must be a valid URL format." do 
+   #  pending "now it's rather obsolete requirement"
+   #   @product.photo.should be_nil 
+   #   @product.should be_valid
+   #   @product.photo = 'shabada'
+   #   @product.should_not be_valid
+   #   @product.photo = 'http://google.pl/image'
+   #   @product.should be_valid
+   # end
+ # end
  context "concerning categories" do
   describe ".add_to_category" do
     it "can take category name" do

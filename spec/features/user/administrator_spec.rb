@@ -1,32 +1,5 @@
 require "spec_helper"
-require_relative './user_helper_spec.rb'
-
-def some_photo
-	"./spec/files/sean.jpeg"
-end 
-def create_new_product product
-	fill_in "Title", with: product.title
-	fill_in "Description", with: product.description
-	fill_in "Price", with: product.price
-	attach_file("Photo", some_photo)
-	click_button "Submit"
-end
-
-def add_to_category product, category_name
-	visit product_path(product)
-	click_link "Add to category"
-	fill_in "New category", with: category_name
-	click_button "Submit"
-end
-
-def put_on_sale products
-  products = [products] unless products.kind_of?(Array)
-  fill_in "discount", with: '50'
-  products.each do |p|
-    check p.title
-  end
-  click_button "Submit"
-end
+# require_relative './user_helper_spec'
 
 describe "Administrator" do
 	subject {page}

@@ -38,12 +38,5 @@ describe ProductsController do
 			assert_template 'show'
 		end
 
-		it "should redirect to products index if product not found" do
-			pending
-			get :show, id: 1
-			# assert_response :not_found	
-			# flash[:error].should == 'Product not found'
-			assert_redirected_to products_path
-		end
 	end
 end
