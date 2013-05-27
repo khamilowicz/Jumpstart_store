@@ -3,16 +3,21 @@
 
  describe "logged user" do
 
+  before(:each) do
+    @user = FactoryGirl.create(:user)
+    visit '/'
+    login @user
+  end
+
   it_behaves_like 'user'
+  it_behaves_like "user who can't"
+
 
   context "is allowed to:" do
 
     it "log out" do 
-      user = FactoryGirl.create(:user)
-      visit '/'
-      login user
       click_link "Log out"
-      page.should_not have_content(user.display_name)
+      page.should_not have_content(@user.display_name)
       page.should_not have_content("Log out")
       page.should have_content("Guest")
       page.should have_link("Log in")
@@ -20,10 +25,7 @@
 
     context "concerning orders" do
       before(:each) do
-        @user = FactoryGirl.create(:user)
         @products = FactoryGirl.create_list(:product, 3, quantity: 3)
-        visit '/'
-        login @user
         order_some_products @products
         @quantity_of_products_in_order = 1
         @order = @user.orders.first
@@ -110,22 +112,11 @@
     end
   end
 
-  context "is NOT allowed to:" do
-
-    it "view another user’s private data (such as current shopping cart, etc.)"
-    it "view the administrator screens or use administrator functionality"
-    it "make themselves an administrator"
-
-  end
-
   context " On products he has purchased" do
     before(:each) do
-      user = FactoryGirl.create(:user)
       products = FactoryGirl.create_list(:product, 2)
       @purchased_product = products.first
       @other_product = products.last
-      visit '/'
-      login user
       order_some_products @purchased_product
 
       visit '/products'

@@ -2,6 +2,13 @@ require "spec_helper"
 # require_relative './user_helper_spec'
 
 describe "Administrator" do
+
+  before(:each) do
+    @admin = FactoryGirl.create(:user, :admin)
+    visit '/'
+    login @admin
+  end
+
 	subject {page}
 	context "managing products" do
 		describe "creates product" do
@@ -72,6 +79,7 @@ describe "Administrator" do
       before(:each) do
         @user = FactoryGirl.create(:user)
         visit '/'
+        click_link 'Log out'
         login @user
 
         Order.statuses.each do |method, status|
@@ -80,12 +88,18 @@ describe "Administrator" do
           order = Order.last
           order.send method
         end
+
+        click_link "Log out"
+        login @admin
         visit orders_path
+
       end
 
       it "checks lots of things" do 
-
       # it "the total number of orders by status" do
+
+      # should have_content('lol'), "#{page.find("body").native}"
+
       %w{cancelled paid shipped returned}.each do |status|
         within(".orders .stats .#{status}"){ should have_content Order.count_by_status(status)}
       end
@@ -121,16 +135,19 @@ describe "Administrator" do
         should have_content("Successfully updated order status to 'shipped")
       end
     end
+
       # end
       # context "and can access details of an individual order, including:" do
         # before(:each) do
+        visit user_path(@admin)
+
         @order = Order.first
         @product = @order.products.first
-        visit order_path(@order) 
+        visit order_path(@order)
         # end
 
         # it {
-        should have_selector(".order .submit_date", text: @order.date_of_purchase.to_s)
+        should have_selector(".order .submit_date", text: @order.date_of_purchase.to_s), "#{page.find("body").native}"
        # }
         # it {
         should have_selector(".order .purchaser", text: @user.full_name)
