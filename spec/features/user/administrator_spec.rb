@@ -2,90 +2,102 @@ require "spec_helper"
 # require_relative './user_helper_spec'
 
 describe "Administrator" do
-	subject {page}
-	context "managing products" do
-		describe "creates product" do
-			before(:each) do
-				@product = FactoryGirl.build(:product)
-				visit new_product_path
-				create_new_product @product
-			end
 
-			it { should have_content("Successfully created product")}
-			it { should have_short_product(@product)}
-			it {@product.photo.should_not be_nil}
+  before(:each) do
+    @admin = FactoryGirl.create(:user, :admin)
+    visit '/'
+    login @admin
+  end
 
-			describe "and modifies them" do 
-				before(:each) do
-					@product_2 = FactoryGirl.build(:product)
-					pro = Product.where(title: @product.title).first
-					visit edit_product_path(pro)
-					create_new_product @product_2
-				end
-
-				it { should have_content("Successfully updated product")}
-				it { should_not have_short_product(@product)}
-				it { should have_short_product(@product_2)}
-			end
-		end
-
-		describe "creates categories" do 
-			before(:each) do
-				@category_name = "Category_1"
-				@product = FactoryGirl.create(:product)
-				add_to_category @product, @category_name
-				visit '/categories'
-				click_link @category_name
-			end
-
-			it {should have_content(@category_name)}
-			it {should have_short_product(@product)}
-		end
-
-
-    describe "assigns prdocuts to catgories" do
-      before(:each) do
-        categories = FactoryGirl.create_list(:category, 3)
-        @add_to_product = categories[0,2]
-        @not_added = categories[2]
-
-        @product = FactoryGirl.create(:product)
-        visit new_add_product_to_category_path(@product)
-      end
-
-      it "assign to more than one category" do
-        @add_to_product.each do |category|
-          check category.name 
-        end
-        click_button 'Submit'
-        visit product_path(@product)
-        @add_to_product.each do |category|
-          should have_content(category.name)
-        end
-        should_not have_content(@not_added.name)
-      end
+  subject {page}
+  context "managing products" do
+    describe "creates product" do
+     before(:each) do
+      @product = FactoryGirl.build(:product)
+      visit new_product_path
+      create_new_product @product
     end
 
-    it "Retire a product from being sold, which hides it from browsing by any non-administrator"
+    it { should have_content("Successfully created product")}
+    it { should have_short_product(@product)}
+    it {@product.photo.should_not be_nil}
 
-    context "sees a listing of all orders" do
+    describe "and modifies them" do 
       before(:each) do
-        @user = FactoryGirl.create(:user)
-        visit '/'
-        login @user
+       @product_2 = FactoryGirl.build(:product)
+       pro = Product.where(title: @product.title).first
+       visit edit_product_path(pro)
+       create_new_product @product_2
+     end
 
-        Order.statuses.each do |method, status|
-          products =  FactoryGirl.create_list(:product, 2)
-          order_some_products products
-          order = Order.last
-          order.send method
-        end
-        visit orders_path
-      end
+     it { should have_content("Successfully updated product")}
+     it { should_not have_short_product(@product)}
+     it { should have_short_product(@product_2)}
+   end
+ end
 
-      it "checks lots of things" do 
+ describe "creates categories" do 
+   before(:each) do
+    @category_name = "Category_1"
+    @product = FactoryGirl.create(:product)
+    add_to_category @product, @category_name
+    visit '/categories'
+    click_link @category_name
+  end
 
+  it {should have_content(@category_name)}
+  it {should have_short_product(@product)}
+end
+
+
+describe "assigns products to catgories" do
+  before(:each) do
+    categories = FactoryGirl.create_list(:category, 3)
+    @add_to_product = categories[0,2]
+    @not_added = categories[2]
+
+    @product = FactoryGirl.create(:product)
+    visit product_add_to_category_path(@product)
+  end
+
+  it "assign to more than one category" do
+    @add_to_product.each do |category|
+      check category.name 
+    end
+    click_button 'Submit'
+    visit product_path(@product)
+    @add_to_product.each do |category|
+      should have_content(category.name)
+    end
+    should_not have_content(@not_added.name)
+  end
+end
+
+it "Retire a product from being sold, which hides it from browsing by any non-administrator"
+
+context "sees a listing of all orders" do
+  before(:each) do
+    @user = FactoryGirl.create(:user)
+    visit '/'
+    click_link 'Log out'
+    login @user
+
+    Order.statuses.each do |method, status|
+      products =  FactoryGirl.create_list(:product, 2)
+      order_some_products products
+      order = Order.last
+      order.send method
+    end
+
+    click_link "Log out"
+    login @admin
+    visit orders_path
+
+  end
+
+  it "checks lots of things" do 
       # it "the total number of orders by status" do
+
       %w{cancelled paid shipped returned}.each do |status|
         within(".orders .stats .#{status}"){ should have_content Order.count_by_status(status)}
       end
@@ -108,7 +120,7 @@ describe "Administrator" do
         # it 'link to "cancel" individual orders which are currently "pending"'
         should have_link('Cancel')
         click_link  'Cancel'
-        should have_content("Successfully updated order status to 'cancelled' ")
+        should have_content("Successfully updated order status to 'cancelled'")
       when 'shipped'
         # it 'link to "mark as returned" individual orders which are currently "shipped"'
         should have_link('Mark as returned')
@@ -118,19 +130,22 @@ describe "Administrator" do
         # it 'link to "mark as shipped" individual orders which are currently "paid"'
         should have_link('Mark as shipped')
         click_link 'Mark as shipped'
-        should have_content("Successfully updated order status to 'shipped")
+        should have_content("Successfully updated order status to 'shipped'")
       end
     end
+
       # end
       # context "and can access details of an individual order, including:" do
         # before(:each) do
+
         @order = Order.first
         @product = @order.products.first
-        visit order_path(@order) 
+        visit order_path(@order)
         # end
+        should have_content("Order page")
 
         # it {
-        should have_selector(".order .submit_date", text: @order.date_of_purchase.to_s)
+        should have_selector(".order .submit_date", text: @order.date_of_purchase.to_s), "#{page.find("body").native}"
        # }
         # it {
         should have_selector(".order .purchaser", text: @user.full_name)
@@ -180,7 +195,7 @@ describe "Administrator" do
 end
 
 context "he may" do
-  
+
   before(:each) do
     @products = FactoryGirl.create_list(:product, 3)
     @category = ['Category_1']

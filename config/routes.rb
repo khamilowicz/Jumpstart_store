@@ -1,45 +1,57 @@
 NewStore::Application.routes.draw do
 
-  get 'users/:id' => 'users#show', as: 'user'
+  get '/dashboard' => 'admins#dashboard', as: "admin_dashboard"
 
-  get 'sales/new'
-  post 'sales/create'
-  get 'sales' => 'sales#index'
-  delete 'sales' => 'sales#delete'
+  get '/sales/new' => 'sales#new', as: "new_sale"
+  delete '/sales' => 'sales#delete', as: "sales"
+  get '/sales' => 'sales#index', as: 'sales'
+  post '/sales' => 'sales#create'
 
-  get "orders/new"
-  get "orders/create"
-  get "orders/index"
-  get "orders/:id" => 'orders#show', as: 'order'
-  get 'orders' => 'orders#index', as: 'orders'
-  get 'orders/filter/:status' => 'orders#filter', as: 'filter_orders'
-  get 'orders/:id/change_status/:status' => 'orders#change_status', as: 'change_order_status'
+  get 'session/new' => 'session#new', as: 'new_session'
+  post 'session/create' => 'session#create', as: 'sessions'
+  delete 'session/delete' => 'session#delete', as: 'session'
+  # get 'sales/new'
+  # post 'sales/create'
+  # get 'sales' => 'sales#index'
+  # delete 'sales' => 'sales#delete'
 
-  get "session/new"
-  delete "session/delete"
-  post "session/create"
+  # get 'orders' => 'orders#index', as: 'orders'
+  # get 'products' => 'products#index', as: 'products'
+  # get 'orders/create' => 'orders#create', as: 'create'
 
-  get '/products' => 'products#index'
-  get '/products/new' => 'products#new', as: 'new_product'
-  get '/products/:id/edit' => 'products#edit', as: 'edit_product'
-  put '/products/:id' => 'products#update', as: 'product'
-  post '/products' => 'products#create', as: 'products'
-  get '/products/:id' => 'products#show', as: 'product'
-  get '/products/:id/to_cart' => 'products#add_to_cart', as: "add_to_cart"
-  get '/products/:id/remove_from_cart' => 'products#remove_from_cart', as: 'remove_from_cart'
-  get '/products/:id/add_to_category' => 'products#new_add_to_category', as: 'new_add_product_to_category'
-  post '/products/:id/category' => 'products#add_to_category', as: 'add_product_to_category'
+  resources :orders, except: [:create] do 
+    collection do
+      get '/create' => "orders#create", as: 'create'
+      get '/filter' => 'orders#filter', as: 'filter'
+    end
+    get '/change_status' => 'orders#change_status', as: 'change_status'
+  end
+  
+  resources :products do
+    get '/add_to_category' => 'products#new_add_to_category'
+    post '/category' => 'products#add_to_category'
+    resources :reviews, only: [:edit, :update]
+    post '/reviews' => 'reviews#create'
+  end
 
-  post '/products/:id/review' => 'reviews#create', as: 'product_reviews'
-  put '/products/:product_id/review/:id' => 'reviews#update', as: 'product_review'
-  get '/products/:product_id/review/:id/edit' => 'reviews#edit', as: 'edit_review'
-  # post '/products/:product_id/review/:id/update' => 'reviews#update', as: 'update_review'
+  get '/cart' => 'carts#show'
+  
+  resources :users do 
+    member do
+      get '/cart' => 'carts#show', as: 'cart'
+    end
+    resources :products, only: [] do 
+      member do 
+        get 'add_to_cart' 
+        get 'remove_from_cart' 
+      end
+    end
+  end
 
 
   get '/categories' => 'categories#index'
   get '/categories/:id' => 'categories#show', as: 'category'
 
-  get '/cart' => 'carts#show', as: 'cart'
 
   root to: 'products#index'
 

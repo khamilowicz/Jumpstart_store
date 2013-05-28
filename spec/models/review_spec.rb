@@ -8,9 +8,9 @@ describe "Review" do
 
     it "has title" do
       subject.title = nil
-      subject.should_not be_valid
+      should_not be_valid
       subject.title = "Review title"
-      subject.should be_valid
+      should be_valid
     end
 
     it "has body" do

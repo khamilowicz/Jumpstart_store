@@ -1,5 +1,5 @@
 Sales
-=form_tag sales_create_path do
+=form_tag sales_path do
   = number_field_tag :discount, "Discount"
   - Category.all.each do |category|
     = label_tag "categories[#{category.id}]", category.name

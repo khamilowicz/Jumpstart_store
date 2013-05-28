@@ -3,33 +3,38 @@
 
  describe "logged user" do
 
-  it_behaves_like 'user'
+  before(:each) do
+    @user = FactoryGirl.create(:user)
+    visit '/'
+    login @user
+  end
 
-  context "is allowed to:" do
+  it_behaves_like 'user'
+  it_behaves_like "user who can't"
+
+
+  context "is allowed to" do
 
     it "log out" do 
-      user = FactoryGirl.create(:user)
-      visit '/'
-      login user
       click_link "Log out"
-      page.should_not have_content(user.display_name)
+      page.should_not have_content(@user.display_name)
       page.should_not have_content("Log out")
       page.should have_content("Guest")
       page.should have_link("Log in")
     end
 
     context "concerning orders" do
+
       before(:each) do
-        @user = FactoryGirl.create(:user)
         @products = FactoryGirl.create_list(:product, 3, quantity: 3)
-        visit '/'
-        login @user
         order_some_products @products
+        visit orders_path
         @quantity_of_products_in_order = 1
         @order = @user.orders.first
       end
       
       it "place an order" do
+        @order.products.should_not be_empty
         visit '/cart'
         @user.products.should be_empty
         @user.orders.first.products.should include_products(@products.first, @products.last)
@@ -39,12 +44,12 @@
       end
 
       it "view their past orders with links to display each order" do
-        visit '/orders'
+        visit orders_path
         page.should have_content("Previous orders")
         page.should have_short_order(@order)
       end
 
-      context "on that order display page there are:" do
+      context "on that order display page there are" do
 
         before(:each) do
           visit order_path(@order)
@@ -110,57 +115,48 @@
     end
   end
 
-  context "is NOT allowed to:" do
+  context "on products he has purchased" do
 
-    it "view another user’s private data (such as current shopping cart, etc.)"
-    it "view the administrator screens or use administrator functionality"
-    it "make themselves an administrator"
-
-  end
-
-  context " On products he has purchased" do
     before(:each) do
-      user = FactoryGirl.create(:user)
       products = FactoryGirl.create_list(:product, 2)
-      @purchased_product = products.first
+        @purchased_product = products.first
       @other_product = products.last
-      visit '/'
-      login user
       order_some_products @purchased_product
-
+      @review = FactoryGirl.build(:review)
       visit '/products'
     end 
     context "he can" do
+      context "add a review" do
 
-      before(:each) do
-        click_link @purchased_product.title
-        @review = FactoryGirl.build(:review)
-        add_a_review @review 
-      end
+        before(:each) do
+          click_link @purchased_product.title
+          add_a_review @review 
+          visit product_path(@purchased_product)
+        end
 
-      context "Add a review including:" do
 
-        it "Star rating 0-5, title, body " do
-          within(".overall_note"){page.should have_note(@review.note) }
+        it "with star rating 0-5, title, body " do
           page.should have_review(@review)
+          within(".overall_note"){page.should have_note(@review.note) }
         end
         
-      end
-      it "Edit a review I’ve previously submitted until 15 minutes after I first submitted it" do
-        review_2 = FactoryGirl.build(:review)
-        review_2.note = 3
-        click_link "Edit review"
-        add_a_review review_2
-        page.should have_content("Successfully updated")
-        page.should have_review(review_2)
-        page.should_not have_review(@review)
-
-        Delorean.jump(16*60) do
+        it "and edit it if submitted until 15 minutes later" do
+          review_2 = FactoryGirl.build(:review)
+          review_2.note = 3
           visit product_path(@purchased_product)
-          page.should_not have_link "Edit review"
+          click_link "Edit review"
+          add_a_review review_2
+          page.should have_content("Successfully updated")
           page.should have_review(review_2)
+          page.should_not have_review(@review)
+
+          Delorean.jump(16*60) do
+            visit product_path(@purchased_product)
+            page.should_not have_link "Edit review"
+            page.should have_review(review_2)
+          end
         end
       end
     end
-  end
-end  
+  end  
+end

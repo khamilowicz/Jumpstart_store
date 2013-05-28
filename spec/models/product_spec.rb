@@ -64,18 +64,6 @@ describe Product do
   end
 end
 
-describe "may have" do
- it "photo. If present it must be a valid URL format." do
-  pending "now it's rather obsolete requirement"
-  @product.photo.should be_nil 
-  @product.should be_valid
-  @product.photo = 'shabada'
-  @product.should_not be_valid
-  @product.photo = 'http://google.pl/image'
-  @product.should be_valid
-end
-end
-
 context "concerning categories" do
   describe ".add_to_category" do
     it "can take category name" do
