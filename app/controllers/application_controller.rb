@@ -16,6 +16,15 @@ class ApplicationController < ActionController::Base
 			return user
 		end
 	end
+	
+	def ensure_not_guest
+		redirect_to root_url, notice: "You can't see this content. Log in first" if current_user.guest?
+	end
+
+	def authorize_admin
+		redirect_to root_url, notice: "You have to be an admin" unless current_user.admin?
+	end
+
 
 	helper_method :current_user
 end

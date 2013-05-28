@@ -136,7 +136,9 @@ end
 
 shared_examples_for "user who can't" do
 
-  describe "View another user’s"  do
+  describe "can't" do
+
+  describe "view another user’s"  do
     before(:each) do
       @other_user = FactoryGirl.create(:user)
       @product = FactoryGirl.create(:product, :on_sale)
@@ -148,7 +150,7 @@ shared_examples_for "user who can't" do
         visit user_path(@other_user)
       end
 
-      it{ should have_content("You can't see other user's profile")}
+      it{ pending; should have_content("You can't")}
       it{ should_not have_content(@other_user.full_name)}
     end
 
@@ -157,8 +159,8 @@ shared_examples_for "user who can't" do
         visit cart_path(@other_user.cart)
       end
 
-      it{ pending; should have_content("You can't see other user's cart")}
-      it{ should_not have_short_product(@product)}
+      # it{ should have_content("You can't")}
+      it{ should_not have_content("#{@other_user.display_name} cart")}
     end
 
     describe 'order' do 
@@ -170,14 +172,20 @@ shared_examples_for "user who can't" do
         visit order_path(@order)
       end
 
-      it{ should have_selector('.notice', text: "You can't see other user's order")}
+      it{ pending; should have_content("You can't")}
       it{ should_not have_content(@other_user.display_name)}
       it {should_not have_content("Order page")}
     end
   end
 
  
-  it "View the administrator screens or use administrator functionality"
-  it "Make themselves an administrator"
+  it "view the administrator screens or use administrator functionality" do
+    visit admin_dashboard_path
+    should_not have_content("Administrator Dashboard")
+  end
+
+  it "make himself an administrator"
+
+end
 
 end

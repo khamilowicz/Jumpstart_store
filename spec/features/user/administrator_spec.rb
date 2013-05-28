@@ -98,8 +98,6 @@ context "sees a listing of all orders" do
   it "checks lots of things" do 
       # it "the total number of orders by status" do
 
-      # should have_content('lol'), "#{page.find("body").native}"
-
       %w{cancelled paid shipped returned}.each do |status|
         within(".orders .stats .#{status}"){ should have_content Order.count_by_status(status)}
       end

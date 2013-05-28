@@ -9,9 +9,7 @@ class UsersController < ApplicationController
 
   def authorize_user
     unless current_user.admin?
-      if current_user.id.to_s != params[:id]
-        redirect_to root_url, notice: "You can't see other user's profile"
-      end
+        redirect_to root_url, notice: "You can't see other user's profile" unless current_user.id.to_s == params[:id]
     end
   end
 end

@@ -1,8 +1,9 @@
 class OrdersController < ApplicationController
-	# before_filter :authorize_user
+	before_filter :ensure_not_guest
+	before_filter :authorize_user, except: [:new, :create, :index]
+	before_filter :authorize_admin, except: [:filter, :create, :new, :show, :index]
 
 	def new
-
 	end
 
 	def change_status
@@ -38,9 +39,11 @@ class OrdersController < ApplicationController
 	end
 
 	def index
-		@orders = Order.all
-		# binding.pry
-		# @orders = current_user.admin? ? Order.all : current_user.orders.all
+		if current_user.admin?
+			@orders = Order.all
+		else
+			@orders = current_user.orders.all
+		end
 	end
 
 	def show
@@ -50,12 +53,10 @@ class OrdersController < ApplicationController
 	private
 
 	def authorize_user
-		
 		unless current_user.admin?
 			@order = Order.find(params[:order_id] || params[:id])
-			if current_user.id != @order.user.id
-				redirect_to root_url, notice: "You can't see other user's order"
-			end
+			# binding.pry unless current_user.id == @order.user.id
+			redirect_to(root_url, :notice => "You can't see other user's order") unless current_user.id == @order.user.id
 		end
 	end
 end

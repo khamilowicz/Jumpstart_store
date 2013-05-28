@@ -14,14 +14,14 @@ describe "guest" do
     it { should have_link("Log in")}
     it { should_not have_link("Log out")}
   end
- it "Checkout (until they log in)" do 
+ it "can't checkout" do 
     product = FactoryGirl.create(:product)
 
     add_products_to_cart product 
 
     visit '/cart'
     page.should_not have_link "Order"
-    page.should have_content "You need to log in to purchase products"
+    page.should have_content("You need to log in")
   end
 
   context "logs in" do

@@ -94,7 +94,6 @@ it "can transfer products from user" do
   order = user.orders.create
   order.transfer_products
   user.products.should be_empty
-  # binding.pry
   order.products.first.title.should == product.title
 end
 
@@ -109,17 +108,10 @@ describe ".products" do
     @order.transfer_products
     @order.save
   end
-
-  it "is product" do
-    @order.products.first.should be_kind_of(OrderProduct)
-  end
-
-  it "responds to quantity with quantity of product in order" do
-    @order.products.first.quantity.should_not == 3
-    @order.products.first.quantity.should == 1
-    
-  end
-
+  subject { @order.products.first}
+  it{ should be_kind_of(OrderProduct)}
+  its(:quantity){should_not == 3}
+  its(:quantity){should == 1}
 end
 
 end

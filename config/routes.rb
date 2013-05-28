@@ -1,5 +1,7 @@
 NewStore::Application.routes.draw do
 
+  get '/dashboard' => 'admins#dashboard', as: "admin_dashboard"
+
   get '/sales/new' => 'sales#new', as: "new_sale"
   delete '/sales' => 'sales#delete', as: "sales"
   get '/sales' => 'sales#index', as: 'sales'
