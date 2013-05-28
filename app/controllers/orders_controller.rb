@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-	before_filter :authorize_user
+	# before_filter :authorize_user
 
 	def new
 
@@ -7,7 +7,7 @@ class OrdersController < ApplicationController
 
 	def change_status
 		new_status = params[:status]
-		order = Order.find(params[:id])
+		order = Order.find(params[:order_id])
 		case new_status
 		when 'ship' then order.is_sent
 		when 'cancel' then order.cancel
@@ -38,24 +38,23 @@ class OrdersController < ApplicationController
 	end
 
 	def index
-		@orders = current_user.admin? ? Order.all : current_user.orders.all
+		@orders = Order.all
+		# binding.pry
+		# @orders = current_user.admin? ? Order.all : current_user.orders.all
 	end
 
 	def show
-		@order = current_user.orders.find(params[:id])
-		# binding.pry
+		@order = Order.find(params[:id])
 	end
 
 	private
 
 	def authorize_user
-		# binding.pry
-		if params[:id]
-			@order = Order.find(params[:id])
-			unless current_user.admin?
-				if current_user.id != @order.user.id
-					redirect_to root_url, notice: "You can't see other user's order"
-				end
+		
+		unless current_user.admin?
+			@order = Order.find(params[:order_id] || params[:id])
+			if current_user.id != @order.user.id
+				redirect_to root_url, notice: "You can't see other user's order"
 			end
 		end
 	end

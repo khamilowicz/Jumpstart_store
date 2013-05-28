@@ -122,7 +122,7 @@ context "sees a listing of all orders" do
         # it 'link to "cancel" individual orders which are currently "pending"'
         should have_link('Cancel')
         click_link  'Cancel'
-        should have_content("Successfully updated order status to 'cancelled' ")
+        should have_content("Successfully updated order status to 'cancelled'")
       when 'shipped'
         # it 'link to "mark as returned" individual orders which are currently "shipped"'
         should have_link('Mark as returned')
@@ -132,7 +132,7 @@ context "sees a listing of all orders" do
         # it 'link to "mark as shipped" individual orders which are currently "paid"'
         should have_link('Mark as shipped')
         click_link 'Mark as shipped'
-        should have_content("Successfully updated order status to 'shipped")
+        should have_content("Successfully updated order status to 'shipped'")
       end
     end
 
@@ -144,6 +144,7 @@ context "sees a listing of all orders" do
         @product = @order.products.first
         visit order_path(@order)
         # end
+        should have_content("Order page")
 
         # it {
         should have_selector(".order .submit_date", text: @order.date_of_purchase.to_s), "#{page.find("body").native}"

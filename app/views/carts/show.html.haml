@@ -6,4 +6,4 @@
 	-if current_user.guest?
 		"You need to log in to purchase products"
 	-else
-		=link_to 'Order', orders_new_path
+		=link_to 'Order', new_order_path

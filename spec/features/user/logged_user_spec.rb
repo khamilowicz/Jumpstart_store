@@ -24,14 +24,17 @@
     end
 
     context "concerning orders" do
+
       before(:each) do
         @products = FactoryGirl.create_list(:product, 3, quantity: 3)
         order_some_products @products
+        visit orders_path
         @quantity_of_products_in_order = 1
         @order = @user.orders.first
       end
       
       it "place an order" do
+        @order.products.should_not be_empty
         visit '/cart'
         @user.products.should be_empty
         @user.orders.first.products.should include_products(@products.first, @products.last)
@@ -41,7 +44,7 @@
       end
 
       it "view their past orders with links to display each order" do
-        visit '/orders'
+        visit orders_path
         page.should have_content("Previous orders")
         page.should have_short_order(@order)
       end

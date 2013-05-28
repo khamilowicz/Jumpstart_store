@@ -1,34 +1,42 @@
 NewStore::Application.routes.draw do
 
-  get 'sales/new'
-  post 'sales/create'
-  get 'sales' => 'sales#index'
-  delete 'sales' => 'sales#delete'
+  get '/sales/new' => 'sales#new', as: "new_sale"
+  delete '/sales' => 'sales#delete', as: "sales"
+  get '/sales' => 'sales#index', as: 'sales'
+  post '/sales' => 'sales#create'
 
-  get "orders/new"
-  get "orders/create"
-  get "orders/index"
-  get "orders/:id" => 'orders#show', as: 'order'
-  get 'orders' => 'orders#index', as: 'orders'
-  get 'orders/filter/:status' => 'orders#filter', as: 'filter_orders'
-  get 'orders/:id/change_status/:status' => 'orders#change_status', as: 'change_order_status'
+  get 'session/new' => 'session#new', as: 'new_session'
+  post 'session/create' => 'session#create', as: 'sessions'
+  delete 'session/delete' => 'session#delete', as: 'session'
+  # get 'sales/new'
+  # post 'sales/create'
+  # get 'sales' => 'sales#index'
+  # delete 'sales' => 'sales#delete'
 
-  get "session/new"
-  delete "session/delete"
-  post "session/create"
+  # get 'orders' => 'orders#index', as: 'orders'
+  # get 'products' => 'products#index', as: 'products'
+  # get 'orders/create' => 'orders#create', as: 'create'
 
+  resources :orders, except: [:create] do 
+    collection do
+      get '/create' => "orders#create", as: 'create'
+      get '/filter' => 'orders#filter', as: 'filter'
+    end
+    get '/change_status' => 'orders#change_status', as: 'change_status'
+  end
+  
   resources :products do
-    get 'add_to_category' => 'products#new_add_to_category'
-    post 'category' => 'products#add_to_category'
+    get '/add_to_category' => 'products#new_add_to_category'
+    post '/category' => 'products#add_to_category'
     resources :reviews, only: [:edit, :update]
-    post 'reviews' => 'reviews#create'
+    post '/reviews' => 'reviews#create'
   end
 
   get '/cart' => 'carts#show'
   
   resources :users do 
     member do
-      get 'cart' => 'carts#show', as: 'cart'
+      get '/cart' => 'carts#show', as: 'cart'
     end
     resources :products, only: [] do 
       member do 

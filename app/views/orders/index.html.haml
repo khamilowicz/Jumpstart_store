@@ -4,6 +4,6 @@ Previous orders
     .status
       - Order.statuses.each do |key, status|
         = content_tag :div, class: status do
-          = link_to status.capitalize, filter_orders_path(status)
+          = link_to status.capitalize, filter_orders_path({status: status})
           = Order.count_by_status(status)
   =render partial: 'orders/short', collection: @orders, as: :order

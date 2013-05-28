@@ -1,7 +1,7 @@
 require "spec_helper"
 
 def add_products_to_cart products
-  visit '/products'
+  visit products_path
   products = [products] unless products.kind_of? Array
   products.each do |product|
     within(".product.#{product.title_param}") { click_link "Add to cart" }
@@ -17,7 +17,7 @@ end
 
 def order_some_products products
   add_products_to_cart products
-  visit '/cart'
+  visit cart_path
   click_link "Order"
   click_link "Buy"
 end
@@ -53,7 +53,7 @@ end
 def put_on_sale stuff
   stuff = [stuff] unless stuff.kind_of?(Array)
   names = stuff.first.kind_of?(Product) ? stuff.map(&:title) : stuff
-  visit sales_new_path
+  visit new_sale_path
   fill_in "discount", with: '50'
   names.each do |name|
     check name 
