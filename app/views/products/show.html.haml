@@ -1,11 +1,20 @@
-.title= @product.title
-.price= @product.price
-.categories
-  Categories:
-  = @product.list_categories.join(' ')
-.add_to_category= link_to "Add to category", product_add_to_category_path(@product)
-.add_to_cart= link_to("Add to cart", add_to_cart_user_product_path(current_user, @product)) if @product.on_sale?
-.description= @product.description
-.overall_note= note_in_stars(@product.rating)
-=render partial: 'reviews/new', locals: {product: @product, review: Review.new}
-.reviews=render @product.reviews
+.row
+  .title
+    %h1= @product.title
+.row
+  .offset4.price= @product.price
+.row
+  .offset4.categories
+    Categories:
+    .span4= @product.list_categories.join(' ')
+    .add_to_category= link_to "Add to category", product_add_to_category_path(@product)
+.row
+  .add_to_cart= link_to("Add to cart", add_to_cart_user_product_path(current_user, @product)) if @product.on_sale?
+.row
+  %p.span4.description= @product.description
+.row
+  .overall_note= note_in_stars(@product.rating)
+.row
+  =render partial: 'reviews/new', locals: {product: @product, review: Review.new}
+.row
+  .reviews=render @product.reviews

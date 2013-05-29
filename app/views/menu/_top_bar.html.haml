@@ -1,8 +1,12 @@
-.top_bar.row
-  .name.offset1.span2=current_user.display_name
-  .session_link.span4
-    -if current_user.guest?
-      =link_to "Log in", new_session_path 
-    -else
-      =link_to "Log out", session_path, method: :delete
+.top_bar
+  .navbar
+    .navbar-inner
+      .brand=link_to "Shop", root_url
+      %ul.nav
+        %li=link_to current_user.display_name, user_path(current_user)
+        %li=link_to "Products", products_path
+        -if current_user.guest?
+          %li.session_link=link_to "Log in", new_session_path 
+        -else
+          %li.session_link=link_to "Log out", session_path, method: :delete
 

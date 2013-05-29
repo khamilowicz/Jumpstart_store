@@ -7,7 +7,6 @@
 	<%= csrf_meta_tags %>
 </head>
 <body>
-	<%= render 'menu/top_bar' %>
 	<div class="notice">
 		<%= flash[:notice] %>
 	</div>
@@ -15,7 +14,16 @@
 		<%= flash[:errors] %>
 	</div>
 	<div class="container">
-		<%= yield %>
+		<%= render 'menu/top_bar' %>
+		<div class="row">
+			<%= render 'menu/right' %>
+			<div class="span7">
+				<%= yield %>
+			</div>
+			<div class="big_product_image span3" style='background: red; height: 100%'>
+				
+			</div>
+		</div>
 	</div>
 	
 
