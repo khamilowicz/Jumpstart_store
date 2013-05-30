@@ -8,7 +8,7 @@
         .category
           .check_form=check_box_tag "categories[#{category.id}]", category.name
           .label_form=label_tag "categories[#{category.id}]", category.name
-    .new_category
-      = label_tag :new_category, ''
+    .new_category_name
+      = label_tag :new_category, 'New category name'
       = text_field_tag :new_category, '', {placeholder: "Different...?"}
     =submit_tag 'Submit'

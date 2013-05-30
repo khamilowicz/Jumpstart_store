@@ -14,7 +14,7 @@
 	<%- end %>
 
 	<% if flash[:errors] %>
-		<div class="errors alert alert-block alert-error fade in">
+	<div class="errors alert alert-block alert-error fade in">
 		<%= flash[:errors] %>
 		<a class="close" data-dismiss="alert" href="#">&times;</a>
 	</div>
@@ -24,15 +24,11 @@
 	<div class="container">
 		<%= render 'menu/top_bar' %>
 		<div class="row">
-			<%= render 'menu/right' %>
-			<div class="span7">
-				<%= yield %>
-			</div>
-			<%= render 'menu/big_product_image' %>
+			<div class="span2"> <%= render 'menu/right' %> </div>
+			<div class="span7"> <%= yield %> </div>
+			<div class="span3"> <%= render 'menu/big_product_image' %> </div>
 		</div>
 	</div>
-	
-
 </body>
 </html>
 

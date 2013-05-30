@@ -1,20 +1,26 @@
-.span7.product{class: product.title_param, id: product_counter }
+.product.short{class: product.title_param, id: product_counter }
 	.row
 		.span3
-			.product_thumbnail{id: product.title}=image_tag product.photo.url
+			.product_thumbnail{id: product.title}= image_tag product.photo.url
 		.span4
 			.row
-				%h3.span4=link_to product.title, product_path(product)
+				.span4
+					%h3=link_to product.title_shorter, product_path(product)
 			.row
 				-if product.users.include?(current_user)
-					.span1=link_to "Add more", add_to_cart_user_product_path(current_user, product)
-					.span1.quantity= "#{product.quantity_for(current_user)} in cart" if product.quantity_for(current_user) > 0
-					.span2=link_to "Remove from cart", remove_from_cart_user_product_path(current_user, product)
+					.btn=link_to "Add more", add_to_cart_user_product_path(current_user, product)
+					.quantity= "#{product.quantity_for(current_user)} in cart" if product.quantity_for(current_user) > 0
+					=link_to "Remove from cart", remove_from_cart_user_product_path(current_user, product)
 				-else
-					.span4=link_to "Add to cart", add_to_cart_user_product_path(current_user, product)
-			.row.price
-				.span1.base="$#{product.base_price}"
-				%h3.span2.current="$#{product.price}"
+					.offset3.span1
+						.btn.btn-primary=link_to "Add to cart", add_to_cart_user_product_path(current_user, product)
 			.row
-				%h3.span4.discount="You save #{(100*(product.base_price - product.price)/product.base_price).round.to_i}%!"
+				.offset2.span1
+					.price
+						.base="$#{product.base_price}"
+			.row
+				.span1
+					%h3.current="$#{product.price}"
+				.span3
+					%h3.price.discount="You save #{(100*(product.base_price - product.price)/product.base_price).round.to_i}%!" if product.discount < 100
 			.row

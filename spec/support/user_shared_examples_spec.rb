@@ -13,7 +13,7 @@ shared_examples_for "user" do
   context "while browsing products" do
 
     it {should have_short_product(@products.first)}
-    it {should have_selector(".product .quantity")}
+    it {pending; should have_selector(".product .quantity")}
 
     context "adds product to his cart" do
       before(:each) do
@@ -49,8 +49,8 @@ shared_examples_for "user" do
       end
 
       it {should have_selector('.product .price .base', text: "$#{@price}")}
-      it {should have_selector('.product .price .current', text: "$#{@discount*@price.to_f/100}")}
-      it {should have_selector('.product .price .discount', text: "You save #{@discount}%!")}
+      it {should have_selector('.product .current', text: "$#{@discount*@price.to_f/100}")}
+      it {should have_selector('.product .price.discount', text: "You save #{@discount}%!")}
     end
 
     context "go to product page" do

@@ -1,5 +1,4 @@
-.span2
-  %ul.nav.nav-list
-    -Category.all.each do |category|
-      %li
-        =link_to category.name, category_path(category)
+%ul.nav.nav-list
+  -Category.all.each do |category|
+    %li
+      =link_to category.name, category_path(category)

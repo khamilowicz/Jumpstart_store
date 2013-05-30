@@ -80,6 +80,11 @@ def title_param
   self.title.parameterize
 end
 
+def title_shorter
+  self.title.length > 40 ? self.title[0,40] + '...' : self.title
+end
+
+
 def quantity_for user
   self.users.where(id: user.id).count
 end
