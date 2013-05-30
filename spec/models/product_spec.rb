@@ -39,7 +39,7 @@ describe Product do
 
     it "price which is a valid decimal numeric value and greater than zero" do
      @product.price = nil
-     @product.price.should be_nil
+     @product.price.should == 0.0
      @product.should_not be_valid
      @product.price = 'shabada'
      @product.should_not be_valid

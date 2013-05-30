@@ -2,16 +2,18 @@
   .title
     %h1= @product.title
 .row
-  .offset4.price= @product.price
+  %h3.price= "$#{@product.price}"
 .row
-  .offset4.categories
+  =link_to 'Edit product', edit_product_path(@product) if current_user.admin?
+.row
+  .categories
     Categories:
-    .span4= @product.list_categories.join(' ')
+    = @product.list_categories.join(' ')
     .add_to_category= link_to "Add to category", product_add_to_category_path(@product)
 .row
   .add_to_cart= link_to("Add to cart", add_to_cart_user_product_path(current_user, @product)) if @product.on_sale?
 .row
-  %p.span4.description= @product.description
+  %p.description= @product.description
 .row
   .overall_note= note_in_stars(@product.rating)
 .row

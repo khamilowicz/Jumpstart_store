@@ -5,6 +5,9 @@
       %ul.nav
         %li=link_to current_user.display_name, user_path(current_user)
         %li=link_to "Products", products_path
+        %li=link_to "My cart", cart_path
+        %li=link_to "Sales menu", sales_path if current_user.admin?
+        %li=link_to "Users", users_path if current_user.admin?
         -if current_user.guest?
           %li.session_link=link_to "Log in", new_session_path 
         -else

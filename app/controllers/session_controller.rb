@@ -19,7 +19,8 @@ class SessionController < ApplicationController
 			session[:current_user_id] = user.id
 			redirect_to new_session_path, notice: "Successfully logged in"
 		else
-			redirect_to new_session_path, notice: "Wrong password or email pass #{session_args[:password]} email #{session_args[:email]}     params #{params}"
+			flash[:errors] =  "Wrong password or email pass"
+			redirect_to new_session_path
 		end
 	end
 end

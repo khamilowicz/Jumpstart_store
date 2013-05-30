@@ -21,6 +21,7 @@ describe "Administrator" do
     it { should have_content("Successfully created product")}
     it { should have_short_product(@product)}
     it {@product.photo.should_not be_nil}
+    it {click_link @product.title; should have_link("Edit product")}
 
     describe "and modifies them" do 
       before(:each) do
@@ -69,7 +70,7 @@ describe "assigns products to catgories" do
     @add_to_product.each do |category|
       should have_content(category.name)
     end
-    should_not have_content(@not_added.name)
+    within('.categories'){should_not have_content(@not_added.name)}
   end
 end
 

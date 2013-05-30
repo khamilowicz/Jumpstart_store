@@ -2,7 +2,7 @@ class Product < ActiveRecord::Base
   # attr_accessible :title, :body
 
 
-  attr_accessible :title, :description, :base_price, :photo, :discount, :quantity, :on_sale
+  attr_accessible :title, :description, :base_price, :photo, :discount, :quantity, :on_sale, :price
   validates :title, presence: true, uniqueness: true
   validates_presence_of :description
   validates :base_price, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
@@ -55,11 +55,15 @@ class Product < ActiveRecord::Base
  end
 
  def price
-  self.base_price ? (self.base_price*self.discount/100.0).round(2) : nil
+  (self.base_price*self.discount/100.0).round(2)
 end
 
 def base_price
-  super.round(2)
+ super || 0 
+end
+
+def discount
+  super || 0
 end
 
 def on_discount discount

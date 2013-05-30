@@ -19,11 +19,17 @@ class ApplicationController < ActionController::Base
 	end
 	
 	def ensure_not_guest
-		redirect_to root_url, notice: "You can't see this content. Log in first" if current_user.guest?
+		if current_user.guest?
+			flash[:errors] =  "You can't see this content. Log in first"
+			redirect_to root_url
+		end
 	end
 
 	def authorize_admin
-		redirect_to root_url, notice: "You have to be an admin" unless current_user.admin?
+		unless current_user.admin?
+			flash[:errors] = "You have to be an admin" 
+			redirect_to root_url
+		end
 	end
 
 

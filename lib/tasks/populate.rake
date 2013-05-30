@@ -21,7 +21,7 @@ namespace :db do
         discount: 100,
         quantity: rand(20),
         on_sale: true
-        )
+      )
     end
 
     4.times do
@@ -32,5 +32,18 @@ namespace :db do
         password: Faker::Lorem.word 
         )
     end
+
+    2.times do 
+      Category.create!(
+        name: "Category #{Faker::Lorem.word}"
+        )
+    end 
+
+    Category.all.each do |category|
+      Product.all.sample(6).each do |product|
+        category.add_product product
+      end
+    end
+
   end
 end
