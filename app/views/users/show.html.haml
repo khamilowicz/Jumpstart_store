@@ -4,9 +4,9 @@
   -if @user.orders.empty?
     User has no orders
   -else
-    =render partial: 'orders/short', collection: @user.orders
+    =render partial: 'orders/short', collection: @user.orders, as: :order
 .products
   -if @user.products.empty?
     User has no products in cart
   -else
-    =render partial: 'products/short', collection: @user.products
+    =render partial: 'products/short', collection: @user.products, as: :product

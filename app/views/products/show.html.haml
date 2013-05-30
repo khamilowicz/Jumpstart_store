@@ -1,22 +1,22 @@
-.row
-  .title
-    %h1= @product.title
-.row
-  %h3.price= "$#{@product.price}"
-.row
-  =link_to 'Edit product', edit_product_path(@product) if current_user.admin?
-.row
-  .categories
-    Categories:
-    = @product.list_categories.join(' ')
-    .add_to_category= link_to "Add to category", product_add_to_category_path(@product)
-.row
-  .add_to_cart= link_to("Add to cart", add_to_cart_user_product_path(current_user, @product)) if @product.on_sale?
-.row
-  %p.description= @product.description
-.row
-  .overall_note= note_in_stars(@product.rating)
-.row
-  =render partial: 'reviews/new', locals: {product: @product, review: Review.new}
-.row
-  .reviews=render @product.reviews
+.product_full
+  .row
+    .span5.title
+      %h1= @product.title
+    %h2.price.span2= "$#{@product.price}"
+  .row
+    .span1=link_to 'Edit product', edit_product_path(@product) if current_user.admin?
+    .offset6.add_to_cart= link_to("Add to cart", add_to_cart_user_product_path(current_user, @product)) if @product.on_sale?
+  .row
+    .image.span4= image_tag @product.photo.url
+    %p.description.span3= @product.description
+  .row
+    .categories
+      Categories:
+      = @product.list_categories.join(' ')
+      .add_to_category= link_to "Add to category", product_add_to_category_path(@product)
+  .row
+    .overall_note= note_in_stars(@product.rating)
+  .row
+    =render partial: 'reviews/new', locals: {product: @product, review: Review.new}
+  .row
+    .reviews=render @product.reviews

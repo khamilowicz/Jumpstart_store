@@ -21,7 +21,7 @@ namespace :db do
         discount: 100,
         quantity: rand(20),
         on_sale: true
-      )
+        )
     end
 
     4.times do
@@ -45,5 +45,10 @@ namespace :db do
       end
     end
 
+    User.all.each do |user|
+      Product.all.sample(rand(8)).each do |product|
+        user.add_product product
+      end
+    end
   end
 end
