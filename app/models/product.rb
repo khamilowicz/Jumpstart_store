@@ -28,7 +28,9 @@ class Product < ActiveRecord::Base
   # end
 
   def add_to_category categories
+    categories = names_from_hash(categories) if categories.kind_of?(Hash) 
     categories = [categories] unless categories.kind_of?(Array)
+
     categories.each do |category|
       Category.get(category).add_product self
     end
@@ -101,6 +103,13 @@ def calculate_rating
  sum_of_notes = reviews.reduce(0){|sum, review| sum+=review.note}
  note = sum_of_notes.to_f/reviews.size
   	(2.0*note).round/2.0 # round to 0.5
+  end
+
+  def names_from_hash paramHash
+    names = []
+    names += paramHash[:new_category].split(',')
+    names += paramHash[:categories].values if paramHash[:categories]
+    names
   end
 
 

@@ -4,6 +4,14 @@ class Order < ActiveRecord::Base
 	has_many :order_products
 	# has_many :products, through: :order_products 
 
+	def set_status new_status
+		case new_status
+		when 'ship' then self.is_sent
+		when 'cancel' then self.cancel
+		when 'return' then self.is_returned
+		end
+	end
+
 	def products
 		self.order_products #.collect(&:product)
 	end
@@ -42,12 +50,14 @@ class Order < ActiveRecord::Base
 		100*total_price/price_without_discount
 	end
 
-	def transfer_products
+	def transfer_products address= self.user.email
 		self.user.products.all.uniq.each do |product|
 			self.order_products << OrderProduct.convert(product, product.quantity_for(self.user))
 			self.user.remove_product product
 			product.retire
 		end
+		## TODO: address
+		self.address = address
 	end
 
 	def self.statuses

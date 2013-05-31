@@ -62,6 +62,10 @@ class User < ActiveRecord::Base
 		pu.destroy
 	end
 
+	def orders
+		admin? ? Order : super
+	end
+
 	def make_purchase
 		orders.create.products = self.cart.products
 		self.products.clear

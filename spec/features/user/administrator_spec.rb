@@ -104,7 +104,7 @@ context "sees a listing of all orders" do
       end
       # end
       # it {
-      should have_link("Show order")
+      should have_link("Show order"), page.find('body').native
       # }
       # it 'filter orders to display by status type (for statuses "pending", "cancelled", "paid", "shipped", "returned")' do
       Order.statuses.each do |key, status| 
