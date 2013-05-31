@@ -14,20 +14,9 @@ class SalesController < ApplicationController
   end
 
   def create
-    categories = params[:categories]
-    products = params[:products]
-    discount = params[:discount].to_i
-      # binding.pry
-    if categories
-      categories.each do |key, value|
-        Category.find(key).discount discount
-      end
-    end
-    if products
-      products.each do |key, value|
-        Product.find(key).on_discount discount
-      end
-    end
+    Sale.build params
+    Sale.discount_all
+    
     redirect_to products_path
   end
 end
