@@ -9,13 +9,10 @@ class SessionController < ApplicationController
 	end
 
 	def create
-		session_args = params[:session]
-		user = User.where(email: session_args[:email]).first
-		if user && user.password == session_args[:password]
-			current_user.products.each do |product|
-				current_user.remove_product product
-				user.add_product product
-			end
+		user = User.authenticate params[:session]
+		
+		if user 
+			User.transfer_products from: current_user, to: user
 			session[:current_user_id] = user.id
 			redirect_to new_session_path, notice: "Successfully logged in"
 		else
