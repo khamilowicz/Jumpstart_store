@@ -1,0 +1,47 @@
+body {
+  margin:0;
+}
+.big_product_container{
+// position: fixed;
+  .big_product_image{
+    min-height: 30em;
+    position: relative;
+    overflow: hidden;
+
+
+    .image{
+      min-height: 30em;
+    }
+
+    .caption.title{
+
+      &#t0{
+       top: 0.2em;
+      }
+
+      &#t1{
+        top: 1em;
+        left: 0.3em;
+      };
+      &#t2{
+                top: 2em;
+        left: -0.3em;
+      };
+      &#t3{
+        top: 3em;
+        left: 0.3em;
+      };
+      &#t4{
+        top: 4em;
+        left: -0.3em;
+      };
+color: red;
+      position: absolute;
+      font-size: 6em;
+      line-height: 200%;
+      font-weight: bold;
+      overflow-wrap: none;
+      word-wrap: none;
+    }
+  }
+}

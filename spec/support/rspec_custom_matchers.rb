@@ -27,7 +27,7 @@ RSpec::Matchers.define :have_note do |note|
   match do |page_content|
     within(".note"){
       page_content.all(".star").size.should == 5
-      page_content.all(".star.full").size.should == note.floor
+      page_content.all(".star.full").size.should == note.ceil
 
       if note.round != note
         page_content.all(".star.half").size.should == 1 

@@ -16,17 +16,23 @@ group :assets do
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 
+gem 'less-rails'
   gem 'uglifier', '>= 1.0.3'
+  gem 'compass-rails'
+  gem 'twitter-bootstrap-rails'
 end
 
 group :test, :development do
-	gem 'rspec-rails'
-	gem 'factory_girl_rails'
-	gem 'capybara'
-	gem 'capybara_rails'
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+  gem 'capybara'
+  gem 'capybara_rails'
   gem 'delorean'
+  gem 'faker'
+  gem 'guard-livereload'
 end
-	gem 'launchy'
+  gem 'launchy'
+gem 'therubyracer'
 
 gem 'simplecov', require: false, group: :test
 gem 'pry-rails'

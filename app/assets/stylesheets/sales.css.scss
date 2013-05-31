@@ -1,0 +1,6 @@
+@import 'formMixins';
+
+.new_sales{
+        @include checkbox_area;
+        
+}

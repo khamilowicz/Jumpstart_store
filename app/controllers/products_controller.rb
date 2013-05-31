@@ -35,6 +35,7 @@ class ProductsController < ApplicationController
 	end
 
 	def create
+
 		@product = Product.new(params[:product])
 		@product.start_selling
 

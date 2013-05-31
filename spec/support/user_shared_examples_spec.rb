@@ -13,7 +13,7 @@ shared_examples_for "user" do
   context "while browsing products" do
 
     it {should have_short_product(@products.first)}
-    it {should_not have_selector(".product .quantity")}
+    it {pending; should have_selector(".product .quantity")}
 
     context "adds product to his cart" do
       before(:each) do
@@ -49,8 +49,8 @@ shared_examples_for "user" do
       end
 
       it {should have_selector('.product .price .base', text: "$#{@price}")}
-      it {should have_selector('.product .price .current', text: "$#{@discount*@price.to_f/100}")}
-      it {should have_selector('.product .price .discount', text: "You save #{@discount}%!")}
+      it {should have_selector('.product .current', text: "$#{@discount*@price.to_f/100}")}
+      it {should have_selector('.product .price.discount', text: "You save #{@discount}%!")}
     end
 
     context "go to product page" do
@@ -92,9 +92,9 @@ shared_examples_for "user" do
        before(:each) do
         click_link @categories.first
       end 
-      it {should have_content(@categories.first)}
+      it {should have_selector('.category', text: @categories.first), "#{page.find("body").native}"}
       it {should have_short_product(@products.first)}
-      it {should_not have_content(@categories.last)}
+      it {should_not have_selector('.category', text:  @categories.last)}
       it {should_not have_short_product(@products.last)}
     end
 
@@ -103,8 +103,8 @@ shared_examples_for "user" do
       click_link @categories.last 
     end 
 
-    it {should have_content(@categories.last)}
-    it {should_not have_content(@categories.first)}
+    it {should have_selector('.category', text: @categories.last)}
+    it {should_not have_selector('.category', text: @categories.first)}
     it {should have_short_product(@products.last)}
     it {should have_short_product(@products.first)}
   end

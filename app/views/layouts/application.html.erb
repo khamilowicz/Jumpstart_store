@@ -7,15 +7,28 @@
 	<%= csrf_meta_tags %>
 </head>
 <body>
-<%= render 'menu/top_bar' %>
-	<div class="notice">
+	<%- if flash[:notice] %>
+	<div class="notice alert alert-block alert-success fade in">
 		<%= flash[:notice] %>
 	</div>
-	<div class="errors">
-		<%= flash[:errors] %>
-	</div>
-	<%= yield %>
+	<%- end %>
 
+	<% if flash[:errors] %>
+	<div class="errors alert alert-block alert-error fade in">
+		<%= flash[:errors] %>
+		<a class="close" data-dismiss="alert" href="#">&times;</a>
+	</div>
+	<% end %>
+
+
+	<div class="container">
+		<%= render 'menu/top_bar' %>
+		<div class="row">
+			<div class="span2"> <%= render 'menu/right' %> </div>
+			<div class="span7"> <%= yield %> </div>
+			<div class="span3"> <%= render 'menu/big_product_image' %> </div>
+		</div>
+	</div>
 </body>
 </html>
 

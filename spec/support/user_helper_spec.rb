@@ -46,7 +46,7 @@ end
 def add_to_category product, category_name
   visit product_path(product)
   click_link "Add to category"
-  fill_in "New category", with: category_name
+  fill_in "New category name", with: category_name
   click_button "Submit"
 end
 

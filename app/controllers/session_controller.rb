@@ -4,7 +4,7 @@ class SessionController < ApplicationController
 	end
 
 	def delete
-		session[:user_id] = nil
+		session[:current_user_id] = nil
 		redirect_to new_session_path, notice: "You are logged out"
 	end
 
@@ -16,10 +16,11 @@ class SessionController < ApplicationController
 				current_user.remove_product product
 				user.add_product product
 			end
-			session[:user_id] = user.id
+			session[:current_user_id] = user.id
 			redirect_to new_session_path, notice: "Successfully logged in"
 		else
-			redirect_to new_session_path, notice: "Wrong password or email pass #{session_args[:password]} email #{session_args[:email]}     params #{params}"
+			flash[:errors] =  "Wrong password or email pass"
+			redirect_to new_session_path
 		end
 	end
 end

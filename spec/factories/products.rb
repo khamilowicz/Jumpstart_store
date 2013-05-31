@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :product do
     sequence(:title){|x| "Product #{x}"}
     sequence(:description ){|x| "Description #{x}"}
-    price '1.00'
+    base_price '1.00'
     discount 100
     quantity 1
     on_sale true

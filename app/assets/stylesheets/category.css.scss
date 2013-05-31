@@ -1,0 +1,15 @@
+@import 'formMixins';
+
+.message {
+
+}
+.new_category {
+  .categories {
+    .category {
+      @include checkbox_area;
+      .new_category_name {
+
+      }
+    }
+  }
+}
