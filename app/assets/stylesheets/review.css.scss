@@ -3,6 +3,9 @@
     input#review_title{
       min-width: 100%;
     }
+    select#review_note{
+      max-width: 120%;
+    }
     textarea#review_body{
       min-width: 100%;
       height: 6em;
