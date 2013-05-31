@@ -2,7 +2,34 @@ class Order < ActiveRecord::Base
 
 	belongs_to :user
 	has_many :order_products
-	# has_many :products, through: :order_products 
+
+	STATUSES = {
+		:cancel => 'cancelled',
+		:pay => 'paid', 
+		:is_sent => 'shipped', 
+		:is_returned => 'returned'
+	}
+
+	validates_presence_of :user, :address, :order_products
+
+	scope :all_by_status, lambda{|status| where(status: status).all}
+
+	alias_attribute :date_of_purchase, :created_at
+	alias_attribute :time_of_status_change, :status_change_date
+
+	class << self
+		def statuses
+			STATUSES
+		end
+
+		def find_by_status status
+			self.where(status: status).all
+		end
+
+		def count_by_status status
+			self.where(status: status).count
+		end
+	end
 
 	def set_status new_status
 		case new_status
@@ -13,7 +40,7 @@ class Order < ActiveRecord::Base
 	end
 
 	def products
-		self.order_products #.collect(&:product)
+		self.order_products 
 	end
 
 	def products= prods
@@ -25,21 +52,6 @@ class Order < ActiveRecord::Base
 			op.product = prod
 		end
 	end
-
-	# def products<< prods
-	# 	prods.each do |prod|
-	# 		op = self.order_products.new
-	# 		op.product = prod
-	# 	end	
-	# end
-
-	validates_presence_of :user, :address, :order_products
-
-	# validates_presence_of :user, :products,:address
-	scope :all_by_status, lambda{|status| where(status: status).all}
-
-	alias_attribute :date_of_purchase, :created_at
-	alias_attribute :time_of_status_change, :status_change_date
 
 	def total_price
 		self.products.reduce(0){|sum, product| sum+= product.price}
@@ -58,25 +70,6 @@ class Order < ActiveRecord::Base
 		end
 		## TODO: address
 		self.address = address
-	end
-
-	def self.statuses
-		STATUSES
-	end
-
-	STATUSES = {
-		:cancel => 'cancelled',
-		:pay => 'paid', 
-		:is_sent => 'shipped', 
-		:is_returned => 'returned'
-	}
-
-	def self.find_by_status status
-		self.where(status: status).all
-	end
-
-	def self.count_by_status status
-		self.where(status: status).count
 	end
 
 	STATUSES.each do |method_name, stat|
