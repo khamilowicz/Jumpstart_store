@@ -12,17 +12,6 @@ class ProductsController < ApplicationController
 		@product = Product.find(params[:id])
 	end
 
-	def new_add_to_category
-		@product = Product.find(params[:product_id])
-		@categories = Category.all
-	end
-
-	def add_to_category
-		@product = Product.find(params[:product_id])
-		@product.add_to_category params
-		redirect_to product_path(@product)
-	end
-
 	def update
 		@product = Product.find(params[:id])
 
@@ -35,10 +24,10 @@ class ProductsController < ApplicationController
 
 	def create
 
-		@product = Product.new(params[:product])
-		@product.start_selling
+		product = Product.new(params[:product])
+		product.start_selling
 
-		if @product.save
+		if product.save
 			redirect_to products_path, notice: "Successfully created product"
 		else
 			redirect_to new_product_path, notice: "Error"
@@ -49,25 +38,4 @@ class ProductsController < ApplicationController
 		@product = Product.find(params[:id])
 	end
 
-	def add_to_cart
-		product = Product.find(params[:id])
-		user = specified_user
-		user.add_product product
-
-		redirect_to products_path, notice: "#{product.title} added to cart"
-	end
-
-	def remove_from_cart
-		product = Product.find(params[:id])
-		user = specified_user
-		user.remove_product product
-
-		redirect_to cart_path, notice: "#{product.title} removed from cart"
-	end
-
-	private
-
-	def specified_user
-		params[:user_id].empty? ? current_user : User.find(params[:user_id])
-	end
 end
