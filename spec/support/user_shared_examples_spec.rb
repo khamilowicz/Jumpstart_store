@@ -63,7 +63,7 @@ shared_examples_for "user" do
           @reviews = FactoryGirl.create_list(:review, 2)
           @reviews.each.with_index do |review, index| 
             review.note = index+1
-            @product.add_review review
+            @product.add review: review
           end
           visit product_path(@product)
         end
@@ -79,9 +79,9 @@ shared_examples_for "user" do
   context "while browsing categories" do
     before(:each) do
       @categories =['Category_1', 'Category_2'] 
-      @products.first.add_to_category @categories.first
-      @products.first.add_to_category @categories.last
-      @products.last.add_to_category @categories.last
+      @products.first.add category: @categories.first
+      @products.first.add category: @categories.last
+      @products.last.add category: @categories.last
       visit '/categories'
     end
 
@@ -142,7 +142,7 @@ shared_examples_for "user who can't" do
     before(:each) do
       @other_user = FactoryGirl.create(:user)
       @product = FactoryGirl.create(:product, :on_sale)
-      @other_user.add_product @product 
+      @other_user.add product: @product 
     end
 
     describe "profile" do

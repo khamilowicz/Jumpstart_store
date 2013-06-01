@@ -29,7 +29,7 @@ FactoryGirl.define do
     end
      
     after(:build) do |product, evaluator|
-     product.add_to_category evaluator.category_name
+     product.add category: evaluator.category_name
    end
  end
 end

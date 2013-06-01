@@ -2,10 +2,45 @@ class Order < ActiveRecord::Base
 
 	belongs_to :user
 	has_many :order_products
-	# has_many :products, through: :order_products 
+
+	STATUSES = {
+		:cancel => 'cancelled',
+		:pay => 'paid', 
+		:is_sent => 'shipped', 
+		:is_returned => 'returned'
+	}
+
+	validates_presence_of :user, :address, :order_products
+
+	scope :all_by_status, lambda{|status| where(status: status).all}
+
+	alias_attribute :date_of_purchase, :created_at
+	alias_attribute :time_of_status_change, :status_change_date
+
+	class << self
+		def statuses
+			STATUSES
+		end
+
+		def find_by_status status
+			self.where(status: status).all
+		end
+
+		def count_by_status status
+			self.where(status: status).count
+		end
+	end
+
+	def set_status new_status
+		case new_status
+		when 'ship' then self.is_sent
+		when 'cancel' then self.cancel
+		when 'return' then self.is_returned
+		end
+	end
 
 	def products
-		self.order_products #.collect(&:product)
+		self.order_products 
 	end
 
 	def products= prods
@@ -18,21 +53,6 @@ class Order < ActiveRecord::Base
 		end
 	end
 
-	# def products<< prods
-	# 	prods.each do |prod|
-	# 		op = self.order_products.new
-	# 		op.product = prod
-	# 	end	
-	# end
-
-	validates_presence_of :user, :address, :order_products
-
-	# validates_presence_of :user, :products,:address
-	scope :all_by_status, lambda{|status| where(status: status).all}
-
-	alias_attribute :date_of_purchase, :created_at
-	alias_attribute :time_of_status_change, :status_change_date
-
 	def total_price
 		self.products.reduce(0){|sum, product| sum+= product.price}
 	end
@@ -42,31 +62,14 @@ class Order < ActiveRecord::Base
 		100*total_price/price_without_discount
 	end
 
-	def transfer_products
+	def transfer_products address= self.user.address
 		self.user.products.all.uniq.each do |product|
-			self.order_products << OrderProduct.convert(product, product.quantity_for(self.user))
-			self.user.remove_product product
+			self.add product: product
+			self.user.remove product: product
 			product.retire
 		end
-	end
-
-	def self.statuses
-		STATUSES
-	end
-
-	STATUSES = {
-		:cancel => 'cancelled',
-		:pay => 'paid', 
-		:is_sent => 'shipped', 
-		:is_returned => 'returned'
-	}
-
-	def self.find_by_status status
-		self.where(status: status).all
-	end
-
-	def self.count_by_status status
-		self.where(status: status).count
+		## TODO: address
+		self.address = address
 	end
 
 	STATUSES.each do |method_name, stat|
@@ -76,9 +79,16 @@ class Order < ActiveRecord::Base
 			save
 		end
 	end
-
-	private
 	
+	def add param
+		if param[:product]
+			product = param[:product]
+			self.order_products << OrderProduct.convert(product, product.quantity_for(self.user))
+		end
+	end
+	
+	private
+
 	def status= stat
 		super
 	end

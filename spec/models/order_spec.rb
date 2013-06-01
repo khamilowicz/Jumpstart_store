@@ -89,7 +89,7 @@ it "can transfer products from user" do
   user = FactoryGirl.create(:user)
   product = FactoryGirl.create(:product)
 
-  user.add_product product
+  user.add product: product
 
   order = user.orders.create
   order.transfer_products
@@ -102,7 +102,7 @@ describe ".products" do
     user = FactoryGirl.create(:user)
     @products = FactoryGirl.create_list(:product, 2, quantity: 3)
     @products.each do |product|
-      user.add_product product
+      user.add product: product
     end
     @order = user.orders.new
     @order.transfer_products

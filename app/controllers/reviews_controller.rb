@@ -1,4 +1,5 @@
 class ReviewsController < ApplicationController
+  
  def edit
   @product = Product.find(params[:product_id])
   @review = @product.reviews.find(params[:id])
@@ -23,8 +24,7 @@ def create
   if review.save
     redirect_to product_path(@product)
   else
-      # binding.pry
-      redirect_to products_path, error: review.errors, notice: "Error"
-    end
+    redirect_to products_path, error: review.errors, notice: "Error"
   end
+end
 end

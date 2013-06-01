@@ -67,7 +67,7 @@ end
 context "concerning categories" do
   describe ".add_to_category" do
     it "can take category name" do
-      @product.add_to_category "Category_1"
+      @product.add category: "Category_1"
       @product.list_categories.should include("Category_1")
     end
 
@@ -75,7 +75,7 @@ context "concerning categories" do
 
   describe ".list_categories" do
     it "gets only names of categories the product belongs to" do
-      @product.add_to_category "Category_1"
+      @product.add category: "Category_1"
       category_2 = Category.get_by_name "Category_2"
       @product.list_categories.should include("Category_1")
       @product.list_categories.should_not include("Category_2")
@@ -92,24 +92,24 @@ context "concerning reviews" do
     end
 
     it "has reviews" do
-     @product.add_review @review_1
+     @product.add review: @review_1
      @product.reviews.should include(@review_1)
    end
 
    it "has raiting, based on reviews" do
     @product.rating.should == 0
 
-    @product.add_review @review_1
+    @product.add review: @review_1
     @product.rating.should == 5
 
-    @product.add_review @review_2
+    @product.add review: @review_2
     @product.rating.should == 3
   end
 
   it "rating can only by integer or half" do
-   @product.add_review @review_1
-   @product.add_review @review_1
-   @product.add_review @review_2
+   @product.add review: @review_1
+   @product.add review: @review_1
+   @product.add review: @review_2
    @product.rating.should == 3.5
  end
 end
@@ -173,7 +173,7 @@ describe ".users" do
   it "show users having it in theirs carts" do
     product = FactoryGirl.create(:product, :on_sale)
     user = FactoryGirl.create(:user)
-    user.add_product product
+    user.add product: product
     product.users.first.should == user
   end
 end
@@ -190,9 +190,9 @@ describe ".quantity_for" do
     product = FactoryGirl.create(:product, :on_sale, quantity: 3)
     user = FactoryGirl.create(:user)
     product.quantity_for(user).should == 0
-    user.add_product product
+    user.add product: product
     product.quantity_for(user).should == 1
-    user.add_product product
+    user.add product: product
     product.quantity_for(user).should == 2
   end
 end

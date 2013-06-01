@@ -28,8 +28,8 @@ NewStore::Application.routes.draw do
   end
   
   resources :products do
-    get '/add_to_category' => 'products#new_add_to_category'
-    post '/category' => 'products#add_to_category'
+    get '/add_to_category' => 'product_category_manager#new'
+    post '/category' => 'product_category_manager#join'
     resources :reviews, only: [:edit, :update]
     post '/reviews' => 'reviews#create'
   end
@@ -42,8 +42,8 @@ NewStore::Application.routes.draw do
     end
     resources :products, only: [] do 
       member do 
-        get 'add_to_cart' 
-        get 'remove_from_cart' 
+        get 'add_to_cart' => 'product_cart_manager#join' 
+        get 'remove_from_cart' => 'product_cart_manager#destroy' 
       end
     end
   end

@@ -70,24 +70,24 @@ end
       @product_1 = FactoryGirl.build(:product)
       @product_2 = FactoryGirl.build(:product)
       @product_3 = FactoryGirl.build(:product)
-      @user.add_product @product 
+      @user.add product: @product 
     end
     
-    describe ".add_product" do
+    describe ".add product:" do
       it "adds product to user" do
         @user.products.should include(@product)
       end
 
       it "increases quantity of said product in user's products" do
         @user.product_quantity(@product).should == 1
-        @user.add_product @product 
+        @user.add product: @product 
         @user.product_quantity(@product).should == 2
       end
 
       it "cannot add product that is retired" do
         @product_1.retire
         @product_1.should_not be_on_sale
-        @user.add_product @product_1
+        @user.add product: @product_1
         @user.products.should_not include(@product_1)
       end
 
@@ -95,14 +95,14 @@ end
         product = FactoryGirl.create(:product, :on_sale, quantity: 2)
         user = FactoryGirl.create(:user)
         user.product_quantity(product).should == 0
-        user.add_product product
+        user.add product: product
         product.quantity.should == 1
         user.product_quantity(product).should == 1
-        user.add_product product
+        user.add product: product
         product.quantity.should == 0
         user.product_quantity(product).should == 2
 
-        user.add_product product
+        user.add product: product
         product.quantity.should == 0
         user.product_quantity(product).should == 2
         
@@ -114,8 +114,8 @@ end
       before(:each) do
         @product_1.start_selling
         @product_2.start_selling
-       @user.add_product @product_1
-       @user.add_product @product_2
+       @user.add product: @product_1
+       @user.add product: @product_2
      end
 
      describe ".products" do
@@ -132,22 +132,22 @@ end
       end
     end
 
-    describe ".remove_product" do 
+    describe ".remove product:" do 
       it "removes product from users products" do 
-        @user.remove_product @product_1
+        @user.remove product: @product_1
         @user.products.should_not include(@product_1)
         @user.products.should include(@product_2)
       end
 
       it "removes product form users cart" do
-        @user.remove_product @product_1
+        @user.remove product: @product_1
         @user.cart.products.should_not include(@product_1)
         @user.cart.products.should include(@product_2)
       end
 
       it "returns product to magazine" do
         expect{
-          @user.remove_product @product_1
+          @user.remove product: @product_1
           }.to change{@product_1.quantity}.by(1)
       end
     end
@@ -161,9 +161,9 @@ end
       @product_2.start_selling
       @product_3.save
       @product_3.start_selling
-     @user.add_product @product_1
-     @user.add_product @product_2
-     @user.add_product @product_3
+     @user.add product: @product_1
+     @user.add product: @product_2
+     @user.add product: @product_3
    end
 
    it "can purchase products from his cart" do
@@ -178,7 +178,7 @@ end
 
   it "can browse previous purchases" do
     @user.make_purchase
-    @user.add_product @product_1
+    @user.add product: @product_1
     @user.make_purchase
     @user.orders.should have(2).items
     # @user.orders.last.products.should_not include(OrderProduct.convert(@product_2,@product_2.quantity))
