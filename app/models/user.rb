@@ -20,6 +20,11 @@ class User < ActiveRecord::Base
 		self.guest
 	end
 
+	def address
+		## TODO: add it
+		"Add it"
+	end
+
 	class << self
 
 		def authenticate params

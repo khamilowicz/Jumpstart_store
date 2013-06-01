@@ -62,9 +62,9 @@ class Order < ActiveRecord::Base
 		100*total_price/price_without_discount
 	end
 
-	def transfer_products address= self.user.email
+	def transfer_products address= self.user.address
 		self.user.products.all.uniq.each do |product|
-			self.order_products << OrderProduct.convert(product, product.quantity_for(self.user))
+			self.add product: product
 			self.user.remove product: product
 			product.retire
 		end
@@ -79,9 +79,16 @@ class Order < ActiveRecord::Base
 			save
 		end
 	end
-
-	private
 	
+	def add param
+		if param[:product]
+			product = param[:product]
+			self.order_products << OrderProduct.convert(product, product.quantity_for(self.user))
+		end
+	end
+	
+	private
+
 	def status= stat
 		super
 	end
