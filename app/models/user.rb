@@ -27,15 +27,8 @@ class User < ActiveRecord::Base
 
 	class << self
 
-		def authenticate params
-			iemail = params[:email]
-			ipassword = params[:password]
-			return self.where(email: iemail, password: ipassword).first
-		end
-
 		def transfer_products from_to
-			from_user = from_to[:from]
-			to_user = from_to[:to]
+			from_user, to_user = from_to[:from], from_to[:to]
 			from_user.products.each do |product|
 				from_user.remove product: product
 				to_user.add product: product

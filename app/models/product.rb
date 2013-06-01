@@ -118,6 +118,4 @@ def calculate_rating
     names += paramHash[:categories].values if paramHash[:categories]
     names
   end
-
-
 end

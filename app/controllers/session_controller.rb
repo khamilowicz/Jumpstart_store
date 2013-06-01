@@ -9,7 +9,7 @@ class SessionController < ApplicationController
 	end
 
 	def create
-		user = User.authenticate params[:session]
+		user = Session.authenticate params[:session]
 		
 		if user 
 			User.transfer_products from: current_user, to: user

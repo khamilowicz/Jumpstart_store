@@ -1,9 +1,7 @@
 class Sale
 
   def self.build params
-    @@categories = params[:categories]
-    @@products = params[:products]
-    @@discount = params[:discount].to_i
+    @@categories, @@products, @@discount = params[:categories], params[:products], params[:discount].to_i
   end
 
   def self.discount_all
