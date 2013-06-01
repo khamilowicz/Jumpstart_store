@@ -46,6 +46,13 @@
 }
 
 .product.inline{
+  .header{
+    font-weight: bold;
+  }
+  .product{
+    border-bottom: 1px solid gray;
+    padding: 0.5em 0;
+  }
   
 }
 @mixin product_form{

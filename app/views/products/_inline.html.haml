@@ -1,4 +1,13 @@
 .product.inline
-  = product.title
-  = product.list_categories
-  = product.quantity_for(current_user)
+  -if product_counter == 0
+    .header.row
+      .span4.title
+        Title
+      .span1.quantity
+        Quantity
+      .span1
+        Remove
+  .product.row
+    .span4= link_to product.title, product_path(product)
+    .span1= product.quantity_for(current_user)
+    .span1= link_to "X", remove_from_cart_user_product_path(current_user, product)

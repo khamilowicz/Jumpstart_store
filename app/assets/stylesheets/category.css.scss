@@ -1,5 +1,14 @@
 @import 'formMixins';
 
+.category.inline{
+  margin: 1em 0;
+  .name{
+    margin: 0.2em;
+    font-weight: bold;
+    font: 1.2em;
+  }
+}
+
 .message {
 
 }

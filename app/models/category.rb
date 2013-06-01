@@ -30,6 +30,10 @@ def add param
   add_product param[:product] if param[:product]
 end
 
+def products_for_user user 
+  user.products & self.products
+end
+
 
 def total_price
  self.products.reduce(0){|sum, product| sum+=product.price}

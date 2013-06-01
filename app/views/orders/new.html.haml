@@ -2,4 +2,5 @@ Order page
 .stats
   .total= "Total for order: $#{current_user.cart.total}"
 =link_to "Buy", create_orders_path
-.products= render partial: 'products/inline', collection: @products, as: :product
+.products
+  = render partial: 'categories/inline', collection: Category.all, as: :category

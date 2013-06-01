@@ -35,7 +35,7 @@ class Product < ActiveRecord::Base
   end
 
   def list_categories
-    categories.map(&:name)
+    categories.map(&:name).join(',')
   end
 
   def rating
