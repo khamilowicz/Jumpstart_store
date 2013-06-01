@@ -8,7 +8,7 @@ class ProductCategoryManagerController < ApplicationController
   
   def join
    @product = Product.find(params[:product_id])
-    @product.add_to_category params
+    @product.add category: params
     redirect_to product_path(@product) 
   end
 

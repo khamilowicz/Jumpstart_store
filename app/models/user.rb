@@ -20,26 +20,30 @@ class User < ActiveRecord::Base
 		self.guest
 	end
 
-	def self.authenticate params
-		iemail = params[:email]
-		ipassword = params[:password]
-		return self.where(email: iemail, password: ipassword).first
-	end
+	class << self
 
-	def self.transfer_products from_to
-		from_user = from_to[:from]
-		to_user = from_to[:to]
-		from_user.products.each do |product|
-			from_user.remove_product product
-			to_user.add_product product
+		def authenticate params
+			iemail = params[:email]
+			ipassword = params[:password]
+			return self.where(email: iemail, password: ipassword).first
 		end
-	end
 
-	def self.create_guest
-		user = User.new
-		user.guest = true
-		user.save
-		user
+		def transfer_products from_to
+			from_user = from_to[:from]
+			to_user = from_to[:to]
+			from_user.products.each do |product|
+				from_user.remove_product product
+				to_user.add_product product
+			end
+		end
+
+		def create_guest
+			user = User.new
+			user.guest = true
+			user.save
+			user
+		end
+
 	end
 
 	def find_by_product product

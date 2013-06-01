@@ -201,7 +201,7 @@ context "he may" do
     @products = FactoryGirl.create_list(:product, 3)
     @category = ['Category_1']
     @products_in_category = @products[0,2]
-    @products_in_category.each {|p| p.add_to_category @category.first}
+    @products_in_category.each {|p| p.add category: @category.first}
     @product = @products.last
   end
   

@@ -27,21 +27,15 @@ class Product < ActiveRecord::Base
   #   ProductUser.where(user: user.id, product: self.id).first.in_cart?
   # end
 
-  def add_to_category categories
-    categories = names_from_hash(categories) if categories.kind_of?(Hash) 
-    categories = [categories] unless categories.kind_of?(Array)
 
-    categories.each do |category|
-      Category.get(category).add_product self
-    end
+
+  def add param 
+    add_review param[:review] if param[:review]
+    add_to_category param[:category] if param[:category]
   end
 
   def list_categories
     categories.map(&:name)
-  end
-
-  def add_review review
-    reviews << review
   end
 
   def rating
@@ -98,6 +92,19 @@ end
 
 
 private
+
+def add_to_category categories
+  categories = names_from_hash(categories) if categories.kind_of?(Hash) 
+  categories = [categories] unless categories.kind_of?(Array)
+
+  categories.each do |category|
+    Category.get(category).add_product self
+  end
+end
+
+def add_review review
+  reviews << review
+end
 
 def calculate_rating
  sum_of_notes = reviews.reduce(0){|sum, review| sum+=review.note}
