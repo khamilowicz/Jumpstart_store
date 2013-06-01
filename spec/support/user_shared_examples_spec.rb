@@ -142,7 +142,7 @@ shared_examples_for "user who can't" do
     before(:each) do
       @other_user = FactoryGirl.create(:user)
       @product = FactoryGirl.create(:product, :on_sale)
-      @other_user.add_product @product 
+      @other_user.add product: @product 
     end
 
     describe "profile" do

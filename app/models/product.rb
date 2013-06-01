@@ -98,7 +98,7 @@ def add_to_category categories
   categories = [categories] unless categories.kind_of?(Array)
 
   categories.each do |category|
-    Category.get(category).add_product self
+    Category.get(category).add product: self
   end
 end
 

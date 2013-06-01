@@ -32,8 +32,8 @@ class User < ActiveRecord::Base
 			from_user = from_to[:from]
 			to_user = from_to[:to]
 			from_user.products.each do |product|
-				from_user.remove_product product
-				to_user.add_product product
+				from_user.remove product: product
+				to_user.add product: product
 			end
 		end
 
@@ -63,24 +63,18 @@ class User < ActiveRecord::Base
 		self.nick = name
 	end
 
-	def add_product product
-		if product.on_sale? && product.quantity > 0
-			pu = self.product_users.new
-			pu.product = product
-			pu.save
-		end
-	end	
+	def add param
+		add_product param[:product]	if param[:product]
+	end
+
+	def remove param
+		remove_product param[:product]	if param[:product]
+	end
+
 
 	def product_quantity product
 		find_by_product(product).count
 	end
-
-	def remove_product product
-		pu = self.product_users.where(product_id: product.id).first
-		self.products.delete product
-		pu.destroy
-	end
-
 	def orders
 		admin? ? Order : super
 	end
@@ -93,5 +87,22 @@ class User < ActiveRecord::Base
 	def promote_to_admin
 		self.admin = true
 	end
+
+	private
+
+	def add_product product
+		if product.on_sale? && product.quantity > 0
+			pu = self.product_users.new
+			pu.product = product
+			pu.save
+		end
+	end
+
+	def remove_product product
+		pu = self.product_users.where(product_id: product.id).first
+		self.products.delete product
+		pu.destroy
+	end
+
 
 end

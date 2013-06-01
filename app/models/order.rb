@@ -65,7 +65,7 @@ class Order < ActiveRecord::Base
 	def transfer_products address= self.user.email
 		self.user.products.all.uniq.each do |product|
 			self.order_products << OrderProduct.convert(product, product.quantity_for(self.user))
-			self.user.remove_product product
+			self.user.remove product: product
 			product.retire
 		end
 		## TODO: address

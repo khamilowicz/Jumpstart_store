@@ -2,7 +2,7 @@ class ProductCartManagerController < ApplicationController
   def join
     product = Product.find(params[:id])
     user = specified_user
-    user.add_product product
+    user.add product: product
 
     redirect_to products_path, notice: "#{product.title} added to cart"
   end
@@ -10,7 +10,7 @@ class ProductCartManagerController < ApplicationController
   def destroy
     product = Product.find(params[:id])
     user = specified_user
-    user.remove_product product
+    user.remove product: product
 
     redirect_to cart_path, notice: "#{product.title} removed from cart"
   end

@@ -173,7 +173,7 @@ describe ".users" do
   it "show users having it in theirs carts" do
     product = FactoryGirl.create(:product, :on_sale)
     user = FactoryGirl.create(:user)
-    user.add_product product
+    user.add product: product
     product.users.first.should == user
   end
 end
@@ -190,9 +190,9 @@ describe ".quantity_for" do
     product = FactoryGirl.create(:product, :on_sale, quantity: 3)
     user = FactoryGirl.create(:user)
     product.quantity_for(user).should == 0
-    user.add_product product
+    user.add product: product
     product.quantity_for(user).should == 1
-    user.add_product product
+    user.add product: product
     product.quantity_for(user).should == 2
   end
 end

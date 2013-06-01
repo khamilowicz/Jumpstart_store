@@ -32,7 +32,7 @@ describe Category do
   it "can have associated products" do
     c1 = Category.get("Category_1")
     product = FactoryGirl.create(:product, on_sale: true)    
-    c1.add_product product
+    c1.add product: product
     c1.products.should include(product)
   end
 
@@ -55,8 +55,8 @@ describe Category do
     category = Category.get 'total price'
     product_1 = FactoryGirl.build(:product, price:'1.00')
     product_2 = FactoryGirl.build(:product, price: '2.00')
-    category.add_product product_1
-    category.add_product product_2
+    category.add product: product_1
+    category.add product: product_2
     category.total_price.should eql(3.00)
     
   end
@@ -93,8 +93,8 @@ describe Category do
     category = Category.get "discount"
     product_1 = FactoryGirl.create(:product,price: 1) 
     product_2 = FactoryGirl.create(:product,price: 2) 
-    category.add_product product_1
-    category.add_product product_2
+    category.add product: product_1
+    category.add product: product_2
     category.total_price.should == 3
     category.discount 50
     category.total_price.should == 1.5

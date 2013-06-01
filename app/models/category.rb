@@ -26,9 +26,10 @@ class Category < ActiveRecord::Base
 
 end
 
-def add_product product
-  self.products << product
+def add param
+  add_product param[:product] if param[:product]
 end
+
 
 def total_price
  self.products.reduce(0){|sum, product| sum+=product.price}
@@ -46,4 +47,9 @@ def discount percent
  self.products.each{|product| product.on_discount percent}
 end
 
+private 
+
+def add_product product
+  self.products << product
+end
 end
