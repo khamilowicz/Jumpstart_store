@@ -1,0 +1,16 @@
+.new_review
+  =form_for [product, review] do |f|
+    .row
+      .span6
+        = f.label :title
+        = f.text_field :title
+      .span1
+        = f.label :note
+        .note= f.select :note, options_for_select((1..5).zip((1..5)))
+    .row
+      .span7
+        = f.label :body
+        = f.text_area :body
+    .row
+      .span2
+        = f.submit "Send review"

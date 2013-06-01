@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>NewStore</title>
+	<%= stylesheet_link_tag    "application", :media => "all" %>
+	<%= javascript_include_tag "application" %>
+	<%= csrf_meta_tags %>
+</head>
+<body>
+	<%- if flash[:notice] %>
+	<div class="notice alert alert-block alert-success fade in">
+		<%= flash[:notice] %>
+	</div>
+	<%- end %>
+
+	<% if flash[:errors] %>
+	<div class="errors alert alert-block alert-error fade in">
+		<%= flash[:errors] %>
+		<a class="close" data-dismiss="alert" href="#">&times;</a>
+	</div>
+	<% end %>
+
+
+	<div class="container">
+		<%= render 'menu/top_bar' %>
+		<div class="row">
+			<div class="span2"> <%= render 'menu/right' %> </div>
+			<div class="span7"> <%= yield %> </div>
+			<div class="span3"> <%= render 'menu/big_product_image' %> </div>
+		</div>
+	</div>
+</body>
+</html>
+

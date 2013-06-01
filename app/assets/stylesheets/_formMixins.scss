@@ -1,0 +1,13 @@
+@mixin checkbox_area{
+ .check_form {
+  display: inline-block;
+  input{
+    margin-bottom: 5px;
+  }
+}
+.label_form {
+  margin-left: 1em;
+  display: inline-block;
+
+}
+}
