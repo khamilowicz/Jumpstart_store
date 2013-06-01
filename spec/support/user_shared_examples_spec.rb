@@ -140,7 +140,7 @@ shared_examples_for "user who can't" do
 
   describe "view another user’s"  do
     before(:each) do
-      @other_user = FactoryGirl.create(:user)
+      @other_user = FactoryGirl.create(:user, first_name: "Abe", last_name: "Lincoln")
       @product = FactoryGirl.create(:product, :on_sale)
       @other_user.add product: @product 
     end
