@@ -21,7 +21,8 @@ class OrdersController < ApplicationController
 	end
 
 	def create
-		@order = current_user.orders.new
+		@order = Order.new
+		@order.user = current_user
 		@order.transfer_products
 		if @order.save
 			redirect_to '/cart', notice: "Order is processed"

@@ -1,9 +1,9 @@
 .heading
-	= "#{current_user.display_name} cart"
-.products
-	=render partial: 'products/short', collection: @products, as: :product
+  = "#{current_user.display_name} cart"
 .order_menu
-	-if current_user.guest?
-		"You need to log in to purchase products"
-	-else
-		=link_to 'Order', new_order_path
+  -if current_user.guest?
+    "You need to log in to purchase products"
+  -else
+    .btn.btn-primary=link_to 'Order', new_order_path
+.products
+  =render partial: 'products/short', collection: @products, as: :product
