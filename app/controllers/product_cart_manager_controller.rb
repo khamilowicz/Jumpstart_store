@@ -17,15 +17,12 @@ class ProductCartManagerController < ApplicationController
     user = specified_user
     user.remove product: product
 
-if params[:back]
-    controller = params[:back][:controller] || 'products'
-    action = params[:back][:action] || 'index'
-  else
     controller = 'products'
     action = 'index'
-  end
-
-    # binding.pry
+    if params[:back]
+      controller = params[:back][:controller] 
+      action = params[:back][:action] 
+    end
 
     respond_to do |format|
       format.html {redirect_to controller: controller, action: action, notice: "#{product.title} removed from cart"}

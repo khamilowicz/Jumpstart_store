@@ -1,6 +1,4 @@
-$('.products').html("<%= j render partial: 'products/short', collection: @products, as: :product %>");
 $(function() {
-
   $('.cart_btn').bind('ajax:beforeSend', function() {
     $(this).button("loading")
   });

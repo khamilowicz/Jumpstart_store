@@ -14,7 +14,7 @@
         .row
           .span3
             %h3.current="$#{product.price}"
-            .btn.btn-primary.cart_btn=link_to "Add more", add_to_cart_user_product_path(current_user, product), remote: true
+            .btn.btn-primary.cart_btn=link_to "Add more", add_to_cart_user_product_path(current_user, product), remote: true, data: {:'loading-text' => 'Processing...'}
         .row
           .span1.quantity= "#{product.quantity_for(current_user)} in cart"
           .span2=link_to "Remove from cart", remove_from_cart_user_product_path(current_user, product), remote: true
@@ -23,7 +23,7 @@
           .span2
             %h3.current="$#{product.price}"
           .span2
-            %h3.btn.btn-primary.cart_btn=link_to "Add to cart", add_to_cart_user_product_path(current_user, product), remote: true
+            %h3.btn.btn-primary.cart_btn=link_to "Add to cart", add_to_cart_user_product_path(current_user, product), remote: true, data: {:'loading-text' => 'Processing...'}
       .row
         .span3
           %h3.price.discount="You save #{(100*(product.base_price - product.price)/product.base_price).round.to_i}%!" if product.discount < 100
