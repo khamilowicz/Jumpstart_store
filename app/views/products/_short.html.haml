@@ -1,7 +1,7 @@
 .product.short.well{class: product.title_param, id: product_counter }
   .row
     .span3
-      .product_thumbnail.thumbnail{id: product.title}= link_to image_tag(product.photo.url), product_path(product)
+      .product_thumbnail.thumbnail{data: {photo: product.photo.url, title: product.title}}= link_to image_tag(product.photo.url), product_path(product)
     .span3
       .row
         .span3
@@ -14,7 +14,8 @@
         .row
           .span3
             %h3.current="$#{product.price}"
-            .btn.btn-primary.cart_btn=link_to "Add more", add_to_cart_user_product_path(current_user, product), remote: true, data: {:'loading-text' => 'Processing...'}
+            .btn.btn-primary.cart_btn{ data: {:'loading-text' => 'Processing...'}}
+              =link_to "Add more", add_to_cart_user_product_path(current_user, product), remote: true
         .row
           .span1.quantity= "#{product.quantity_for(current_user)} in cart"
           .span2=link_to "Remove from cart", remove_from_cart_user_product_path(current_user, product), remote: true
@@ -23,7 +24,8 @@
           .span2
             %h3.current="$#{product.price}"
           .span2
-            %h3.btn.btn-primary.cart_btn=link_to "Add to cart", add_to_cart_user_product_path(current_user, product), remote: true, data: {:'loading-text' => 'Processing...'}
+            %h3.btn.btn-primary.cart_btn{ data: {:'loading-text' => 'Processing...'}}
+              =link_to "Add to cart", add_to_cart_user_product_path(current_user, product), remote: true, data: {:'loading-text' => 'Processing...'}
       .row
         .span3
           %h3.price.discount="You save #{(100*(product.base_price - product.price)/product.base_price).round.to_i}%!" if product.discount < 100

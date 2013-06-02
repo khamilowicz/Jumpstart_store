@@ -5,16 +5,17 @@ $(function() {// Stuff to do as soon as the DOM is ready;
     class: 'catchphrase'
   });
 
-  $(".product_thumbnail").on('mouseenter', function(){
-    var title = $(this).attr('id');
+  $(".product_thumbnail, .product .title a").on('mouseenter', function(){
+    var title = $(this).data('title');
     var title_array = title.split(" ")
-    var image = $(this).find('img').attr('src');
+    var image_url = $(this).data('photo');
 
     $('.big_product_image .image').css({
-      'background-image': 'url("' + image + '")',
+      'background-image': 'url("' + image_url + '")',
       'background-position': '20% 0%',
       'background-repeat': 'no-repeat'
     });
+
     $('.big_product_image .catchphrase').remove();
 
     $(title_array).slice(0,5).each( function(index, word) {
@@ -27,7 +28,7 @@ $(function() {// Stuff to do as soon as the DOM is ready;
     });
   });
 
-  $(".product_thumbnail").on('mouseleave', function(){
+  $(".product_thumbnail, .product .title a").on('mouseleave', function(){
 
     $('.big_product_image .caption.title').remove();
     $('.big_product_image .image').css("background","white");

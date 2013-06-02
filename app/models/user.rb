@@ -44,6 +44,10 @@ class User < ActiveRecord::Base
 
 	end
 
+	def products
+		super.uniq
+	end
+
 	def find_by_product product
 		self.products.where(id: product.id)
 	end
