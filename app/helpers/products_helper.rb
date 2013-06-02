@@ -15,20 +15,27 @@ module ProductsHelper
     end
   end
 
-  def quantity_and_remove product
+  def quantity product
     text = ''
     if product.users.include?(current_user)
       text = content_tag :div, class: 'quantity' do
         "#{product.quantity_for(current_user)} in cart"
       end
-      text += content_tag :div, class: 'remove' do
-        link_to "Remove from cart", remove_from_cart_user_product_path(current_user, product), remote: true 
-     end
-     text
-   end
- end
+    end
+    text
+  end
 
- def saving_text product
+def remove product
+  text = ''
+  if product.users.include?(current_user)
+    text = content_tag :div, class: 'remove' do
+      link_to "Remove from cart", remove_from_cart_user_product_path(current_user, product), remote: true 
+    end
+  end
+  text
+end
+
+def saving_text product
   "You save #{(100*(product.base_price - product.price)/product.base_price).round.to_i}%!" if product.price != product.base_price
- end
+end
 end

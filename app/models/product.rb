@@ -77,7 +77,7 @@ def title_param
 end
 
 def title_shorter
-  self.title.length > 40 ? self.title[0,40] + '...' : self.title
+  self.title.length > 35 ? self.title[0,35] + '...' : self.title
 end
 
 

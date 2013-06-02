@@ -1,19 +1,19 @@
-.product.short.well{class: product.title_param, id: product_counter }
-  .row
-    .span6
-      .product_thumbnail.thumbnail{data: {photo: product.photo.url, title: product.title}}
-        = link_to image_tag(product.photo.url), product_path(product)
-  .row
-    .span6
-      %h3=link_to product.title_shorter, product_path(product)
-  .row
-    .span1
-      = product_price product
-    .span3
-      = quantity_and_remove product
-    .span2
-      .btn.btn-primary.cart_btn{ data: {:'loading-text' => 'Processing...'}}
-        =link_to adding_text(product), add_to_cart_user_product_path(current_user, product), remote: true    
-  .row 
+.span5.product.short.well{class: product.title_param, id: product_counter }
+  .row.span12
+    .product_thumbnail.thumbnail{data: {photo: product.photo.url, title: product.title}}
+      = link_to image_tag(product.photo.url), product_path(product)
+  .row.span12
+    %h3=link_to product.title_shorter, product_path(product)
+  .row.span12
     .span4
+      = product_price product
+    .span4
+      = quantity product
+  .row.span12
+    .span12
+      = remove product
+  .row.span12
+    .span12
       %h3.price.discount= saving_text product
+  .row.span12
+    =link_to adding_text(product), add_to_cart_user_product_path(current_user, product), remote: true, class: 'span12 btn btn-primary cart_btn', data: {:'loading-text' => 'Processing...'}
