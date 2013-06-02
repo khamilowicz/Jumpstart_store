@@ -5,8 +5,12 @@ class SalesController < ApplicationController
   def delete
     @product = Product.find(params[:product])
     @product.off_discount
+    @products = Product.where('discount !=?', 100).all
 
-    redirect_to sales_url
+    respond_to do |format|
+      format.html {redirect_to sales_url}
+      format.js {render :index}
+    end
   end
 
   def index

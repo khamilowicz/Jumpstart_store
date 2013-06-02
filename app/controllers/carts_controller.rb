@@ -3,7 +3,7 @@ class CartsController < ApplicationController
   # before_filter :authorize_user
 
 	def show
-		@products = current_user.cart.products 
+		@products = current_user.products 
 	end
 
   private
