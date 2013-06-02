@@ -431,7 +431,7 @@
 			"file": "app/views/products/_inline.html.haml",
 			"settings":
 			{
-				"buffer_size": 419,
+				"buffer_size": 550,
 				"line_ending": "Unix"
 			}
 		},
@@ -490,25 +490,147 @@
 				"buffer_size": 81,
 				"line_ending": "Unix"
 			}
+		},
+		{
+			"file": "app/views/products/_short.html.haml",
+			"settings":
+			{
+				"buffer_size": 1448,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/views/products/index.js.erb",
+			"settings":
+			{
+				"buffer_size": 298,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/views/carts/show.html.haml",
+			"settings":
+			{
+				"buffer_size": 278,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/assets/javascripts/order.js",
+			"settings":
+			{
+				"buffer_size": 1077,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/models/user.rb",
+			"settings":
+			{
+				"buffer_size": 1979,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/models/cart.rb",
+			"settings":
+			{
+				"buffer_size": 245,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/controllers/carts_controller.rb",
+			"settings":
+			{
+				"buffer_size": 268,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/assets/stylesheets/product.css.scss",
+			"settings":
+			{
+				"buffer_size": 891,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 213 files for \".big\"\n\n/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/assets/javascripts/order.js:\n   11      var image_url = $(this).data('photo');\n   12  \n   13:     $('.big_product_image .image').css({\n   14        'background-image': 'url(\"' + image_url + '\")',\n   15        'background-position': '20% 0%',\n   ..\n   17      });\n   18  \n   19:     $('.big_product_image .catchphrase').remove();\n   20  \n   21      $(title_array).slice(0,5).each( function(index, word) {\n   ..\n   25          class: 'caption title'\n   26        });\n   27:       $('.big_product_image').append(part_title);\n   28      });\n   29    });\n   ..\n   31    $(\".product_thumbnail, .product .title a\").on('mouseleave', function(){\n   32  \n   33:     $('.big_product_image .caption.title').remove();\n   34:     $('.big_product_image .image').css(\"background\",\"white\");\n   35:     $('.big_product_image').append(catchphrase);\n   36    });\n   37  });\n\n/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/assets/stylesheets/home.css.scss:\n    2    margin:0;\n    3  }\n    4: .big_product_container{\n    5  // position: fixed;\n    6:   .big_product_image{\n    7      min-height: 30em;\n    8      position: relative;\n\n/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/menu/_big_product_image.html.haml:\n    1: .big_product_container\n    2:   .big_product_image\n    3      .image\n    4      .caption\n\n10 matches across 3 files\n",
+			"settings":
+			{
+				"buffer_size": 1426,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "app/assets/stylesheets/home.css.scss",
+			"settings":
+			{
+				"buffer_size": 683,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/views/sales/index.html.haml",
+			"settings":
+			{
+				"buffer_size": 116,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/views/sales/_short.html.haml",
+			"settings":
+			{
+				"buffer_size": 612,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/controllers/sales_controller.rb",
+			"settings":
+			{
+				"buffer_size": 495,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/views/orders/_product.html.haml",
+			"settings":
+			{
+				"buffer_size": 151,
+				"line_ending": "Unix"
+			}
 		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 392.0,
+		"height": 180.0,
 		"selected_items":
 		[
 			[
-				"rein",
-				"Indentation: Reindent Lines"
+				"git cot",
+				"Git: Commit"
+			],
+			[
+				"gitad",
+				"Git: Add..."
+			],
+			[
+				"git add",
+				"Git: Add..."
 			],
 			[
 				"git com",
 				"Git: Commit"
 			],
 			[
-				"git add",
-				"Git: Add..."
+				"rein",
+				"Indentation: Reindent Lines"
 			],
 			[
 				"renam",
@@ -561,10 +683,6 @@
 			[
 				"gitcommi",
 				"Git: Commit"
-			],
-			[
-				"gitad",
-				"Git: Add..."
 			],
 			[
 				"gitcommit",
@@ -1005,13 +1123,9 @@
 			[
 				"del",
 				"File: Delete"
-			],
-			[
-				"rer",
-				"RubyTest: Run Last Ruby Test"
 			]
 		],
-		"width": 530.0
+		"width": 467.0
 	},
 	"console":
 	{
@@ -1028,6 +1142,9 @@
 	},
 	"file_history":
 	[
+		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/sales/index.js.erb",
+		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/assets/javascripts/product.js",
+		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/lib/tasks/populate.rake",
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/orders/new.js.erb",
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/db/migrate/20130601215227_add_address_to_user.rb",
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/config/routes.rb",
@@ -1111,7 +1228,6 @@
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/sales/index.html.haml",
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/assets/javascripts/order.js",
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/assets/stylesheets/sales.css.scss",
-		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/lib/tasks/populate.rake",
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/assets/stylesheets/_form_mixins.scss",
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/assets/stylesheets/form_mixins.scss",
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/assets/stylesheets/_form_mixins.css.scss",
@@ -1153,9 +1269,7 @@
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/sales/_short.html.haml",
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/session/new.html.erb",
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/reviews/_review.html.haml",
-		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/reviews/edit.html.haml",
-		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/controllers/order_controller.rb",
-		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/order/new.html.haml"
+		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/reviews/edit.html.haml"
 	],
 	"find":
 	{
@@ -1163,7 +1277,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 93.0,
 		"where_history":
 		[
 			"/home/kham/Projekty/Rails/jumpstart/New_store_flow",
@@ -1176,6 +1290,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"index",
+			".big",
+			".big_image",
+			"produ",
 			"remove_from_cart_path",
 			"page",
 			"order",
@@ -1299,11 +1417,7 @@
 			"price",
 			"category",
 			"doub",
-			"catego",
-			"categom",
-			"catego",
-			"delete",
-			"@@all_cate"
+			"catego"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1331,7 +1445,7 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 25,
 			"sheets":
 			[
 				{
@@ -1377,8 +1491,8 @@
 						"selection":
 						[
 							[
-								66,
-								66
+								65,
+								65
 							]
 						],
 						"settings":
@@ -1407,8 +1521,8 @@
 						"selection":
 						[
 							[
-								180,
-								180
+								179,
+								179
 							]
 						],
 						"settings":
@@ -1460,15 +1574,15 @@
 					"file": "app/views/products/_inline.html.haml",
 					"settings":
 					{
-						"buffer_size": 419,
+						"buffer_size": 550,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								275,
-								275
+								550,
+								550
 							]
 						],
 						"settings":
@@ -1477,8 +1591,8 @@
 							"syntax": "Packages/Haml/Syntaxes/Ruby Haml.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true,
-							"vintage_lines.line": 11,
-							"vintage_lines.lines": 12,
+							"vintage_lines.line": 0,
+							"vintage_lines.lines": 15,
 							"vintage_lines.mode": true
 						},
 						"translation.x": 0.0,
@@ -1499,8 +1613,8 @@
 						"selection":
 						[
 							[
-								506,
-								506
+								637,
+								637
 							]
 						],
 						"settings":
@@ -1509,7 +1623,7 @@
 							"syntax": "Packages/Ruby/Ruby.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true,
-							"vintage_lines.line": 19,
+							"vintage_lines.line": 23,
 							"vintage_lines.lines": 37,
 							"vintage_lines.mode": true
 						},
@@ -1531,8 +1645,8 @@
 						"selection":
 						[
 							[
-								157,
-								157
+								156,
+								156
 							]
 						],
 						"settings":
@@ -1561,8 +1675,8 @@
 						"selection":
 						[
 							[
-								90,
-								90
+								89,
+								89
 							]
 						],
 						"settings":
@@ -1591,8 +1705,8 @@
 						"selection":
 						[
 							[
-								625,
-								625
+								624,
+								624
 							]
 						],
 						"settings":
@@ -1653,8 +1767,8 @@
 						"selection":
 						[
 							[
-								155,
-								155
+								154,
+								154
 							]
 						],
 						"settings":
@@ -1693,6 +1807,491 @@
 							"syntax": "Packages/Haml/Syntaxes/Ruby Haml.tmLanguage",
 							"vintage_lines.line": 0,
 							"vintage_lines.lines": 1,
+							"vintage_lines.mode": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "app/views/products/_short.html.haml",
+					"settings":
+					{
+						"buffer_size": 1448,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								161,
+								161
+							]
+						],
+						"settings":
+						{
+							"line_numbers": false,
+							"syntax": "Packages/Haml/Syntaxes/Ruby Haml.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true,
+							"vintage_lines.line": 3,
+							"vintage_lines.lines": 30,
+							"vintage_lines.mode": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "app/views/products/index.js.erb",
+					"settings":
+					{
+						"buffer_size": 298,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								295,
+								295
+							]
+						],
+						"settings":
+						{
+							"line_numbers": false,
+							"syntax": "Packages/Rails/JavaScript (Rails).tmLanguage",
+							"vintage_lines.line": 2,
+							"vintage_lines.lines": 9,
+							"vintage_lines.mode": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "app/views/carts/show.html.haml",
+					"settings":
+					{
+						"buffer_size": 278,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								264,
+								264
+							]
+						],
+						"settings":
+						{
+							"line_numbers": true,
+							"syntax": "Packages/Haml/Syntaxes/Ruby Haml.tmLanguage",
+							"vintage_lines.line": 8,
+							"vintage_lines.lines": 9,
+							"vintage_lines.mode": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "app/assets/javascripts/order.js",
+					"settings":
+					{
+						"buffer_size": 1077,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								258,
+								258
+							]
+						],
+						"settings":
+						{
+							"line_numbers": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true,
+							"vintage_lines.line": 8,
+							"vintage_lines.lines": 36,
+							"vintage_lines.mode": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "app/models/user.rb",
+					"settings":
+					{
+						"buffer_size": 1979,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								974,
+								974
+							]
+						],
+						"settings":
+						{
+							"line_numbers": true,
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"translate_tabs_to_spaces": false,
+							"vintage_lines.line": 42,
+							"vintage_lines.lines": 110,
+							"vintage_lines.mode": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 452.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "app/models/cart.rb",
+					"settings":
+					{
+						"buffer_size": 245,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								140,
+								140
+							]
+						],
+						"settings":
+						{
+							"line_numbers": true,
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"vintage_lines.line": 4,
+							"vintage_lines.lines": 13,
+							"vintage_lines.mode": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "app/controllers/carts_controller.rb",
+					"settings":
+					{
+						"buffer_size": 268,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								166,
+								166
+							]
+						],
+						"settings":
+						{
+							"line_numbers": true,
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"vintage_lines.line": 10,
+							"vintage_lines.lines": 14,
+							"vintage_lines.mode": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "app/assets/stylesheets/product.css.scss",
+					"settings":
+					{
+						"buffer_size": 891,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								548,
+								548
+							]
+						],
+						"settings":
+						{
+							"line_numbers": false,
+							"syntax": "Packages/SCSS/SCSS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true,
+							"vintage_lines.line": 43,
+							"vintage_lines.lines": 71,
+							"vintage_lines.mode": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 459.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"settings":
+					{
+						"buffer_size": 1426,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										188,
+										192
+									],
+									[
+										372,
+										376
+									],
+									[
+										568,
+										572
+									],
+									[
+										746,
+										750
+									],
+									[
+										806,
+										810
+									],
+									[
+										875,
+										879
+									],
+									[
+										1066,
+										1070
+									],
+									[
+										1126,
+										1130
+									],
+									[
+										1310,
+										1314
+									],
+									[
+										1342,
+										1346
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								1133,
+								1133
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
+							"translate_tabs_to_spaces": false,
+							"vintage_lines.line": 34,
+							"vintage_lines.lines": 45,
+							"vintage_lines.mode": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 153.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "app/assets/stylesheets/home.css.scss",
+					"settings":
+					{
+						"buffer_size": 683,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								219,
+								219
+							]
+						],
+						"settings":
+						{
+							"line_numbers": true,
+							"syntax": "Packages/SCSS/SCSS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true,
+							"vintage_lines.line": 15,
+							"vintage_lines.lines": 47,
+							"vintage_lines.mode": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "app/views/sales/index.html.haml",
+					"settings":
+					{
+						"buffer_size": 116,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3,
+								3
+							]
+						],
+						"settings":
+						{
+							"line_numbers": true,
+							"syntax": "Packages/Haml/Syntaxes/Ruby Haml.tmLanguage",
+							"vintage_lines.line": 0,
+							"vintage_lines.lines": 2,
+							"vintage_lines.mode": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "app/views/sales/_short.html.haml",
+					"settings":
+					{
+						"buffer_size": 612,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								612,
+								612
+							]
+						],
+						"settings":
+						{
+							"line_numbers": true,
+							"syntax": "Packages/Haml/Syntaxes/Ruby Haml.tmLanguage",
+							"vintage_lines.line": 19,
+							"vintage_lines.lines": 19,
+							"vintage_lines.mode": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 34.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 24,
+					"file": "app/controllers/sales_controller.rb",
+					"settings":
+					{
+						"buffer_size": 495,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								164,
+								164
+							]
+						],
+						"settings":
+						{
+							"line_numbers": true,
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true,
+							"vintage_lines.line": 7,
+							"vintage_lines.lines": 25,
+							"vintage_lines.mode": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 25,
+					"file": "app/views/orders/_product.html.haml",
+					"settings":
+					{
+						"buffer_size": 151,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								151,
+								151
+							]
+						],
+						"settings":
+						{
+							"line_numbers": false,
+							"syntax": "Packages/Haml/Syntaxes/Ruby Haml.tmLanguage",
+							"vintage_lines.line": 6,
+							"vintage_lines.lines": 6,
 							"vintage_lines.mode": true
 						},
 						"translation.x": 0.0,
@@ -1754,6 +2353,106 @@
 		"selected_items":
 		[
 			[
+				"ordproh",
+				"app/views/orders/_product.html.haml"
+			],
+			[
+				"ordershow",
+				"app/views/orders/show.html.haml"
+			],
+			[
+				"salind",
+				"app/views/sales/index.html.haml"
+			],
+			[
+				"indjs",
+				"app/views/sales/index.js.erb"
+			],
+			[
+				"salcon",
+				"app/controllers/sales_controller.rb"
+			],
+			[
+				"prodinli",
+				"app/views/products/_inline.html.haml"
+			],
+			[
+				"saleshor",
+				"app/views/sales/_short.html.haml"
+			],
+			[
+				"procs",
+				"app/assets/stylesheets/product.css.scss"
+			],
+			[
+				"carcon",
+				"app/controllers/carts_controller.rb"
+			],
+			[
+				"carsho",
+				"app/views/carts/show.html.haml"
+			],
+			[
+				"cart",
+				"app/models/cart.rb"
+			],
+			[
+				"cartshow",
+				"app/views/carts/show.html.haml"
+			],
+			[
+				"proinli",
+				"app/views/products/_inline.html.haml"
+			],
+			[
+				"orjs",
+				"app/assets/javascripts/order.js"
+			],
+			[
+				"prodinl",
+				"app/views/products/_inline.html.haml"
+			],
+			[
+				"proshor",
+				"app/views/products/_short.html.haml"
+			],
+			[
+				"user",
+				"app/models/user.rb"
+			],
+			[
+				"viecart",
+				"app/views/carts/show.html.haml"
+			],
+			[
+				"js",
+				"app/assets/javascripts/order.js"
+			],
+			[
+				"inli",
+				"app/views/products/_inline.html.haml"
+			],
+			[
+				"rodshor",
+				"app/views/products/_short.html.haml"
+			],
+			[
+				"cartsho",
+				"app/views/carts/show.html.haml"
+			],
+			[
+				"prodjs",
+				"app/views/products/index.js.erb"
+			],
+			[
+				"popu",
+				"lib/tasks/populate.rake"
+			],
+			[
+				"prodshort",
+				"app/views/products/_short.html.haml"
+			],
+			[
 				"prodin",
 				"app/views/products/index.html.haml"
 			],
@@ -1776,10 +2475,6 @@
 			[
 				"ordenew",
 				"app/views/orders/new.html.haml"
-			],
-			[
-				"ordershow",
-				"app/views/orders/show.html.haml"
 			],
 			[
 				"manager",
@@ -1812,10 +2507,6 @@
 			[
 				"prodcss",
 				"app/assets/stylesheets/product.css.scss"
-			],
-			[
-				"viecart",
-				"app/views/carts/show.html.haml"
 			],
 			[
 				"carind",
@@ -1890,16 +2581,8 @@
 				"app/models/product.rb"
 			],
 			[
-				"proinli",
-				"app/views/products/_inline.html.haml"
-			],
-			[
 				"fea",
 				"spec/features/user/logged_user_spec.rb"
-			],
-			[
-				"cart",
-				"app/models/cart.rb"
 			],
 			[
 				"ordernew",
@@ -1908,10 +2591,6 @@
 			[
 				"facuser",
 				"spec/factories/users.rb"
-			],
-			[
-				"cartshow",
-				"app/views/carts/show.html.haml"
 			],
 			[
 				"menutop",
@@ -1940,10 +2619,6 @@
 			[
 				"ordcon",
 				"app/controllers/orders_controller.rb"
-			],
-			[
-				"user",
-				"app/models/user.rb"
 			],
 			[
 				"prospe",
@@ -2046,10 +2721,6 @@
 				"app/views/products/_short.html.haml"
 			],
 			[
-				"proshor",
-				"app/views/products/_short.html.haml"
-			],
-			[
 				"prsho",
 				"app/views/products/show.html.haml"
 			],
@@ -2076,10 +2747,6 @@
 			[
 				"menbig",
 				"app/views/menu/_big_product_image.html.haml"
-			],
-			[
-				"procs",
-				"app/assets/stylesheets/product.css.scss"
 			],
 			[
 				"catshor",
@@ -2146,10 +2813,6 @@
 				"app/views/sales/index.html.haml"
 			],
 			[
-				"js",
-				"app/assets/javascripts/order.js"
-			],
-			[
 				"proin",
 				"app/views/products/index.html.haml"
 			],
@@ -2159,10 +2822,6 @@
 			],
 			[
 				"popul",
-				"lib/tasks/populate.rake"
-			],
-			[
-				"popu",
 				"lib/tasks/populate.rake"
 			],
 			[
@@ -2204,66 +2863,6 @@
 			[
 				"produ",
 				"app/models/product.rb"
-			],
-			[
-				"categor",
-				"app/models/category.rb"
-			],
-			[
-				"pop",
-				"lib/tasks/populate.rake"
-			],
-			[
-				"adminspec",
-				"spec/features/user/administrator_spec.rb"
-			],
-			[
-				"produshow",
-				"app/views/products/show.html.haml"
-			],
-			[
-				"proform",
-				"app/views/products/_form.html.haml"
-			],
-			[
-				"prodspe",
-				"spec/models/product_spec.rb"
-			],
-			[
-				"modpr",
-				"app/models/product.rb"
-			],
-			[
-				"factprod",
-				"spec/factories/products.rb"
-			],
-			[
-				"spec",
-				"spec/features/user/administrator_spec.rb"
-			],
-			[
-				"lib",
-				"lib/tasks/populate.rake"
-			],
-			[
-				"aphtml",
-				"app/views/layouts/application.html.erb"
-			],
-			[
-				"sessioco",
-				"app/controllers/session_controller.rb"
-			],
-			[
-				"usercon",
-				"app/controllers/users_controller.rb"
-			],
-			[
-				"vieus",
-				"app/views/users/show.html.haml"
-			],
-			[
-				"applihtml",
-				"app/views/layouts/application.html.erb"
 			]
 		],
 		"width": 0.0
