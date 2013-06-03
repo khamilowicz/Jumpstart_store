@@ -1,7 +1,23 @@
 Order page
 .stats
   .total= "Total for order: $#{current_user.cart.total}"
-.btn.btn-primary=link_to "Buy", create_orders_path
+=#link_to "Buy", create_orders_path, class: "btn btn-primary"
+= form_tag create_orders_path, id: 'payment-form', method: :post do
+  .payment-errors    
+  =fields_for 'transaction' do |f|
+    =f.hidden_field 'card-amount-int', { class: 'card-amount-int', value: current_user.cart.total.to_i}
+    =f.hidden_field 'card-currency', {class: 'card-currency', value: 'EUR'}
+    =f.label 'card-number', "Card number"
+    =f.text_field :'card-number'
+    =f.label :'card-cvc', "CVC"
+    =f.text_field :'card-cvc'
+    =f.label 'card-holdername', "Holder name"
+    =f.text_field :'card-holdername'
+    =f.label 'card-expiry-month', "Expiry month"
+    =f.text_field :'card-expiry-month'
+    =f.label 'card-expiry-year', "Expiry year"
+    =f.text_field :'card-expiry-year'
+  =submit_tag 'Submit', class: 'submit-button'
 .products
   = render partial: 'products/inline', collection: current_user.products_uniq, as: :product                  
   =# render partial: 'categories/inline', collection: Category.all, as: :category

@@ -21,8 +21,9 @@ NewStore::Application.routes.draw do
 
   resources :orders, except: [:create] do 
     collection do
-      get '/create' => "orders#create", as: 'create'
+      post '/create' => "orders#create", as: 'create'
       get '/filter' => 'orders#filter', as: 'filter'
+      post '/new' => 'orders#new'
     end
     get '/change_status' => 'orders#change_status', as: 'change_status'
   end

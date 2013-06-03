@@ -21,6 +21,15 @@ class OrdersController < ApplicationController
 	end
 
 	def create
+par = {
+	amount: current_user.cart.total.to_i.to_s,
+	currency: 'EUR',
+	token: params[:paymillToken],
+	description: 'Can it be?'
+}
+		trans = Paymill::Transaction.create(par)
+		binding.pry
+		
 		@order = Order.new
 		@order.user = current_user
 		@order.transfer_products
