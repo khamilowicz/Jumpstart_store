@@ -13,4 +13,4 @@
     .span7.title= link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} 
     .span1.price= "$#{product.price}"
     .span2.quantity= product.quantity_for(current_user)
-    .span2.remove= link_to "X", remove_from_cart_user_product_path(current_user, product, back: {controller: 'orders', action: 'new'}), remote: true
+    .span2.remove= link_to "X", remove_from_cart_user_product_path(current_user, product, back: {controller: params[:controller], action: params[:action]}), remote: true

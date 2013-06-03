@@ -4,6 +4,10 @@ class CartsController < ApplicationController
 
 	def show
 		@products = current_user.products 
+    respond_to do |format|
+      format.html
+      format.js {render :show}
+    end
 	end
 
   private
