@@ -7,4 +7,7 @@ $(function() {
   $('.cart_btn').bind('ajax:success', function() {
     $(this).button('reset');
   });
+
+   $('li.category').removeClass("active");
+  $("li.category.all").addClass("active");
 });

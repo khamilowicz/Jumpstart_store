@@ -1,0 +1,5 @@
+  $(".products").html("<%= j render partial: 'products/short', collection: @category.products, as: :product %>");
+jQuery(document).ready(function($) {
+  $('li.category').removeClass("active");
+  $("li.category#<%= @category.id %>").addClass("active");
+});
