@@ -1,23 +1,33 @@
-Order page
-.stats
-  .total= "Total for order: $#{current_user.cart.total}"
-=#link_to "Buy", create_orders_path, class: "btn btn-primary"
-= form_tag create_orders_path, id: 'payment-form', method: :post do
-  .payment-errors    
-  =fields_for 'transaction' do |f|
-    =f.hidden_field 'card-amount-int', { class: 'card-amount-int', value: current_user.cart.total.to_i}
-    =f.hidden_field 'card-currency', {class: 'card-currency', value: 'EUR'}
-    =f.label 'card-number', "Card number"
-    =f.text_field :'card-number'
-    =f.label :'card-cvc', "CVC"
-    =f.text_field :'card-cvc'
-    =f.label 'card-holdername', "Holder name"
-    =f.text_field :'card-holdername', {value: current_user.full_name }
-    =f.label 'card-expiry-month', "Expiry month"
-    =f.text_field :'card-expiry-month'
-    =f.label 'card-expiry-year', "Expiry year"
-    =f.text_field :'card-expiry-year'
-  =submit_tag 'Buy', class: 'submit-button btn btn-primary'
-.products
-  = render partial: 'products/inline', collection: current_user.products_uniq, as: :product                  
-  =# render partial: 'categories/inline', collection: Category.all, as: :category
+.order_new
+  %h2 Order page
+  .stats
+    %h3.total= "Total for order: $#{current_user.cart.total}"
+  .span12.form_order
+    = form_tag create_orders_path, id: 'payment-form', method: :post do
+      .payment-errors    
+      .row
+        .span6=label_tag :address, "Address"
+      .row
+        .span6=text_area_tag :address, current_user.address, {class: 'address', rows: 2}
+      =fields_for 'transaction' do |f|
+        =f.hidden_field 'card-amount-int', { class: 'card-amount-int', value: current_user.cart.total.to_i}
+        =f.hidden_field 'card-currency', {class: 'card-currency', value: 'EUR'}
+        .row
+          .span6=f.label 'card-number', "Card number", {placeholer: 4111111111111111}
+          .span6=f.label 'card-cvc', "CVC", {placeholer: 123}
+        .row
+          .span6=f.text_field 'card-number'
+          .span6=f.text_field 'card-cvc'
+        .row  
+          .span6=f.label 'card-expiry-month', "Expiry month"
+          .span6=f.label 'card-expiry-year', "Expiry year"
+        .row
+          .span6=f.text_field :'card-expiry-month'
+          .span6=f.text_field :'card-expiry-year'
+        .row
+          .span6=f.label 'card-holdername', "Holder name"
+        .row
+          .span6=f.text_field :'card-holdername', {value: current_user.full_name }
+        =submit_tag 'Buy', class: 'submit-button btn btn-primary span4'
+  .products
+    = render partial: 'products/inline', collection: current_user.products_uniq, as: :product
