@@ -1,9 +1,10 @@
 %h3 Previous orders
 .orders
-  .stats
+  %h5.stats
+    .status= link_to 'All orders', orders_path, remote: true
     - Order.statuses.each do |key, status|
       .status
         = content_tag :div, class: status do
-          = link_to status.capitalize, filter_orders_path({status: status})
+          = link_to status.capitalize, filter_orders_path({status: status}), remote: true
           = Order.count_by_status(status)
-  =render partial: 'orders/inline', collection: @orders, as: :order
+  .orders=render partial: 'orders/inline', collection: @orders, as: :order

@@ -17,7 +17,10 @@ class OrdersController < ApplicationController
 
 	def filter
 		@orders = Order.find_by_status(params[:status])
-		render 'index'
+		respond_to do |format|
+			format.html {render 'index'}
+			format.js {render :index}
+		end
 	end
 
 	def create
