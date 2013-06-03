@@ -12,7 +12,7 @@ Order page
     =f.label :'card-cvc', "CVC"
     =f.text_field :'card-cvc'
     =f.label 'card-holdername', "Holder name"
-    =f.text_field :'card-holdername'
+    =f.text_field :'card-holdername', {value: current_user.full_name }
     =f.label 'card-expiry-month', "Expiry month"
     =f.text_field :'card-expiry-month'
     =f.label 'card-expiry-year', "Expiry year"

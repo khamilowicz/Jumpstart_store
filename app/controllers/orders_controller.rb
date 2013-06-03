@@ -21,27 +21,22 @@ class OrdersController < ApplicationController
 	end
 
 	def create
-par = {
-	amount: current_user.cart.total.to_i.to_s,
-	currency: 'EUR',
-	token: params[:paymillToken],
-	description: 'Can it be?'
-}
-		trans = Paymill::Transaction.create(par)
-		binding.pry
-		
-		@order = Order.new
-		@order.user = current_user
-		@order.transfer_products
+		if PaymillManager.transaction(current_user, params[:paymillToken], 'EUR')
+			@order = Order.new
+			@order.user = current_user
+			@order.transfer_products
+			@order.pay
+		end
 		if @order.save
-			redirect_to '/cart', notice: "Order is processed"
+			render :show, notice: "Order is processed"
 		else
-			redirect_to '/cart', notice: "Something went wrong"
+			flash[:errors] = "Something went wrong"
+			redirect_to '/cart'
 		end
 	end
 
 	def index
-			@orders = current_user.orders.all
+		@orders = current_user.orders.all
 	end
 
 	def show

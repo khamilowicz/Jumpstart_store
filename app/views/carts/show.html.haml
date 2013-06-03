@@ -4,6 +4,6 @@
   -if current_user.guest?
     "You need to log in to purchase products"
   -else
-    .btn.btn-primary=link_to 'Order', new_order_path
+    =link_to 'Order', new_order_path, class: 'btn btn-primary'
 .products
   =render partial: 'products/inline', collection: @products, as: :product
