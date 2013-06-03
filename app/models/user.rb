@@ -78,7 +78,7 @@ class User < ActiveRecord::Base
 		find_by_product(product).count
 	end
 	def orders
-		admin? ? Order : super
+		admin? ? Order.where("user_id is not NULL") : super
 	end
 
 	def make_purchase
