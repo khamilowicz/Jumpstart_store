@@ -23,6 +23,7 @@ group :assets do
   gem 'twitter-bootstrap-rails'
 end
 
+  gem 'faker'
 group :test, :development do
 gem 'sqlite3'
   gem 'rspec-rails'
@@ -30,7 +31,6 @@ gem 'sqlite3'
   gem 'capybara'
   gem 'capybara_rails'
   gem 'delorean'
-  gem 'faker'
   gem 'guard-livereload'
 end
 
