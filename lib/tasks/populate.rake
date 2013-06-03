@@ -41,13 +41,13 @@ namespace :db do
 
     Category.all.each do |category|
       Product.all.sample(6).each do |product|
-        category.add_product product
+        category.add product: product
       end
     end
 
     User.all.each do |user|
       Product.all.sample(rand(8)).each do |product|
-        user.add_product product
+        user.add product: product
       end
     end
   end
