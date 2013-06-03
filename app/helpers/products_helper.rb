@@ -1,8 +1,10 @@
 module ProductsHelper
   def product_price product
-    text = "$#{product.price}"
+    text = "<b>$#{product.price}</b>"
     if product.price != product.base_price
-      text = "$#{product.base_price}, only" + text
+      text = "Was <strike>$#{product.base_price}</strike>. Now, only " + text
+    else
+      text = "Only " + text
     end
     raw text
   end
