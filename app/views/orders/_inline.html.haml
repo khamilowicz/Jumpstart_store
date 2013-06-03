@@ -1,0 +1,26 @@
+.order.inline
+  -if order_counter == 0
+    .header.row
+      .span1
+      .span3.user
+        Purchaser
+      .span2.date
+        Date
+      .span1.total
+        Total
+      .span1.status
+        Status
+      .span1
+      - if current_user.admin?
+        .span1
+          Change status
+  .order.row
+    .span1= link_to "Show", order_path(order)
+    .span3.user= order.user.full_name if order.user
+    .span2= order.created_at.strftime("%e %b %Y")
+    .span1= "$#{order.total_price}"
+    .span1= order.status
+    .span1
+    -if current_user.admin?
+      .span1
+        =change_status_link(order)

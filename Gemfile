@@ -9,6 +9,7 @@ gem 'sqlite3'
 gem 'paperclip'
 gem 'paymill'
 
+gem 'vcr'
 
 # in production environments by default.
 group :assets do

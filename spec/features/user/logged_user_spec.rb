@@ -41,7 +41,7 @@
         it{ should have_selector('.total', text: "Total for order: $3.0")}
       end
 
-      context "after placing it" do
+      context "after placing it", js: true do
 
         before(:each) do
           order_some_products @products
@@ -133,7 +133,7 @@
     end
   end
 
-  context "on products he has purchased" do
+  context "on products he has purchased", js: true do
 
     before(:each) do
       products = FactoryGirl.create_list(:product, 2)

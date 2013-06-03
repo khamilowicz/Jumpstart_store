@@ -17,7 +17,7 @@ Order page
     =f.text_field :'card-expiry-month'
     =f.label 'card-expiry-year', "Expiry year"
     =f.text_field :'card-expiry-year'
-  =submit_tag 'Submit', class: 'submit-button'
+  =submit_tag 'Buy', class: 'submit-button btn btn-primary'
 .products
   = render partial: 'products/inline', collection: current_user.products_uniq, as: :product                  
   =# render partial: 'categories/inline', collection: Category.all, as: :category
