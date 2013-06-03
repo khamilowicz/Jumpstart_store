@@ -2,4 +2,5 @@
 jQuery(document).ready(function($) {
   $('li.category').removeClass("active");
   $("li.category#<%= @category.id %>").addClass("active");
+  $(".product_thumbnail, .product .title a").on('mouseenter', update_big_image);
 });
