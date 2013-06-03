@@ -1,5 +1,5 @@
 .heading
-  = "#{current_user.display_name} cart"
+  %h3= "#{current_user.display_name}'s' cart"
 .order_menu
   -if current_user.guest?
     "You need to log in to purchase products"
