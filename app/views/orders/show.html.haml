@@ -1,11 +1,10 @@
-Order page
+%h2 Order page
 .order
-  .products
-    =render partial: 'orders/product', collection: @order.products, as: :product
-  .status= "Product is #{@order.status} since #{@order.status_change_date}"
-  .total_price= @order.total_price
-  .submit_date= @order.date_of_purchase
   .purchaser
-    .name= @order.user.full_name
-    .email= @order.user.email
-  .total_price= @order.total_price
+    .name= "Name: " + @order.user.full_name
+    .email= "Email: " + @order.user.email
+  .status= "Order is #{@order.status} since #{@order.status_change_date.strftime("%d %b %Y")}"
+  .submit_date= "Was purchased #{@order.date_of_purchase.strftime("%d %b %Y")}"
+  .total_price= "Total price: $#{@order.total_price}"
+  .products
+    =render partial: 'orders/inline_product', collection: @order.products, as: :product

@@ -76,7 +76,7 @@ end
 
 it "Retire a product from being sold, which hides it from browsing by any non-administrator"
 
-context "sees a listing of all orders" do
+context "sees a listing of all orders", js: true do
   before(:each) do
     @user = FactoryGirl.create(:user)
     visit '/'

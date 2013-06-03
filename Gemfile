@@ -7,7 +7,9 @@ gem 'rails', '3.2.13'
 
 gem 'sqlite3'
 gem 'paperclip'
+gem 'paymill'
 
+gem 'vcr'
 
 # in production environments by default.
 group :assets do

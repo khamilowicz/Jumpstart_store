@@ -2,8 +2,55 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 body{
-    .btn{
+  .btn{
     margin: 1em 0;
     a { color: white; }
+  }
+}
+.orders{
+  margin-top: 1em;
+  .stats{
+    text-align: center;
+    margin-bottom: 2em;
+
+    .status{
+      display: inline-block;
+      margin: 0 0.5em;
+      border-right: 1px solid gray;
+      padding-right: 0.5em;
+    }
+  }
+}
+.order{
+  .products{
+    margin-top: 2em;
+
+    .product.inline{
+      .price, .quantity{
+        text-align: right;
+      }
+    }
+  }
+}
+.order_new{
+  .total{
+    text-align: right;
+  }
+
+.form_order{
+  margin: 2em 0;
+  .address{
+  }
+}
+}
+.order.inline{
+  border-bottom: 1px solid gray;
+  margin-top: 0.5em;
+  .header{
+    font-weight: bold;
+  }
+  .row{
+    text-align: right;
+    margin-left: 2em;
   }
 }
