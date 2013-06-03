@@ -21,13 +21,24 @@ body{
     }
   }
 }
+.order{
+  .products{
+    margin-top: 2em;
+
+    .product.inline{
+      .price, .quantity{
+        text-align: right;
+      }
+    }
+  }
+}
 .order.inline{
   border-bottom: 1px solid gray;
   margin-top: 0.5em;
-.header{
-  font-weight: bold;
-}
- .row{
+  .header{
+    font-weight: bold;
+  }
+  .row{
     text-align: right;
     margin-left: 2em;
   }
