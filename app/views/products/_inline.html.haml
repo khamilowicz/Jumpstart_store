@@ -1,0 +1,16 @@
+.product.inline
+  -if product_counter == 0
+    .header.row
+      .span7.title
+        Title
+      .span1.price
+        Price
+      .span2.quantity
+        Quantity
+      .span2
+        Remove
+  .product.row
+    .span7.title= link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} 
+    .span1= "$#{product.price}"
+    .span2= product.quantity_for(current_user)
+    .span2= link_to "X", remove_from_cart_user_product_path(current_user, product, back: {controller: 'orders', action: 'new'}), remote: true

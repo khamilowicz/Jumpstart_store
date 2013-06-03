@@ -4,6 +4,7 @@ class OrdersController < ApplicationController
 	before_filter :authorize_admin, except: [:filter, :create, :new, :show, :index]
 
 	def new
+		@products = current_user.cart.products
 	end
 
 	def change_status
@@ -20,7 +21,8 @@ class OrdersController < ApplicationController
 	end
 
 	def create
-		@order = current_user.orders.new
+		@order = Order.new
+		@order.user = current_user
 		@order.transfer_products
 		if @order.save
 			redirect_to '/cart', notice: "Order is processed"

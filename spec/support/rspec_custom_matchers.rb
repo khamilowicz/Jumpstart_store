@@ -1,10 +1,13 @@
-RSpec::Matchers.define :have_short_product do |product|
+RSpec::Matchers.define :have_short_product do |products|
   match do |page_content|
-    selector = ".product.#{product.title_param}" 
-    page_content.should have_selector(selector)
-    within(selector){
-      page_content.should have_content(product.title)
-    }
+    products = [products] unless products.kind_of? Array
+    products.each do |product|
+      selector = ".product.#{product.title_param}" 
+      page_content.should have_selector(selector)
+      within(selector){
+        page_content.should have_content(product.title)
+      }
+    end
   end
 end
 
@@ -48,7 +51,7 @@ RSpec::Matchers.define :have_short_order do |order|
   end
 
   failure_message_for_should do |page_content|
-    
+
     "Expected #{page_content.find(".order").native} to have #{order.date_of_purchase}, #{order.total_price}, and link 'Show order'"
   end
 end
