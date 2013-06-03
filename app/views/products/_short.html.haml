@@ -1,29 +1,19 @@
-.product.short.well{class: product.title_param, id: product_counter }
-  .row
-    .span3
-      .product_thumbnail.thumbnail{id: product.title}= link_to image_tag(product.photo.url), product_path(product)
-    .span3
-      .row
-        .span3
-          %h3=link_to product.title_shorter, product_path(product)
-      .row
-        .span1
-          .price
-            .base="$#{product.base_price}"
-      -if product.users.include?(current_user)
-        .row
-          .span3
-            %h3.current="$#{product.price}"
-            .btn.btn-primary.cart_btn=link_to "Add more", add_to_cart_user_product_path(current_user, product)
-        .row
-          .span1.quantity= "#{product.quantity_for(current_user)} in cart"
-          .span2=link_to "Remove from cart", remove_from_cart_user_product_path(current_user, product)
-      -else
-        .row
-          .span2
-            %h3.current="$#{product.price}"
-          .span2
-            %h3.btn.btn-primary.cart_btn=link_to "Add to cart", add_to_cart_user_product_path(current_user, product)
-      .row
-        .span3
-          %h3.price.discount="You save #{(100*(product.base_price - product.price)/product.base_price).round.to_i}%!" if product.discount < 100
+.span6.product.short.well{class: product.title_param, id: product_counter }
+  .row.span12
+    .product_thumbnail.thumbnail{data: {photo: product.photo.url, title: product.title}}
+      = link_to image_tag(product.photo.url), product_path(product)
+  .row.span12
+    %h3=link_to product.title_shorter, product_path(product)
+  .row.span12
+    .span4
+      .price= product_price product
+    .span4
+      = quantity product
+  .row.span12
+    .span12
+      = remove product
+  .row.span12
+    .span12
+      %h3.price.discount= saving_text product
+  .row.span12
+    =link_to adding_text(product), add_to_cart_user_product_path(current_user, product), remote: true, class: 'span12 btn btn-primary cart_btn', data: {:'loading-text' => 'Processing...'}

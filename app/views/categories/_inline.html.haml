@@ -1,0 +1,6 @@
+=if category.products_for_user(current_user)
+  .category.inline
+    .name
+      =category.name
+    .products
+      =render partial: 'products/inline', collection: category.products_for_user(current_user), as: :product

@@ -76,7 +76,7 @@ end
 
 it "Retire a product from being sold, which hides it from browsing by any non-administrator"
 
-context "sees a listing of all orders" do
+context "sees a listing of all orders", js: true do
   before(:each) do
     @user = FactoryGirl.create(:user)
     visit '/'
@@ -233,7 +233,7 @@ context "he may" do
     before(:each) do
       put_on_sale @product
       visit sales_path
-      within('.sale'){ click_link 'End sale'}
+      within('.sale'){ click_link 'X'}
       visit sales_path
     end
 

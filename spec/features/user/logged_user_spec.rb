@@ -3,6 +3,8 @@
 
  describe "logged user" do
 
+  subject{page}
+
   before(:each) do
     @user = FactoryGirl.create(:user)
     visit '/'
@@ -17,96 +19,112 @@
 
     it "log out" do 
       click_link "Log out"
-      page.should_not have_content(@user.display_name)
-      page.should_not have_content("Log out")
-      page.should have_content("Guest")
-      page.should have_link("Log in")
+      should_not have_content(@user.display_name)
+      should_not have_content("Log out")
+      should have_content("Guest")
+      should have_link("Log in")
     end
 
     context "concerning orders" do
-
       before(:each) do
-        @products = FactoryGirl.create_list(:product, 3, quantity: 3)
-        order_some_products @products
-        visit orders_path
-        @quantity_of_products_in_order = 1
-        @order = @user.orders.first
+          @products = FactoryGirl.create_list(:product, 3, quantity: 3)
       end
-      
-      it "place an order" do
-        @order.products.should_not be_empty
-        visit '/cart'
-        @user.products.should be_empty
-        @user.orders.first.products.should include_products(@products.first, @products.last)
-        @products.each do |product|
-          page.should_not have_short_product(product)
+
+      context "on new order page" do
+        before(:each) do
+          add_products_to_cart @products
+          click_link "My cart"
+          click_link 'Order'
         end
+
+        it{should have_short_product(@products.first) }
+        it{ should have_selector('.total', text: "Total for order: $3.0")}
       end
 
-      it "view their past orders with links to display each order" do
-        visit orders_path
-        page.should have_content("Previous orders")
-        page.should have_short_order(@order)
-      end
-
-      context "on that order display page there are" do
+      context "after placing it", js: true do
 
         before(:each) do
-          visit order_path(@order)
+          order_some_products @products
+          visit orders_path
+          @quantity_of_products_in_order = 1
+          @order = @user.orders.first
         end
 
-        it "products with quantity ordered and line-item subtotals" do
-          @order.products.each do |product|
-            within('.products'){
-              page.should have_selector('.product', text: product.title)
-              page.should have_selector(".product .quantity", text: @quantity_of_products_in_order.to_s)
-            }
+        it "cart is empty" do
+          @order.products.should_not be_empty
+          visit '/cart'
+          @user.products.should be_empty
+          @user.orders.first.products.should include_products(@products.first, @products.last)
+          @products.each do |product|
+            should_not have_short_product(product)
+
           end
         end
 
-        it "links to each product page" do 
-          @order.products.each do |product|
-            within('.products'){
-              page.should have_link(product.title)
-            }
-          end
+        it "view their past orders with links to display each order" do
+          visit orders_path
+          should have_content("Previous orders")
+          should have_short_order(@order)
         end
 
-        it "the current status" do
-          page.should have_selector(".status", content: @order.status)
-        end
+        context "on that order display page there are" do
 
-        it "order total price" do 
-          page.should have_selector(".total_price", content: @order.total_price)
-        end
-
-        it "date/time order was submitted" do
-          page.should have_selector(".submit_date", content: @order.date_of_purchase)
-        end
-
-        it "if shipped or cancelled, display a timestamp when that action took place" do
-          page.should have_selector(".status", content: @order.status_change_date)
-        end
-
-
-        context "if any product is retired:" do
           before(:each) do
-            @product = @order.products.first
-            @product.retire 
-            @product.product.save
-            click_link @product.title
+            visit order_path(@order)
           end
 
-          it "they can still access the product page" do
-            page.should have_content(@product.title)
-            page.should have_content(@product.description)
+          it "products with quantity ordered and line-item subtotals" do
+            @order.products.each do |product|
+              within('.products'){
+                should have_selector('.product', text: product.title)
+                should have_selector(".product .quantity", text: @quantity_of_products_in_order.to_s)
+              }
+            end
           end
 
-          it "they cannot add it to a new cart" do 
-            page.should_not have_link "Add to cart"
+          it "links to each product page" do 
+            @order.products.each do |product|
+              within('.products'){
+                should have_link(product.title)
+              }
+            end
+          end
+
+          it "the current status" do
+            should have_selector(".status", content: @order.status)
+          end
+
+          it "order total price" do 
+            should have_selector(".total_price", content: @order.total_price)
+          end
+
+          it "date/time order was submitted" do
+            should have_selector(".submit_date", content: @order.date_of_purchase)
+          end
+
+          it "if shipped or cancelled, display a timestamp when that action took place" do
+            should have_selector(".status", content: @order.status_change_date)
+          end
+
+
+          context "if any product is retired:" do
+            before(:each) do
+              @product = @order.products.first
+              @product.retire 
+              @product.product.save
+              click_link @product.title
+            end
+
+            it "they can still access the product page" do
+              should have_content(@product.title)
+              should have_content(@product.description)
+            end
+
+            it "they cannot add it to a new cart" do 
+              should_not have_link "Add to cart"
+            end
           end
         end
-
       end
 
       it "Place a 'Two-Click' order from any active product page."
@@ -115,11 +133,11 @@
     end
   end
 
-  context "on products he has purchased" do
+  context "on products he has purchased", js: true do
 
     before(:each) do
       products = FactoryGirl.create_list(:product, 2)
-        @purchased_product = products.first
+      @purchased_product = products.first
       @other_product = products.last
       order_some_products @purchased_product
       @review = FactoryGirl.build(:review)

@@ -44,6 +44,10 @@ class User < ActiveRecord::Base
 
 	end
 
+	def products_uniq 
+		products.uniq 
+	end
+
 	def find_by_product product
 		self.products.where(id: product.id)
 	end
@@ -74,7 +78,7 @@ class User < ActiveRecord::Base
 		find_by_product(product).count
 	end
 	def orders
-		admin? ? Order : super
+		admin? ? Order.where("user_id is not NULL") : super
 	end
 
 	def make_purchase

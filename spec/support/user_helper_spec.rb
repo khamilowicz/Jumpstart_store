@@ -19,7 +19,11 @@ def order_some_products products
   add_products_to_cart products
   visit cart_path
   click_link "Order"
-  click_link "Buy"
+  fill_in :'card-number', with: 4111111111111111
+  fill_in :'card-cvc', with: 123
+  fill_in :'card-expiry-month', with: 12
+  fill_in :'card-year', with: 2020
+  click_button "Buy"
 end
 
 def add_a_review review 

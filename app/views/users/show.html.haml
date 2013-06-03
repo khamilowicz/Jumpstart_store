@@ -1,12 +1,17 @@
-%h3=@user.full_name
+.user
+  %h3=@user.full_name
+  .display_name="Display name: #{@user.display_name}"
+  .email="Email: #{@user.email}"
 
-.orders
-  -if @user.orders.empty?
-    User has no orders
-  -else
-    =render partial: 'orders/short', collection: @user.orders, as: :order
-.products
-  -if @user.products.empty?
-    User has no products in cart
-  -else
-    =render partial: 'products/short', collection: @user.products, as: :product
+  .orders_block
+    %h3.order_text.btn.span12 Orders
+    -if @user.orders
+      .orders=render partial: 'orders/inline', collection: @user.orders, as: :order
+    -else
+      User has no orders
+  .products_block
+    %h3.cart_text.btn.span12 Cart
+    -if @user.products.empty?
+      User has no products in cart
+    -else
+      .cart=render partial: 'products/inline', collection: @user.products_uniq, as: :product

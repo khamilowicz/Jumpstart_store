@@ -12,7 +12,7 @@
     %p.description.span3= @product.description
   .row.categories
     Categories:
-    = @product.list_categories.join(' ')
+    = @product.list_categories
     .add_to_category= link_to "Add to category", product_add_to_category_path(@product)
   .row.note_bar
     .overall_note= note_in_stars(@product.rating)

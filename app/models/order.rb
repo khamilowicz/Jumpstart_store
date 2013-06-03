@@ -7,7 +7,8 @@ class Order < ActiveRecord::Base
 		:cancel => 'cancelled',
 		:pay => 'paid', 
 		:is_sent => 'shipped', 
-		:is_returned => 'returned'
+		:is_returned => 'returned',
+		:is_pending => 'pending'
 	}
 
 	validates_presence_of :user, :address, :order_products
@@ -62,14 +63,14 @@ class Order < ActiveRecord::Base
 		100*total_price/price_without_discount
 	end
 
-	def transfer_products address= self.user.address
+	def transfer_products 
 		self.user.products.all.uniq.each do |product|
 			self.add product: product
 			self.user.remove product: product
 			product.retire
 		end
 		## TODO: address
-		self.address = address
+		self.address = self.user.address
 	end
 
 	STATUSES.each do |method_name, stat|

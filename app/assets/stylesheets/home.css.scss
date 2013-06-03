@@ -4,9 +4,10 @@ body {
 .big_product_container{
 // position: fixed;
   .big_product_image{
-    min-height: 30em;
+    min-height: 50em;
     position: relative;
     overflow: hidden;
+    background-size: 300%;
 
 
     .image{

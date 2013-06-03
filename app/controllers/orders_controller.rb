@@ -17,21 +17,29 @@ class OrdersController < ApplicationController
 
 	def filter
 		@orders = Order.find_by_status(params[:status])
-		render 'index'
+		respond_to do |format|
+			format.html {render 'index'}
+			format.js {render :index}
+		end
 	end
 
 	def create
-		@order = current_user.orders.new
-		@order.transfer_products
+		if PaymillManager.transaction(current_user, params[:paymillToken], 'EUR')
+			@order = Order.new
+			@order.user = current_user
+			@order.transfer_products
+			@order.pay
+		end
 		if @order.save
-			redirect_to '/cart', notice: "Order is processed"
+			render :show, notice: "Order is processed"
 		else
-			redirect_to '/cart', notice: "Something went wrong"
+			flash[:errors] = "Something went wrong"
+			redirect_to '/cart'
 		end
 	end
 
 	def index
-			@orders = current_user.orders.all
+		@orders = current_user.orders.all
 	end
 
 	def show

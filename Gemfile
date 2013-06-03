@@ -7,7 +7,9 @@ gem 'rails', '3.2.13'
 
 gem 'sqlite3'
 gem 'paperclip'
+gem 'paymill'
 
+gem 'vcr'
 
 # in production environments by default.
 group :assets do
@@ -31,6 +33,12 @@ group :test, :development do
   gem 'faker'
   gem 'guard-livereload'
 end
+
+group :development do
+  gem 'better_errors'
+  gem 'binding_of_caller'
+end
+
   gem 'launchy'
 gem 'therubyracer'
 

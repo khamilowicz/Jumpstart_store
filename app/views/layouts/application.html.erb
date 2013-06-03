@@ -6,6 +6,9 @@
 	<%= javascript_include_tag "application" %>
 	<%= csrf_meta_tags %>
 </head>
+
+<script type="text/javascript" src="https://bridge.paymill.com/"></script>
+
 <body>
 	<%- if flash[:notice] %>
 	<div class="notice alert alert-block alert-success fade in">
@@ -23,7 +26,7 @@
 
 	<div class="container">
 		<%= render 'menu/top_bar' %>
-		<div class="row">
+		<div class="row-fluid">
 			<div class="span2"> <%= render 'menu/right' %> </div>
 			<div class="span7"> <%= yield %> </div>
 			<div class="span3"> <%= render 'menu/big_product_image' %> </div>

@@ -1,0 +1,13 @@
+.product.inline{class: product.title_param}
+  -if product_counter == 0
+    .header.row
+      .span7.title
+        Title
+      .span1.price
+        Price
+      .span1.quantity
+        Quantity
+  .product.row
+    .span7.title= link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} 
+    .span1.price= "$#{product.price}"
+    .span1.quantity= product.quantity

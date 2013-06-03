@@ -16,3 +16,5 @@
 
 # Ignore coverage results
 /coverage
+
+/New_store_flow.sublime-*
