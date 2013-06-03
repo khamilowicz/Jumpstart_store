@@ -12,13 +12,10 @@ $(function() {// Stuff to do as soon as the DOM is ready;
     return 0;
   };
 
-  var catchphrase = $('<div/>', {
-    text: "Best prices",
-    class: 'catchphrase' });
+   slogan_format("Best prices");
 
   $(".product_thumbnail, .product .title a").on('mouseenter', function(){
     var title = $(this).data('title');
-    var title_array = title.split(" ")
     var image_url = $(this).data('photo');
 
     $('.big_product_image .image').css({
@@ -27,14 +24,14 @@ $(function() {// Stuff to do as soon as the DOM is ready;
       'background-repeat': 'no-repeat'
     });
 
-    $('.big_product_image .catchphrase').remove();
+    $('.big_product_image .caption').remove();
 
     slogan_format(title);
 
     $(".product_thumbnail, .product .title a").on('mouseleave', function(){
       $('.big_product_image .caption.title').remove();
       $('.big_product_image .image').css("background","white");
-      $('.big_product_image').append(catchphrase);
+     slogan_format("Best prices");
     });
   });
 });
