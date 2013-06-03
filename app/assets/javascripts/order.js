@@ -1,9 +1,20 @@
 $(function() {// Stuff to do as soon as the DOM is ready;
+  var slogan_format = function(phrase){
+    var part_title;
+    var intitle = phrase.split(' ').slice(0,5);
+    $.each(intitle, function(index, word) {
+      part_title = $('<div />', {
+        text: word,
+        id: 't' + index,
+        class: 'caption title'});
+      $('.big_product_image').append(part_title);
+    });
+    return 0;
+  };
 
   var catchphrase = $('<div/>', {
     text: "Best prices",
-    class: 'catchphrase'
-  });
+    class: 'catchphrase' });
 
   $(".product_thumbnail, .product .title a").on('mouseenter', function(){
     var title = $(this).data('title');
@@ -18,20 +29,12 @@ $(function() {// Stuff to do as soon as the DOM is ready;
 
     $('.big_product_image .catchphrase').remove();
 
-    $(title_array).slice(0,5).each( function(index, word) {
-      var part_title = $('<div />', {
-        text: word,
-        id: 't' + index,
-        class: 'caption title'
-      });
-      $('.big_product_image').append(part_title);
+    slogan_format(title);
+
+    $(".product_thumbnail, .product .title a").on('mouseleave', function(){
+      $('.big_product_image .caption.title').remove();
+      $('.big_product_image .image').css("background","white");
+      $('.big_product_image').append(catchphrase);
     });
-  });
-
-  $(".product_thumbnail, .product .title a").on('mouseleave', function(){
-
-    $('.big_product_image .caption.title').remove();
-    $('.big_product_image .image').css("background","white");
-    $('.big_product_image').append(catchphrase);
   });
 });
