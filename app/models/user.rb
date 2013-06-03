@@ -44,8 +44,8 @@ class User < ActiveRecord::Base
 
 	end
 
-	def products
-		super.uniq
+	def products_uniq 
+		products.uniq 
 	end
 
 	def find_by_product product

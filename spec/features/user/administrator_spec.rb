@@ -233,7 +233,7 @@ context "he may" do
     before(:each) do
       put_on_sale @product
       visit sales_path
-      within('.sale'){ click_link 'End sale'}
+      within('.sale'){ click_link 'X'}
       visit sales_path
     end
 

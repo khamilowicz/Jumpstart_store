@@ -9,4 +9,4 @@
   -if @user.products.empty?
     User has no products in cart
   -else
-    =render partial: 'products/short', collection: @user.products, as: :product
+    =render partial: 'products/inline', collection: @user.products_uniq, as: :product

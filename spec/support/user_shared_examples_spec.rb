@@ -48,9 +48,9 @@ shared_examples_for "user" do
         visit products_path
       end
 
-      it {should have_selector('.product .price .base', text: "$#{@price}")}
-      it {should have_selector('.product .current', text: "$#{@discount*@price.to_f/100}")}
-      it {should have_selector('.product .price.discount', text: "You save #{@discount}%!")}
+      it {should have_content("$#{@price}")}
+      it {should have_content("$#{@discount*@price.to_f/100}")}
+      it {should have_content("You save #{@discount}%!")}
     end
 
     context "go to product page" do
@@ -120,9 +120,9 @@ context "while viewing his cart" do
   it {should have_content("cart")}
   it {should have_short_product(@product)}
 
-  context "removes a product from his cart" do 
+  context "removes a product from his cart", js: true do 
     before(:each) do
-      within(".product#0.#{@product.title_param}"){ click_link 'Remove from cart'}
+      within(".product.#{@product.title_param}"){ click_link 'X'}
     end
     it {should have_content("#{@product.title} removed from cart")}
     it {should_not have_short_product(@product)}
