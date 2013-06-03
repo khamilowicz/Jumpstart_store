@@ -5,15 +5,12 @@
   .row.span12
     %h3=link_to product.title_shorter, product_path(product)
   .row.span12
-    .span4
-      .price= product_price product
-    .span4
-      = quantity product
+    .price= product_price product
   .row.span12
-    .span12
-      = remove product
-  .row.span12
-    .span12
-      %h3.price.discount= saving_text product
+    .price.discount= saving_text product
   .row.span12
     =link_to adding_text(product), add_to_cart_user_product_path(current_user, product), remote: true, class: 'span12 btn btn-primary cart_btn', data: {:'loading-text' => 'Processing...'}
+  .row.span12
+    .span3= quantity product
+    .span4
+    .span5.remove= remove product
