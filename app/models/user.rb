@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
 
-	attr_accessible :first_name, :last_name, :email, :password, :admin
+	attr_accessible :first_name, :last_name, :email, :password, :address, :password_confirmation
 
 	
 	validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, unless: :guest?
@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
 	validates_presence_of :first_name, :last_name, unless: :guest?
 	validates :nick, length: {minimum: 2, maximum: 32}, allow_nil: true, unless: :guest?
 	validates_presence_of :password, unless: :guest?
+	validates :password, confirmation: true
+	validates_presence_of :password_confirmation
 
 	has_many :product_users
 	has_many :products, through: :product_users
@@ -15,6 +17,7 @@ class User < ActiveRecord::Base
 	has_one :cart
 
 	after_create :create_cart
+
 
 	def guest?
 		self.guest
