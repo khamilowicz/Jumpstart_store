@@ -5,6 +5,7 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 AddAddressToOrder	db/migrate/20130521104418_add_address_to_order.rb	/^class AddAddressToOrder < ActiveRecord::Migration$/;"	c
+AddAddressToUser	db/migrate/20130601215227_add_address_to_user.rb	/^class AddAddressToUser < ActiveRecord::Migration$/;"	c
 AddAttachementToProduct	db/migrate/20130525175512_add_attachement_to_product.rb	/^class AddAttachementToProduct < ActiveRecord::Migration$/;"	c
 AddAttributesToReview	db/migrate/20130521210117_add_attributes_to_review.rb	/^	class AddAttributesToReview < ActiveRecord::Migration$/;"	c
 AddCategoryToProduct	db/migrate/20130521093115_add_category_to_product.rb	/^class AddCategoryToProduct < ActiveRecord::Migration$/;"	c
@@ -47,9 +48,14 @@ Order	app/models/order.rb	/^class Order < ActiveRecord::Base$/;"	c
 OrderHelper	app/helpers/order_helper.rb	/^module OrderHelper$/;"	m
 OrderProduct	app/models/order_product.rb	/^class OrderProduct < ActiveRecord::Base$/;"	c
 OrdersController	app/controllers/orders_controller.rb	/^class OrdersController < ApplicationController$/;"	c
+PAYMILL_PUBLIC_KEY	app/assets/javascripts/order.js	/^var PAYMILL_PUBLIC_KEY = '22916269435eef4b426e05604ce8cc89';$/;"	v
+PaymillManager	app/models/paymill_manager.rb	/^class PaymillManager$/;"	c
 Product	app/models/product.rb	/^class Product < ActiveRecord::Base$/;"	c
+ProductCartManagerController	app/controllers/product_cart_manager_controller.rb	/^class ProductCartManagerController < ApplicationController$/;"	c
+ProductCategoryManagerController	app/controllers/product_category_manager_controller.rb	/^class ProductCategoryManagerController < ApplicationController$/;"	c
 ProductUser	app/models/product_user.rb	/^class ProductUser < ActiveRecord::Base$/;"	c
 ProductsController	app/controllers/products_controller.rb	/^class ProductsController < ApplicationController$/;"	c
+ProductsHelper	app/helpers/products_helper.rb	/^module ProductsHelper$/;"	m
 RemoveCategoryIdFromProduct	db/migrate/20130521094157_remove_category_id_from_product.rb	/^class RemoveCategoryIdFromProduct < ActiveRecord::Migration$/;"	c
 RemoveRealnameFromUser	db/migrate/20130520214333_remove_realname_from_user.rb	/^class RemoveRealnameFromUser < ActiveRecord::Migration$/;"	c
 RemoveUserIdFromProducts	db/migrate/20130520223105_remove_user_id_from_products.rb	/^class RemoveUserIdFromProducts < ActiveRecord::Migration$/;"	c
@@ -63,21 +69,27 @@ SessionController	app/controllers/session_controller.rb	/^class SessionControlle
 SessionHelper	app/helpers/session_helper.rb	/^module SessionHelper$/;"	m
 User	app/models/user.rb	/^class User < ActiveRecord::Base$/;"	c
 UsersController	app/controllers/users_controller.rb	/^class UsersController < ApplicationController$/;"	c
+add	app/models/category.rb	/^def add param$/;"	f
+add	app/models/order.rb	/^	def add param$/;"	f
+add	app/models/product.rb	/^  def add param $/;"	f	class:Product
+add	app/models/user.rb	/^	def add param$/;"	f
 add_a_review	spec/support/user_helper_spec.rb	/^def add_a_review review $/;"	f
-add_product	app/models/category.rb	/^  def add_product product$/;"	f	class:Category
-add_product	app/models/user.rb	/^	def add_product product$/;"	f	class:User
+add_product	app/models/category.rb	/^def add_product product$/;"	f
+add_product	app/models/user.rb	/^	def add_product product$/;"	f
 add_products_to_cart	spec/support/user_helper_spec.rb	/^def add_products_to_cart products$/;"	f
-add_review	app/models/product.rb	/^  def add_review review$/;"	f	class:Product
-add_to_cart	app/controllers/products_controller.rb	/^	def add_to_cart$/;"	f	class:ProductsController
-add_to_category	app/controllers/products_controller.rb	/^	def add_to_category$/;"	f	class:ProductsController
-add_to_category	app/models/product.rb	/^  def add_to_category categories$/;"	f	class:Product
+add_review	app/models/product.rb	/^def add_review review$/;"	f	class:Product
+add_to_category	app/models/product.rb	/^def add_to_category categories$/;"	f	class:Product
 add_to_category	spec/support/user_helper_spec.rb	/^def add_to_category product, category_name$/;"	f
-all_on_sale?	app/models/category.rb	/^  def all_on_sale?$/;"	f	class:Category
+adding_text	app/helpers/products_helper.rb	/^  def adding_text product$/;"	f	class:ProductsHelper
+address	app/models/user.rb	/^	def address$/;"	f	class:User
+all_on_sale?	app/models/category.rb	/^def all_on_sale?$/;"	f
+authenticate	app/models/session.rb	/^    def authenticate params$/;"	f	class:Session
 authorize_admin	app/controllers/application_controller.rb	/^	def authorize_admin$/;"	f	class:ApplicationController
 authorize_user	app/controllers/carts_controller.rb	/^  def authorize_user$/;"	f	class:CartsController
 authorize_user	app/controllers/orders_controller.rb	/^	def authorize_user$/;"	f	class:OrdersController
 authorize_user	app/controllers/users_controller.rb	/^  def authorize_user$/;"	f	class:UsersController
 base_price	app/models/product.rb	/^def base_price$/;"	f	class:Product
+build	app/models/sale.rb	/^  def self.build params$/;"	F	class:Sale
 calculate_rating	app/models/product.rb	/^def calculate_rating$/;"	f	class:Product
 change	db/migrate/20130520185358_create_products.rb	/^  def change$/;"	f	class:CreateProducts
 change	db/migrate/20130520185641_add_title_description_price_to_product.rb	/^  def change$/;"	f	class:AddTitleDescriptionPriceToProduct
@@ -107,25 +119,29 @@ change	db/migrate/20130522174813_add_quantity_to_product.rb	/^  def change$/;"	f
 change	db/migrate/20130522185427_add_password_to_user.rb	/^  def change$/;"	f	class:AddPasswordToUser
 change	db/migrate/20130524154706_create_order_products.rb	/^  def change$/;"	f	class:CreateOrderProducts
 change	db/migrate/20130524171520_add_quantity_to_order_product.rb	/^  def change$/;"	f	class:AddQuantityToOrderProduct
+change	db/migrate/20130601215227_add_address_to_user.rb	/^  def change$/;"	f	class:AddAddressToUser
+change_slogan	app/assets/javascripts/order.js	/^function change_slogan () {$/;"	f
 change_status	app/controllers/orders_controller.rb	/^	def change_status$/;"	f	class:OrdersController
 change_status_link	app/helpers/order_helper.rb	/^  def change_status_link order$/;"	f	class:OrderHelper
 convert	app/models/order_product.rb	/^  def self.convert prod, quantity= 1$/;"	F	class:OrderProduct
-count_by_status	app/models/order.rb	/^	def self.count_by_status status$/;"	F	class:Order
+count_by_status	app/models/order.rb	/^		def count_by_status status$/;"	f	class:Order
 create	app/controllers/orders_controller.rb	/^	def create$/;"	f	class:OrdersController
 create	app/controllers/products_controller.rb	/^	def create$/;"	f	class:ProductsController
 create	app/controllers/reviews_controller.rb	/^def create$/;"	f	class:ReviewsController
 create	app/controllers/sales_controller.rb	/^  def create$/;"	f	class:SalesController
 create	app/controllers/session_controller.rb	/^	def create$/;"	f	class:SessionController
-create_guest	app/models/user.rb	/^	def self.create_guest$/;"	F	class:User
+create_guest	app/models/user.rb	/^		def create_guest$/;"	f	class:User
 create_new_product	spec/support/user_helper_spec.rb	/^def create_new_product product$/;"	f
 current_user	app/controllers/application_controller.rb	/^	def current_user$/;"	f	class:ApplicationController
 dashboard	app/controllers/admins_controller.rb	/^  def dashboard$/;"	f	class:AdminsController
 delete	app/controllers/sales_controller.rb	/^  def delete$/;"	f	class:SalesController
 delete	app/controllers/session_controller.rb	/^	def delete$/;"	f	class:SessionController
-discount	app/models/category.rb	/^  def discount percent$/;"	f	class:Category
+destroy	app/controllers/product_cart_manager_controller.rb	/^  def destroy$/;"	f	class:ProductCartManagerController
+discount	app/models/category.rb	/^def discount percent$/;"	f
 discount	app/models/product.rb	/^def discount$/;"	f	class:Product
-display_name	app/models/user.rb	/^	def display_name$/;"	f	class:User
-display_name=	app/models/user.rb	/^	def display_name= name $/;"	f	class:User
+discount_all	app/models/sale.rb	/^  def self.discount_all$/;"	F	class:Sale
+display_name	app/models/user.rb	/^	def display_name$/;"	f
+display_name=	app/models/user.rb	/^	def display_name= name $/;"	f
 down	db/migrate/20130520214333_remove_realname_from_user.rb	/^  def down$/;"	f	class:RemoveRealnameFromUser
 down	db/migrate/20130520223105_remove_user_id_from_products.rb	/^  def down$/;"	f	class:RemoveUserIdFromProducts
 down	db/migrate/20130521094157_remove_category_id_from_product.rb	/^  def down$/;"	f	class:RemoveCategoryIdFromProduct
@@ -135,65 +151,83 @@ edit	app/controllers/products_controller.rb	/^	def edit$/;"	f	class:ProductsCont
 edit	app/controllers/reviews_controller.rb	/^ def edit$/;"	f	class:ReviewsController
 ensure_not_guest	app/controllers/application_controller.rb	/^	def ensure_not_guest$/;"	f	class:ApplicationController
 filter	app/controllers/orders_controller.rb	/^	def filter$/;"	f	class:OrdersController
-find_by_product	app/models/user.rb	/^	def find_by_product product$/;"	f	class:User
-find_by_status	app/models/order.rb	/^	def self.find_by_status status$/;"	F	class:Order
-find_products_for	app/models/category.rb	/^  def self.find_products_for category_name$/;"	F	class:Category
-full_name	app/models/user.rb	/^	def full_name$/;"	f	class:User
-get	app/models/category.rb	/^  def self.get category_name$/;"	F	class:Category
-get_by_name	app/models/category.rb	/^  def self.get_by_name c_name$/;"	F	class:Category
+find_by_product	app/models/user.rb	/^	def find_by_product product$/;"	f
+find_by_status	app/models/order.rb	/^		def find_by_status status$/;"	f	class:Order
+find_products_for	app/models/category.rb	/^    def find_products_for category_name$/;"	f	class:Category
+full_name	app/models/user.rb	/^	def full_name$/;"	f
+get	app/models/category.rb	/^   def get category_name$/;"	f	class:Category
+get_by_name	app/models/category.rb	/^    def get_by_name name$/;"	f	class:Category
 guest?	app/models/user.rb	/^	def guest?$/;"	f	class:User
 index	app/controllers/categories_controller.rb	/^ def index$/;"	f	class:CategoriesController
 index	app/controllers/orders_controller.rb	/^	def index$/;"	f	class:OrdersController
 index	app/controllers/products_controller.rb	/^	def index$/;"	f	class:ProductsController
 index	app/controllers/sales_controller.rb	/^  def index$/;"	f	class:SalesController
 index	app/controllers/users_controller.rb	/^  def index$/;"	f	class:UsersController
-list_categories	app/models/category.rb	/^  def self.list_categories$/;"	F	class:Category
+join	app/controllers/product_cart_manager_controller.rb	/^  def join$/;"	f	class:ProductCartManagerController
+join	app/controllers/product_category_manager_controller.rb	/^  def join$/;"	f	class:ProductCategoryManagerController
+list_categories	app/models/category.rb	/^  def list_categories$/;"	f	class:Category
 list_categories	app/models/product.rb	/^  def list_categories$/;"	f	class:Product
 login	spec/support/user_helper_spec.rb	/^def login user $/;"	f
 make_guest	app/controllers/application_controller.rb	/^	def make_guest$/;"	f	class:ApplicationController
-make_purchase	app/models/user.rb	/^	def make_purchase$/;"	f	class:User
+make_purchase	app/models/user.rb	/^	def make_purchase$/;"	f
 method_missing	app/models/order_product.rb	/^  def method_missing(method, *args, &block)$/;"	f	class:OrderProduct
+names_from_hash	app/models/product.rb	/^  def names_from_hash paramHash$/;"	f	class:Product
 new	app/controllers/orders_controller.rb	/^	def new$/;"	f	class:OrdersController
+new	app/controllers/product_category_manager_controller.rb	/^  def new$/;"	f	class:ProductCategoryManagerController
 new	app/controllers/products_controller.rb	/^	def new$/;"	f	class:ProductsController
 new	app/controllers/sales_controller.rb	/^  def new$/;"	f	class:SalesController
 new	app/controllers/session_controller.rb	/^	def new$/;"	f	class:SessionController
-new_add_to_category	app/controllers/products_controller.rb	/^	def new_add_to_category$/;"	f	class:ProductsController
 note_in_stars	app/helpers/application_helper.rb	/^	def note_in_stars note$/;"	f	class:ApplicationHelper
 off_discount	app/models/product.rb	/^def off_discount$/;"	f	class:Product
 on_discount	app/models/product.rb	/^def on_discount discount$/;"	f	class:Product
 order_some_products	spec/support/user_helper_spec.rb	/^def order_some_products products$/;"	f
-persisted?	app/models/session.rb	/^	def persisted?$/;"	f	class:Session
+orders	app/models/user.rb	/^	def orders$/;"	f
+persisted?	app/models/session.rb	/^  def persisted?$/;"	f
 price	app/models/product.rb	/^ def price$/;"	f	class:Product
-product_quantity	app/models/user.rb	/^	def product_quantity product$/;"	f	class:User
+product_price	app/helpers/products_helper.rb	/^  def product_price product$/;"	f	class:ProductsHelper
+product_quantity	app/models/user.rb	/^	def product_quantity product$/;"	f
 products	app/models/cart.rb	/^	def products$/;"	f	class:Cart
-products	app/models/order.rb	/^	def products$/;"	f	class:Order
-products=	app/models/order.rb	/^	def products= prods$/;"	f	class:Order
-promote_to_admin	app/models/user.rb	/^	def promote_to_admin$/;"	f	class:User
+products	app/models/order.rb	/^	def products$/;"	f
+products=	app/models/order.rb	/^	def products= prods$/;"	f
+products_for_user	app/models/category.rb	/^def products_for_user user $/;"	f
+products_uniq	app/models/user.rb	/^	def products_uniq $/;"	f
+promote_to_admin	app/models/user.rb	/^	def promote_to_admin$/;"	f
 put_on_sale	spec/support/user_helper_spec.rb	/^def put_on_sale stuff$/;"	f
+quantity	app/helpers/products_helper.rb	/^  def quantity product$/;"	f	class:ProductsHelper
 quantity	app/models/product.rb	/^def quantity$/;"	f	class:Product
 quantity_for	app/models/product.rb	/^def quantity_for user$/;"	f	class:Product
 rating	app/models/product.rb	/^  def rating$/;"	f	class:Product
-remove_from_cart	app/controllers/products_controller.rb	/^	def remove_from_cart$/;"	f	class:ProductsController
-remove_product	app/models/user.rb	/^	def remove_product product$/;"	f	class:User
+remove	app/helpers/products_helper.rb	/^def remove product$/;"	f	class:ProductsHelper
+remove	app/models/user.rb	/^	def remove param$/;"	f
+remove_product	app/models/user.rb	/^	def remove_product product$/;"	f
 retire	app/models/product.rb	/^ def retire$/;"	f	class:Product
 reviewer_name	app/models/review.rb	/^	def reviewer_name$/;"	f	class:Review
+saving_text	app/helpers/products_helper.rb	/^def saving_text product$/;"	f	class:ProductsHelper
 set_in_cart_status	app/models/product_user.rb	/^  def set_in_cart_status$/;"	f	class:ProductUser
+set_status	app/models/order.rb	/^	def set_status new_status$/;"	f
 show	app/controllers/carts_controller.rb	/^	def show$/;"	f	class:CartsController
-show	app/controllers/categories_controller.rb	/^def show$/;"	f	class:CategoriesController
+show	app/controllers/categories_controller.rb	/^ def show$/;"	f	class:CategoriesController
 show	app/controllers/orders_controller.rb	/^	def show$/;"	f	class:OrdersController
 show	app/controllers/products_controller.rb	/^	def show$/;"	f	class:ProductsController
 show	app/controllers/users_controller.rb	/^  def show$/;"	f	class:UsersController
+slogan_format	app/assets/javascripts/order.js	/^var slogan_format = function(phrase){$/;"	f
+slogans	app/assets/javascripts/order.js	/^ var slogans = ["Best prices", "Always on time", "Kids friendly", "Red and green"];$/;"	v
 some_photo	spec/support/user_helper_spec.rb	/^def some_photo$/;"	f
-start_selling	app/models/category.rb	/^  def start_selling$/;"	f	class:Category
+specified_user	app/controllers/product_cart_manager_controller.rb	/^  def specified_user$/;"	f	class:ProductCartManagerController
+start_selling	app/models/category.rb	/^def start_selling$/;"	f
 start_selling	app/models/product.rb	/^  def start_selling$/;"	f	class:Product
-status=	app/models/order.rb	/^	def status= stat$/;"	f	class:Order
-statuses	app/models/order.rb	/^	def self.statuses$/;"	F	class:Order
+status=	app/models/order.rb	/^	def status= stat$/;"	f
+statuses	app/models/order.rb	/^		def statuses$/;"	f	class:Order
 subtotal	app/models/order_product.rb	/^  def subtotal$/;"	f	class:OrderProduct
 title_param	app/models/product.rb	/^def title_param$/;"	f	class:Product
-total_discount	app/models/order.rb	/^	def total_discount$/;"	f	class:Order
-total_price	app/models/category.rb	/^  def total_price$/;"	f	class:Category
-total_price	app/models/order.rb	/^	def total_price$/;"	f	class:Order
-transfer_products	app/models/order.rb	/^	def transfer_products$/;"	f	class:Order
+title_shorter	app/models/product.rb	/^def title_shorter$/;"	f	class:Product
+total	app/models/cart.rb	/^  def total$/;"	f	class:Cart
+total_discount	app/models/order.rb	/^	def total_discount$/;"	f
+total_price	app/models/category.rb	/^def total_price$/;"	f
+total_price	app/models/order.rb	/^	def total_price$/;"	f
+transaction	app/models/paymill_manager.rb	/^  def self.transaction user, token, currency, description="New store"$/;"	F	class:PaymillManager
+transfer_products	app/models/order.rb	/^	def transfer_products $/;"	f
+transfer_products	app/models/user.rb	/^		def transfer_products from_to$/;"	f	class:User
 up	db/migrate/20130520214333_remove_realname_from_user.rb	/^  def up$/;"	f	class:RemoveRealnameFromUser
 up	db/migrate/20130520223105_remove_user_id_from_products.rb	/^  def up$/;"	f	class:RemoveUserIdFromProducts
 up	db/migrate/20130521094157_remove_category_id_from_product.rb	/^  def up$/;"	f	class:RemoveCategoryIdFromProduct
@@ -201,4 +235,5 @@ up	db/migrate/20130521175812_rename_column_price_to_base_price_in_products.rb	/^
 up	db/migrate/20130525175512_add_attachement_to_product.rb	/^  def self.up$/;"	F	class:AddAttachementToProduct
 update	app/controllers/products_controller.rb	/^	def update$/;"	f	class:ProductsController
 update	app/controllers/reviews_controller.rb	/^def update$/;"	f	class:ReviewsController
-update_status_date	app/models/order.rb	/^	def update_status_date$/;"	f	class:Order
+update_big_image	app/assets/javascripts/order.js	/^function update_big_image () {$/;"	f
+update_status_date	app/models/order.rb	/^	def update_status_date$/;"	f

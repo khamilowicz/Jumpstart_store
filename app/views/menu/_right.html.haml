@@ -1,4 +1,6 @@
-%ul.nav.nav-list
+%ul.nav.nav-tabs.right_menu
+  %li{class: "category all #{'active' if 'products' == params[:controller] && 'index' == params[:action]}" }
+    =link_to "All products", products_path, remote: true
   -Category.all.each do |category|
-    %li
-      =link_to category.name, category_path(category)
+    %li{class: "category #{'active' if category.id.to_s == params[:id]}", id: category.id }
+      =link_to category.name, category_path(category), remote: true

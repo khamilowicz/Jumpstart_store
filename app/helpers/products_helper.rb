@@ -17,15 +17,23 @@ module ProductsHelper
     end
   end
 
-  def quantity product
-    text = ''
-    if product.users.include?(current_user)
-      text = content_tag :div, class: 'quantity' do
-        "#{product.quantity_for(current_user)} in cart"
-      end
-    end
-    text
+  def adding_class product
+   if product.users.include?(current_user)
+    'many'
+  else
+    'single' 
   end
+end
+
+def quantity product
+  text = ''
+  if product.users.include?(current_user)
+    text = content_tag :div, class: 'quantity' do
+      "#{product.quantity_for(current_user)} in cart"
+    end
+  end
+  text
+end
 
 def remove product
   text = ''

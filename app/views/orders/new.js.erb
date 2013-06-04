@@ -1,1 +1,2 @@
-$('.products').html("<%= j render partial: 'products/inline', collection: @products, as: :products%>")
+  $('.products').html("<%= j render partial: 'products/inline', collection: @products, as: :product %>");
+  $('.stats .total').html('<%= j "Total for order: $#{current_user.cart.total}" %>');

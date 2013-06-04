@@ -9,6 +9,18 @@ describe User do
     
   context "to be valid must have" do
 
+    it "password confirmation must match password" do
+      attrs = FactoryGirl.attributes_for(:user)
+      attrs[:password] = 'secret'
+      attrs[:password_confirmation] = 'nosecret'
+      user = User.new(attrs)
+      user.should_not be_valid
+      attrs[:password] = 'secret'
+      attrs[:password_confirmation] = 'secret'
+      user = User.new(attrs)
+      user.should be_valid
+    end
+
     context "email that is" do
 
       it "in right format" do

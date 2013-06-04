@@ -1,5 +1,9 @@
 @import 'formMixins';
 
+.top_bar .span9{
+  margin-left: 0;
+}
+
 .category.inline{
   margin: 1em 0;
   .name{
