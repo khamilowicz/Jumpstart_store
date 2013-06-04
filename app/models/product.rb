@@ -2,7 +2,7 @@ class Product < ActiveRecord::Base
   # attr_accessible :title, :body
 
 
-  attr_accessible :title, :description, :base_price, :photo, :discount, :quantity, :on_sale, :price
+  attr_accessible :title, :description, :base_price, :discount, :quantity, :on_sale, :price, :assets_attributes
   validates :title, presence: true, uniqueness: true
   validates_presence_of :description
   validates :base_price, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
@@ -19,7 +19,12 @@ class Product < ActiveRecord::Base
   has_many :categories, through: :category_products
   has_many :reviews
 
-  has_attached_file :photo
+  has_many :assets
+
+  after_create :create_asset
+  accepts_nested_attributes_for :assets
+
+  # has_many :photos, through: :assets
 
   alias_attribute :price= , :base_price=
 
@@ -27,6 +32,9 @@ class Product < ActiveRecord::Base
   #   ProductUser.where(user: user.id, product: self.id).first.in_cart?
   # end
 
+def photo
+  self.assets.last.photo
+end
 
 
   def add param 
@@ -92,6 +100,10 @@ end
 
 
 private
+
+  def create_asset
+    self.assets.create
+  end
 
 def add_to_category categories
   categories = names_from_hash(categories) if categories.kind_of?(Hash) 

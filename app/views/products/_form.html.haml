@@ -6,5 +6,6 @@
   = f.label :price
   = f.text_field :price
   = f.label :photo
-  = f.file_field :photo
+  =f.fields_for :assets do |a|
+    = a.file_field :photo
   = f.submit "Submit"

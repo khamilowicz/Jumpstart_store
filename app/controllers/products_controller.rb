@@ -16,6 +16,7 @@ class ProductsController < ApplicationController
 		@product = Product.find(params[:id])
 
 		if @product.update_attributes(params[:product])
+		# binding.pry
 			redirect_to products_path, notice: "Successfully updated product"
 		else
 			redirect_to edit_product_path(@product), notice: "Error"
@@ -25,6 +26,7 @@ class ProductsController < ApplicationController
 	def create
 
 		product = Product.new(params[:product])
+
 		product.start_selling
 
 		if product.save
