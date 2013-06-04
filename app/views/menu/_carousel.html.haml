@@ -1,0 +1,10 @@
+.carousel.slide#myCarousel
+  -item_thing.photos.size.times do |i|
+    %ol.carousel-indicators
+      %li{data: {target: '#myCarousel'}, class: "#{'active' if i == 1}"}
+  .carousel-inner
+    -item_thing.photos.each do |photo|
+      .item
+        =image_tag photo.url
+  = link_to "<", "#myCarousel", {class: 'left carousel-control', data: {slide: 'prev'}}
+  = link_to ">", "#myCarousel", {class: 'right carousel-control', data: {slide: 'next'}}

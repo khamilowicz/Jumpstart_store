@@ -9,7 +9,9 @@
     %h2.btn.btn-primary.add_to_cart= link_to("Add to cart", add_to_cart_user_product_path(current_user, @product)) if @product.on_sale?
     .span2=link_to 'Edit product', edit_product_path(@product) if current_user.admin?
   .row.overview
-    .image.span6= image_tag @product.photo.url
+    .span6
+      = render partial: 'menu/carousel', locals: {item_thing: @product}
+    .image=# image_tag @product.photo.url
     .span6
       .row
         %p.description

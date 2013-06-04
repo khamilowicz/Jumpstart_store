@@ -5,4 +5,5 @@ $(function() {
   $('.cart_btn').bind('ajax:success', function() {
     $(this).button('reset');
   });
+  $('.carousel').carousel();
 });
