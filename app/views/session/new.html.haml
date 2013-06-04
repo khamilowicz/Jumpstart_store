@@ -1,0 +1,7 @@
+%h3 Create new session
+= form_for @session do |f| 
+  = f.label :email 
+  = f.text_field :email 
+  = f.label :password 
+  = f.password_field :password 
+  .submit= f.submit "Sign in", class: 'btn btn-primary' 

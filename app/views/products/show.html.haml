@@ -1,21 +1,23 @@
-.product.product_full
+.product.product_full.span12
   .row.top_title
-    .span5.title
+    .span9.title
       %h1= @product.title
-    %h2.price.span2= "$#{@product.price}"
-  .row.buttons
-    .span2=link_to 'Edit product', edit_product_path(@product) if current_user.admin?
-    .offset4
-      %h2.btn.btn-primary.add_to_cart= link_to("Add to cart", add_to_cart_user_product_path(current_user, @product)) if @product.on_sale?
-  .row.overview
-    .image.span4= image_tag @product.photo.url
-    %p.description.span3= @product.description
-  .row.categories
-    Categories:
-    = @product.list_categories
-    .add_to_category= link_to "Add to category", product_add_to_category_path(@product)
+    %h2.price.span3= "$#{@product.price}"
   .row.note_bar
     .overall_note= note_in_stars(@product.rating)
+  .row.buttons
+    %h2.btn.btn-primary.add_to_cart= link_to("Add to cart", add_to_cart_user_product_path(current_user, @product)) if @product.on_sale?
+    .span2=link_to 'Edit product', edit_product_path(@product) if current_user.admin?
+  .row.overview
+    .image.span6= image_tag @product.photo.url
+    .span6
+      .row
+        %p.description
+          = @product.description
+      .row.categories
+        Categories:
+        = @product.list_categories
+        .add_to_category= link_to "Add to category", product_add_to_category_path(@product) if current_user.admin?
   .row.review_bar
     =render partial: 'reviews/new', locals: {product: @product, review: Review.new}
   .row.reviews
