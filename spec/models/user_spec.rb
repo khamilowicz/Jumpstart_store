@@ -11,9 +11,6 @@ describe User do
 
     it "password confirmation must match password" do
       attrs = FactoryGirl.attributes_for(:user)
-      user = User.new(attrs)
-     user.should_not be_valid
-
       attrs[:password] = 'secret'
       attrs[:password_confirmation] = 'nosecret'
       user = User.new(attrs)
