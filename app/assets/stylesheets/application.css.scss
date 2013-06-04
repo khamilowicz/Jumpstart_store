@@ -1,4 +1,7 @@
 // @import 'compass';
 // @import 'home';
 // @import 'bootstrap_and_overrides';
-
+html, body{
+  height: 100%;
+  overflow: auto;
+}

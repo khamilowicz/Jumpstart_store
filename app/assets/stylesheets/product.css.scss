@@ -2,6 +2,10 @@
   .image{
 
   }
+  .carousel{
+    width: 30em;
+    height: 30em;
+  }
   .row{
     &.top_title{}
     &.buttons{margin: 1em 0;}
@@ -38,10 +42,18 @@
     text-align: right;
   }
 
-
-
   .cart_btn{
-    
+   // -webkit-transition-duration: 1s;
+   //    -moz-transition-duration: 1s;
+   //     -ms-transition-duration: 1s;
+   //      -o-transition-duration: 1s;
+   //         transition-duration: 1s;
+    &.many{height: 1em}
+    &.single{
+      height: 6em;
+      // font-size: 1em;
+      padding: 2em;
+    }
   }
 }
 
@@ -54,7 +66,7 @@
    text-align: center;
 
    img{
-    height: inherit;
+    max-height: 14em;
    }
 
  }
@@ -63,10 +75,14 @@
 .product.inline{
   .header{
     font-weight: bold;
+    text-align: center;
   }
   .product{
     border-bottom: 1px solid gray;
     padding: 0.5em 0;
+    .price{ text-align: center;}
+.quantity{ text-align: center;}
+.remove{ text-align: center;}
   }
   
 }

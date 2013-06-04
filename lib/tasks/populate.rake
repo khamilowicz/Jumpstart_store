@@ -10,6 +10,7 @@ namespace :db do
       last_name: "Khamilowicz",
       email: 'kham@gmail.com',
       password: 'megamega',
+      password_confirmation: 'megamega',
       admin: true
       )
 
@@ -25,15 +26,17 @@ namespace :db do
     end
 
     4.times do
+      password = Faker::Lorem.word
       User.create!(
         first_name: Faker::Name.first_name,
         last_name: Faker::Name.last_name,
         email: Faker::Internet.email, 
-        password: Faker::Lorem.word 
+        password: password,
+        password_confirmation: password
         )
     end
 
-    2.times do 
+    5.times do 
       Category.create!(
         name: "Category #{Faker::Lorem.word}"
         )

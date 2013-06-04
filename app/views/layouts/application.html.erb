@@ -26,10 +26,10 @@
 
 	<div class="container">
 		<%= render 'menu/top_bar' %>
+	 <%= render 'menu/right' %>
 		<div class="row-fluid">
-			<div class="span2"> <%= render 'menu/right' %> </div>
-			<div class="span7"> <%= yield %> </div>
-			<div class="span3"> <%= render 'menu/big_product_image' %> </div>
+			<div class="span9"> <%= yield %> </div>
+			<div class="span3 big_picture_frame "> <%= render 'menu/big_product_image' %> </div>
 		</div>
 	</div>
 </body>

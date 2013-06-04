@@ -1,8 +1,15 @@
 body {
   margin:0;
 }
+
+.span3.big_picture_frame{
+  margin-left: 0;
+}
+
 .big_product_container{
-// position: fixed;
+position: fixed;
+height: 100%;
+width: inherit;
   .big_product_image{
     min-height: 50em;
     position: relative;
@@ -13,10 +20,11 @@ body {
     .image{
       min-height: 30em;
     }
-
+overflow: visible;
     .caption.title{
 
       &#t0{
+      left: 0em;
        top: 0.2em;
       }
 
@@ -34,7 +42,7 @@ body {
       };
       &#t4{
         top: 4em;
-        left: -0.3em;
+        left: -0.1em;
       };
 color: red;
       position: absolute;
