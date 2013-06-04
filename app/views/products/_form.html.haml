@@ -6,6 +6,6 @@
   = f.label :price
   = f.text_field :price
   = f.label :photo
-  =f.fields_for :assets do |a|
-    = a.file_field :photo
+  = fields_for :assets do |a|
+    = a.file_field :photos, multiple: true
   = f.submit "Submit"

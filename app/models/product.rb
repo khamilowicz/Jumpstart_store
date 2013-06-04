@@ -2,7 +2,7 @@ class Product < ActiveRecord::Base
   # attr_accessible :title, :body
 
 
-  attr_accessible :title, :description, :base_price, :discount, :quantity, :on_sale, :price, :assets_attributes
+  attr_accessible :title, :description, :base_price, :discount, :quantity, :on_sale, :price
   validates :title, presence: true, uniqueness: true
   validates_presence_of :description
   validates :base_price, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
@@ -34,6 +34,10 @@ class Product < ActiveRecord::Base
 
 def photo
   self.assets.last.photo
+end
+
+def photos
+  Asset.where(product_id: self.id).all.map(&:photo)
 end
 
 
