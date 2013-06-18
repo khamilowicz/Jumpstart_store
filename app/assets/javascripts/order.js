@@ -33,7 +33,7 @@ function update_big_image () {
   $('.big_product_image .image').css("background","white");
  
   // parseInt(($(document).height()/slogans.length()))
-  
+   
   change_slogan();
 });
 }
@@ -45,6 +45,7 @@ slogan = slogans[0];
     if(window.pageYOffset > i*$(document).height()/slogans.length){ slogan = slogans[i];}
   }
   slogan_format(slogan);
+  console.lot(window.pageYOffset);
 }
 
 $(function() {
