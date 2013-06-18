@@ -46,6 +46,7 @@ slogan = slogans[0];
   }
   slogan_format(slogan);
   console.log(window.pageYOffset);
+  
 }
 
 $(function() {
