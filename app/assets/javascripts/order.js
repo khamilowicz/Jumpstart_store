@@ -31,34 +31,34 @@ function update_big_image () {
  $(".product_thumbnail, .product .title a").on('mouseleave', function(){
   $('.big_product_image .caption.title').remove();
   $('.big_product_image .image').css("background","white");
- 
+
   // parseInt(($(document).height()/slogans.length()))
-   
+
   change_slogan();
 });
 }
- var slogans = ["Best prices", "Always on time", "Kids friendly", "Red and green"];
+var slogans = ["Best prices", "Always on time", "Kids friendly", "Red and green"];
 
-function change_slogan () {
-slogan = slogans[0];
+function change_slogan(){
+  slogan = slogans[0];
   for(var i=1; i<slogans.length; i++){
-    if(window.pageYOffset > i*$(document).height()/slogans.length){ slogan = slogans[i];}
+    if((window.pageYOffset) > (i*$(document).height()/slogans.length)){ 
+      slogan = slogans[i];
+    }
   }
   slogan_format(slogan);
-  console.log(window.pageYOffset);
-  
 }
 
 $(function() {
 
-$(window).on('scroll', function() {
-  $('.big_product_image .caption.title').remove();
-  change_slogan();
-});
+  $(window).on('scroll', function() {
+    $('.big_product_image .caption.title').remove();
+    change_slogan();
+  });
 
 // Stuff to do as soon as the DOM is ready;
-  $("#payment-form").submit(function(event) {
-    event.preventDefault();
+$("#payment-form").submit(function(event) {
+  event.preventDefault();
     // Deactivate submit button to avoid further clicks
     $('.submit-button').attr("disabled", "disabled");
 
@@ -75,7 +75,7 @@ $(window).on('scroll', function() {
     return false;
   });
 
-  function PaymillResponseHandler(error, result) {
+function PaymillResponseHandler(error, result) {
 
    $('#transaction_card-number').val(' '); // required, ohne Leerzeichen und Bindestriche
     $('#transaction_card-expiry-month').val(' '); // required
