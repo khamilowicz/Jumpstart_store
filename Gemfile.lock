@@ -154,6 +154,7 @@ GEM
       mime-types
     paymill (0.3.0)
       json
+    pg (0.15.1)
     polyglot (0.3.3)
     pry (0.9.12.2)
       coderay (~> 1.0.5)
@@ -290,6 +291,7 @@ DEPENDENCIES
   less-rails
   paperclip
   paymill
+  pg
   pry-plus
   pry-rails
   pry-stack_explorer

@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+Order page
+=link_to "Buy", create_orders_path
+= "Total price: #{@products}"
+= render partial: 'product/short', collection: @products, as: :product
+=======
 .order_new
   %h2 Order page
   .stats
@@ -31,3 +37,4 @@
         =submit_tag 'Buy', class: 'submit-button btn btn-primary span4'
   .products
     = render partial: 'products/inline', collection: current_user.products_uniq, as: :product
+>>>>>>> release/v0.2
