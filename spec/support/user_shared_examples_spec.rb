@@ -120,7 +120,7 @@ context "while viewing his cart" do
   it {should have_content("cart")}
   it {should have_short_product(@product)}
 
-  context "removes a product from his cart", js: true do 
+  context "removes a product from his cart" do 
     before(:each) do
       within(".product.#{@product.title_param}"){ click_link 'X'}
     end

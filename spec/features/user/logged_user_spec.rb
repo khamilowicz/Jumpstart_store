@@ -25,6 +25,11 @@
       should have_link("Log in")
     end
 
+    it "change his profile data" do
+      click_link @user.full_name
+      click_link "Edit profile"
+    end
+
     context "concerning orders" do
       before(:each) do
           @products = FactoryGirl.create_list(:product, 3, quantity: 3)
@@ -41,7 +46,7 @@
         it{ should have_selector('.total', text: "Total for order: $3.0")}
       end
 
-      context "after placing it", js: true do
+      context "after placing it" do
 
         before(:each) do
           order_some_products @products
@@ -133,7 +138,7 @@
     end
   end
 
-  context "on products he has purchased", js: true do
+  context "on products he has purchased" do
 
     before(:each) do
       products = FactoryGirl.create_list(:product, 2)
