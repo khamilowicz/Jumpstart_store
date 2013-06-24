@@ -43,7 +43,7 @@ def create_new_product product
   fill_in "Title", with: product.title
   fill_in "Description", with: product.description
   fill_in "Price", with: product.price
-  attach_file("Photo", some_photo)
+  attach_file("assets_photos", some_photo)
   click_button "Submit"
 end
 

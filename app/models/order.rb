@@ -63,16 +63,19 @@ class Order < ActiveRecord::Base
 		100*total_price/price_without_discount
 	end
 
+	def has_discount?
+		total_discount < 100
+	end
+
 	def transfer_products 
 		self.user.products.all.uniq.each do |product|
 			self.add product: product
 			self.user.remove product: product
 			product.retire
 		end
-		## TODO: address
-		self.address = self.user.address
 	end
 
+	
 	STATUSES.each do |method_name, stat|
 		define_method method_name do
 			self.status = stat

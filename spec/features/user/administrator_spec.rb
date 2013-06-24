@@ -18,6 +18,8 @@ describe "Administrator" do
       create_new_product @product
     end
 
+    it {@product.should_not be_nil}
+
     it { should have_content("Successfully created product")}
     it { should have_short_product(@product)}
     it {@product.photo.should_not be_nil}
@@ -76,7 +78,7 @@ end
 
 it "Retire a product from being sold, which hides it from browsing by any non-administrator"
 
-context "sees a listing of all orders", js: true do
+context "sees a listing of all orders" do
   before(:each) do
     @user = FactoryGirl.create(:user)
     visit '/'
@@ -178,76 +180,87 @@ context "sees a listing of all orders", js: true do
 
       end
       context "On the order 'dashboard' they can:" do
+        before(:each) do
+          click_link 'Orders'
+        end
         context "View details of an individual order, including:" do
+          before(:each) do
+            click_link 'Show'
+          end
 
-         it "If purchased on sale, original price, sale percentage and adjusted price"
-         it "Subtotal for the order"
-         it "Discount for the order"
-         it "Total for the order reflecting any discounts from applicable sales"
-       end 
-     end
-     it 'View and edit orders; may change quantity or remove products from orders with the status of pending or paid'
-     it 'Change the status of an order according to the rules as outlined above'
-   end
- end
-
- context "not allowed to" do
-  it 'modify any personal data aside from their own'
-end
-
-context "he may" do
-
-  before(:each) do
-    @products = FactoryGirl.create_list(:product, 3)
-    @category = ['Category_1']
-    @products_in_category = @products[0,2]
-    @products_in_category.each {|p| p.add category: @category.first}
-    @product = @products.last
-  end
-  
-  it "View a list of all active sales" do 
-    put_on_sale @products_in_category
-    visit sales_path
-    should have_short_product(@products_in_category.first)
-    should_not have_short_product(@product) 
-  end
-
-  describe "create a sale" do
-
-    it "for products" do
-      put_on_sale @products_in_category
-      visit product_path(@products_in_category.last) 
-      should have_selector(".price", text: (0.5*@products_in_category.last.price).to_s)
+          it "If purchased on sale, original price, sale percentage and adjusted price" do
+            should have_content("Purchased on sale? Yes")
+          end
+          it "Subtotal for the order" do
+            should have_content("Total price: $#{@order.total_price}")
+          end
+          it "Discount for the order" do
+            should have_content("Total discount: #{@order.total_discount}")
+          end
+        end 
+      end
+      it 'View and edit orders; may change quantity or remove products from orders with the status of pending or paid'
+      it 'Change the status of an order according to the rules as outlined above'
     end
+  end
 
-    it "for categories" do
-      put_on_sale @category
-      @products_in_category.each do |product| 
-       visit product_path(product) 
-       should have_selector(".price", text: (0.5*product.price).to_s), "#{page.find('body').native}"
-     end
-   end
+  context "not allowed to" do
+    it 'modify any personal data aside from their own'
+  end
 
+  context "he may" do
 
-   describe "End a sale" do
     before(:each) do
-      put_on_sale @product
+      @products = FactoryGirl.create_list(:product, 3)
+      @category = ['Category_1']
+      @products_in_category = @products[0,2]
+      @products_in_category.each {|p| p.add category: @category.first}
+      @product = @products.last
+    end
+    
+    it "View a list of all active sales" do 
+      put_on_sale @products_in_category
       visit sales_path
-      within('.sale'){ click_link 'X'}
-      visit sales_path
+      should have_short_product(@products_in_category.first)
+      should_not have_short_product(@product) 
     end
 
-    it { should_not have_short_product(@product) }
+    describe "create a sale" do
+
+      it "for products" do
+        put_on_sale @products_in_category
+        visit product_path(@products_in_category.last) 
+        should have_selector(".price", text: (0.5*@products_in_category.last.price).to_s)
+      end
+
+      it "for categories" do
+        put_on_sale @category
+        @products_in_category.each do |product| 
+         visit product_path(product) 
+         should have_selector(".price", text: (0.5*product.price).to_s), "#{page.find('body').native}"
+       end
+     end
+
+
+     describe "End a sale" do
+      before(:each) do
+        put_on_sale @product
+        visit sales_path
+        within('.sale'){ click_link 'X'}
+        visit sales_path
+      end
+
+      it { should_not have_short_product(@product) }
+    end
   end
-end
 
-context "search orders using a builder-style interface (like Google’s 'Advanced Search;) allowing them to specify any of these:" do
+  context "search orders using a builder-style interface (like Google’s 'Advanced Search;) allowing them to specify any of these:" do
 
-  it 'Status (drop-down)'
-  it 'Order total (drop-down for >, <, = and a text field for dollar-with-cents)'
-  it 'Order date (drop-down for >, <, = and a text field for a date)'
-  it 'Email address of purchaser'
-end
+    it 'Status (drop-down)'
+    it 'Order total (drop-down for >, <, = and a text field for dollar-with-cents)'
+    it 'Order date (drop-down for >, <, = and a text field for a date)'
+    it 'Email address of purchaser'
+  end
 
 end 
 end

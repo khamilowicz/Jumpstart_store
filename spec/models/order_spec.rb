@@ -77,24 +77,34 @@ end
 it "can calculate total discount" do
   products = FactoryGirl.create_list(:product,3, price: 1)
   @order.products = products
+  @order.has_discount?.should be_false
   tp = @order.total_price
   products.each{|p| p.on_discount(50) }
   @order.total_price.should == 0.5*tp
   @order.total_discount.should == 50
+  @order.has_discount?.should be_true
 
 end
 
 end
-it "can transfer products from user" do
-  user = FactoryGirl.create(:user)
-  product = FactoryGirl.create(:product)
 
-  user.add product: product
+describe "transfers product" do
 
-  order = user.orders.create
-  order.transfer_products
-  user.products.should be_empty
-  order.products.first.title.should == product.title
+  before(:each) do
+   @user = FactoryGirl.create(:user)
+   @product = FactoryGirl.create(:product)
+
+   @user.add product: @product
+
+   @order = @user.orders.create
+ end
+
+ it "from user" do
+   @order.transfer_products
+   @user.products.should be_empty
+   @order.products.first.title.should == @product.title
+ end
+ 
 end
 
 describe ".products" do
