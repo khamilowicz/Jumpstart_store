@@ -92,9 +92,7 @@ shared_examples_for "user" do
        before(:each) do
         click_link @categories.first
       end 
-      it {should have_selector('.category', text: @categories.first), "#{page.find("body").native}"}
       it {should have_short_product(@products.first)}
-      it {should_not have_selector('.category', text:  @categories.last)}
       it {should_not have_short_product(@products.last)}
     end
 
@@ -103,8 +101,6 @@ shared_examples_for "user" do
       click_link @categories.last 
     end 
 
-    it {should have_selector('.category', text: @categories.last)}
-    it {should_not have_selector('.category', text: @categories.first)}
     it {should have_short_product(@products.last)}
     it {should have_short_product(@products.first)}
   end

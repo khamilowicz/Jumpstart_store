@@ -11,6 +11,19 @@ RSpec::Matchers.define :have_short_product do |products|
   end
 end
 
+RSpec::Matchers.define :have_inline_product do |products|
+  match do |page_content|
+   products = [products] unless products.kind_of? Array
+   products.each do |product|
+    selector = ".product.inline.#{product.title_param}" 
+    page_content.should have_selector(selector)
+    within(selector){
+      page_content.should have_content(product.title)
+    }
+  end
+end
+end
+
 RSpec::Matchers.define :have_review do |review|
   match do |page_content|
     within('.review'){
@@ -44,9 +57,9 @@ end
 RSpec::Matchers.define :have_short_order do |order|
   match do |page_content|
     within('.order'){
-      page_content.should have_content(order.date_of_purchase)
+      page_content.should have_content(order.date_of_purchase.strftime("%e %b %Y"))
       page_content.should have_content(order.total_price)
-      page_content.should have_link("Show order")
+      page_content.should have_link("Show")
     }
   end
 

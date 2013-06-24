@@ -1,4 +1,5 @@
 =form_for product, :html => { :multipart => true } do |f|
+  =render partial: 'menu/errors', locals: {object: product}
   = f.label :title
   = f.text_field :title
   = f.label :description

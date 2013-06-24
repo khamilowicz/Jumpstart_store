@@ -10,6 +10,22 @@ class UsersController < ApplicationController
     @users = User.all
   end
 
+  def edit
+    @user = current_user
+  end
+
+  def update
+    @user = User.find(params[:id])
+    
+    if @user.update_attributes(params[:user])
+      redirect_to @user, notice: "Update successfull"
+    else
+      flash[:errors] = 'Something went wrong'
+      render :edit
+    end
+
+  end
+
   def new
     @user = User.new
   end

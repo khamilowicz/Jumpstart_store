@@ -1,5 +1,7 @@
 require "spec_helper"
 
+
+
 def add_products_to_cart products
   visit products_path
   products = [products] unless products.kind_of? Array
@@ -15,7 +17,7 @@ def login user
   click_button "Sign in"
 end
 
-def order_some_products products
+def order_some_products_for_real products
   add_products_to_cart products
   visit cart_path
   click_link "Order"
@@ -24,6 +26,20 @@ def order_some_products products
   fill_in :'card-expiry-month', with: 12
   fill_in :'card-year', with: 2020
   click_button "Buy"
+end
+
+def current_user
+ @user
+end
+
+def order_some_products products
+  add_products_to_cart products
+  order = Order.new
+  order.user = current_user
+  order.transfer_products
+  order.address = "some address"
+  order.pay
+  order.save
 end
 
 def add_a_review review 
