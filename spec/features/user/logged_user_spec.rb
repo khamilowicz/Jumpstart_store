@@ -2,6 +2,7 @@
 
 
  describe "logged user" do
+  
 
   subject{page}
 
@@ -24,15 +25,21 @@
       should have_content("Guest")
       should have_link("Log in")
     end
+    context "in profile" do
+      
+      it "change his profile data" do
+        click_link @user.full_name
+        click_link "Edit profile"
+        fill_in :address, with: "Other address"
+        click_button "Submit"
+        page.should have_content("Update successfull")
+        page.should have_content("Other address") 
+      end
 
-    it "change his profile data" do
-      click_link @user.full_name
-      click_link "Edit profile"
     end
-
     context "concerning orders" do
       before(:each) do
-          @products = FactoryGirl.create_list(:product, 3, quantity: 3)
+        @products = FactoryGirl.create_list(:product, 3, quantity: 3)
       end
 
       context "on new order page" do

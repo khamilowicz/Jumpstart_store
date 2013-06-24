@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 	validates :nick, length: {minimum: 2, maximum: 32}, allow_nil: true, unless: :guest?
 	validates_presence_of :password, unless: :guest?
 	validates :password, confirmation: true
-	validates_presence_of :password_confirmation, unless: :guest?
+	# validates_presence_of :password_confirmation, unless: :guest?
 
 	has_many :product_users
 	has_many :products, through: :product_users
