@@ -25,6 +25,11 @@
       should have_link("Log in")
     end
 
+    it "change his profile data" do
+      click_link @user.full_name
+      click_link "Edit profile"
+    end
+
     context "concerning orders" do
       before(:each) do
           @products = FactoryGirl.create_list(:product, 3, quantity: 3)
