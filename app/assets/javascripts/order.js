@@ -49,7 +49,7 @@ function change_slogan(){
   slogan_format(slogan);
 }
 
-$(function() {
+$(document).ready(function() {
 
   $(window).on('scroll', function() {
     $('.big_product_image .caption.title').remove();
