@@ -36,6 +36,10 @@ gem 'sqlite3'
   gem 'guard-livereload'
 end
 
+group :test do
+  gem 'shoulda-matchers'
+end
+
 group :production do
   gem 'pg'
 end
