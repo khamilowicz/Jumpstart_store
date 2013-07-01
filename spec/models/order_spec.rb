@@ -2,59 +2,19 @@ require 'spec_helper'
 
 describe Order do
   context "to be valid" do
-    before(:each) do
-      @order = FactoryGirl.build(:order)
+    subject{ FactoryGirl.build(:order, products: FactoryGirl.create_list(:product, 3, price: 1))}
+
+    it{ should belong_to(:user)}
+    it{ should have_many(:order_products)}
+    it{ should validate_presence_of(:address)}
+    it{ should respond_to(:date_of_purchase) }
+    its(:total_price){should == 3}
+
+    %w{pending cancelled paid shipped returned}.each do |status|
+      it{ should allow_value(status).for(:status)}
+      it{ should_not allow_value(status + 'not').for(:status)}
     end
 
-    it "must belong to an user" do
-      @order.user = nil
-      @order.should_not be_valid
-    end
-    
-
-    it "is for one or more products currently being sold" do
-      @order.products = []
-      @order.should_not be_valid
-      @order.products = FactoryGirl.create(:product)
-      @order.should be_valid
-    end
-
-    it "has address" do
-      @order.address = nil
-      @order.should_not be_valid
-      @order.address = "Other address"
-      @order.should be_valid
-    end
-
-    it "has date of purchase" do
-      @order.save
-      time = Time.now
-      @order.date_of_purchase.to_date.should == time.to_date
-    end
-
-    it "has total price" do
-      @order.products = FactoryGirl.create_list(:product, 3, price: 1)
-      @order.total_price.should == 3
-    end
-
-    it 'has status in "pending", "cancelled", "paid", "shipped", "returned")' do
-  @order.status.should == "pending"
-  @order.should be_valid
-  @order.cancel
-  @order.status.should == "cancelled"
-  @order.should be_valid
-  @order.pay
-  @order.status.should == "paid"
-  @order.should be_valid
-  @order.is_sent
-  @order.status.should == "shipped"
-  @order.should be_valid
-  @order.is_returned
-  @order.status.should == "returned"
-  @order.should be_valid
-  expect{@order.status = "cancelled"}.to raise_error
-  expect{@order.status = "something else"}.to raise_error
-end
 
 it "has date of status change" do
   @time_now = Time.now
