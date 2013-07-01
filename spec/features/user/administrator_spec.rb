@@ -222,13 +222,52 @@ context "he may" do
   end
 end
 
-context "search orders using a builder-style interface (like Google’s 'Advanced Search;) allowing them to specify any of these:" do
 
-  it 'Status (drop-down)'
-  it 'Order total (drop-down for >, <, = and a text field for dollar-with-cents)'
-  it 'Order date (drop-down for >, <, = and a text field for a date)'
-  it 'Email address of purchaser'
+context "search order using a builder-style interface (like Google’s 'Advanced Search;) allowing them to specify any of these:" do
+  before(:each) do
+    @pending_order = FactoryGirl.create(:order, status: 'pending', user: FactoryGirl.create(:user))
+    @cancelled_order = FactoryGirl.create(:order, status: 'cancelled', user: FactoryGirl.create(:user))
+    product_11 = FactoryGirl.create(:product, price: 11)
+    product_9 = FactoryGirl.create(:product, price: 9)
+    @pending_order.add product: product_11
+    @pending_order.created_at = Date.new(2011, 10,10)
+    @cancelled_order.add product: product_9
+    @cancelled_order.created_at = Date.new(2008, 10,10)
+    @pending_order.save
+    @cancelled_order.save
+    click_link 'Search'
+  end
+
+  it 'Status (drop-down)' do
+    select('pending', from: 'search[status]')
+    click_button "Search"
+    page.should have_short_order(@pending_order), "#{page.find('body').native}"
+  end
+
+  it 'Order total (drop-down for >, <, = and a text field for dollar-with-cents)' do
+    fill_in(:total_value, with: 10)
+    select('more', :from => 'search[value]')
+    click_button "Search"
+    page.should have_short_order(@pending_order), "#{page.find('body').native}"
+    page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
+  end
+
+  it 'Order date (drop-down for >, <, = and a text field for a date)' do
+    select("more", from: 'search[date]')
+    select('2010', from: 'search[date_value(1i)]')
+    select('October', from: 'search[date_value(2i)]')
+    select('10', from: 'search[date_value(3i)]')
+    click_button "Search"
+    page.should have_short_order(@pending_order), "#{page.find('body').native}"
+    page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
+  end
+  it 'Email address of purchaser' do 
+    save_and_open_page
+    fill_in(:email, with: @pending_order.user.email)
+    click_button "Search"
+    page.should have_short_order(@pending_order), "#{page.find('body').native}"
+    page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
+  end
 end
-
-end 
+end
 end

@@ -196,4 +196,15 @@ describe ".quantity_for" do
     product.quantity_for(user).should == 2
   end
 end
+
+describe "#search" do
+  it "finds products with word" do
+    product_searched = FactoryGirl.create(:product, description: "Some text")
+    product_not_searched = FactoryGirl.create(:product, description: "Other text")
+    found = Product.search("Some", load: true)
+    found.results.should include(product_searched)
+    found.results.should_not include(product_not_searched)
+  end
+  
+end
 end

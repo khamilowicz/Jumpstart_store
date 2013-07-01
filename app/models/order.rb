@@ -27,6 +27,37 @@ class Order < ActiveRecord::Base
 			self.where(status: status).all
 		end
 
+		def find_by_value sign, value
+			value = value.to_i
+			orders = Order.all.select do |order|
+				case sign
+				when 'less' 
+					order.total_price < value
+				when 'more'
+					order.total_price > value
+				when 'equal'
+					order.total_price == value
+				end
+			end
+			orders
+		end
+
+		def find_by_date date, date_value
+			date_params = date_value.split(',').map(&:to_i)
+			date_parsed = Date.new *date_params
+			sign = case date 
+			when 'less' then '<'
+			when 'more' then '>'
+			when 'equal' then '='
+			end
+			Order.where("created_at #{sign} ?", date_parsed).all
+		end
+
+		def find_by_email email
+			user = User.where(email: email).first
+			user.orders if user
+		end
+
 		def count_by_status status
 			self.where(status: status).count
 		end

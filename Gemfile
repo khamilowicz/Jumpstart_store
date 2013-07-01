@@ -1,14 +1,16 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
+gem 'zeus'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'paperclip'
 gem 'paymill'
+gem 'tire'
 
-gem 'vcr'
+# gem 'vcr'
 
 # in production environments by default.
 group :assets do

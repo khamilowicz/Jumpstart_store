@@ -1,6 +1,9 @@
 class Product < ActiveRecord::Base
   # attr_accessible :title, :body
 
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
+
 
   attr_accessible :title, :description, :base_price, :discount, :quantity, :on_sale, :price
   validates :title, presence: true, uniqueness: true

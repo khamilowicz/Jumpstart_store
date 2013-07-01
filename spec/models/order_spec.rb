@@ -124,5 +124,75 @@ describe ".products" do
   its(:quantity){should == 1}
 end
 
+context "searching" do
+  describe ".find_by_value" do
+    before(:each) do
+
+      @order_1 = FactoryGirl.create(:order)
+      @order_2 = FactoryGirl.create(:order)
+      products_1 = FactoryGirl.create_list(:product, 3, price: 10)
+      products_1.each do |product|
+        @order_1.add product: product
+      end
+      products_2 = FactoryGirl.create_list(:product, 2, price: 5)
+      products_2.each do |product|
+        @order_2.add product: product
+      end
+    end
+    it {@order_2.total_price.should == 10}
+    
+    it "finds by total price more than" do
+      order_over = Order.find_by_value('more', '20')
+      order_over.should include(@order_1)
+      order_over.should_not include(@order_2)
+    end
+    it "finds by total price less than" do
+      order_over = Order.find_by_value('less', '20')
+      order_over.should_not include(@order_1)
+      order_over.should include(@order_2)
+    end 
+    it "finds by total price equal to" do
+      order_over = Order.find_by_value('equal', '10')
+      order_over.should_not include(@order_1)
+      order_over.should include(@order_2)
+    end 
+  end
+
+  describe ".find_by_date" do
+    before(:each) do
+      @order_1 = FactoryGirl.create(:order)
+      @order_1.created_at = Date.new(2010, 10, 11)
+      @order_1.save
+      @order_2 = FactoryGirl.create(:order)
+      @order_2.created_at = Date.new(2008, 10, 10)
+      @order_2.save
+    end
+    it "finds by date" do
+      orders = Order.find_by_date 'more', "2010, 10, 10"
+      orders.should include(@order_1)
+      orders.should_not include(@order_2)
+    end
+    
+  end
+
+  describe ".find_by_email" do
+    before(:each) do
+      @user_1 = FactoryGirl.create(:user)
+      @order_1 = FactoryGirl.create(:order)
+      @user_1.orders << @order_1
+
+      @user_2 = FactoryGirl.create(:user)
+      @order_2 = FactoryGirl.create(:order)
+      @user_2.orders << @order_2
+      
+      @orders = Order.find_by_email(@user_1.email)
+    end
+    it{ @orders.should include(@order_1)}
+    it{ @orders.should_not include(@order_2)}
+    
+  end
+
+end
+
 end
 

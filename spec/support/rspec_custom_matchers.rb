@@ -56,6 +56,7 @@ end
 
 RSpec::Matchers.define :have_short_order do |order|
   match do |page_content|
+    page_content.should have_selector(".order")
     within('.order'){
       page_content.should have_content(order.date_of_purchase.strftime("%e %b %Y"))
       page_content.should have_content(order.total_price)

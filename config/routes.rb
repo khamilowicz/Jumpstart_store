@@ -10,6 +10,9 @@ NewStore::Application.routes.draw do
   get 'session/new' => 'session#new', as: 'new_session'
   post 'session/create' => 'session#create', as: 'sessions'
   delete 'session/delete' => 'session#delete', as: 'session'
+
+  get 'search' => 'search#new', as: 'search'
+  post 'search' => 'search#show', as: 'searches'
   # get 'sales/new'
   # post 'sales/create'
   # get 'sales' => 'sales#index'

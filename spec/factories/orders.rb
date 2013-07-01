@@ -5,8 +5,8 @@ FactoryGirl.define do
 
   	address "Some address"
     after(:build) do |order|
-    	order.user = FactoryGirl.build(:user)
-    	order.products = FactoryGirl.build(:product)
+    	order.user = FactoryGirl.create(:user)
+    	order.products = FactoryGirl.create_list(:product, 1)
     end
   end
 end
