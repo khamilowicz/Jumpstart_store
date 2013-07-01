@@ -262,7 +262,6 @@ context "search order using a builder-style interface (like Google’s 'Advanced
     page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
   end
   it 'Email address of purchaser' do 
-    save_and_open_page
     fill_in(:email, with: @pending_order.user.email)
     click_button "Search"
     page.should have_short_order(@pending_order), "#{page.find('body').native}"

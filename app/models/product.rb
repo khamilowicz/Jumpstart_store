@@ -9,7 +9,6 @@ class Product < ActiveRecord::Base
   validates :title, presence: true, uniqueness: true
   validates_presence_of :description
   validates :base_price, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
-  # validates :photo, format: {with: %r{https?://(www\.)?\w+(\.\w+)+} }, allow_nil: true
 
   validates :quantity, presence: true, numericality: {greater_than_or_equal_to: 0, integer: true}
 

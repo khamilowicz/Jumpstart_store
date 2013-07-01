@@ -4,7 +4,6 @@ class SearchController < ApplicationController
   end
 
   def show
-    # binding.pry
     @orders = Search.find(params[:search])
   end
 end
