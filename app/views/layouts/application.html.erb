@@ -26,7 +26,7 @@
 
 	<div class="container">
 		<%= render 'menu/top_bar' %>
-	 <%= render 'menu/right' %>
+		<%= content_for(:category_bar) %>
 		<div class="row-fluid">
 			<div class="span9"> <%= yield %> </div>
 			<div class="span3 big_picture_frame "> <%= render 'menu/big_product_image' %> </div>
