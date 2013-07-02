@@ -1,7 +1,7 @@
 module ProductsHelper
   def product_price product
     text = "<b>$#{product.price}</b>"
-    if product.price != product.base_price
+    if product.on_discount?
       text = "Was <strike>$#{product.base_price}</strike>. Now, only " + text
     else
       text = "Only " + text
@@ -46,6 +46,6 @@ def remove product
 end
 
 def saving_text product
-  "You save #{(100*(product.base_price - product.price)/product.base_price).round.to_i}%!" if product.price != product.base_price
+  "You pay only #{product.discount}%!" if product.on_discount?
 end
 end

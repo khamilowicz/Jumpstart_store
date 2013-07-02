@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130604105340) do
+ActiveRecord::Schema.define(:version => 20130702125021) do
 
   create_table "assets", :force => true do |t|
     t.integer  "product_id"
@@ -71,16 +71,17 @@ ActiveRecord::Schema.define(:version => 20130604105340) do
   end
 
   create_table "products", :force => true do |t|
-    t.datetime "created_at",                                                   :null => false
-    t.datetime "updated_at",                                                   :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.string   "title"
     t.text     "description"
-    t.decimal  "base_price",  :precision => 8, :scale => 2
     t.string   "photo"
-    t.boolean  "on_sale",                                   :default => false
+    t.boolean  "on_sale",             :default => false
     t.integer  "discount"
     t.integer  "order_id"
-    t.integer  "quantity",                                  :default => 1
+    t.integer  "quantity",            :default => 1
+    t.integer  "base_price_cents",    :default => 0,     :null => false
+    t.string   "base_price_currency", :default => "USD", :null => false
   end
 
   create_table "reviews", :force => true do |t|

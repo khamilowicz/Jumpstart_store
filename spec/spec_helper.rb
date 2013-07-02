@@ -48,6 +48,7 @@ require 'rspec/rails'
 # require 'rspec/autorun
 require "capybara/rails"
 require 'capybara/rspec'
+require "money-rails/test_helpers"
 # require "factory_girl_rails"
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

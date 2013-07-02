@@ -4,6 +4,8 @@ describe User do
 
   subject{ FactoryGirl.create(:user, :logged) }
 
+  it{should respond_to(:address)}
+
   context "who is registered" do
 
     it{ should validate_confirmation_of(:password)}

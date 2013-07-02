@@ -198,14 +198,14 @@ context "he may" do
     it "for products" do
       put_on_sale @products_in_category
       visit product_path(@products_in_category.last) 
-      should have_selector(".price", text: (0.5*@products_in_category.last.price).to_s)
+      should have_selector(".price", text: (@products_in_category.last.price*0.5).to_s)
     end
 
     it "for categories" do
       put_on_sale @category
       @products_in_category.each do |product| 
        visit product_path(product) 
-       should have_selector(".price", text: (0.5*product.price).to_s), "#{page.find('body').native}"
+       should have_selector(".price", text: (product.price*0.5).to_s), "#{page.find('body').native}"
      end
    end
 
@@ -227,8 +227,8 @@ context "search order using a builder-style interface (like Google’s 'Advanced
   before(:each) do
     @pending_order = FactoryGirl.create(:order, status: 'pending', user: FactoryGirl.create(:user))
     @cancelled_order = FactoryGirl.create(:order, status: 'cancelled', user: FactoryGirl.create(:user))
-    product_11 = FactoryGirl.create(:product, price: 11)
-    product_9 = FactoryGirl.create(:product, price: 9)
+    product_11 = FactoryGirl.create(:product, base_price: 11)
+    product_9 = FactoryGirl.create(:product, base_price: 9)
     @pending_order.add product: product_11
     @pending_order.created_at = Date.new(2011, 10,10)
     @cancelled_order.add product: product_9

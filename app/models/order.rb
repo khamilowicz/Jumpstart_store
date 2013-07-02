@@ -29,15 +29,15 @@ class Order < ActiveRecord::Base
 		end
 
 		def find_by_value sign, value
-			value = value.to_i
+			value = Money.parse("$#{value}").cents
 			orders = Order.all.select do |order|
 				case sign
 				when 'less' 
-					order.total_price < value
+					order.total_price.cents < value
 				when 'more'
-					order.total_price > value
+					order.total_price.cents > value
 				when 'equal'
-					order.total_price == value
+					order.total_price.cents == value
 				end
 			end
 			orders
@@ -87,16 +87,23 @@ class Order < ActiveRecord::Base
 	end
 
 	def total_price
-		self.products.reduce(0){|sum, product| sum+= product.price}
+		sum_price
+	end
+
+	def total_price_without_discount
+		sum_price :base_price
+	end
+
+	def sum_price price=:price
+		Product.total_price	self.products, price
 	end
 
 	def total_discount
-		price_without_discount = self.products.reduce(0){|sum, product| sum+= product.base_price}
-		100*total_price/price_without_discount
+		(total_price_without_discount.cents - total_price.cents)*100/total_price_without_discount.cents
 	end
 
 	def has_discount?
-		total_discount < 100
+		self.products.any?(&:on_discount?)
 	end
 
 	def transfer_products 
@@ -119,7 +126,7 @@ class Order < ActiveRecord::Base
 	def add param
 		if param[:product]
 			product = param[:product]
-			self.order_products << OrderProduct.convert(product, product.quantity_for(self.user))
+			self.order_products << OrderProduct.convert(product, (product.quantity_for(self.user) || 1))
 		end
 	end
 	

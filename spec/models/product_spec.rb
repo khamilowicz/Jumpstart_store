@@ -2,14 +2,18 @@ require 'spec_helper'
 
 describe Product do
 
+  include MoneyRails::TestHelpers
+
   it{ should validate_presence_of(:title)}
   it{ should validate_uniqueness_of(:title)}
   it{ should validate_presence_of(:description)}
   it{ should allow_value(1).for(:base_price)}
-  it{ should_not allow_value(1.101).for(:base_price)}
-  it{ should_not allow_value(-1).for(:base_price)}
-  it{ should_not allow_value('some string').for(:base_price)}
-  it{ should_not allow_value(nil).for(:base_price)}
+  it{ monetize(:base_price).should be_true}
+  it{ monetize(:price).should be_true}
+  # it{ should_not allow_value(1.101).for(:base_price)}
+  # it{ should_not allow_value(-1).for(:base_price).with_message("base_price_cents must be greater than 0 (-100)")}
+  # it{ should_not allow_value('some string').for(:base_price)}
+  it{ should_not allow_value(nil).for(:base_price_cents)}
   it{ should respond_to(:price)}
   it{ should respond_to(:quantity)}
   it{ FactoryGirl.create(:product).quantity.should eq(1)}
@@ -70,16 +74,24 @@ describe Product do
 
     end
 
+    describe "price" do
+      let(:product){ FactoryGirl.create(:product)}
+
+      it{ (product.price + product.price).cents.should eq(200) }
+      it{ (product.price + product.price).should eq(Money.new(200, "USD")) }
+    end
+
     describe "discounts" do
       let(:product){FactoryGirl.build(:product)}
+      
       it{ expect{product.on_discount 50}.to change{
         product.price
-        }.from(product.base_price).to(0.5*product.base_price)
+        }.from(product.base_price).to(product.base_price/2)
       }
 
       it{ expect{product.on_discount 50; product.off_discount}.to_not change{
         product.price
-        }.from(product.base_price).to(0.5*product.base_price)
+        }.from(product.base_price).to(product.base_price/2)
       }
 
     end
