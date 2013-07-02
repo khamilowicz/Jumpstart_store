@@ -12,6 +12,7 @@ class Order < ActiveRecord::Base
 	}
 
 	validates_presence_of :user, :address, :order_products
+	validates_inclusion_of :status, in: STATUSES.values
 
 	scope :all_by_status, lambda{|status| where(status: status).all}
 
