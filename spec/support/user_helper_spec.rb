@@ -40,7 +40,7 @@ def order_some_products_for_real products
 end
 
 def current_user
- @user
+ user
 end
 
 def order_some_products products

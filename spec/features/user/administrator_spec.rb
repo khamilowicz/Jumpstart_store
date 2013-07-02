@@ -3,39 +3,41 @@ require "spec_helper"
 
 describe "Administrator" do
 
-  before(:each) do
-    @admin = FactoryGirl.create(:user, :admin)
+  let(:user){FactoryGirl.create(:user, :admin) }
+
+  before do
     visit '/'
-    login @admin
+    login user
   end
 
   subject {page}
   context "managing products" do
     describe "creates product" do
-     before(:each) do
-      @product = FactoryGirl.build(:product)
+
+      let(:product){ FactoryGirl.build(:product)}
+
+     before do
       visit new_product_path
-      create_new_product @product
+      create_new_product product
     end
 
-    it {@product.should_not be_nil}
+    it {product.should_not be_nil}
 
     it { should have_content("Successfully created product")}
-    it { should have_short_product(@product)}
-    it {@product.photo.should_not be_nil}
-    it {click_link @product.title; should have_link("Edit product")}
+    it { should have_short_product(product)}
+    it {product.photo.should_not be_nil}
+    it {click_link product.title; should have_link("Edit product")}
 
     describe "and modifies them" do 
-      before(:each) do
-       @product_2 = FactoryGirl.build(:product)
-       pro = Product.where(title: @product.title).first
-       visit edit_product_path(pro)
-       create_new_product @product_2
+       let(:product_2){ FactoryGirl.build(:product)}
+      before do
+       visit edit_product_path(1)
+       create_new_product product_2
      end
 
      it { should have_content("Successfully updated product")}
-     it { should_not have_short_product(@product)}
-     it { should have_short_product(@product_2)}
+     it { should_not have_short_product(product)}
+     it { should have_short_product(product_2)}
    end
  end
 
@@ -86,14 +88,18 @@ context "sees a listing of all orders" do
     login @user
 
     Order.statuses.each do |method, status|
-      products =  FactoryGirl.create_list(:product, 2)
-      order_some_products products
-      order = Order.last
-      order.send method
+      FactoryGirl.create_list(:product, 2).each do |product|
+        @user.add product: product
+      end
+      order = @user.orders.create
+      order.transfer_products
+      order.address = "some address"
+      order.save
+      Order.all.last.send method
     end
 
     click_link "Log out"
-    login @admin
+    login user
     visit orders_path
 
   end
