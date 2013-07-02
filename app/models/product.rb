@@ -1,4 +1,4 @@
-class Product < ActiveRecord::Bas
+class Product < ActiveRecord::Base
 
   monetize :base_price_cents
   monetize :price_cents
