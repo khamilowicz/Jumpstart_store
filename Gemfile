@@ -8,9 +8,6 @@ gem 'money-rails'
 
 gem 'paperclip'
 gem 'paymill'
-gem 'tire'
-
-# gem 'vcr'
 
 # in production environments by default.
 group :assets do
