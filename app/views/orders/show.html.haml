@@ -6,5 +6,8 @@
   .status= "Order is #{@order.status} since #{@order.status_change_date.strftime("%d %b %Y")}" if @order.status_change_date
   .submit_date= "Was purchased #{@order.date_of_purchase.strftime("%d %b %Y")}"
   .total_price= "Total price: $#{@order.total_price}"
+  .sale
+    .was_on_sale= "Purchased on sale? #{@order.has_discount? ? 'Yes' : 'No'}"
+    .discount= "Total discount: #{@order.total_discount}%"
   .products
     =render partial: 'orders/inline_product', collection: @order.products, as: :product

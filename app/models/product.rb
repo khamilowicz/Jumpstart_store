@@ -1,12 +1,15 @@
 class Product < ActiveRecord::Base
-  # attr_accessible :title, :body
 
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
 
-  attr_accessible :title, :description, :base_price, :discount, :quantity, :on_sale, :price
+  monetize :base_price_cents
+  monetize :price_cents
+
+  attr_accessible :title, :description, :base_price_cents, :discount, :quantity, :on_sale, :price_cents, :base_price
   validates :title, presence: true, uniqueness: true
   validates_presence_of :description
-  validates :base_price, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
-  # validates :photo, format: {with: %r{https?://(www\.)?\w+(\.\w+)+} }, allow_nil: true
+  validates :base_price_cents, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
 
   validates :quantity, presence: true, numericality: {greater_than_or_equal_to: 0, integer: true}
 
@@ -26,19 +29,21 @@ class Product < ActiveRecord::Base
 
   # has_many :photos, through: :assets
 
-  alias_attribute :price= , :base_price=
-
-  # def in_cart? user
+    # def in_cart? user
   #   ProductUser.where(user: user.id, product: self.id).first.in_cart?
   # end
 
-def photo
-  self.assets.last.photo
-end
+  def self.total_price products, price=:price 
+    products.reduce(Money.new(0, "USD")){ |sum, product| sum += product.send price}
+  end
 
-def photos
-  Asset.where(product_id: self.id).all.map(&:photo)
-end
+  def photo
+    self.assets.last.photo
+  end
+
+  def photos
+    Asset.where(product_id: self.id).all.map(&:photo)
+  end
 
 
   def add param 
@@ -56,18 +61,20 @@ end
 
   def start_selling
    self.on_sale = true
+   self.save
  end
 
  def retire
    self.on_sale = false
+   self.save
  end
 
- def price
-  (self.base_price*self.discount/100.0).round(2)
+ def price_cents
+  return self.base_price_cents*self.discount/100
 end
 
-def base_price
- super || 0 
+def base_price_cents
+  super || Money.new(0, "USD")
 end
 
 def discount
@@ -77,6 +84,10 @@ end
 def on_discount discount
  self.discount = discount
  self.save
+end
+
+def on_discount?
+  discount < 100
 end
 
 def off_discount
@@ -105,9 +116,9 @@ end
 
 private
 
-  def create_asset
-    self.assets.create
-  end
+def create_asset
+  self.assets.create
+end
 
 def add_to_category categories
   categories = names_from_hash(categories) if categories.kind_of?(Hash) 

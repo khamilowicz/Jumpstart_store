@@ -36,7 +36,7 @@ end
 
 
 def total_price
- self.products.reduce(0){|sum, product| sum+=product.price}
+ self.products.reduce(Money.new(0, "USD")){|sum, product| sum+=product.price}
 end
 
 def all_on_sale?

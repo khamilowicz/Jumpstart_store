@@ -3,104 +3,106 @@ require 'spec_helper'
 describe Category do
 
   describe ".get" do
-    before(:each) do
-      @name = "Category name"
-      @c1 = Category.get @name
-    end
+    let(:name){ "Category name"}
+    let!(:category){ Category.get name}
 
-    it "creates category by name" do
-      @c1.should be_kind_of(Category)
-      @c1.name.should == @name
-    end
+    subject{ category}
 
-    it "retrieves existing category" do
-      c2 = Category.get @name
-      c2.should == @c1
-      Category.all.should have(1).item
+    it{ should be_kind_of(Category)}
+    its(:name){should eq(name)}
+
+    it{ assert_equal Category.get(name), category}
+    it{ expect{ Category.get(name)}.to_not change{Category.all.size}}
+  end
+
+  describe "categories" do
+   let!(:c1){Category.get("C_1")}
+   let!(:c2){Category.get("C_2")}
+   let!(:c3){Category.get("C_3")} 
+
+   describe "class.list_categories" do
+    it{ Category.list_categories.should include(c1,c2,c3) }
+  end
+
+  describe "#products" do
+
+    let(:product){FactoryGirl.create(:product)}
+    before{ c1.add product: product}
+
+    subject{ c1.products}
+
+    it{ should include(product)}
+
+    describe "finds products by category" do
+      let(:product_1){FactoryGirl.create(:product)}
+      let(:product_11){FactoryGirl.create(:product)}
+      let(:product_2){FactoryGirl.create(:product)}
+
+      before do
+        product_1.add category: "Category_1"
+        product_11.add category: "Category_1"
+        product_2.add category: "Category_2"
+      end
+
+      subject{ Category.find_products_for("Category_1")}
+
+      it{ should include(product_1, product_11)}
+      it{ should_not include(product_2)}
+      it{ Category.find_products_for("Category_2").should include(product_2)}
+    end
+  end
+end
+
+describe "total price" do
+
+
+  let!(:category){ Category.get 'total price'}
+  let!(:product_1){ FactoryGirl.build(:product, base_price: 100)}
+  let!(:product_2){ FactoryGirl.build(:product, base_price: 200)}
+
+  it{
+   expect{ category.add product: product_1 }.
+   to change{ category.total_price}.
+   from(0).
+   to(1)
+
+   expect{ category.add product: product_2 }.
+   to change{ category.total_price}.
+   from(1).
+   to(3)
+ }
+
+end
+
+describe "concerning putting on sale" do
+
+  let(:category_name){ "Category name"}
+  let(:category){Category.get(category_name)}
+  let(:product_price){ Money.parse("$4")}
+
+  before do
+    FactoryGirl.create_list(:product, 2, :not_on_sale, base_price: 200).each do |product|
+      product.add category: category_name
     end
   end
 
-  describe "class.list_categories" do
-    it "lists all categories" do
-      c1 = Category.get("C_1")
-      c2 = Category.get("C_2")
-      c3 = Category.get("C_3")
-      Category.list_categories.should include(c1,c2,c3)
-    end
-  end
+  subject{ category}
 
-  it "can have associated products" do
-    c1 = Category.get("Category_1")
-    product = FactoryGirl.create(:product, on_sale: true)    
-    c1.add product: product
-    c1.products.should include(product)
-  end
+  its(:products){ should_not be_empty}
 
-  it "finds products by category" do
-    product_1 = FactoryGirl.create(:product)
-    product_2 = FactoryGirl.create(:product)
-    product_3 = FactoryGirl.create(:product)
-    product_1.add category: "Category_1"
-    product_2.add category: "Category_1"
-    product_3.add category: "Category_2"
-
-    products_c_1 = Category.find_products_for("Category_1")
-    products_c_1.should include(product_1,product_2)
-    products_c_1.should_not include(product_3)
-    Category.find_products_for("Category_2").should include(product_3)
-  end
-
-  it "has total price" do
-
-    category = Category.get 'total price'
-    product_1 = FactoryGirl.build(:product, price:'1.00')
-    product_2 = FactoryGirl.build(:product, price: '2.00')
-    category.add product: product_1
-    category.add product: product_2
-    category.total_price.should eql(3.00)
+  its(:all_on_sale?){ should be_false}
+  it{ expect{ category.start_selling}.to change{category.all_on_sale?}.to(true)}
+  describe "category products" do
+    let(:products){ category.products}
     
+    it{ expect{ products.each(&:start_selling)}.to change{category.all_on_sale?}.to(true)}
+    it{ expect{ products.first.start_selling}.to_not change{category.all_on_sale?}.to(true)}
   end
 
-  describe "concerning putting on sale" do
+  describe "discount" do
+    before {category.start_selling}
 
-    before(:each) do
-      @category_name = "Category_1"
-      @product_1 = FactoryGirl.create(:product, :not_on_sale)
-      @product_2 = FactoryGirl.create(:product, :not_on_sale)
-      @product_3 = FactoryGirl.create(:product, :not_on_sale)
-      @product_1.add category: @category_name
-      @product_2.add category: @category_name 
-      @product_3.add category: "Category_2"
-      @category = Category.get(@category_name)
-    end
-
-    it ".all_on_sale? tells if every product in category is on sale" do
-      @category.all_on_sale?.should be_false
-      @category.products.each(&:start_selling)
-      @category.all_on_sale?.should be_true
-      @category.products.first.retire
-      @category.all_on_sale?.should be_false
-    end
-
-    it ".start_selling affects every product in category" do
-      @category.all_on_sale?.should be_false
-      @category.start_selling
-      @category.all_on_sale?.should be_true
-    end
+    it{ expect{ category.discount 50}.to change{category.total_price}.from(product_price).to(product_price/2)}
   end
-
-  it "can be discounted" do
-    category = Category.get "discount"
-    product_1 = FactoryGirl.create(:product,price: 1) 
-    product_2 = FactoryGirl.create(:product,price: 2) 
-    category.add product: product_1
-    category.add product: product_2
-    category.total_price.should == 3
-    category.discount 50
-    category.total_price.should == 1.5
-    category.products.each do |product|
-      product.discount.should == 50
-    end
-  end
-
+end
 end

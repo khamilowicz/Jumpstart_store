@@ -12,6 +12,7 @@ class Order < ActiveRecord::Base
 	}
 
 	validates_presence_of :user, :address, :order_products
+	validates_inclusion_of :status, in: STATUSES.values
 
 	scope :all_by_status, lambda{|status| where(status: status).all}
 
@@ -25,6 +26,37 @@ class Order < ActiveRecord::Base
 
 		def find_by_status status
 			self.where(status: status).all
+		end
+
+		def find_by_value sign, value
+			value = Money.parse("$#{value}").cents
+			orders = Order.all.select do |order|
+				case sign
+				when 'less' 
+					order.total_price.cents < value
+				when 'more'
+					order.total_price.cents > value
+				when 'equal'
+					order.total_price.cents == value
+				end
+			end
+			orders
+		end
+
+		def find_by_date date, date_value
+			date_params = date_value.split(',').map(&:to_i)
+			date_parsed = Date.new *date_params
+			sign = case date 
+			when 'less' then '<'
+			when 'more' then '>'
+			when 'equal' then '='
+			end
+			Order.where("created_at #{sign} ?", date_parsed).all
+		end
+
+		def find_by_email email
+			user = User.where(email: email).first
+			user.orders if user
 		end
 
 		def count_by_status status
@@ -55,12 +87,23 @@ class Order < ActiveRecord::Base
 	end
 
 	def total_price
-		self.products.reduce(0){|sum, product| sum+= product.price}
+		sum_price
+	end
+
+	def total_price_without_discount
+		sum_price :base_price
+	end
+
+	def sum_price price=:price
+		Product.total_price	self.products, price
 	end
 
 	def total_discount
-		price_without_discount = self.products.reduce(0){|sum, product| sum+= product.base_price}
-		100*total_price/price_without_discount
+		(total_price_without_discount.cents - total_price.cents)*100/total_price_without_discount.cents
+	end
+
+	def has_discount?
+		self.products.any?(&:on_discount?)
 	end
 
 	def transfer_products 
@@ -69,10 +112,9 @@ class Order < ActiveRecord::Base
 			self.user.remove product: product
 			product.retire
 		end
-		## TODO: address
-		self.address = self.user.address
 	end
 
+	
 	STATUSES.each do |method_name, stat|
 		define_method method_name do
 			self.status = stat
@@ -84,7 +126,7 @@ class Order < ActiveRecord::Base
 	def add param
 		if param[:product]
 			product = param[:product]
-			self.order_products << OrderProduct.convert(product, product.quantity_for(self.user))
+			self.order_products << OrderProduct.convert(product, (product.quantity_for(self.user) || 1))
 		end
 	end
 	

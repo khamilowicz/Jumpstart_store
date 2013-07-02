@@ -39,10 +39,10 @@ shared_examples_for "user" do
 
     context "sees sale prices" do
       before(:each) do
-        @price = 150.60
+        @price = Money.parse("$150.60")
         @discount = 50
         product = @products.first
-        product.price = @price
+        product.base_price = @price
         product.on_discount @discount
         product.save
         visit products_path
@@ -50,7 +50,7 @@ shared_examples_for "user" do
 
       it {should have_content("$#{@price}")}
       it {should have_content("$#{@discount*@price.to_f/100}")}
-      it {should have_content("You save #{@discount}%!")}
+      it {should have_content("You pay only #{@discount}%!")}
     end
 
     context "go to product page" do
@@ -92,9 +92,7 @@ shared_examples_for "user" do
        before(:each) do
         click_link @categories.first
       end 
-      it {should have_selector('.category', text: @categories.first), "#{page.find("body").native}"}
       it {should have_short_product(@products.first)}
-      it {should_not have_selector('.category', text:  @categories.last)}
       it {should_not have_short_product(@products.last)}
     end
 
@@ -103,8 +101,6 @@ shared_examples_for "user" do
       click_link @categories.last 
     end 
 
-    it {should have_selector('.category', text: @categories.last)}
-    it {should_not have_selector('.category', text: @categories.first)}
     it {should have_short_product(@products.last)}
     it {should have_short_product(@products.first)}
   end
@@ -120,7 +116,7 @@ context "while viewing his cart" do
   it {should have_content("cart")}
   it {should have_short_product(@product)}
 
-  context "removes a product from his cart", js: true do 
+  context "removes a product from his cart" do 
     before(:each) do
       within(".product.#{@product.title_param}"){ click_link 'X'}
     end

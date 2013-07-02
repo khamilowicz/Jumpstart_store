@@ -5,9 +5,8 @@ class Cart < ActiveRecord::Base
 		ProductUser.joins(:product).where(user_id: self.user, in_cart: true).all.collect(&:product)
 	end
 
-  def total
-    self.products.reduce(0){|sum, p| sum+=p.price}
-    
+  def total_price
+    Product.total_price(self.products)
   end
 	
 end

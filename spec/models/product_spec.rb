@@ -2,198 +2,129 @@ require 'spec_helper'
 
 describe Product do
 
-	context "to be valid" do
+  include MoneyRails::TestHelpers
+
+  it{ should validate_presence_of(:title)}
+  it{ should validate_uniqueness_of(:title)}
+  it{ should validate_presence_of(:description)}
+  it{ should allow_value(1).for(:base_price)}
+  it{ monetize(:base_price).should be_true}
+  it{ monetize(:price).should be_true}
+  # it{ should_not allow_value(1.101).for(:base_price)}
+  # it{ should_not allow_value(-1).for(:base_price).with_message("base_price_cents must be greater than 0 (-100)")}
+  # it{ should_not allow_value('some string').for(:base_price)}
+  it{ should_not allow_value(nil).for(:base_price_cents)}
+  it{ should respond_to(:price)}
+  it{ should respond_to(:quantity)}
+  it{ FactoryGirl.create(:product).quantity.should eq(1)}
+
+  context "concerning categories" do
+
+    subject { FactoryGirl.create(:product)}
+
     before(:each) do
-      @product = FactoryGirl.create(:product)     
+      subject.add category: "Category_1"
+    end
+    describe "#add_to_category" do
+      its(:list_categories){should include("Category_1")}
     end
 
-    context "must have" do 
+    describe "#list_categories" do
+      before(:each) do
+        Category.get_by_name "Category_2"
+      end
+      its(:list_categories){should include("Category_1")}
+      its(:list_categories){should_not include("Category_2")}
+    end
+  end
 
-      it "a title" do
-        @product.title = ''
-        @product.should_not be_valid
-        @product.title = 'Product title'
-        @product.should be_valid
+  context "concerning reviews" do
+
+    it{ should have_many(:reviews)}
+    it{ should respond_to(:rating)}
+    its(:rating){should eq(0)}
+
+    describe "reviews" do
+      let(:review_1){FactoryGirl.build(:review, note: 5)}
+      let(:review_2){FactoryGirl.build(:review, note: 1)}
+
+      it{ expect{ subject.add review: review_1}.to change{subject.rating}.from(0).to(5)}
+      it{ expect{ subject.add review: review_2; subject.add review: review_1}.to change{subject.rating}.from(0).to(3)}
+      it{ expect{ subject.add review: review_1; 
+        subject.add review: review_2;
+        subject.add review: review_1
+        }.to change{subject.rating}.from(0).to(3.5)
+      }
+    end
+
+
+    describe ".on_sale" do
+      it{ should_not be_on_sale }
+
+      it{ expect{ subject.start_selling}.to change{subject.on_sale?}.from(false).to(true)}
+      it{ subject.start_selling; expect{ subject.retire}.to change{subject.on_sale?}.from(true).to(false)}
+
+      describe ".find_on_sale" do
+        let(:product){FactoryGirl.create(:product, on_sale: false)}
+        subject{Product}
+
+        its(:find_on_sale){ should_not include(product)}
+        its(:find_on_sale){ product.start_selling; should include(product)}
       end
 
-      it "description" do 
-       @product.description = ''
-       @product.should_not be_valid
-       @product.description = 'Product description'
-       @product.should be_valid
-     end
-
-     it "price" do
-      @product.should_not be_nil
-
-     end
-
-
-    it "unique title" do
-      product_2 = FactoryGirl.build(:product, title: @product.title)
-      product_2.should_not be_valid
-      product_2.title = "Product 2"
-      product_2.should be_valid
     end
 
+    describe "price" do
+      let(:product){ FactoryGirl.create(:product)}
 
-    it "price which is a valid decimal numeric value and greater than zero" do
-     @product.price = nil
-     @product.price.should == 0.0
-     @product.should_not be_valid
-     @product.price = 'shabada'
-     @product.should_not be_valid
-     @product.price = 19.432
-     @product.should_not be_valid
-     @product.price = -10.01
-     @product.should_not be_valid
-     @product.price = 19.43
-     @product.price.should == 19.43
-     @product.should be_valid
-   end
-
-   it "quantity, which is by default 1" do
-    @product.quantity = nil
-    @product.should be_valid
-    @product.quantity = -2
-    @product.should_not be_valid
-    @product.quantity = 2.3
-    @product.quantity.should == 2
-    @product.quantity = 2
-    @product.should be_valid
-  end
-end
-
-context "concerning categories" do
-  describe ".add_to_category" do
-    it "can take category name" do
-      @product.add category: "Category_1"
-      @product.list_categories.should include("Category_1")
+      it{ (product.price + product.price).cents.should eq(200) }
+      it{ (product.price + product.price).should eq(Money.new(200, "USD")) }
     end
 
-  end
+    describe "discounts" do
+      let(:product){FactoryGirl.build(:product)}
+      
+      it{ expect{product.on_discount 50}.to change{
+        product.price
+        }.from(product.base_price).to(product.base_price/2)
+      }
 
-  describe ".list_categories" do
-    it "gets only names of categories the product belongs to" do
-      @product.add category: "Category_1"
-      category_2 = Category.get_by_name "Category_2"
-      @product.list_categories.should include("Category_1")
-      @product.list_categories.should_not include("Category_2")
+      it{ expect{product.on_discount 50; product.off_discount}.to_not change{
+        product.price
+        }.from(product.base_price).to(product.base_price/2)
+      }
+
     end
   end
-
 end
 
-context "concerning reviews" do
-  describe "reviews" do
-    before(:each) do
-      @review_1 = FactoryGirl.build(:review, note: 5)
-      @review_2 = FactoryGirl.build(:review, note: 1)
-    end
+describe "#users" do
 
-    it "has reviews" do
-     @product.add review: @review_1
-     @product.reviews.should include(@review_1)
-   end
+  let(:product){FactoryGirl.create(:product)}
+  let(:user){FactoryGirl.create(:user)}
+  subject{product}
 
-   it "has raiting, based on reviews" do
-    @product.rating.should == 0
-
-    @product.add review: @review_1
-    @product.rating.should == 5
-
-    @product.add review: @review_2
-    @product.rating.should == 3
-  end
-
-  it "rating can only by integer or half" do
-   @product.add review: @review_1
-   @product.add review: @review_1
-   @product.add review: @review_2
-   @product.rating.should == 3.5
- end
+  its(:users){ should be_empty}
+  its(:users){ user.add product: product; should include(user)}
 end
 
-describe ".on_sale" do
-  it "by default is not on sale" do
-    product = Product.new
-    product.should_not be_on_sale
-  end
-
-  it "can be set to sale" do
-    @product.start_selling
-    @product.should be_on_sale
-  end
-
-  it "can be retired from selling" do
-    @product.start_selling
-    @product.retire
-    @product.should_not be_on_sale
-  end
-
-  it "can be found by sale status" do
-    @product.retire
-    @product.save
-    Product.find_on_sale.should_not include(@product)
-    @product.start_selling
-    @product.save
-    Product.find_on_sale.should include(@product)
-  end
+describe "#title_param" do
+  subject{ FactoryGirl.build(:product, title: "this is product")}
+  its(:title_param) {should eq('this-is-product') }
 end
 
-describe "discounts" do
-  it "can be discounted" do
-   @product.price.should == @product.base_price
-   @product.on_discount 50
-   @product.price.should == 0.5*@product.base_price
- end
+describe "#quantity_for" do
+  let(:product){ FactoryGirl.create(:product, quantity: 3) }
+  let(:user){ FactoryGirl.create(:user)}
 
- it "can be put off discount" do
-   @product.price.should == @product.base_price
-   @product.on_discount 50
-   @product.price.should == 0.5*@product.base_price
-   @product.off_discount
-   @product.price.should == @product.base_price
- end
+  it{ expect{user.add product: product}.to change{product.quantity_for(user)}.from(0).to(1)}
 end
 
-# describe ".in_cart?" do
-#   it "tells if product is in user's cart" do
-#     user = FactoryGirl.create(:user)
-# user_2 = FactoryGirl.create(jjjj:user)
-#     product = FactoryGirl.create(:product, :on_sale)
-#     user.add_product product
-# product.in_cart?(user).should be_true
-# product.in_cart?(user_2).should be_false
+describe "#search" do
+  let(:product_searched){FactoryGirl.create(:product, description: "Some text")}
+  let(:product_not_searched){FactoryGirl.create(:product, description: "Other text")}
+  subject{ Product.search("Some", load: true) }
 
-end
-end
-
-describe ".users" do
-  it "show users having it in theirs carts" do
-    product = FactoryGirl.create(:product, :on_sale)
-    user = FactoryGirl.create(:user)
-    user.add product: product
-    product.users.first.should == user
-  end
-end
-
-describe ".title_param" do
-  it 'returns title as param string' do
-    product = FactoryGirl.build(:product, title: "this is product")
-    product.title_param.should == 'this-is-product'
-  end
-end
-
-describe ".quantity_for" do
-  it "returns quantity of product for given user" do
-    product = FactoryGirl.create(:product, :on_sale, quantity: 3)
-    user = FactoryGirl.create(:user)
-    product.quantity_for(user).should == 0
-    user.add product: product
-    product.quantity_for(user).should == 1
-    user.add product: product
-    product.quantity_for(user).should == 2
-  end
-end
+  its(:results){ should include(product_searched)}
+  its(:results){ should_not include(product_not_searched)}
 end

@@ -7,30 +7,45 @@ FactoryGirl.define do
     sequence(:email){|n| "#{n}@gmail.com"}
     password 'secret'
     password_confirmation 'secret'
+    address "Some address"
 
     trait :guest do
-        guest true
+      guest true
     end
 
     trait :logged do
-        guest false
+      guest false
     end
 
     trait :admin do
     	admin true 
-        guest false
+      guest false
     end
-    
-    trait :with_order do
-      after(:build) do |instance|
-       instance.orders << FactoryGirl.build(:order, :with_products)
-   end
-end
 
-trait :with_empty_order do
+    trait :with_products do 
+      ignore do 
+        number_of_products 3
+      end
+
+      after(:create) do |user, evaluator|
+        FactoryGirl.create_list(:product, evaluator.number_of_products).each do |product|
+          user.add product: product
+        end
+      end
+    end
+
+  end
+
+
+  trait :with_order do
+    after(:build) do |instance|
+     instance.orders << FactoryGirl.build(:order, :with_products)
+   end
+ end
+
+ trait :with_empty_order do
   after(:build) do |instance|
    instance.orders << FactoryGirl.build(:order)
-end
-end
+ end
 end
 end

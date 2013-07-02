@@ -1,6 +1,6 @@
 class PaymillManager
   def self.transaction user, token, currency, description="New store"
-        amount = (user.cart.total*100).to_i
+        amount = user.cart.total_price.cents
     par = {
       amount: amount.to_s,
       currency: currency,

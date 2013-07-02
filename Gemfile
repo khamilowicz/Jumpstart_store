@@ -1,14 +1,17 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
+gem 'zeus'
+gem 'money-rails'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'paperclip'
 gem 'paymill'
+gem 'tire'
 
-gem 'vcr'
+# gem 'vcr'
 
 # in production environments by default.
 group :assets do
@@ -18,7 +21,7 @@ group :assets do
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 
   gem 'less-rails'
-  gem 'uglifier', '>= 1.0.3'
+  gem 'uglifier'
   gem 'compass-rails'
   gem 'twitter-bootstrap-rails'
 end
@@ -32,6 +35,10 @@ gem 'sqlite3'
   gem 'capybara_rails'
   gem 'delorean'
   gem 'guard-livereload'
+end
+
+group :test do
+  gem 'shoulda-matchers'
 end
 
 group :production do

@@ -1,0 +1,15 @@
+Search
+=form_for @search do |f|
+  =f.label :email
+  =f.text_field :email
+  =f.label :status
+  =f.select :status, Order.statuses.values.zip(Order.statuses.values), {include_blank: true}
+  =f.label :value
+  =f.select :value, %w{less more equal}.zip(%w{less more equal}), {include_blank: true}
+  =f.label :total_value
+  =f.text_field :total_value, {include_blank: true}
+  =f.label :date
+  =f.select :date, %w{less more equal}.zip(%w{less more equal}), {include_blank: true}
+  =f.label :date_value
+  =f.date_select :date_value
+  =f.submit "Search"

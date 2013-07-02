@@ -1,5 +1,18 @@
 require "spec_helper"
 
+  def create_order products=nil
+    products = FactoryGirl.create_list(:product, 1) unless products
+    user = FactoryGirl.create(:user)
+    products.each do |product|
+      user.add product: product
+    end
+    order = user.orders.build
+    order.address = user.address
+    order.transfer_products
+    order.save
+    order
+  end
+
 def add_products_to_cart products
   visit products_path
   products = [products] unless products.kind_of? Array
@@ -15,7 +28,7 @@ def login user
   click_button "Sign in"
 end
 
-def order_some_products products
+def order_some_products_for_real products
   add_products_to_cart products
   visit cart_path
   click_link "Order"
@@ -24,6 +37,20 @@ def order_some_products products
   fill_in :'card-expiry-month', with: 12
   fill_in :'card-year', with: 2020
   click_button "Buy"
+end
+
+def current_user
+ user
+end
+
+def order_some_products products
+  add_products_to_cart products
+  order = Order.new
+  order.user = current_user
+  order.transfer_products
+  order.address = "some address"
+  order.pay
+  order.save
 end
 
 def add_a_review review 
@@ -43,7 +70,7 @@ def create_new_product product
   fill_in "Title", with: product.title
   fill_in "Description", with: product.description
   fill_in "Price", with: product.price
-  attach_file("Photo", some_photo)
+  attach_file("assets_photos", some_photo)
   click_button "Submit"
 end
 

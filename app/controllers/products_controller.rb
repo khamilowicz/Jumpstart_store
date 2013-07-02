@@ -38,7 +38,7 @@ def create
 		@photos = params[:assets][:photos]
 		@photos.each do |value|
 			photo = Asset.create({photo: value})
-			@product.assets << photo
+			product.assets << photo
 		end
 
 		redirect_to products_path, notice: "Successfully created product"

@@ -27,6 +27,7 @@ class OrdersController < ApplicationController
 		if PaymillManager.transaction(current_user, params[:paymillToken], 'EUR')
 			@order = Order.new
 			@order.user = current_user
+			@order.address = params[:address]
 			@order.transfer_products
 			@order.pay
 		end
