@@ -1,7 +1,4 @@
-class Product < ActiveRecord::Base
-
-  include Tire::Model::Search
-  include Tire::Model::Callbacks
+class Product < ActiveRecord::Bas
 
   monetize :base_price_cents
   monetize :price_cents
