@@ -31,3 +31,4 @@
         =submit_tag 'Buy', class: 'submit-button btn btn-primary span4'
   .products
     = render partial: 'products/inline', collection: current_user.products_uniq, as: :product
+=javascript_include_tag "pages/paymill"

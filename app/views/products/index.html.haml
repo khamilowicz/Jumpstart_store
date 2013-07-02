@@ -1,2 +1,4 @@
 .products.span12
   =render partial: 'products/short', collection: @products, as: :product
+- content_for(:category_bar) do
+  =render 'menu/right'
