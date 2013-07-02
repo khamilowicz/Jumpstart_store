@@ -18,7 +18,7 @@ namespace :db do
       Product.create!(
         title: Faker::Lorem.sentence(rand(4)+1),
         description: Faker::Lorem.paragraph(3),
-        base_price: "#{rand(100)}.#{rand(100)}",
+        base_price: Money.new(rand(10000), "USD"),
         discount: 100,
         quantity: rand(20),
         on_sale: true
@@ -38,7 +38,7 @@ namespace :db do
 
     5.times do 
       Category.create!(
-        name: "Category #{Faker::Lorem.word}"
+        name: "#{Faker::Lorem.word}"
         )
     end 
 

@@ -326,5 +326,5 @@ DEPENDENCIES
   therubyracer
   tire
   twitter-bootstrap-rails
-  uglifier (>= 1.0.3)
+  uglifier
   zeus
