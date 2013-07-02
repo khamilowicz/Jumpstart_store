@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
-gem 'zeus'
 gem 'money-rails'
 
 # Bundle edge Rails instead:
@@ -28,6 +27,7 @@ end
 
   gem 'faker'
 group :test, :development do
+gem 'zeus'
 gem 'sqlite3'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
@@ -35,6 +35,9 @@ gem 'sqlite3'
   gem 'capybara_rails'
   gem 'delorean'
   gem 'guard-livereload'
+gem 'pry-rails'
+gem 'pry-plus'
+gem 'pry-stack_explorer'
 end
 
 group :test do
@@ -54,9 +57,6 @@ gem 'launchy'
 gem 'therubyracer'
 
 gem 'simplecov', require: false, group: :test
-gem 'pry-rails'
-gem 'pry-plus'
-gem 'pry-stack_explorer'
 
 
 gem 'jquery-rails'
