@@ -1,8 +1,11 @@
 require 'spec_helper'
 
 describe Order do
+
   context "to be valid" do
-    subject{ FactoryGirl.create(:order)}
+    # subject{ FactoryGirl.create(:order)}
+    let(:order){ create_order }
+    subject{ order}
 
     it{ should belong_to(:user)}
     it{ should have_many(:order_products)}
@@ -25,13 +28,15 @@ describe Order do
   end
 
   describe ".all_by_status" do
-   let(:order_can){ FactoryGirl.create(:order) }
-   let(:order_sent){ FactoryGirl.create(:order) }
+   let!(:order_can){ create_order }
+   let!(:order_sent){ create_order }
 
    before do
     order_can.cancel
     order_sent.is_sent
   end
+
+  it{ Order.all.should include(order_can, order_sent)}
 
   it{
     Order.all_by_status(:shipped).
@@ -44,29 +49,25 @@ describe Order do
 end
 
 describe "total  price and total discount" do
-  subject{ Order.new }
-  let(:products){FactoryGirl.create_list(:product,3, price: 1)}
-  before do
-    subject.products = products
-  end
-
-  it{ subject.total_price.should eq(3)}
-
+  let(:price){ Money.parse("$1") }
+  let(:products){FactoryGirl.create_list(:product,3, base_price: price.cents)}
+  
   it{ 
     expect{ products.each{|p| p.on_discount 50}}.
-    to change{ subject.total_price}.
-    from(3).
-    to(1.5)
+    to change{ create_order(products).total_price }.
+    from(Money.parse(price*3)).
+    to(Money.parse(price*3/2))
   }
+
   it{ 
     expect{ products.each{|p| p.on_discount 50}}.
-    to change{ subject.total_discount}.
+    to change{ create_order(products).total_discount}.
     from(0).
     to(50)
   }
   it{ 
     expect{ products.each{|p| p.on_discount 50}}.
-    to change{ subject.has_discount?}.
+    to change{ create_order(products).has_discount?}.
     from(false).
     to(true)
   }
@@ -90,44 +91,40 @@ describe "products" do
     its(:quantity){should_not eq(3)}
     its(:quantity){should eq(1)}
   end
+
 end
 
 context "searching" do
   describe ".find_by_value" do
 
-    let(:products_price_10){ FactoryGirl.create_list(:product, 3, price: 10)}
-    let(:products_price_5){ FactoryGirl.create_list(:product, 2, price: 5)}
-    let(:order_price_30){ FactoryGirl.create(:order) }
-    let(:order_price_10){ FactoryGirl.create(:order) }
+    let(:price_10){ Money.parse("$10")}
+    let(:price_5){ Money.parse("$5")}
 
-    before do
-      products_price_10.each do |product|
-        order_price_30.add product: product
-      end
-      products_price_5.each do |product|
-        order_price_10.add product: product
-      end
-    end
+    let(:products_price_10){ FactoryGirl.create_list(:product, 3, base_price: price_10.cents)}
+    let(:products_price_5){ FactoryGirl.create_list(:product, 2, base_price: price_5.cents)}
 
-    it{order_price_30.total_price.should eq(30)}
-    it{order_price_10.total_price.should eq(10)}
+    let(:order_price_30){ create_order products_price_10  }
+    let(:order_price_10){ create_order products_price_5  }
+
+    it{order_price_30.total_price.should eq(price_10*3)}
+    it{order_price_10.total_price.should eq(price_5*2)}
 
     describe "more" do
-      subject{ Order.find_by_value('more', '20')}
+      subject{ Order.find_by_value('more', '$20')}
 
       it{ should include(order_price_30) }
       it{ should_not include(order_price_10) }
     end
 
     describe "less" do
-      subject{ Order.find_by_value('less', '20')}
+      subject{ Order.find_by_value('less', '$20')}
 
       it{ should_not include(order_price_30) }
       it{ should include(order_price_10) }
     end
 
     describe "equal" do
-      subject{ Order.find_by_value('equal', '10')}
+      subject{ Order.find_by_value('equal', '$10')}
 
       it{ should_not include(order_price_30) }
       it{ should include(order_price_10) }

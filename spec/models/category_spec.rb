@@ -57,8 +57,8 @@ describe "total price" do
 
 
   let!(:category){ Category.get 'total price'}
-  let!(:product_1){ FactoryGirl.build(:product, price:'1.00')}
-  let!(:product_2){ FactoryGirl.build(:product, price: '2.00')}
+  let!(:product_1){ FactoryGirl.build(:product, base_price: 100)}
+  let!(:product_2){ FactoryGirl.build(:product, base_price: 200)}
 
   it{
    expect{ category.add product: product_1 }.
@@ -78,9 +78,10 @@ describe "concerning putting on sale" do
 
   let(:category_name){ "Category name"}
   let(:category){Category.get(category_name)}
+  let(:product_price){ Money.parse("$4")}
 
   before do
-    FactoryGirl.create_list(:product, 2, :not_on_sale, price: 2).each do |product|
+    FactoryGirl.create_list(:product, 2, :not_on_sale, base_price: 200).each do |product|
       product.add category: category_name
     end
   end
@@ -101,7 +102,7 @@ describe "concerning putting on sale" do
   describe "discount" do
     before {category.start_selling}
 
-    it{ expect{ category.discount 50}.to change{category.total_price}.from(4).to(2)}
+    it{ expect{ category.discount 50}.to change{category.total_price}.from(product_price).to(product_price/2)}
   end
 end
 end

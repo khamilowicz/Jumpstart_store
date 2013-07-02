@@ -5,8 +5,8 @@ describe "search" do
  context "finds orders by" do
   context "status" do
 
-    let(:order_pending ){ FactoryGirl.create(:order, status: 'pending')}
-    let(:order_cancel){ FactoryGirl.create(:order, status: 'cancelled')}
+    let(:order_pending ){ create_order}
+    let(:order_cancel){order = create_order; order.cancel; order}
     subject{Search.find({status: 'pending'})}
 
     it{ should include(order_pending)}
@@ -15,8 +15,8 @@ describe "search" do
 
   context "value" do
 
-    let(:product_over_100){ FactoryGirl.create(:product, price: 110)}
-    let(:product_below_100){ FactoryGirl.create(:product, price: 90)}
+    let(:product_over_100){ FactoryGirl.create(:product, base_price: 11000)}
+    let(:product_below_100){ FactoryGirl.create(:product, base_price: 9000)}
 
     let(:order_below_100){ FactoryGirl.create(:order)}
     let(:order_over_100){ FactoryGirl.create(:order)}

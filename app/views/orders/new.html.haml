@@ -1,7 +1,7 @@
 .order_new
   %h2 Order page
   .stats
-    %h3.total= "Total for order: $#{current_user.cart.total}"
+    %h3.total= "Total for order: $#{current_user.cart.total_price}"
   .span12.form_order
     = form_tag create_orders_path, id: 'payment-form', method: :post do
       .payment-errors    
@@ -10,7 +10,7 @@
       .row
         .span6=text_area_tag :address, current_user.address, {class: 'address', rows: 2}
       =fields_for 'transaction' do |f|
-        =f.hidden_field 'card-amount-int', { class: 'card-amount-int', value: current_user.cart.total.to_i}
+        =f.hidden_field 'card-amount-int', { class: 'card-amount-int', value: current_user.cart.total_price.cents.to_i}
         =f.hidden_field 'card-currency', {class: 'card-currency', value: 'EUR'}
         .row
           .span6=f.label 'card-number', "Card number", {placeholer: 4111111111111111}

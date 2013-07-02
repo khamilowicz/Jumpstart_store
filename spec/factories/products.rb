@@ -4,33 +4,42 @@ FactoryGirl.define do
   factory :product do
     sequence(:title){|x| "Product #{x}"}
     sequence(:description ){|x| "Description #{x}"}
-    base_price '1.00'
+    
     discount 100
     quantity 1
     on_sale true
 
-    trait :with_photo do
-     sequence(:photo){|x| "http://Photo.com/#{x}"} 
-   end
-
-   trait :not_on_sale do
-    on_sale false
-  end
-
-   trait :on_sale do
-    after(:build) do |product|
-      product.start_selling
-    end
-  end
-
-  trait :with_category do
     ignore do
-      category_name "Category 1" 
-    end
-     
-    after(:build) do |product, evaluator|
-     product.add category: evaluator.category_name
+     base_price 100
    end
+
+   after(:build) do |product, evaluator|
+
+    product.base_price = Money.new(evaluator.base_price, "USD")
+  end
+
+  trait :with_photo do
+   sequence(:photo){|x| "http://Photo.com/#{x}"} 
  end
+
+ trait :not_on_sale do
+  on_sale false
+end
+
+trait :on_sale do
+  after(:build) do |product|
+    product.start_selling
+  end
+end
+
+trait :with_category do
+  ignore do
+    category_name "Category 1" 
+  end
+
+  after(:build) do |product, evaluator|
+   product.add category: evaluator.category_name
+ end
+end
 end
 end

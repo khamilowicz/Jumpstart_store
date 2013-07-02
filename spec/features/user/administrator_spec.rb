@@ -3,39 +3,41 @@ require "spec_helper"
 
 describe "Administrator" do
 
-  before(:each) do
-    @admin = FactoryGirl.create(:user, :admin)
+  let(:user){FactoryGirl.create(:user, :admin) }
+
+  before do
     visit '/'
-    login @admin
+    login user
   end
 
   subject {page}
   context "managing products" do
     describe "creates product" do
-     before(:each) do
-      @product = FactoryGirl.build(:product)
+
+      let(:product){ FactoryGirl.build(:product)}
+
+     before do
       visit new_product_path
-      create_new_product @product
+      create_new_product product
     end
 
-    it {@product.should_not be_nil}
+    it {product.should_not be_nil}
 
     it { should have_content("Successfully created product")}
-    it { should have_short_product(@product)}
-    it {@product.photo.should_not be_nil}
-    it {click_link @product.title; should have_link("Edit product")}
+    it { should have_short_product(product)}
+    it {product.photo.should_not be_nil}
+    it {click_link product.title; should have_link("Edit product")}
 
     describe "and modifies them" do 
-      before(:each) do
-       @product_2 = FactoryGirl.build(:product)
-       pro = Product.where(title: @product.title).first
-       visit edit_product_path(pro)
-       create_new_product @product_2
+       let(:product_2){ FactoryGirl.build(:product)}
+      before do
+       visit edit_product_path(1)
+       create_new_product product_2
      end
 
      it { should have_content("Successfully updated product")}
-     it { should_not have_short_product(@product)}
-     it { should have_short_product(@product_2)}
+     it { should_not have_short_product(product)}
+     it { should have_short_product(product_2)}
    end
  end
 
@@ -86,14 +88,18 @@ context "sees a listing of all orders" do
     login @user
 
     Order.statuses.each do |method, status|
-      products =  FactoryGirl.create_list(:product, 2)
-      order_some_products products
-      order = Order.last
-      order.send method
+      FactoryGirl.create_list(:product, 2).each do |product|
+        @user.add product: product
+      end
+      order = @user.orders.create
+      order.transfer_products
+      order.address = "some address"
+      order.save
+      Order.all.last.send method
     end
 
     click_link "Log out"
-    login @admin
+    login user
     visit orders_path
 
   end
@@ -198,14 +204,14 @@ context "he may" do
     it "for products" do
       put_on_sale @products_in_category
       visit product_path(@products_in_category.last) 
-      should have_selector(".price", text: (0.5*@products_in_category.last.price).to_s)
+      should have_selector(".price", text: (@products_in_category.last.price*0.5).to_s)
     end
 
     it "for categories" do
       put_on_sale @category
       @products_in_category.each do |product| 
        visit product_path(product) 
-       should have_selector(".price", text: (0.5*product.price).to_s), "#{page.find('body').native}"
+       should have_selector(".price", text: (product.price*0.5).to_s), "#{page.find('body').native}"
      end
    end
 
@@ -227,8 +233,8 @@ context "search order using a builder-style interface (like Google’s 'Advanced
   before(:each) do
     @pending_order = FactoryGirl.create(:order, status: 'pending', user: FactoryGirl.create(:user))
     @cancelled_order = FactoryGirl.create(:order, status: 'cancelled', user: FactoryGirl.create(:user))
-    product_11 = FactoryGirl.create(:product, price: 11)
-    product_9 = FactoryGirl.create(:product, price: 9)
+    product_11 = FactoryGirl.create(:product, base_price: 11)
+    product_9 = FactoryGirl.create(:product, base_price: 9)
     @pending_order.add product: product_11
     @pending_order.created_at = Date.new(2011, 10,10)
     @cancelled_order.add product: product_9
