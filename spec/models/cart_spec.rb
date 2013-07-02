@@ -2,17 +2,15 @@ require 'spec_helper'
 
 describe Cart do
 	describe ".remove_product" do
+		subject{ FactoryGirl.create(:user)}
+		let(:product){ FactoryGirl.create(:product, :on_sale)}
+
 		before(:each) do
-			@user = FactoryGirl.create(:user)
-			@product = FactoryGirl.create(:product, :on_sale)
-			@user.add product: @product
-			@user.remove product: @product
+			subject.add product: product
+			subject.remove product: product
 		end
 
-		it "removes product from cart" do
-			@user.products.should_not include(@product)
-			@user.cart.products.should_not include(@product)
-		end
-		
+		its(:products){ should_not include(product)}
+		it{ subject.cart.products.should_not include(product)}
 	end
 end
