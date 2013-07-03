@@ -4,8 +4,12 @@ class Product < ActiveRecord::Base
   monetize :price_cents
 
   attr_accessible :title, :description, :base_price_cents, :discount, :quantity, :on_sale, :price_cents, :base_price
+  
   validates :title, presence: true, uniqueness: true
+  
   validates_presence_of :description
+
+  validates_presence_of :base_price
   validates :base_price_cents, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
 
   validates :quantity, presence: true, numericality: {greater_than_or_equal_to: 0, integer: true}
@@ -24,12 +28,6 @@ class Product < ActiveRecord::Base
   after_create :create_asset
   accepts_nested_attributes_for :assets
 
-  # has_many :photos, through: :assets
-
-    # def in_cart? user
-  #   ProductUser.where(user: user.id, product: self.id).first.in_cart?
-  # end
-
   def self.total_price products, price=:price 
     products.reduce(Money.new(0, "USD")){ |sum, product| sum += product.send price}
   end
@@ -41,7 +39,6 @@ class Product < ActiveRecord::Base
   def photos
     Asset.where(product_id: self.id).all.map(&:photo)
   end
-
 
   def add param 
     add_review param[:review] if param[:review]
@@ -99,7 +96,6 @@ end
 def title_shorter
   self.title.length > 25 ? self.title[0,25] + '...' : self.title
 end
-
 
 def quantity_for user
   self.users.where(id: user.id).count
