@@ -14,7 +14,7 @@ namespace :db do
       admin: true
       )
 
-    25.times do 
+    40.times do 
       Product.create!(
         title: Faker::Lorem.sentence(rand(4)+1),
         description: Faker::Lorem.paragraph(3),
@@ -43,7 +43,7 @@ namespace :db do
     end 
 
     Category.all.each do |category|
-      Product.all.sample(6).each do |product|
+      Product.all.sample(11).each do |product|
         category.add product: product
       end
     end

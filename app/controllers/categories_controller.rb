@@ -6,9 +6,10 @@ class CategoriesController < ApplicationController
 
  def show
    @category = Category.find(params[:id])
+   @products = @category.products.page params[:page]
 
    respond_to do |format|
-    format.html { render :show}
+    format.html { render 'products/index'}
     format.js
   end
 end
