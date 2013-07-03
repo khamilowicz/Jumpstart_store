@@ -16,65 +16,89 @@ describe "Administrator" do
 
       let(:product){ FactoryGirl.build(:product)}
 
-     before do
-      visit new_product_path
-      create_new_product product
-    end
-
-    it {product.should_not be_nil}
-
-    it { should have_content("Successfully created product")}
-    it { should have_short_product(product)}
-    it {product.photo.should_not be_nil}
-    it {click_link product.title; should have_link("Edit product")}
-
-    describe "and modifies them" do 
-       let(:product_2){ FactoryGirl.build(:product)}
       before do
-       visit edit_product_path(1)
-       create_new_product product_2
+        visit new_product_path
+        create_new_product product
+      end
+
+      it {product.should_not be_nil}
+
+      it { should have_content("Successfully created product")}
+      it { should have_short_product(product)}
+      it {product.photo.should_not be_nil}
+      it {click_link product.title; should have_link("Edit product")}
+
+      describe "and modifies them" do 
+       let(:product_2){ FactoryGirl.build(:product)}
+       before do
+         visit edit_product_path(1)
+         create_new_product product_2
+       end
+
+       it { should have_content("Successfully updated product")}
+       it { should_not have_short_product(product)}
+       it { should have_short_product(product_2)}
      end
-
-     it { should have_content("Successfully updated product")}
-     it { should_not have_short_product(product)}
-     it { should have_short_product(product_2)}
    end
- end
 
- describe "creates categories" do 
-   before(:each) do
-    @category_name = "Category_1"
-    @product = FactoryGirl.create(:product)
-    add_to_category @product, @category_name
-    visit '/categories'
-    click_link @category_name
+   describe "creates categories" do 
+     before(:each) do
+      @category_name = "Category_1"
+      @product = FactoryGirl.create(:product)
+      add_to_category @product, @category_name
+      visit '/categories'
+      click_link @category_name
+    end
+
+    it {should have_content(@category_name)}
+    it {should have_short_product(@product)}
   end
 
-  it {should have_content(@category_name)}
-  it {should have_short_product(@product)}
-end
 
+  describe "assigns products to catgories" do
+    before(:each) do
+      categories = FactoryGirl.create_list(:category, 3)
+      @add_to_product = categories[0,2]
+      @not_added = categories[2]
+      @products = FactoryGirl.create_list(:product, 4)
 
-describe "assigns products to catgories" do
-  before(:each) do
-    categories = FactoryGirl.create_list(:category, 3)
-    @add_to_product = categories[0,2]
-    @not_added = categories[2]
-
-    @product = FactoryGirl.create(:product)
-    visit product_add_to_category_path(@product)
-  end
-
-  it "assign to more than one category" do
-    @add_to_product.each do |category|
-      check category.name 
+      @product = @products.first
+      visit product_add_to_category_path(@product)
     end
-    click_button 'Submit'
-    visit product_path(@product)
-    @add_to_product.each do |category|
-      should have_content(category.name)
+
+    it "assign to more than one category" do
+      @add_to_product.each do |category|
+        check category.name 
+      end
+      click_button 'Submit'
+      visit product_path(@product)
+      @add_to_product.each do |category|
+        should have_content(category.name)
+      end
+      within('.categories'){should_not have_content(@not_added.name)}
     end
-    within('.categories'){should_not have_content(@not_added.name)}
+
+    describe "assigns many products to many categories" do
+      before do
+        visit manage_categories_path
+        
+        @products[0,2].each do |product|
+          check product.title
+        end
+        @add_to_product.each do |category|
+          check category.name
+        end
+        find('form input[name="commit"]').click
+      end
+
+      it 'should join products and categories' do
+       @products[0,2].each do |product|
+        product.categories.should eq(@add_to_product)
+      end
+    end
+
+
+
   end
 end
 
