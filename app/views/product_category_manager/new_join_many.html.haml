@@ -1,0 +1,7 @@
+= render partial: 'product_category_manager/info', locals: { pcm: @product_category_manager} unless @product_category_manager.empty?
+= simple_form_for @product_category_manager do |f|
+  = f.button :submit, "Join"
+  .row
+    .span1
+    .span6= f.input :product, as: :check_boxes, collection: Product.all
+    .span5= f.input :category, as: :check_boxes, collection: Category.all

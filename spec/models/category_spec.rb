@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe Category do
 
+  let(:name){ "Category name"}
+  let!(:category){ Category.get name}
   describe ".get" do
-    let(:name){ "Category name"}
-    let!(:category){ Category.get name}
 
     subject{ category}
 
@@ -22,6 +22,21 @@ describe Category do
 
    describe "class.list_categories" do
     it{ Category.list_categories.should include(c1,c2,c3) }
+  end
+
+  describe "add" do
+   let(:product){ FactoryGirl.create(:product)}
+
+   before do
+    category.add product: product
+  end
+
+
+     context "adds unique products" do
+      it {expect{ category.add product: product}.
+      not_to change{ category.products.size} }
+    end
+    
   end
 
   describe "#products" do
@@ -54,7 +69,6 @@ describe Category do
 end
 
 describe "total price" do
-
 
   let!(:category){ Category.get 'total price'}
   let!(:product_1){ FactoryGirl.build(:product, base_price: 100)}

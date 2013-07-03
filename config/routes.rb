@@ -54,6 +54,8 @@ NewStore::Application.routes.draw do
 
 
   get '/categories' => 'categories#index'
+  get '/categories/manage' => 'product_category_manager#new_join_many', as: 'manage_categories'
+  post '/categories/manage' => 'product_category_manager#join_many', as: 'product_category_managers'
   get '/categories/:id' => 'categories#show', as: 'category'
 
 

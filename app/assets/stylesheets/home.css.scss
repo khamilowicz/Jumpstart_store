@@ -21,33 +21,34 @@ body,html {
     overflow: hidden;
     background-size: 300%;
 
-
     .image{
       min-height: 30em;
     }
     overflow: visible;
     .caption.title{
 
+      $caption_margin: 0.3em;
+
       &#t0{
-        left: 0em;
         top: 0.2em;
+        left: $caption_margin + 0em;
       }
 
       &#t1{
         top: 1em;
-        left: 0.3em;
+        left: $caption_margin + 0.3em;
       };
       &#t2{
         top: 2em;
-        left: -0.3em;
+        left: $caption_margin -0.2em;
       };
       &#t3{
         top: 3em;
-        left: 0.3em;
+        left: $caption_margin + 0.3em;
       };
       &#t4{
         top: 4em;
-        left: -0.1em;
+        left: $caption_margin -0.1em;
       };
       color: red;
       position: absolute;

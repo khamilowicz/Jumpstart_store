@@ -13,6 +13,7 @@
 	<%- if flash[:notice] %>
 	<div class="notice alert alert-block alert-success fade in">
 		<%= flash[:notice] %>
+		<a class="close" data-dismiss="alert" href="#">&times;</a>
 	</div>
 	<%- end %>
 
@@ -22,7 +23,6 @@
 		<a class="close" data-dismiss="alert" href="#">&times;</a>
 	</div>
 	<% end %>
-
 
 	<div class="container">
 		<%= render 'menu/top_bar' %>
