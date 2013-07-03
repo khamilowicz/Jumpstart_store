@@ -1,4 +1,6 @@
+= paginate(@products)
 .products.span12
   =render partial: 'products/short', collection: @products, as: :product
+= paginate(@products)
 - content_for(:category_bar) do
   =render 'menu/right'

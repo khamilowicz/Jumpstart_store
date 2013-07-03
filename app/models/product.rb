@@ -1,5 +1,7 @@
 class Product < ActiveRecord::Base
 
+  paginates_per 9
+
   monetize :base_price_cents
   monetize :price_cents
 

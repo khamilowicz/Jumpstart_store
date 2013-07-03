@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
 
 	def index
-		@products = Product.find_on_sale.all
+		@products = Product.find_on_sale.page params[:page]
 	end
 
 	def new
