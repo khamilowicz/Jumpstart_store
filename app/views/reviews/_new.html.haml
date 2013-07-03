@@ -1,16 +1,14 @@
 .new_review
-  =form_for [product, review] do |f|
+  %h4 Review
+  =simple_form_for [product, review], defaults: { label: false} do |f|
     .row
       .span6
-        = f.label :title
-        = f.text_field :title
+        = f.input :title, placeholder: 'Title'
       .span1
-        = f.label :note
-        .note= f.select :note, options_for_select((1..5).zip((1..5)))
+        .note= f.input :note, placeholder: "Note"
     .row
       .span7
-        = f.label :body
-        = f.text_area :body
+        = f.input :body, placeholder: "Your opinion doesn't matter to us"
     .row
       .span2
-        = f.submit "Send review"
+        = f.button :submit, "Send review"

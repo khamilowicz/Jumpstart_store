@@ -9,9 +9,15 @@
         %li=link_to "Orders", orders_path
         -if current_user.admin?
           %li.divider-vertical
-          %li=link_to "Sales menu", sales_path
-          %li=link_to "Users", users_path
-          %li=link_to "Search", search_path
+          %li.dropdown
+            %a.dropdown-toggle{href: '#', data: {toggle: 'dropdown'}}
+              Dashboard
+              %b.caret
+            %ul.dropdown-menu
+              %li=link_to "Sales menu", sales_path
+              %li=link_to "Users", users_path
+              %li=link_to "Search", search_path
+              %li=link_to "New product", new_product_path
       %ul.nav.pull-right
         -if current_user.guest?
           %li.session_link=link_to "Log in", new_session_path 

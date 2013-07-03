@@ -1,15 +1,20 @@
-body {
-  margin:0;
+body,html {
+  height: 100%;
 }
+
+.container{
+  min-height: 100%;
+}
+
 
 .span3.big_picture_frame{
   margin-left: 0;
 }
 
 .big_product_container{
-position: fixed;
-height: 100%;
-width: inherit;
+  position: fixed;
+  height: 100%;
+  width: inherit;
   .big_product_image{
     min-height: 50em;
     position: relative;
@@ -20,12 +25,12 @@ width: inherit;
     .image{
       min-height: 30em;
     }
-overflow: visible;
+    overflow: visible;
     .caption.title{
 
       &#t0{
-      left: 0em;
-       top: 0.2em;
+        left: 0em;
+        top: 0.2em;
       }
 
       &#t1{
@@ -33,7 +38,7 @@ overflow: visible;
         left: 0.3em;
       };
       &#t2{
-                top: 2em;
+        top: 2em;
         left: -0.3em;
       };
       &#t3{
@@ -44,7 +49,7 @@ overflow: visible;
         top: 4em;
         left: -0.1em;
       };
-color: red;
+      color: red;
       position: absolute;
       font-size: 6em;
       line-height: 200%;
@@ -52,5 +57,17 @@ color: red;
       overflow-wrap: none;
       word-wrap: none;
     }
+  }
+}
+
+.footer{
+  padding: 2em;
+  height: 8em;
+  background-color: blue;
+  position: relative;
+  bottom: 0;
+
+  .some_link{
+    margin-bottom: 0.5em;
   }
 }

@@ -55,9 +55,9 @@ end
 
 def add_a_review review 
   within(".new_review"){
-    fill_in 'Title', with: review.title
-    fill_in 'Body', with: review.body
-    select(review.note.to_s, from: 'review_note')
+    fill_in 'review[title]', with: review.title
+    fill_in 'review[body]', with: review.body
+    fill_in( 'review_note', with: review.note.to_s)
   }
   click_button "Send review"
 end
@@ -66,12 +66,15 @@ end
 def some_photo
   "./spec/files/sean.jpeg"
 end 
+
 def create_new_product product
   fill_in "Title", with: product.title
   fill_in "Description", with: product.description
-  fill_in "Price", with: product.price
+  fill_in "Base price", with: product.price
   attach_file("assets_photos", some_photo)
-  click_button "Submit"
+
+  find('form input[name="commit"]').click
+  # click_button "Create Product"
 end
 
 def add_to_category product, category_name
