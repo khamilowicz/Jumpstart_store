@@ -13,7 +13,7 @@ class ProductCategoryManagerController < ApplicationController
   end
 
   def new_join_many
-    @product_category = ProductCategoryManager.new
+    @product_category_manager = ProductCategoryManager.new
   end
 
   def join_many
@@ -21,7 +21,7 @@ class ProductCategoryManagerController < ApplicationController
     @product_category_manager = ProductCategoryManager.new params[:product_category_manager]
     @product_category_manager.join
 
-    redirect_to controller: :categories, action: :index , notice: 'Successfully categorized products'
+    render :new_join_many, notice: 'Successfully categorized products'
   end
 
 

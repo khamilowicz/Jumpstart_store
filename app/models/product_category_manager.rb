@@ -13,6 +13,18 @@ class ProductCategoryManager
     end
   end
 
+  def products
+    Product.find(@product)
+  end
+
+  def categories
+    Category.find(@category)
+  end
+
+  def empty?
+    @product.nil? && @category.nil?
+  end
+
   def join
     Product.find(product).each do |product|
       Category.find(category).each do |category|

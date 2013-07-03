@@ -1,0 +1,8 @@
+= "Added #{pluralize(pcm.product.size, 'product')} :"
+- pcm.products.each do |product|
+  %ul
+    %li= product.title
+to
+- pcm.categories.each do |category|
+  %ul
+    %li= category.name
