@@ -6,7 +6,6 @@ describe "Review" do
     let(:user){ FactoryGirl.build(:user, first_name: "John", last_name: "Smith") }
     subject{FactoryGirl.create(:review, user: user)}
 
-    it{should validate_presence_of(:title)}
     it{ should allow_value("I liked it very much").for(:title)}
     it{should validate_presence_of(:body)}
     it{ should allow_value("I liked it very much").for(:body)}
