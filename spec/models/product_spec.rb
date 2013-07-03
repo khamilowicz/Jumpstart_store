@@ -96,35 +96,27 @@ describe Product do
 
     end
   end
-end
+  describe "#users" do
 
-describe "#users" do
 
-  let(:product){FactoryGirl.create(:product)}
-  let(:user){FactoryGirl.create(:user)}
-  subject{product}
+    let(:product){FactoryGirl.create(:product)}
+    let(:user){FactoryGirl.create(:user)}
+    subject{product}
 
-  its(:users){ should be_empty}
-  its(:users){ user.add product: product; should include(user)}
-end
+    its(:users){ should be_empty}
+    its(:users){ user.add product: product; should include(user)}
+  end
 
-describe "#title_param" do
-  subject{ FactoryGirl.build(:product, title: "this is product")}
-  its(:title_param) {should eq('this-is-product') }
-end
+  describe "#title_param" do
+    subject{ FactoryGirl.build(:product, title: "this is product")}
+    its(:title_param) {should eq('this-is-product') }
+  end
 
-describe "#quantity_for" do
-  let(:product){ FactoryGirl.create(:product, quantity: 3) }
-  let(:user){ FactoryGirl.create(:user)}
+  describe "#quantity_for" do
+    let(:product){ FactoryGirl.create(:product, quantity: 3) }
+    let(:user){ FactoryGirl.create(:user)}
 
-  it{ expect{user.add product: product}.to change{product.quantity_for(user)}.from(0).to(1)}
-end
+    it{ expect{user.add product: product}.to change{product.quantity_for(user)}.from(0).to(1)}
+  end
 
-describe "#search" do
-  let(:product_searched){FactoryGirl.create(:product, description: "Some text")}
-  let(:product_not_searched){FactoryGirl.create(:product, description: "Other text")}
-  subject{ Product.search("Some", load: true) }
-
-  its(:results){ should include(product_searched)}
-  its(:results){ should_not include(product_not_searched)}
 end

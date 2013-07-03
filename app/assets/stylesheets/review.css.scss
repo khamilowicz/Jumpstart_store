@@ -1,10 +1,10 @@
 .new_review{
   *{
     input#review_title{
-      min-width: 100%;
+      max-width: 100%;
     }
-    select#review_note{
-      max-width: 120%;
+    input#review_note{
+      max-width: 100%;
     }
     textarea#review_body{
       min-width: 100%;

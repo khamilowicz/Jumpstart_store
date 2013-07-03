@@ -9,7 +9,7 @@ class Search
     find_order params
  end
 
- def find_order params
+ def self.find_order params
   orders = Order.all
    orders &= Order.find_by_status params[:status] unless params[:status].blank?
    orders &= Order.find_by_value(params[:value], params[:total_value]) unless params[:value].blank?

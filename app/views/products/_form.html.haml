@@ -1,12 +1,8 @@
-=form_for product, :html => { :multipart => true } do |f|
-  =render partial: 'menu/errors', locals: {object: product}
-  = f.label :title
-  = f.text_field :title
-  = f.label :description
-  = f.text_area :description
-  = f.label :base_price, "Price"
-  = f.text_field :base_price
-  = f.label :photo
-  = fields_for :assets do |a|
-    = a.file_field :photos , multiple: true
-  = f.submit "Submit"
+=simple_form_for product do |f|
+  = f.button :submit, class: 'btn-primary btn'
+  = f.input :title
+  = f.input :description, input_html: {rows: 10}
+  = f.input :base_price
+  = f.input :quantity
+  = simple_fields_for :assets do |a|
+    = a.input :photos , as: :file, input_html: {multiple: true}, inline_label: true, require: false
