@@ -54,6 +54,6 @@ end
 private 
 
 def add_product product
-  self.products << product
+  self.products << product unless self.products.any?{|prod| prod == product}
 end
 end

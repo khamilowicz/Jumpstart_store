@@ -96,9 +96,6 @@ describe "Administrator" do
         product.categories.should eq(@add_to_product)
       end
     end
-
-
-
   end
 end
 

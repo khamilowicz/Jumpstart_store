@@ -1,4 +1,6 @@
 = simple_form_for @product_category do |f|
-  = f.input :product, as: :check_boxes, collection: Product.all
-  = f.input :category, as: :check_boxes, collection: Category.all
   = f.button :submit, "Join"
+  .row
+    .span1
+    .span6= f.input :product, as: :check_boxes, collection: Product.all
+    .span5= f.input :category, as: :check_boxes, collection: Category.all
