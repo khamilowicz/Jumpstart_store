@@ -1,8 +1,9 @@
-= "Added #{pluralize(pcm.product.size, 'product')} :"
-- pcm.products.each do |product|
-  %ul
-    %li= product.title
-to
-- pcm.categories.each do |category|
-  %ul
-    %li= category.name
+.info.alert.alert-info
+  = "Added #{pluralize(pcm.product.size, 'product')} :"
+  - pcm.products.each do |product|
+    %ul
+      %li= link_to product.title, product_path(product)
+  to
+  - pcm.categories.each do |category|
+    %ul
+      %li= link_to category.name, category_path(category)

@@ -5,7 +5,7 @@
       .span6
         = f.input :title, placeholder: 'Title'
       .span1
-        .note= f.input :note, placeholder: "Note"
+        .note= f.input :note, placeholder: "Note", input_html: {min: 1, max: 5}
     .row
       .span7
         = f.input :body, placeholder: "Your opinion doesn't matter to us"
