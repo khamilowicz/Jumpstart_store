@@ -79,6 +79,10 @@ describe User do
         expect{ subject.add product: product }.
         to_not change{ subject.product_quantity(product)}.
         by(1)
+        expect{ subject.remove product: product }.
+        to change{ subject.product_quantity(product)}.
+        by(1)
+
       end
     end
 
