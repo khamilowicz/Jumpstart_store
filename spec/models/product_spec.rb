@@ -18,6 +18,14 @@ describe Product do
   it{ should respond_to(:quantity)}
   it{ FactoryGirl.create(:product).quantity.should eq(1)}
 
+  describe "assets" do
+    
+    let(:product){ FactoryGirl.create(:product)}
+    subject{ product}
+    its(:assets){ should_not be_empty}
+    it{ product.assets.first.should_not be_nil}
+  end
+
   context "concerning categories" do
 
     subject { FactoryGirl.create(:product)}

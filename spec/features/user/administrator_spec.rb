@@ -25,7 +25,6 @@ describe "Administrator" do
 
       it { should have_content("Successfully created product")}
       it { should have_short_product(product)}
-      it {product.photo.should_not be_nil}
       it {click_link product.title; should have_link("Edit product")}
 
       describe "and modifies them" do 

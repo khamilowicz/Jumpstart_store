@@ -99,10 +99,6 @@ class User < ActiveRecord::Base
 	end
 
 	def remove_product product
-		pu = self.product_users.where(product_id: product.id).first
-		self.products.delete product
-		pu.destroy
+		ProductUser.where(user_id: self.id, product_id: product.id).first.delete
 	end
-
-
 end

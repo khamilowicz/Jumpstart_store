@@ -14,6 +14,7 @@ describe "guest" do
     it { should have_link("Log in")}
     it { should_not have_link("Log out")}
   end
+  
   it "can't checkout" do 
     product = FactoryGirl.create(:product)
 

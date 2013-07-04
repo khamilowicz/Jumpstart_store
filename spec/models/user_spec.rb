@@ -30,7 +30,8 @@ describe User do
   end
 
   it{ 
-    should ensure_length_of(:display_name).
+    # pending "Test doesn't work because of error message"
+    should ensure_length_of(:nick).
     is_at_least(2).
     is_at_most(32)
   }
@@ -79,10 +80,6 @@ describe User do
         expect{ subject.add product: product }.
         to_not change{ subject.product_quantity(product)}.
         by(1)
-        expect{ subject.remove product: product }.
-        to change{ subject.product_quantity(product)}.
-        by(1)
-
       end
     end
 
@@ -104,15 +101,15 @@ describe User do
         before(:each) do
           subject.remove product: product
         end
+
         its(:products){should_not include(product)}
         its(:products){should include(product_2)}
         it{ subject.cart.products.should_not include(product_3, product)}
         it{ subject.cart.products.should include(product_2)}
 
-
         it "returns product to magazine" do
           expect{ subject.remove product: product_2
-            }.to change{product.quantity}.by(1)
+            }.to change{product_2.quantity}.by(1)
           end
         end
       end
