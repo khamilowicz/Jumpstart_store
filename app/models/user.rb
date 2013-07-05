@@ -1,7 +1,6 @@
 class User < ActiveRecord::Base
 
 	attr_accessible :first_name, :last_name, :email, :password, :address, :password_confirmation, :admin
-
 	
 	validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, unless: :guest?
 	validates_uniqueness_of :email, unless: :guest?
@@ -9,7 +8,6 @@ class User < ActiveRecord::Base
 	validates :nick, length: {minimum: 2, maximum: 32}, allow_nil: true, unless: :guest?
 	validates_presence_of :password, unless: :guest?
 	validates :password, confirmation: true
-	# validates_presence_of :password_confirmation, unless: :guest?
 
 	has_many :product_users
 	has_many :products, through: :product_users
@@ -17,11 +15,6 @@ class User < ActiveRecord::Base
 	has_one :cart
 
 	after_create :create_cart
-
-
-	def guest?
-		self.guest
-	end
 
 	class << self
 
@@ -34,12 +27,14 @@ class User < ActiveRecord::Base
 		end
 
 		def create_guest
-			user = User.new
-			user.guest = true
-			user.save
-			user
+			new.make_guest
 		end
+	end
 
+	def make_guest
+		self.guest = true
+		self.save
+		self
 	end
 
 	def products_uniq 
@@ -71,10 +66,10 @@ class User < ActiveRecord::Base
 		remove_product param[:product]	if param[:product]
 	end
 
-
 	def product_quantity product
-		find_by_product(product).count
+		ProductUser.quantity(product, self)
 	end
+
 	def orders
 		admin? ? Order.where("user_id is not NULL") : super
 	end
@@ -91,14 +86,10 @@ class User < ActiveRecord::Base
 	private
 
 	def add_product product
-		if product.on_sale? && product.quantity > 0
-			pu = self.product_users.new
-			pu.product = product
-			pu.save
-		end
+		ProductUser.add product, self if product.on_sale?
 	end
 
 	def remove_product product
-		ProductUser.where(user_id: self.id, product_id: product.id).first.delete
+		ProductUser.remove product, self
 	end
 end

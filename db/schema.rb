@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130702125021) do
+ActiveRecord::Schema.define(:version => 20130704141803) do
 
   create_table "assets", :force => true do |t|
     t.integer  "product_id"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20130702125021) do
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
     t.boolean  "in_cart",    :default => false
+    t.integer  "quantity",   :default => 0
   end
 
   create_table "products", :force => true do |t|

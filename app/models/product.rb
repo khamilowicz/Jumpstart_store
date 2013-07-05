@@ -6,7 +6,7 @@ class Product < ActiveRecord::Base
   monetize :price_cents
 
   attr_accessible :title, :description, :base_price_cents, :discount, :quantity, :on_sale, :price_cents, :base_price
-  
+
   validates :title, presence: true, uniqueness: true
   
   validates_presence_of :description
@@ -103,9 +103,10 @@ def quantity_for user
   self.users.where(id: user.id).count
 end
 
-def quantity
-  in_carts = self.product_users.count
-  return(super.to_i - in_carts)
+def out_of_stock?
+  self.quantity == self.product_users.quantity
+  # in_carts = self.product_users.all.reduce(0){|sum, pu| sum+=pu.quantity }
+  # return(super - in_carts)
 end
 
 

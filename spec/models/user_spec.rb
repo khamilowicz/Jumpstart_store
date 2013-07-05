@@ -18,10 +18,13 @@ describe User do
     it{should validate_presence_of(:last_name)}
 
     its(:full_name){should eq("#{subject.first_name} #{subject.last_name}")}
+    its(:guest?){ should be_false}
   end
 
   context "who is guest" do
-    subject{FactoryGirl.create(:user, :guest)}
+    subject{ User.create_guest}
+
+    its(:guest?){ should be_true}
 
     it{ should allow_value(nil).for(:email)}
     it{ should allow_value(nil).for(:last_name)}
@@ -97,7 +100,7 @@ describe User do
         it{ subject.cart.products.should include(product, product_2)}
       end
 
-      describe ".remove product:" do 
+      describe ".remove product" do 
         before(:each) do
           subject.remove product: product
         end
@@ -106,6 +109,19 @@ describe User do
         its(:products){should include(product_2)}
         it{ subject.cart.products.should_not include(product_3, product)}
         it{ subject.cart.products.should include(product_2)}
+
+        describe "many times" do
+
+          before do
+            subject.add product: product
+            subject.add product: product
+
+            subject.remove product: product
+            subject.remove product: product_2
+          end
+
+          its(:products){ should eq([product])}
+        end
 
         it "returns product to magazine" do
           expect{ subject.remove product: product_2
