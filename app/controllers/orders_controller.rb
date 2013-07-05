@@ -41,7 +41,6 @@ class OrdersController < ApplicationController
 
 	def index
 		@orders = current_user.admin? ? Order.all : current_user.orders
-		# @orders = current_user.orders.all
 	end
 
 	def show

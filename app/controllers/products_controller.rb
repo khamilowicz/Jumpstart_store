@@ -48,7 +48,7 @@ def create
 end
 
 def show
-	@product = Product.find(params[:id])
+	@product_presenter = ProductPresenter.new Product.find(params[:id])
 end
 
 end

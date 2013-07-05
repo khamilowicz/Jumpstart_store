@@ -24,6 +24,11 @@ describe Product do
     subject{ product}
     its(:assets){ should_not be_empty}
     it{ product.assets.first.should_not be_nil}
+
+    describe "photos" do
+      it{should respond_to(:photos)}
+      its(:photos){ should have(1).item}
+    end
   end
 
   context "concerning categories" do
@@ -34,16 +39,16 @@ describe Product do
       subject.add category: "Category_1"
     end
     describe "#add_to_category" do
-      its(:list_categories){should include("Category_1")}
+      its(:categories){should include(Category.get "Category_1")}
     end
 
-    describe "#list_categories" do
-      before(:each) do
-        Category.get_by_name "Category_2"
-      end
-      its(:list_categories){should include("Category_1")}
-      its(:list_categories){should_not include("Category_2")}
-    end
+    # describe "#list_categories" do
+    #   before(:each) do
+    #     Category.get_by_name "Category_2"
+    #   end
+    #   its(:list_categories){should include("Category_1")}
+    #   its(:list_categories){should_not include("Category_2")}
+    # end
   end
 
   context "concerning reviews" do

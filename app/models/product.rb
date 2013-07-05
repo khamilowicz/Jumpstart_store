@@ -35,20 +35,16 @@ class Product < ActiveRecord::Base
   end
 
   def photo
-    self.assets.last.photo
+    self.assets.first.photo
   end
 
   def photos
-    Asset.where(product_id: self.id).all.map(&:photo)
+    Asset.photos_for(self)
   end
 
   def add param 
     add_review param[:review] if param[:review]
     add_to_category param[:category] if param[:category]
-  end
-
-  def list_categories
-    categories.map(&:name).join(',')
   end
 
   def rating

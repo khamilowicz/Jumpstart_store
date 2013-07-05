@@ -20,8 +20,10 @@ class Category < ActiveRecord::Base
     end
   end
 
-  def list_categories
-  	self.all
+  def list_categories item=nil
+    category_names = 
+      item ? item.categories.pluck(:name) : Category.pluck(:name)
+    category_names.join(', ')
   end
 
 end
