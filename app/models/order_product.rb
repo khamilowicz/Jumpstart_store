@@ -18,6 +18,15 @@ class OrderProduct < ActiveRecord::Base
     op
   end
 
+
+   def self.total_price price=nil
+    if price == 'base'
+      Money.new(self.joins(:product).sum("base_price_cents"), "USD")
+    else
+      Money.new(self.joins(:product).sum("base_price_cents * discount"), "USD")/100
+    end
+  end
+
   def subtotal
     self.quantity*self.price
   end

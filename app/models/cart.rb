@@ -2,11 +2,11 @@ class Cart < ActiveRecord::Base
 	belongs_to :user
 
 	def products
-		ProductUser.joins(:product).where(user_id: self.user, in_cart: true).all.collect(&:product)
+    self.user.products.joins(:product_users).where('product_users.in_cart' => true)
 	end
 
   def total_price
-    Product.total_price(self.products)
+    self.products.total_price
   end
 	
 end

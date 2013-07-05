@@ -5,7 +5,9 @@ class ProductUser < ActiveRecord::Base
 
   after_initialize :set_in_cart_status
 
-  validates_numericality_of :quantity, only_integer: true, greater_than_or_equal_to: 1
+  validates_numericality_of :quantity, 
+                            only_integer: true, 
+                            greater_than_or_equal_to: 1
   validates_presence_of :quantity
 
   class << self

@@ -26,6 +26,8 @@ namespace :db do
         )
     end
 
+    Product.all.sample(10).map{|p| p.on_discount rand(100)}
+
     4.times do
       password = Faker::Lorem.word
       User.create!(

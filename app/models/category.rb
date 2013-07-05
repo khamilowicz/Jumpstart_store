@@ -22,7 +22,7 @@ class Category < ActiveRecord::Base
 
   def list_categories item=nil
     category_names = 
-      item ? item.categories.pluck(:name) : Category.pluck(:name)
+    item ? item.categories.pluck(:name) : Category.pluck(:name)
     category_names.join(', ')
   end
 
@@ -38,7 +38,7 @@ end
 
 
 def total_price
- self.products.reduce(Money.new(0, "USD")){|sum, product| sum+=product.price}
+ self.products.total_price
 end
 
 def all_on_sale?

@@ -50,7 +50,7 @@ end
 
 describe "total  price and total discount" do
   let(:price){ Money.parse("$1") }
-  let(:products){FactoryGirl.create_list(:product,3, base_price: price.cents)}
+  let(:products){FactoryGirl.create_list(:product,3, base_price: 100)}
   
   it{ 
     expect{ products.each{|p| p.on_discount 50}}.

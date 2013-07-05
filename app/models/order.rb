@@ -86,16 +86,16 @@ class Order < ActiveRecord::Base
 		end
 	end
 
+	def sum_price price=nil
+		self.products.total_price price
+	end
+
 	def total_price
 		sum_price
 	end
 
 	def total_price_without_discount
-		sum_price :base_price
-	end
-
-	def sum_price price=:price
-		Product.total_price	self.products, price
+		sum_price 'base'
 	end
 
 	def total_discount

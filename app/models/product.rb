@@ -25,13 +25,20 @@ class Product < ActiveRecord::Base
   has_many :categories, through: :category_products
   has_many :reviews
 
+  has_one :order_product
+  has_one :order, through: :order_product
+
   has_many :assets
 
   after_create :create_asset
   accepts_nested_attributes_for :assets
 
-  def self.total_price products, price=:price 
-    products.reduce(Money.new(0, "USD")){ |sum, product| sum += product.send price}
+  def self.total_price price=nil
+    if price == 'base'
+      Money.new(self.sum("base_price_cents"), "USD")
+    else
+      Money.new(self.sum("base_price_cents * discount"), "USD")/100
+    end
   end
 
   def photo
@@ -129,10 +136,10 @@ def add_review review
   reviews << review
 end
 
-  def names_from_hash paramHash
-    names = []
-    names += paramHash[:new_category].split(',')
-    names += paramHash[:categories].values if paramHash[:categories]
-    names
-  end
+def names_from_hash paramHash
+  names = []
+  names += paramHash[:new_category].split(',')
+  names += paramHash[:categories].values if paramHash[:categories]
+  names
+end
 end

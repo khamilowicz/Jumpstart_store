@@ -122,6 +122,19 @@ describe Product do
     its(:users){ user.add product: product; should include(user)}
   end
 
+  describe "#total_price" do
+    let(:products){ FactoryGirl.create_list(:product, 5, base_price: 1)}
+    let(:user){ FactoryGirl.create :user}
+    before(:each) do
+      products.each do |p|
+        user.add product: p
+      end
+    end
+    subject{ user.products}
+    its(:total_price){ should eq(Money.new(5, "USD"))}
+    
+  end
+
   describe "#title_param" do
     subject{ FactoryGirl.build(:product, title: "this is product")}
     its(:title_param) {should eq('this-is-product') }

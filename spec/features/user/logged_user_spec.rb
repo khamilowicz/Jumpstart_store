@@ -136,9 +136,9 @@
         end
       end
 
-      it "Place a 'Two-Click' order from any active product page."
-      it "The first click asks 'Place an order for ‘X’? and if you then click 'OK', the order is completed."
-      it "Handle this in JavaScript or plain HTML at your discretion."
+      describe "Place a 'Two-Click' order from any active product page." do
+        it "The first click asks 'Place an order for ‘X’? and if you then click 'OK', the order is completed."
+      end
     end
   end
 
