@@ -37,27 +37,6 @@ class User < ActiveRecord::Base
 		self
 	end
 
-	# def products_uniq 
-	# 	products.uniq 
-	# end
-
-	def find_by_product product
-		self.products.where(id: product.id)
-	end
-
-	# def full_name
-	# 	"#{self.first_name} #{self.last_name}"
-	# end
-
-	# def display_name
-	# 	return 'Guest' if guest?
-	# 	self.nick || full_name
-	# end
-
-	# def display_name= name 
-	# 	self.nick = name
-	# end
-
 	def add param
 		add_product param[:product]	if param[:product]
 	end
