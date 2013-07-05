@@ -27,7 +27,7 @@ describe User do
     it{ should allow_value(nil).for(:email)}
     it{ should allow_value(nil).for(:last_name)}
     it{ should allow_value(nil).for(:first_name)}
-   
+
   end
 
   it{ 
@@ -127,17 +127,17 @@ describe User do
         end
       end
 
-      context "concerning orders" do
-       it{ 
-        expect{subject.make_purchase}.
-        to change{subject.orders.size}.
-        from(0).
-        to(1)
-      }
+      # context "concerning orders" do
+      #   it{ 
+      #     expect{subject.make_purchase}.
+      #     to change{subject.orders.size}.
+      #     from(0).
+      #     to(1)
+      #   }
+      # end
+    end
+    
+    context "concerning status" do
+      it{ expect{ subject.promote_to_admin}.to change{ subject.admin?}.from(false).to(true)}
     end
   end
-  
-  context "concerning status" do
-    it{ expect{ subject.promote_to_admin}.to change{ subject.admin?}.from(false).to(true)}
-  end
-end

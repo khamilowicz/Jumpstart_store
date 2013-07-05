@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
 
-	attr_accessible :first_name, :last_name, :email, :password, :address, :password_confirmation, :admin
+	attr_accessible :first_name, :last_name, :email, :password, :address, :password_confirmation
 	
 	validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, unless: :guest?
 	validates_uniqueness_of :email, unless: :guest?
@@ -40,19 +40,6 @@ class User < ActiveRecord::Base
 
 	def remove param
 		remove_product param[:product]	if param[:product]
-	end
-
-	# def product_quantity product
-	# 	ProductUser.quantity(product, self)
-	# end
-
-	def orders
-		admin? ? Order.where("user_id is not NULL") : super
-	end
-
-	def make_purchase
-		orders.create.products = self.cart.products
-		self.products.clear
 	end
 
 	def promote_to_admin
