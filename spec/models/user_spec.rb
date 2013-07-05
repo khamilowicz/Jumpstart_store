@@ -60,25 +60,25 @@ describe User do
 
       it{ 
         expect{ subject.add product: product}.
-        to change{ subject.product_quantity(product)}.
+        to change{ ProductUser.quantity subject, product}.
         from(0).
         to(1)
       }
 
       it{ 
         expect{ subject.add product: product_not_on_sale}.
-        to_not change{subject.product_quantity(product_not_on_sale)}.
+        to_not change{ProductUser.quantity subject, product_not_on_sale}.
         by(1)
       }
 
       it "cannot add products beyond its quantity" do
         product.quantity.times{
           expect{ subject.add product: product }.
-          to change{ subject.product_quantity(product)}.
+          to change{ ProductUser.quantity subject, product}.
           by(1)
         }
         expect{ subject.add product: product }.
-        to_not change{ subject.product_quantity(product)}.
+        to_not change{ ProductUser.quantity subject, product}.
         by(1)
       end
     end

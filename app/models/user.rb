@@ -27,14 +27,11 @@ class User < ActiveRecord::Base
 		end
 
 		def create_guest
-			new.make_guest
+			user_guest = new
+			user_guest.guest = true
+			user_guest.save
+			user_guest
 		end
-	end
-
-	def make_guest
-		self.guest = true
-		self.save
-		self
 	end
 
 	def add param
@@ -45,9 +42,9 @@ class User < ActiveRecord::Base
 		remove_product param[:product]	if param[:product]
 	end
 
-	def product_quantity product
-		ProductUser.quantity(product, self)
-	end
+	# def product_quantity product
+	# 	ProductUser.quantity(product, self)
+	# end
 
 	def orders
 		admin? ? Order.where("user_id is not NULL") : super
