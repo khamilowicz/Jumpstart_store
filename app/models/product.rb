@@ -48,7 +48,7 @@ class Product < ActiveRecord::Base
   end
 
   def rating
-    reviews.empty? ? 0 : calculate_rating
+    self.reviews.rating
   end
 
   def start_selling
@@ -128,12 +128,6 @@ end
 def add_review review
   reviews << review
 end
-
-def calculate_rating
- sum_of_notes = reviews.reduce(0){|sum, review| sum+=review.note}
- note = sum_of_notes.to_f/reviews.size
-  	(2.0*note).round/2.0 # round to 0.5
-  end
 
   def names_from_hash paramHash
     names = []

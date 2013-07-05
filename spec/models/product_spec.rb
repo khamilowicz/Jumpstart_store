@@ -18,10 +18,10 @@ describe Product do
   it{ should respond_to(:quantity)}
   it{ FactoryGirl.create(:product).quantity.should eq(1)}
 
+  let(:product){ FactoryGirl.create(:product)}
+  subject{ product}
   describe "assets" do
-    
-    let(:product){ FactoryGirl.create(:product)}
-    subject{ product}
+
     its(:assets){ should_not be_empty}
     it{ product.assets.first.should_not be_nil}
 
@@ -58,20 +58,22 @@ describe Product do
     its(:rating){should eq(0)}
 
     describe "reviews" do
-      let(:review_1){FactoryGirl.build(:review, note: 5)}
-      let(:review_2){FactoryGirl.build(:review, note: 1)}
+      let(:review_1){FactoryGirl.create(:review, note: 5)}
+      let(:review_2){FactoryGirl.create(:review, note: 1)}
+      let(:review_3){FactoryGirl.create(:review, note: 5)}
 
       it{ expect{ subject.add review: review_1}.to change{subject.rating}.from(0).to(5)}
       it{ expect{ subject.add review: review_2; subject.add review: review_1}.to change{subject.rating}.from(0).to(3)}
       it{ expect{ subject.add review: review_1; 
         subject.add review: review_2;
-        subject.add review: review_1
+        subject.add review: review_3
         }.to change{subject.rating}.from(0).to(3.5)
       }
     end
 
 
     describe ".on_sale" do
+      subject{ FactoryGirl.create(:product, on_sale: false)}
       it{ should_not be_on_sale }
 
       it{ expect{ subject.start_selling}.to change{subject.on_sale?}.from(false).to(true)}
