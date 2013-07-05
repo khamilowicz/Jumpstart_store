@@ -3,7 +3,7 @@
  describe "logged user" do
 
   subject{page}
-  let(:user){FactoryGirl.create(:user)}
+  let(:user){ UserPresenter.new FactoryGirl.create(:user)}
 
   before do
     visit '/'
@@ -26,7 +26,9 @@
     context "in profile" do
 
       it "change his profile data" do
-        click_link user.full_name
+        click_link user.display_name
+        # page.should_not have_content("Email"), "#{page.find("body").native}"
+
         click_link "Edit profile"
         fill_in :address, with: "Other address"
         click_button "Submit"

@@ -8,6 +8,10 @@ class ApplicationController < ActionController::Base
 		User.where(id: session[:current_user_id]).first || make_guest
 	end
 
+	def current_user_presenter
+		UserPresenter.new current_user
+	end
+
 	def make_guest
 		user = User.create_guest
 		session[:current_user_id] = user.id
@@ -28,5 +32,5 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
-	helper_method :current_user
+	helper_method :current_user, :current_user_presenter
 end

@@ -11,8 +11,9 @@ namespace :db do
       email: 'kham@gmail.com',
       password: 'megamega',
       password_confirmation: 'megamega',
-      admin: true
       )
+    admin.promote_to_admin
+    admin.save
 
     40.times do 
       Product.create!(

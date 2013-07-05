@@ -40,11 +40,13 @@ class OrdersController < ApplicationController
 	end
 
 	def index
-		@orders = current_user.orders.all
+		@orders = current_user.admin? ? Order.all : current_user.orders
+		# @orders = current_user.orders.all
 	end
 
 	def show
 		@order = Order.find(params[:id])
+		@user = UserPresenter.new @order.user
 	end
 
 	private
