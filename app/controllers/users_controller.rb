@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_filter :authorize_user, except: [:new, :create]
 
   def show
-    @user = User.find(params[:id])
+    @user = UserPresenter.new User.find(params[:id])
   end
 
   def index
@@ -54,8 +54,8 @@ class UsersController < ApplicationController
   private
 
   def authorize_user
-    unless current_user.admin?
-      redirect_to root_url, notice: "You can't see other user's profile" unless current_user.id.to_s == params[:id]
+    unless current_user.id.to_s == params[:id] || current_user.admin?
+      redirect_to root_url, notice: "You can't see other user's profile" 
     end
   end
 end

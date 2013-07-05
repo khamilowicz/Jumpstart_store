@@ -30,7 +30,7 @@ describe "guest" do
   context "logs in" do
 
     before(:each) do
-      @user = FactoryGirl.create(:user)
+      @user = UserPresenter.new FactoryGirl.create(:user)
       @product = FactoryGirl.create(:product, :on_sale)
       add_products_to_cart @product
       login @user 

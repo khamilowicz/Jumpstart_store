@@ -45,6 +45,7 @@ class OrdersController < ApplicationController
 
 	def show
 		@order = Order.find(params[:id])
+		@user = UserPresenter.new @order.user
 	end
 
 	private

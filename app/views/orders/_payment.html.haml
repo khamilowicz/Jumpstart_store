@@ -22,5 +22,5 @@
     .row
       .span6=f.label 'card-holdername', "Holder name"
     .row
-      .span6=f.text_field :'card-holdername', {value: current_user.full_name }
+      .span6=f.text_field :'card-holdername', {value: current_user_presenter.full_name }
     =submit_tag 'Buy', class: 'submit-button btn btn-primary span4'

@@ -8,6 +8,6 @@ class Review < ActiveRecord::Base
 	belongs_to :product
 
 	def reviewer_name
-		user.display_name
+		UserPresenter.new(user).display_name
 	end
 end

@@ -100,7 +100,8 @@ def title_shorter
 end
 
 def quantity_for user
-  self.users.where(id: user.id).count
+  ProductUser.quantity(self, user)
+  # self.users.where(id: user.id).count
 end
 
 def out_of_stock?
@@ -109,6 +110,9 @@ def out_of_stock?
   # return(super - in_carts)
 end
 
+def quantity_in_magazine
+  self.quantity - self.product_users.quantity
+end
 
 private
 

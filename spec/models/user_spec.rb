@@ -17,8 +17,6 @@ describe User do
     it{should validate_presence_of(:first_name)}
     it{should validate_presence_of(:last_name)}
 
-    its(:full_name){should eq("#{subject.first_name} #{subject.last_name}")}
-    its(:guest?){ should be_false}
   end
 
   context "who is guest" do
@@ -29,11 +27,10 @@ describe User do
     it{ should allow_value(nil).for(:email)}
     it{ should allow_value(nil).for(:last_name)}
     it{ should allow_value(nil).for(:first_name)}
-    its(:display_name){should eq("Guest")}
+   
   end
 
   it{ 
-    # pending "Test doesn't work because of error message"
     should ensure_length_of(:nick).
     is_at_least(2).
     is_at_most(32)
@@ -125,7 +122,7 @@ describe User do
 
         it "returns product to magazine" do
           expect{ subject.remove product: product_2
-            }.to change{product_2.quantity}.by(1)
+            }.to change{product_2.quantity_in_magazine}.by(1)
           end
         end
       end
