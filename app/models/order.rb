@@ -14,7 +14,9 @@ class Order < ActiveRecord::Base
 	validates_presence_of :user, :address, :order_products
 	validates_inclusion_of :status, in: STATUSES.values
 
-	scope :all_by_status, lambda{|status| where(status: status).all}
+	scope :all_by_status, ->(status){ where(status: status).all}
+	scope :all_by_email, ->(email){ includes(:user).where(users: {email: email}).all}
+	def self.count_by_status status;  self.where(status: status).count; end 
 
 	alias_attribute :date_of_purchase, :created_at
 	alias_attribute :time_of_status_change, :status_change_date
@@ -50,14 +52,6 @@ class Order < ActiveRecord::Base
 			Order.where("created_at #{sign} ?", date_parsed).all
 		end
 
-		def find_by_email email
-			user = User.where(email: email).first
-			user.orders if user
-		end
-
-		def count_by_status status
-			self.where(status: status).count
-		end
 	end
 
 	def set_status new_status

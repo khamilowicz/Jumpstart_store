@@ -140,7 +140,7 @@ context "searching" do
     it{should_not include(order_earlier)}
   end
 
-  describe ".find_by_email" do
+  describe ".all_by_email" do
     let(:user){ FactoryGirl.create(:user) }
     let(:user_2){ FactoryGirl.create(:user) }
     let(:order){ FactoryGirl.create(:order) }
@@ -151,9 +151,19 @@ context "searching" do
       user_2.orders << order_2
     end
 
-    subject{ Order.find_by_email(user.email)}
+    subject{ Order.all_by_email(user.email)}
     it{ should include(order)}
     it{ should_not include(order_2)}
   end
+end
+
+describe ".count_by_status" do
+  before(:each) do
+    FactoryGirl.create(:order, status: 'pending')
+    FactoryGirl.create_list(:order, 2, status: 'cancelled')
+  end
+  it{ Order.count_by_status('pending').should eq(1)}
+  it{ Order.count_by_status('cancelled').should eq(2)}
+  
 end
 end
