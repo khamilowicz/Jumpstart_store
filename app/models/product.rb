@@ -30,7 +30,7 @@ class Product < ActiveRecord::Base
 
   accepts_nested_attributes_for :assets
 
-  # def_dele
+  delegate :rating, to: :reviews
 
   def self.total_price price=nil
     if price == 'base'
@@ -51,10 +51,6 @@ class Product < ActiveRecord::Base
   def add param 
     add_review param[:review] if param[:review]
     add_to_category param[:category] if param[:category]
-  end
-
-  def rating
-    self.reviews.rating
   end
 
   def start_selling
