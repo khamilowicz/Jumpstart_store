@@ -4,7 +4,7 @@ class OrdersController < ApplicationController
 	before_filter :authorize_admin, except: [:filter, :create, :new, :show, :index]
 
 	def new
-		@products = current_user.cart.products
+		@products = ProductPresenter.new_from_array current_user.cart.products
 	end
 
 	def change_status
@@ -46,6 +46,7 @@ class OrdersController < ApplicationController
 	def show
 		@order = Order.find(params[:id])
 		@user = UserPresenter.new @order.user
+		@products = ProductPresenter.new_from_array @order.products
 	end
 
 	private

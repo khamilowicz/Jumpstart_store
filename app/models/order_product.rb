@@ -11,6 +11,14 @@ class OrderProduct < ActiveRecord::Base
     end
   end
 
+  def respond_to?(method_id, private_methods = false)
+    if product.respond_to?(method_id)
+      true
+    else
+      super
+    end
+  end
+
   def self.convert prod, quantity= 1
     op = self.create
     op.product = prod
@@ -19,7 +27,7 @@ class OrderProduct < ActiveRecord::Base
   end
 
 
-   def self.total_price price=nil
+  def self.total_price price=nil
     if price == 'base'
       Money.new(self.joins(:product).sum("base_price_cents"), "USD")
     else

@@ -86,7 +86,7 @@ end
 
 def put_on_sale stuff
   stuff = [stuff] unless stuff.kind_of?(Array)
-  names = stuff.first.kind_of?(Product) ? stuff.map(&:title) : stuff
+  names = stuff.first.respond_to?(:title) ? stuff.map(&:title) : stuff
   visit new_sale_path
   fill_in "discount", with: '50'
   names.each do |name|

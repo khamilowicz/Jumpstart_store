@@ -5,7 +5,7 @@ class Product < ActiveRecord::Base
   monetize :base_price_cents
   monetize :price_cents
 
-  attr_accessible :title, :description, :base_price_cents, :discount, :quantity, :on_sale, :price_cents, :base_price
+  attr_accessible :title, :description, :base_price_cents, :discount, :quantity, :on_sale, :base_price, :price_cents
 
   validates :title, presence: true, uniqueness: true
   
@@ -21,16 +21,19 @@ class Product < ActiveRecord::Base
   has_many :product_users
   has_many :users, through: :product_users
   belongs_to :order
+
   has_many :category_products
   has_many :categories, through: :category_products
+
   has_many :reviews
 
-  has_one :order_product
-  has_one :order, through: :order_product
+  # has_one :order_product
+  # has_one :order, through: :order_product
 
   has_many :assets
 
   after_create :create_asset
+  after_initialize :set_default_discount_value
   accepts_nested_attributes_for :assets
 
   def self.total_price price=nil
@@ -59,30 +62,19 @@ class Product < ActiveRecord::Base
   end
 
   def start_selling
-   self.on_sale = true
-   self.save
+   self.on_sale = true; self.save
  end
 
  def retire
-   self.on_sale = false
-   self.save
+   self.on_sale = false; self.save
  end
 
  def price_cents
-  return self.base_price_cents*self.discount/100
-end
-
-def base_price_cents
-  super || Money.new(0, "USD")
-end
-
-def discount
-  super || 0
+  self.base_price_cents.to_i*self.discount/100
 end
 
 def on_discount discount
- self.discount = discount
- self.save
+ self.discount = discount; self.save
 end
 
 def on_discount?
@@ -90,17 +82,16 @@ def on_discount?
 end
 
 def off_discount
- self.discount = 100
- self.save
+ self.discount = 100; self.save
 end
 
-def title_param
-  self.title.parameterize
-end
+# def title_param
+#   self.title.parameterize
+# end
 
-def title_shorter
-  self.title.length > 25 ? self.title[0,25] + '...' : self.title
-end
+# def title_shorter
+#   self.title.length > 25 ? self.title[0,25] + '...' : self.title
+# end
 
 def quantity_for user
   ProductUser.quantity(self, user)
@@ -109,8 +100,6 @@ end
 
 def out_of_stock?
   self.quantity == self.product_users.quantity
-  # in_carts = self.product_users.all.reduce(0){|sum, pu| sum+=pu.quantity }
-  # return(super - in_carts)
 end
 
 def quantity_in_magazine
@@ -141,5 +130,9 @@ def names_from_hash paramHash
   names += paramHash[:new_category].split(',')
   names += paramHash[:categories].values if paramHash[:categories]
   names
+end
+
+def set_default_discount_value
+  self.discount ||= 100
 end
 end

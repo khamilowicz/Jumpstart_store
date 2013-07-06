@@ -5,8 +5,8 @@ shared_examples_for "user" do
   subject{page}
 
   before(:each) do
-    @products = FactoryGirl.create_list(:product, 2, :on_sale, quantity: 3)
-    @product = @products.first
+    @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 2, quantity: 3)
+    @product =  @products.first
     visit '/products' 
   end
 
@@ -78,9 +78,9 @@ shared_examples_for "user" do
   context "while browsing categories" do
     before(:each) do
       @categories =['Category_1', 'Category_2'] 
-      @products.first.add category: @categories.first
-      @products.first.add category: @categories.last
-      @products.last.add category: @categories.last
+      @products.first.product.add category: @categories.first
+      @products.first.product.add category: @categories.last
+      @products.last.product.add category: @categories.last
       visit '/categories'
     end
 
@@ -100,7 +100,7 @@ shared_examples_for "user" do
       click_link @categories.last 
     end 
 
-    it {should have_short_product(@products.last)}
+    it {should have_short_product(@products.last), "#{page.find("body").native}"}
     it {should have_short_product(@products.first)}
   end
 end

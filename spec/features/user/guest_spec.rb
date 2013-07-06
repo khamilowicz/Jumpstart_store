@@ -16,7 +16,7 @@ describe "guest" do
   end
   
   it "can't checkout" do 
-    product = FactoryGirl.create(:product)
+    product = ProductPresenter.new FactoryGirl.create(:product)
 
     add_products_to_cart product 
 
@@ -31,7 +31,7 @@ describe "guest" do
 
     before(:each) do
       @user = UserPresenter.new FactoryGirl.create(:user)
-      @product = FactoryGirl.create(:product, :on_sale)
+      @product = ProductPresenter.new FactoryGirl.create(:product, :on_sale)
       add_products_to_cart @product
       login @user 
     end

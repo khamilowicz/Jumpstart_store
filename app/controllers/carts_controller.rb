@@ -3,7 +3,7 @@ class CartsController < ApplicationController
   # before_filter :authorize_user
 
 	def show
-		@products = current_user.products 
+		@products = ProductPresenter.new_from_array current_user.products 
     respond_to do |format|
       format.html
       format.js {render :show}

@@ -38,7 +38,7 @@
 
     end
     context "concerning orders" do
-      let(:products){ FactoryGirl.create_list(:product, 3, quantity: 3)}
+      let(:products){ ProductPresenter.new_from_array FactoryGirl.create_list(:product, 3, quantity: 3)}
 
       context "on new order page" do
         before(:each) do
@@ -144,8 +144,8 @@
 
   context "on products he has purchased" do
 
-    let(:purchased_product){FactoryGirl.create(:product)}
-    let(:other_product){FactoryGirl.create(:product)}
+    let(:purchased_product){ ProductPresenter.new FactoryGirl.create(:product)}
+    let(:other_product){ProductPresenter.new FactoryGirl.create(:product)}
     let(:review){FactoryGirl.build(:review)}
 
     before do

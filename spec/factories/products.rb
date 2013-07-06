@@ -14,7 +14,6 @@ FactoryGirl.define do
    end
 
    after(:build) do |product, evaluator|
-
     product.base_price = Money.new(evaluator.base_price, "USD")
   end
 
@@ -27,9 +26,7 @@ FactoryGirl.define do
 end
 
 trait :on_sale do
-  after(:build) do |product|
-    product.start_selling
-  end
+  on_sale true
 end
 
 trait :with_category do

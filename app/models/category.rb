@@ -20,10 +20,8 @@ class Category < ActiveRecord::Base
     end
   end
 
-  def list_categories item=nil
-    category_names = 
-    item ? item.categories.pluck(:name) : Category.pluck(:name)
-    category_names.join(', ')
+  def list_categories
+    self.pluck(:name).join(', ')
   end
 
 end
@@ -35,7 +33,6 @@ end
 def products_for_user user 
   user.products & self.products
 end
-
 
 def total_price
  self.products.total_price

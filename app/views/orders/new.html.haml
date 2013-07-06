@@ -5,5 +5,5 @@
   .span12.form_order
     = render 'payment'
   .products
-    = render partial: 'products/inline', collection: current_user.products, as: :product
+    = render partial: 'products/inline', collection: @products, as: :product
 =javascript_include_tag "pages/paymill"

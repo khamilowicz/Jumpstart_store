@@ -3,7 +3,7 @@ require "spec_helper"
 
 describe "Administrator" do
 
-  let(:user){FactoryGirl.create(:user, :admin) }
+  let(:user){ UserPresenter.new FactoryGirl.create(:user, :admin) }
 
   before do
     visit '/'
@@ -14,7 +14,7 @@ describe "Administrator" do
   context "managing products" do
     describe "creates product" do
 
-      let(:product){ FactoryGirl.build(:product)}
+      let(:product){ ProductPresenter.new FactoryGirl.build(:product)}
 
       before do
         visit new_product_path
@@ -28,7 +28,7 @@ describe "Administrator" do
       it {click_link product.title; should have_link("Edit product")}
 
       describe "and modifies them" do 
-       let(:product_2){ FactoryGirl.build(:product)}
+       let(:product_2){ ProductPresenter.new FactoryGirl.build(:product)}
        before do
          visit edit_product_path(1)
          create_new_product product_2
@@ -43,8 +43,8 @@ describe "Administrator" do
    describe "creates categories" do 
      before(:each) do
       @category_name = "Category_1"
-      @product = FactoryGirl.create(:product)
-      add_to_category @product, @category_name
+      @product = ProductPresenter.new FactoryGirl.create(:product)
+      add_to_category @product.product, @category_name
       visit '/categories'
       click_link @category_name
     end
@@ -59,7 +59,7 @@ describe "Administrator" do
       categories = FactoryGirl.create_list(:category, 3)
       @add_to_product = categories[0,2]
       @not_added = categories[2]
-      @products = FactoryGirl.create_list(:product, 4)
+      @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 4)
 
       @product = @products.first
       visit product_add_to_category_path(@product)
@@ -102,7 +102,7 @@ it "Retire a product from being sold, which hides it from browsing by any non-ad
 
 context "sees a listing of all orders" do
   before(:each) do
-    @user = FactoryGirl.create(:user)
+    @user = UserPresenter.new FactoryGirl.create(:user)
     visit '/'
     click_link 'Log out'
     login @user
@@ -205,7 +205,7 @@ end
 context "he may" do
 
   before(:each) do
-    @products = FactoryGirl.create_list(:product, 3)
+    @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 3)
     @category = ['Category_1']
     @products_in_category = @products[0,2]
     @products_in_category.each {|p| p.add category: @category.first}
@@ -254,11 +254,11 @@ context "search order using a builder-style interface (like Google’s 'Advanced
   before(:each) do
     @pending_order = FactoryGirl.create(:order, status: 'pending', user: FactoryGirl.create(:user))
     @cancelled_order = FactoryGirl.create(:order, status: 'cancelled', user: FactoryGirl.create(:user))
-    product_11 = FactoryGirl.create(:product, base_price: 11)
-    product_9 = FactoryGirl.create(:product, base_price: 9)
-    @pending_order.add product: product_11
+    product_11 = ProductPresenter.new FactoryGirl.create(:product, base_price: 11)
+    product_9 = ProductPresenter.new  FactoryGirl.create(:product, base_price: 9)
+    @pending_order.add product: product_11.product
     @pending_order.created_at = Date.new(2011, 10,10)
-    @cancelled_order.add product: product_9
+    @cancelled_order.add product: product_9.product
     @cancelled_order.created_at = Date.new(2008, 10,10)
     @pending_order.save
     @cancelled_order.save

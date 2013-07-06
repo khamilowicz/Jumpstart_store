@@ -135,10 +135,6 @@ describe Product do
     
   end
 
-  describe "#title_param" do
-    subject{ FactoryGirl.build(:product, title: "this is product")}
-    its(:title_param) {should eq('this-is-product') }
-  end
 
   describe "#quantity_for" do
     let(:product){ FactoryGirl.create(:product, quantity: 3) }

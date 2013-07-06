@@ -17,5 +17,8 @@ describe ProductPresenter do
   end
 
   its(:title){ should eq(product.title)}
-  
+  describe "#title_param" do
+    subject{ ProductPresenter.new FactoryGirl.build(:product, title: "this is product")}
+    its(:title_param) {should eq('this-is-product') }
+  end
 end
