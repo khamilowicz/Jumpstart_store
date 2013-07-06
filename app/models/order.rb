@@ -113,7 +113,6 @@ class Order < ActiveRecord::Base
 			product.retire
 		end
 	end
-
 	
 	STATUSES.each do |method_name, stat|
 		define_method method_name do
