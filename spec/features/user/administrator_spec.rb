@@ -107,7 +107,7 @@ context "sees a listing of all orders" do
     click_link 'Log out'
     login @user
 
-    Order.statuses.each do |method, status|
+    Order::STATUSES.each do |method, status|
       FactoryGirl.create_list(:product, 2).each do |product|
         @user.add product: product
       end
@@ -130,8 +130,8 @@ context "sees a listing of all orders" do
       within(".orders .stats .#{status}"){ should have_content(Order.count_by_status(status))}
     end
     should have_link("Show")
-    Order.statuses.each do |key, status| 
-      other = Order.statuses
+    Order::STATUSES.each do |key, status| 
+      other = Order::STATUSES
       other.delete status
       click_link status.capitalize
       other.each do |other_status|

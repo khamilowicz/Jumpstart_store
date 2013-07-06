@@ -20,11 +20,9 @@ class Order < ActiveRecord::Base
 
 	alias_attribute :date_of_purchase, :created_at
 	alias_attribute :time_of_status_change, :status_change_date
+	alias_attribute :products, :order_products
 
 	class << self
-		def statuses
-			STATUSES
-		end
 
 		def find_by_value sign, value
 			value = Money.parse("$#{value}").cents
@@ -66,27 +64,8 @@ class Order < ActiveRecord::Base
 		end
 	end
 
-	def products
-		self.order_products 
-	end
-
-	def products= prods
-		self.order_products.delete_all
-
-		prods = [prods] unless prods.kind_of?(Array)
-		prods.each do |prod|
-			op = self.order_products.new
-			op.product = prod
-		end
-	end
-
-	def total_price
-		sum_price
-	end
-
-	def total_price_without_discount
-		sum_price 'base'
-	end
+	def total_price; sum_price; end
+	def total_price_without_discount; sum_price 'base'; end
 
 	def total_discount
 		(total_price_without_discount.cents - total_price.cents)*100/total_price_without_discount.cents
@@ -115,20 +94,15 @@ class Order < ActiveRecord::Base
 	end
 	
 	def add param
-		if param[:product]
-			self.order_products.new.add product: param[:product]
-		end
+			self.order_products.new.add product: param[:product] if param[:product]
 	end
 
 	private
 
-	# def status= stat
-	# 	super
-	# end
-def sum_price price=nil
+	def sum_price price=nil
 		self.products.total_price price
 	end
-	
+
 	def update_status_date
 		self.status_change_date = Time.now
 	end
