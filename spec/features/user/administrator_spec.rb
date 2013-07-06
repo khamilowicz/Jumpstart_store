@@ -158,7 +158,7 @@ context "sees a listing of all orders" do
     end
 
     @order = Order.first
-    @product = @order.products.first
+    @product = ProductPresenter.new @order.products.first
     @user = UserPresenter.new @user
     visit order_path(@order)
     should have_content("Order page")
