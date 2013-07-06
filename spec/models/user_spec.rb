@@ -42,6 +42,7 @@ describe User do
     let(:product){ FactoryGirl.create(:product, :on_sale, quantity: 2) }
     let(:product_not_on_sale){ FactoryGirl.create(:product, on_sale: false) }
     let(:product_2){ FactoryGirl.create(:product) }
+    let(:product_2_presenter){ ProductPresenter.new product_2 }
     let(:product_3){ FactoryGirl.create(:product) }
 
     describe ".add product:" do
@@ -122,7 +123,7 @@ describe User do
 
         it "returns product to magazine" do
           expect{ subject.remove product: product_2
-            }.to change{product_2.quantity_in_magazine}.by(1)
+            }.to change{product_2_presenter.quantity_in_magazine}.by(1)
           end
         end
       end

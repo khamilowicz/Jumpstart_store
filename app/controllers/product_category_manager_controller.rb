@@ -1,14 +1,15 @@
 class ProductCategoryManagerController < ApplicationController
 
   def new
-      @product = Product.find(params[:product_id])
+    @product = Product.find(params[:product_id])
     @categories = Category.all 
     render 'products/new_add_to_category'
   end
   
   def join
-   @product = Product.find(params[:product_id])
-    @product.add category: params
+    @product = Product.find(params[:product_id])
+    get_categories_names(params).each { |c| @product.add category: c }
+
     redirect_to product_path(@product) 
   end
 
@@ -23,6 +24,15 @@ class ProductCategoryManagerController < ApplicationController
 
     render :new_join_many, notice: 'Successfully categorized products'
   end
+
+  private
+
+  def get_categories_names params
+   categories = []  
+   categories << params[:categories].values  if params[:categories]
+   categories << params[:new_category] if params[:new_category] 
+   categories
+ end
 
 
 end

@@ -42,13 +42,6 @@ describe Product do
       its(:categories){should include(Category.get "Category_1")}
     end
 
-    # describe "#list_categories" do
-    #   before(:each) do
-    #     Category.get_by_name "Category_2"
-    #   end
-    #   its(:list_categories){should include("Category_1")}
-    #   its(:list_categories){should_not include("Category_2")}
-    # end
   end
 
   context "concerning reviews" do
@@ -132,15 +125,5 @@ describe Product do
     end
     subject{ user.products}
     its(:total_price){ should eq(Money.new(5, "USD"))}
-    
   end
-
-
-  describe "#quantity_for" do
-    let(:product){ FactoryGirl.create(:product, quantity: 3) }
-    let(:user){ FactoryGirl.create(:user)}
-
-    it{ expect{user.add product: product}.to change{product.quantity_for(user)}.from(0).to(1)}
-  end
-
 end

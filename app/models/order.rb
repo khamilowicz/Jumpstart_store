@@ -126,10 +126,10 @@ class Order < ActiveRecord::Base
 	def add param
 		if param[:product]
 			product = param[:product]
-			self.order_products << OrderProduct.convert(product, (product.quantity_for(self.user) || 1))
+			self.order_products << OrderProduct.convert(product, (ProductUser.quantity(product, self.user) || 1))
 		end
 	end
-	
+
 	private
 
 	def status= stat
