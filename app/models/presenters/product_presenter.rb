@@ -1,6 +1,12 @@
   class ProductPresenter
 
+    extend TotalPrice
+    
     attr_accessor :product
+
+    def price
+      Money.new @product.base_price_cents.to_i*@product.discount/100, @product.base_price_currency
+    end
 
     def initialize product
       @product = product

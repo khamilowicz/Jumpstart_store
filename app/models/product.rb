@@ -1,9 +1,10 @@
 class Product < ActiveRecord::Base
 
+  extend TotalPrice
+
   paginates_per 9
 
   monetize :base_price_cents
-  monetize :price_cents
 
   attr_accessible :title, :description, :base_price_cents, :discount, :quantity, :on_sale, :base_price, :price_cents
 
@@ -32,14 +33,6 @@ class Product < ActiveRecord::Base
 
   delegate :rating, to: :reviews
 
-  def self.total_price price=nil
-    if price == 'base'
-      Money.new(self.sum("base_price_cents"), "USD")
-    else
-      Money.new(self.sum("base_price_cents * discount"), "USD")/100
-    end
-  end
-
   def photo
     self.assets.first.photo
   end
@@ -63,10 +56,6 @@ class Product < ActiveRecord::Base
     self.save
   end
 
-  def price_cents
-    self.base_price_cents.to_i*self.discount/100
-  end
-
   def on_discount discount
     self.discount = discount
     self.save
@@ -79,7 +68,6 @@ class Product < ActiveRecord::Base
   def off_discount
     self.discount = 100; self.save
   end
-
 
   def out_of_stock?
     self.quantity == self.product_users.quantity

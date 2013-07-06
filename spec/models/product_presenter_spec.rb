@@ -29,4 +29,26 @@ describe ProductPresenter do
     it{ expect{user.add product: product}.to change{product_presenter.quantity_for(user)}.from(0).to(1)}
   end
   end
+
+    describe "price" do
+      let(:product){ProductPresenter.new FactoryGirl.create(:product)}
+
+      it{ (product.price + product.price).cents.should eq(200) }
+      it{ (product.price + product.price).should eq(Money.new(200, "USD")) }
+    end
+
+       describe "discounts" do
+      let(:product){ ProductPresenter.new FactoryGirl.build(:product)}
+      
+      it{ expect{product.on_discount 50}.to change{
+        product.price
+        }.from(product.base_price).to(product.base_price/2)
+      }
+
+      it{ expect{product.on_discount 50; product.off_discount}.to_not change{
+        product.price
+        }.from(product.base_price).to(product.base_price/2)
+      }
+
+    end
 end
