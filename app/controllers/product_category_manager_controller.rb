@@ -29,8 +29,8 @@ class ProductCategoryManagerController < ApplicationController
 
   def get_categories_names params
    categories = []  
-   categories << params[:categories].values  if params[:categories]
-   categories << params[:new_category] if params[:new_category] 
+   categories += params[:categories].values  if params[:categories]
+   categories << params[:new_category] unless params[:new_category].blank?
    categories
  end
 
