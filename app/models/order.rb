@@ -11,7 +11,7 @@ class Order < ActiveRecord::Base
 		:is_pending => 'pending'
 	}
 
-	validates_presence_of :user, :address, :order_products
+	validates_presence_of :user, :address
 	validates_inclusion_of :status, in: STATUSES.values
 
 	scope :all_by_status, ->(status){ where(status: status).all}
@@ -54,6 +54,10 @@ class Order < ActiveRecord::Base
 
 	end
 
+	def set_address address=nil
+		self.address = address || self.user.address
+	end
+
 	def set_status new_status
 		case new_status
 		when 'ship' then self.is_sent
@@ -76,10 +80,6 @@ class Order < ActiveRecord::Base
 		end
 	end
 
-	def sum_price price=nil
-		self.products.total_price price
-	end
-
 	def total_price
 		sum_price
 	end
@@ -96,8 +96,10 @@ class Order < ActiveRecord::Base
 		self.products.any?(&:on_discount?)
 	end
 
-	def transfer_products 
-		self.user.products.all.uniq.each do |product|
+	def transfer_products
+		self.set_address
+		self.save
+		self.user.products.all.each do |product|
 			self.add product: product
 			self.user.remove product: product
 			product.retire
@@ -114,17 +116,19 @@ class Order < ActiveRecord::Base
 	
 	def add param
 		if param[:product]
-			product = param[:product]
-			self.order_products << OrderProduct.convert(product, (ProductUser.quantity(product, self.user) || 1))
+			self.order_products.new.add product: param[:product]
 		end
 	end
 
 	private
 
-	def status= stat
-		super
+	# def status= stat
+	# 	super
+	# end
+def sum_price price=nil
+		self.products.total_price price
 	end
-
+	
 	def update_status_date
 		self.status_change_date = Time.now
 	end
