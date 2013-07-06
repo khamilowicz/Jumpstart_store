@@ -24,10 +24,6 @@ class Order < ActiveRecord::Base
 			STATUSES
 		end
 
-		def find_by_status status
-			self.where(status: status).all
-		end
-
 		def find_by_value sign, value
 			value = Money.parse("$#{value}").cents
 			orders = Order.all.select do |order|
