@@ -23,6 +23,14 @@ class UserPresenter
     end
   end
 
+  def respond_to? method_name, private_method = false
+    if @user.respond_to?(method_name)
+      true
+    else
+      super
+    end
+  end
+
   def to_param
     @user.to_param
   end

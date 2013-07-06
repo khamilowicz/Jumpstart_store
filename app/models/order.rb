@@ -86,16 +86,16 @@ class Order < ActiveRecord::Base
 		end
 	end
 
+	def sum_price price=nil
+		self.products.total_price price
+	end
+
 	def total_price
 		sum_price
 	end
 
 	def total_price_without_discount
-		sum_price :base_price
-	end
-
-	def sum_price price=:price
-		Product.total_price	self.products, price
+		sum_price 'base'
 	end
 
 	def total_discount
@@ -126,10 +126,10 @@ class Order < ActiveRecord::Base
 	def add param
 		if param[:product]
 			product = param[:product]
-			self.order_products << OrderProduct.convert(product, (product.quantity_for(self.user) || 1))
+			self.order_products << OrderProduct.convert(product, (ProductUser.quantity(product, self.user) || 1))
 		end
 	end
-	
+
 	private
 
 	def status= stat

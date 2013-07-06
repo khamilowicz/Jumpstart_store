@@ -9,21 +9,24 @@ describe Product do
   it{ should validate_presence_of(:description)}
   it{ should allow_value(1).for(:base_price)}
   it{ monetize(:base_price).should be_true}
-  it{ monetize(:price).should be_true}
   # it{ should_not allow_value(1.101).for(:base_price)}
   # it{ should_not allow_value(-1).for(:base_price).with_message("base_price_cents must be greater than 0 (-100)")}
   # it{ should_not allow_value('some string').for(:base_price)}
   it{ should_not allow_value(nil).for(:base_price_cents)}
-  it{ should respond_to(:price)}
   it{ should respond_to(:quantity)}
   it{ FactoryGirl.create(:product).quantity.should eq(1)}
 
+  let(:product){ FactoryGirl.create(:product)}
+  subject{ product}
   describe "assets" do
-    
-    let(:product){ FactoryGirl.create(:product)}
-    subject{ product}
+
     its(:assets){ should_not be_empty}
     it{ product.assets.first.should_not be_nil}
+
+    describe "photos" do
+      it{should respond_to(:photos)}
+      its(:photos){ should have(1).item}
+    end
   end
 
   context "concerning categories" do
@@ -34,16 +37,9 @@ describe Product do
       subject.add category: "Category_1"
     end
     describe "#add_to_category" do
-      its(:list_categories){should include("Category_1")}
+      its(:categories){should include(Category.get "Category_1")}
     end
 
-    describe "#list_categories" do
-      before(:each) do
-        Category.get_by_name "Category_2"
-      end
-      its(:list_categories){should include("Category_1")}
-      its(:list_categories){should_not include("Category_2")}
-    end
   end
 
   context "concerning reviews" do
@@ -53,20 +49,22 @@ describe Product do
     its(:rating){should eq(0)}
 
     describe "reviews" do
-      let(:review_1){FactoryGirl.build(:review, note: 5)}
-      let(:review_2){FactoryGirl.build(:review, note: 1)}
+      let(:review_1){FactoryGirl.create(:review, note: 5)}
+      let(:review_2){FactoryGirl.create(:review, note: 1)}
+      let(:review_3){FactoryGirl.create(:review, note: 5)}
 
       it{ expect{ subject.add review: review_1}.to change{subject.rating}.from(0).to(5)}
       it{ expect{ subject.add review: review_2; subject.add review: review_1}.to change{subject.rating}.from(0).to(3)}
       it{ expect{ subject.add review: review_1; 
         subject.add review: review_2;
-        subject.add review: review_1
+        subject.add review: review_3
         }.to change{subject.rating}.from(0).to(3.5)
       }
     end
 
 
     describe ".on_sale" do
+      subject{ FactoryGirl.create(:product, on_sale: false)}
       it{ should_not be_on_sale }
 
       it{ expect{ subject.start_selling}.to change{subject.on_sale?}.from(false).to(true)}
@@ -82,24 +80,17 @@ describe Product do
 
     end
 
-    describe "price" do
-      let(:product){ FactoryGirl.create(:product)}
-
-      it{ (product.price + product.price).cents.should eq(200) }
-      it{ (product.price + product.price).should eq(Money.new(200, "USD")) }
-    end
-
     describe "discounts" do
       let(:product){FactoryGirl.build(:product)}
       
       it{ expect{product.on_discount 50}.to change{
-        product.price
-        }.from(product.base_price).to(product.base_price/2)
+        product.discount
+        }.from(100).to(50)
       }
 
       it{ expect{product.on_discount 50; product.off_discount}.to_not change{
-        product.price
-        }.from(product.base_price).to(product.base_price/2)
+        product.discount
+        }.from(100)
       }
 
     end
@@ -115,16 +106,15 @@ describe Product do
     its(:users){ user.add product: product; should include(user)}
   end
 
-  describe "#title_param" do
-    subject{ FactoryGirl.build(:product, title: "this is product")}
-    its(:title_param) {should eq('this-is-product') }
+  describe "#total_price" do
+    let(:products){ FactoryGirl.create_list(:product, 5, base_price: 1)}
+    let(:user){ FactoryGirl.create :user}
+    before(:each) do
+      products.each do |p|
+        user.add product: p
+      end
+    end
+    subject{ user.products}
+    its(:total_price){ should eq(Money.new(5, "USD"))}
   end
-
-  describe "#quantity_for" do
-    let(:product){ FactoryGirl.create(:product, quantity: 3) }
-    let(:user){ FactoryGirl.create(:user)}
-
-    it{ expect{user.add product: product}.to change{product.quantity_for(user)}.from(0).to(1)}
-  end
-
 end

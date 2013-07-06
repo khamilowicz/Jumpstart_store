@@ -14,7 +14,7 @@ class SalesController < ApplicationController
   end
 
   def index
-    @products = Product.where('discount !=?', 100).all
+    @products = ProductPresenter.new_from_array Product.where('discount !=?', 100).all
   end
 
   def create

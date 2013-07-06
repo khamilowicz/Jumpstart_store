@@ -21,7 +21,7 @@ describe Category do
    let!(:c3){Category.get("C_3")} 
 
    describe "class.list_categories" do
-    it{ Category.list_categories.should include(c1,c2,c3) }
+    it{ Category.list_categories.should include("C_1, C_2, C_3") }
   end
 
   describe "add" do

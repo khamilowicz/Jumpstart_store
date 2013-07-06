@@ -21,7 +21,7 @@ class Category < ActiveRecord::Base
   end
 
   def list_categories
-  	self.all
+    self.pluck(:name).join(', ')
   end
 
 end
@@ -34,9 +34,8 @@ def products_for_user user
   user.products & self.products
 end
 
-
 def total_price
- self.products.reduce(Money.new(0, "USD")){|sum, product| sum+=product.price}
+ self.products.total_price
 end
 
 def all_on_sale?
