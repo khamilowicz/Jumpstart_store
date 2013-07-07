@@ -10,7 +10,7 @@ class Search
   end
 
   def self.find_order params
-    binding.pry
+    # binding.pry
     orders = Order.all
     orders &= Order.all_by_status params[:status] unless params[:status].blank?
     orders &= Order.all_by_value(params[:value], params[:total_value]) unless params[:value].blank?
