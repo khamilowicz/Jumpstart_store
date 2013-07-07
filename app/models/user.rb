@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
 
+	extend TransferProducts
+
 	attr_accessible :first_name, :last_name, :email, :password, :address, :password_confirmation
 	
 	validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, unless: :guest?
@@ -17,14 +19,6 @@ class User < ActiveRecord::Base
 	after_create :create_cart
 
 	class << self
-
-		def transfer_products from_to
-			from_user, to_user = from_to[:from], from_to[:to]
-			from_user.products.each do |product|
-				from_user.remove product: product
-				to_user.add product: product
-			end
-		end
 
 		def create_guest
 			user_guest = new

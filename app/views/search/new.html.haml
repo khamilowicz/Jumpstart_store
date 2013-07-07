@@ -3,7 +3,7 @@ Search
   =f.label :email
   =f.text_field :email
   =f.label :status
-  =f.select :status, Order.statuses.values.zip(Order.statuses.values), {include_blank: true}
+  =f.select :status, Order::STATUSES.values.zip(Order::STATUSES.values), {include_blank: true}
   =f.label :value
   =f.select :value, %w{less more equal}.zip(%w{less more equal}), {include_blank: true}
   =f.label :total_value

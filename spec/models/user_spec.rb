@@ -98,10 +98,20 @@ describe User do
         it{ subject.cart.products.should include(product, product_2)}
       end
 
+      describe ".transfer_products" do
+        let(:user_2){ FactoryGirl.create(:user)}
+        before(:each) do
+          User.transfer_products from: subject, to: user_2
+        end
+        its(:products){ should be_empty}
+        it{ user_2.products.should include(product, product_2)}
+        
+      end
+
       describe ".remove product" do 
         before(:each) do
           subject.remove product: product
-        end
+         end
 
         its(:products){should_not include(product)}
         its(:products){should include(product_2)}

@@ -71,6 +71,25 @@ describe "total  price and total discount" do
     from(false).
     to(true)
   }
+  describe "doesn't change after saving order" do
+    before(:each) do
+      @order = create_order(products)
+    end
+    it{ 
+      expect{ products.each{|p| p.on_discount 50}}.
+      to_not change{ @order.total_price }
+    }
+
+    it{ 
+      expect{ products.each{|p| p.on_discount 50}}.
+      to_not change{ @order.total_discount}
+    }
+    it{ 
+      expect{ products.each{|p| p.on_discount 50}}.
+      to_not change{ @order.has_discount?}
+    } 
+  end
+
 end
 
 describe "products" do

@@ -21,21 +21,15 @@ class OrderProduct < ActiveRecord::Base
     end
   end
 
-  def self.convert prod, quantity= 1
-    op = self.create
-    op.product = prod
-    op.quantity = quantity
-    op
+  def convert prod
+    self.product = prod
+    self.quantity = ProductUser.quantity(prod, self.order.user)
+    self
   end
 
-
-  # def self.total_price price=nil
-  #   if price == 'base'
-  #     Money.new(self.joins(:product).sum("base_price_cents"), "USD")
-  #   else
-  #     Money.new(self.joins(:product).sum("base_price_cents * discount"), "USD")/100
-  #   end
-  # end
+  def add params
+    self.convert(params[:product])
+  end
 
   def subtotal
     self.quantity*self.price

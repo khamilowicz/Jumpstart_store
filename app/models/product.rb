@@ -26,8 +26,8 @@ class Product < ActiveRecord::Base
   has_many :reviews
   has_many :assets
 
-  after_create :create_asset
   after_initialize :set_default_discount_value
+  after_create :create_asset
 
   accepts_nested_attributes_for :assets
 
@@ -47,18 +47,15 @@ class Product < ActiveRecord::Base
   end
 
   def start_selling
-    self.on_sale = true
-    self.save
+    self.on_sale = true; self.save
   end
 
   def retire
-    self.on_sale = false
-    self.save
+    self.on_sale = false; self.save
   end
 
   def on_discount discount
-    self.discount = discount
-    self.save
+    self.discount = discount; self.save
   end
 
   def on_discount?
@@ -71,6 +68,12 @@ class Product < ActiveRecord::Base
 
   def out_of_stock?
     self.quantity == self.product_users.quantity
+  end
+
+  def swap_prepare
+    self.quantity +=1
+    yield
+    self.quantity -=1
   end
 
   private
