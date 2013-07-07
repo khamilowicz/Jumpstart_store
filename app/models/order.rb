@@ -3,6 +3,7 @@ class Order < ActiveRecord::Base
 
 	belongs_to :user
 	has_many :order_products
+	monetize :price_cents
 
 	include TransferProducts
 
@@ -14,46 +15,31 @@ class Order < ActiveRecord::Base
 		:is_pending => 'pending'
 	}
 
+	COMPARISONS = {
+		'before' => '<', 'less' => '<',
+		'after' => '>', 'more' => '>',
+		'at' => '=', 'equal' => '='
+	}
+
 	validates_presence_of :user, :address
 	validates_inclusion_of :status, in: STATUSES.values
 
 	scope :all_by_status, ->(status){ where(status: status).all}
 	scope :all_by_email, ->(email){ includes(:user).where(users: {email: email}).all}
+	scope :all_by_date, ->(sign_word, year, month, day){ 
+		where("created_at #{COMPARISONS[sign_word]} ?", Date.new(year.to_i,month.to_i,day.to_i)).all 
+	}
+	scope :all_by_value, ->(sign_word, value){ 
+		where("price_cents #{COMPARISONS[sign_word]} ?", Money.parse(value).cents).all
+	}
+
 	def self.count_by_status status;  self.where(status: status).count; end 
 
 	alias_attribute :date_of_purchase, :created_at
 	alias_attribute :time_of_status_change, :status_change_date
 	alias_attribute :products, :order_products
 
-	class << self
-
-		def find_by_value sign, value
-			value = Money.parse("$#{value}").cents
-			orders = Order.all.select do |order|
-				case sign
-				when 'less' 
-					order.total_price.cents < value
-				when 'more'
-					order.total_price.cents > value
-				when 'equal'
-					order.total_price.cents == value
-				end
-			end
-			orders
-		end
-
-		def find_by_date date, date_value
-			date_params = date_value.split(',').map(&:to_i)
-			date_parsed = Date.new *date_params
-			sign = case date 
-			when 'less' then '<'
-			when 'more' then '>'
-			when 'equal' then '='
-			end
-			Order.where("created_at #{sign} ?", date_parsed).all
-		end
-
-	end
+	before_save :set_price_and_discount
 
 	def set_address address=nil
 		self.address = address || self.user.address
@@ -67,10 +53,16 @@ class Order < ActiveRecord::Base
 		end
 	end
 
-	def total_price; sum_price; end
-	def total_price_without_discount; sum_price 'base'; end
+	def total_price
+		self.price != 0 ? self.price*self.discount/100 : sum_price
+	end
+
+	def total_price_without_discount
+		self.price != 0 ? self.price : sum_price('base')
+	end
 
 	def total_discount
+		return 100 if total_price_without_discount == 0
 		(total_price_without_discount.cents - total_price.cents)*100/total_price_without_discount.cents
 	end
 
@@ -83,7 +75,7 @@ class Order < ActiveRecord::Base
 		self.save
 		super from: self.user, to: self
 	end
-	
+
 	STATUSES.each do |method_name, stat|
 		define_method method_name do
 			self.status = stat
@@ -91,12 +83,17 @@ class Order < ActiveRecord::Base
 			save
 		end
 	end
-	
+
 	def add param
-			self.order_products.new.add product: param[:product] if param[:product]
+		self.order_products.new.add product: param[:product] if param[:product]
 	end
 
 	private
+
+	def set_price_and_discount
+		self.price = total_price_without_discount
+		self.discount = total_discount if self.has_discount?
+	end
 
 	def sum_price price=nil
 		self.products.total_price price
@@ -105,5 +102,4 @@ class Order < ActiveRecord::Base
 	def update_status_date
 		self.status_change_date = Time.now
 	end
-
 end

@@ -9,7 +9,7 @@ Search
   =f.label :total_value
   =f.text_field :total_value, {include_blank: true}
   =f.label :date
-  =f.select :date, %w{less more equal}.zip(%w{less more equal}), {include_blank: true}
+  =f.select :date, %w{before after at}.zip(%w{before after at}), {include_blank: true}
   =f.label :date_value
   =f.date_select :date_value
   =f.submit "Search"

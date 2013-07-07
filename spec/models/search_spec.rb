@@ -18,13 +18,8 @@ describe "search" do
     let(:product_over_100){ FactoryGirl.create(:product, base_price: 11000)}
     let(:product_below_100){ FactoryGirl.create(:product, base_price: 9000)}
 
-    let(:order_below_100){ FactoryGirl.create(:order)}
-    let(:order_over_100){ FactoryGirl.create(:order)}
-
-    before(:each) do
-      order_over_100.add product: product_over_100
-      order_below_100.add product: product_below_100
-    end
+    let(:order_below_100){ create_order [product_over_100]}
+    let(:order_over_100){ create_order [product_below_100]}
 
     def search_find param
       Search.find({value: param, total_value: "100"})
@@ -39,7 +34,7 @@ describe "search" do
   context "date" do
     let(:order){ FactoryGirl.create(:order, created_at: Date.new(2010, 10, 10))}
     subject{ Search.find({
-      date: 'less', 
+      date: 'before', 
       :'date_value(1i)' => '2011',
       :'date_value(2i)' => '10',
       :'date_value(3i)' => '10'

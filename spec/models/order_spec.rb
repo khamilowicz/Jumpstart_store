@@ -11,6 +11,7 @@ describe Order do
     it{ should have_many(:order_products)}
     it{ should validate_presence_of(:address)}
     it{ should respond_to(:date_of_purchase) }
+    it{ should respond_to(:price)}
 
     %w{pending cancelled paid shipped returned}.each do |status|
       it{ should allow_value(status).for(:status)}
@@ -74,8 +75,10 @@ describe "total  price and total discount" do
   describe "doesn't change after saving order" do
     before(:each) do
       @order = create_order(products)
+      @order.save
     end
-    it{ 
+
+    it{
       expect{ products.each{|p| p.on_discount 50}}.
       to_not change{ @order.total_price }
     }
@@ -89,7 +92,6 @@ describe "total  price and total discount" do
       to_not change{ @order.has_discount?}
     } 
   end
-
 end
 
 describe "products" do
@@ -114,7 +116,7 @@ describe "products" do
 end
 
 context "searching" do
-  describe ".find_by_value" do
+  describe ".all_by_value" do
 
     let(:price_10){ Money.parse("$10")}
     let(:price_5){ Money.parse("$5")}
@@ -125,35 +127,40 @@ context "searching" do
     let(:order_price_30){ create_order products_price_10  }
     let(:order_price_10){ create_order products_price_5  }
 
+    before(:each) do
+      order_price_30.save
+      order_price_10.save
+    end
+
     it{order_price_30.total_price.should eq(price_10*3)}
     it{order_price_10.total_price.should eq(price_5*2)}
 
     describe "more" do
-      subject{ Order.find_by_value('more', '$20')}
+      subject{ Order.all_by_value('more', '$20')}
 
       it{ should include(order_price_30) }
       it{ should_not include(order_price_10) }
     end
 
     describe "less" do
-      subject{ Order.find_by_value('less', '$20')}
+      subject{ Order.all_by_value('less', '$20')}
 
       it{ should_not include(order_price_30) }
       it{ should include(order_price_10) }
     end
 
     describe "equal" do
-      subject{ Order.find_by_value('equal', '$10')}
+      subject{ Order.all_by_value('equal', '$10')}
 
       it{ should_not include(order_price_30) }
       it{ should include(order_price_10) }
     end
   end
 
-  describe ".find_by_date" do
+  describe ".all_by_date" do
     let(:order_later){ FactoryGirl.create(:order, created_at: Date.new(2010, 10, 11)) }
     let(:order_earlier){ FactoryGirl.create(:order, created_at: Date.new(2008, 10, 10)) }
-    subject{ Order.find_by_date 'more', "2010, 10, 10" }
+    subject{ Order.all_by_date('after', "2010", "10", "10") }
     
     it{should include(order_later)}
     it{should_not include(order_earlier)}

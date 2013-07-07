@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130705210707) do
+ActiveRecord::Schema.define(:version => 20130707194139) do
 
   create_table "assets", :force => true do |t|
     t.integer  "product_id"
@@ -58,6 +58,9 @@ ActiveRecord::Schema.define(:version => 20130705210707) do
     t.text     "address"
     t.string   "status",             :default => "pending"
     t.datetime "status_change_date"
+    t.integer  "price_cents",        :default => 0,         :null => false
+    t.string   "price_currency",     :default => "USD",     :null => false
+    t.integer  "discount",           :default => 100
   end
 
   add_index "orders", ["user_id"], :name => "index_orders_on_user_id"
