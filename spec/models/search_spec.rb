@@ -39,7 +39,7 @@ describe "search" do
   context "date" do
     let(:order){ FactoryGirl.create(:order, created_at: Date.new(2010, 10, 10))}
     subject{ Search.find({
-      date: 'less', 
+      date: 'before', 
       :'date_value(1i)' => '2011',
       :'date_value(2i)' => '10',
       :'date_value(3i)' => '10'

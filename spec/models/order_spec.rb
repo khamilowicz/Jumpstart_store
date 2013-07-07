@@ -11,6 +11,7 @@ describe Order do
     it{ should have_many(:order_products)}
     it{ should validate_presence_of(:address)}
     it{ should respond_to(:date_of_purchase) }
+    it{ should respond_to(:price)}
 
     %w{pending cancelled paid shipped returned}.each do |status|
       it{ should allow_value(status).for(:status)}
@@ -74,8 +75,10 @@ describe "total  price and total discount" do
   describe "doesn't change after saving order" do
     before(:each) do
       @order = create_order(products)
+      @order.save
     end
-    it{ 
+
+    it{
       expect{ products.each{|p| p.on_discount 50}}.
       to_not change{ @order.total_price }
     }
@@ -89,7 +92,6 @@ describe "total  price and total discount" do
       to_not change{ @order.has_discount?}
     } 
   end
-
 end
 
 describe "products" do
@@ -150,10 +152,10 @@ context "searching" do
     end
   end
 
-  describe ".find_by_date" do
+  describe ".all_by_date" do
     let(:order_later){ FactoryGirl.create(:order, created_at: Date.new(2010, 10, 11)) }
     let(:order_earlier){ FactoryGirl.create(:order, created_at: Date.new(2008, 10, 10)) }
-    subject{ Order.find_by_date 'more', "2010, 10, 10" }
+    subject{ Order.all_by_date('after', "2010", "10", "10") }
     
     it{should include(order_later)}
     it{should_not include(order_earlier)}

@@ -280,7 +280,7 @@ context "search order using a builder-style interface (like Google’s 'Advanced
   end
 
   it 'Order date (drop-down for >, <, = and a text field for a date)' do
-    select("more", from: 'search[date]')
+    select("after", from: 'search[date]')
     select('2010', from: 'search[date_value(1i)]')
     select('October', from: 'search[date_value(2i)]')
     select('10', from: 'search[date_value(3i)]')
