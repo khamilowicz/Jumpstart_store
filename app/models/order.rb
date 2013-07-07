@@ -1,7 +1,10 @@
+# require "transfer_products"
 class Order < ActiveRecord::Base
 
 	belongs_to :user
 	has_many :order_products
+
+	include TransferProducts
 
 	STATUSES = {
 		:cancel => 'cancelled',
@@ -78,11 +81,7 @@ class Order < ActiveRecord::Base
 	def transfer_products
 		self.set_address
 		self.save
-		self.user.products.all.each do |product|
-			self.add product: product
-			self.user.remove product: product
-			product.retire
-		end
+		super from: self.user, to: self
 	end
 	
 	STATUSES.each do |method_name, stat|

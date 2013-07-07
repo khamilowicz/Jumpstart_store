@@ -35,9 +35,8 @@ class ProductUser < ActiveRecord::Base
         pu.nil? ? 0 : pu.quantity
       else
         quantity_all
-      end
+      end 
     end
-
   end
 
   def add params
@@ -54,7 +53,6 @@ class ProductUser < ActiveRecord::Base
   def empty?
     self.quantity == 0
   end
-
 
   private
 

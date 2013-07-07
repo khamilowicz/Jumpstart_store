@@ -73,6 +73,12 @@ class Product < ActiveRecord::Base
     self.quantity == self.product_users.quantity
   end
 
+  def swap_prepare
+    self.quantity +=1
+    yield
+    self.quantity -=1
+  end
+
   private
 
   def create_asset

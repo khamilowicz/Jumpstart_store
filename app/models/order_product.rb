@@ -23,7 +23,7 @@ class OrderProduct < ActiveRecord::Base
 
   def convert prod
     self.product = prod
-    self.quantity = ProductUser.quantity prod, self.order.user
+    self.quantity = ProductUser.quantity(prod, self.order.user)
     self
   end
 
