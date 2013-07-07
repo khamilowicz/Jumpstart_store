@@ -24,13 +24,13 @@ class Order < ActiveRecord::Base
 	validates_presence_of :user, :address
 	validates_inclusion_of :status, in: STATUSES.values
 
-	scope :all_by_status, ->(status){ where(status: status).all}
-	scope :all_by_email, ->(email){ includes(:user).where(users: {email: email}).all}
-	scope :all_by_date, ->(sign_word, year, month, day){ 
-		where("created_at #{COMPARISONS[sign_word]} ?", Date.new(year.to_i,month.to_i,day.to_i)).all 
+	scope :find_by_status, ->(status){ where(status: status)}
+	scope :find_by_email, ->(email){ includes(:user).where(users: {email: email})}
+	scope :find_by_date, ->(sign_word, year, month, day){ 
+		where("created_at #{COMPARISONS[sign_word]} ?", Date.new(year.to_i,month.to_i,day.to_i)) 
 	}
-	scope :all_by_value, ->(sign_word, value){ 
-		where("price_cents #{COMPARISONS[sign_word]} ?", Money.parse(value).cents).all
+	scope :find_by_value, ->(sign_word, value){ 
+		where("price_cents #{COMPARISONS[sign_word]} ?", Money.parse(value).cents)
 	}
 
 	def self.count_by_status status;  self.where(status: status).count; end 
