@@ -116,7 +116,7 @@ describe "products" do
 end
 
 context "searching" do
-  describe ".find_by_value" do
+  describe ".all_by_value" do
 
     let(:price_10){ Money.parse("$10")}
     let(:price_5){ Money.parse("$5")}
@@ -127,25 +127,30 @@ context "searching" do
     let(:order_price_30){ create_order products_price_10  }
     let(:order_price_10){ create_order products_price_5  }
 
+    before(:each) do
+      order_price_30.save
+      order_price_10.save
+    end
+
     it{order_price_30.total_price.should eq(price_10*3)}
     it{order_price_10.total_price.should eq(price_5*2)}
 
     describe "more" do
-      subject{ Order.find_by_value('more', '$20')}
+      subject{ Order.all_by_value('more', '$20')}
 
       it{ should include(order_price_30) }
       it{ should_not include(order_price_10) }
     end
 
     describe "less" do
-      subject{ Order.find_by_value('less', '$20')}
+      subject{ Order.all_by_value('less', '$20')}
 
       it{ should_not include(order_price_30) }
       it{ should include(order_price_10) }
     end
 
     describe "equal" do
-      subject{ Order.find_by_value('equal', '$10')}
+      subject{ Order.all_by_value('equal', '$10')}
 
       it{ should_not include(order_price_30) }
       it{ should include(order_price_10) }
