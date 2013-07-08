@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.13'
 gem 'money-rails'
 gem 'simple_form'
+gem 'kaminari'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -23,19 +24,19 @@ group :assets do
   gem 'twitter-bootstrap-rails'
 end
 
-  gem 'faker'
+gem 'faker'
 group :test, :development do
-gem 'zeus'
-gem 'sqlite3'
+  gem 'zeus'
+  gem 'sqlite3'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'capybara_rails'
   gem 'delorean'
   gem 'guard-livereload'
-gem 'pry-rails'
-gem 'pry-plus'
-gem 'pry-stack_explorer'
+  gem 'pry-rails'
+  gem 'pry-plus'
+  gem 'pry-stack_explorer'
 end
 
 group :test do

@@ -1,7 +1,8 @@
 class ProductsController < ApplicationController
 
 	def index
-		@products = Product.find_on_sale.all
+		@products = Product.find_on_sale.page params[:page]
+		@products_presenter = ProductPresenter.new_from_array @products
 	end
 
 	def new
@@ -48,7 +49,7 @@ def create
 end
 
 def show
-	@product = Product.find(params[:id])
+	@product_presenter = ProductPresenter.new Product.find(params[:id])
 end
 
 end

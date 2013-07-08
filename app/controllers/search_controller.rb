@@ -4,6 +4,6 @@ class SearchController < ApplicationController
   end
 
   def show
-    @orders = Search.find(params[:search])
+    @orders = Search.new(params[:search]).find
   end
 end

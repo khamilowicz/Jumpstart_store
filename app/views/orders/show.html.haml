@@ -1,8 +1,8 @@
 %h2 Order page
 .order
   .purchaser
-    .name= "Name: " + @order.user.full_name
-    .email= "Email: " + @order.user.email
+    .name= "Name: " + @user.full_name
+    .email= "Email: " + @user.email
   .status= "Order is #{@order.status} since #{@order.status_change_date.strftime("%d %b %Y")}" if @order.status_change_date
   .submit_date= "Was purchased #{@order.date_of_purchase.strftime("%d %b %Y")}"
   .total_price= "Total price: $#{@order.total_price}"
@@ -10,4 +10,4 @@
     .was_on_sale= "Purchased on sale? #{@order.has_discount? ? 'Yes' : 'No'}"
     .discount= "Total discount: #{@order.total_discount}%"
   .products
-    =render partial: 'orders/inline_product', collection: @order.products, as: :product
+    =render partial: 'orders/inline_product', collection: @products, as: :product

@@ -14,8 +14,9 @@ describe "guest" do
     it { should have_link("Log in")}
     it { should_not have_link("Log out")}
   end
+  
   it "can't checkout" do 
-    product = FactoryGirl.create(:product)
+    product = ProductPresenter.new FactoryGirl.create(:product)
 
     add_products_to_cart product 
 
@@ -29,8 +30,8 @@ describe "guest" do
   context "logs in" do
 
     before(:each) do
-      @user = FactoryGirl.create(:user)
-      @product = FactoryGirl.create(:product, :on_sale)
+      @user = UserPresenter.new FactoryGirl.create(:user)
+      @product = ProductPresenter.new FactoryGirl.create(:product, :on_sale)
       add_products_to_cart @product
       login @user 
     end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130702125021) do
+ActiveRecord::Schema.define(:version => 20130707194139) do
 
   create_table "assets", :force => true do |t|
     t.integer  "product_id"
@@ -58,6 +58,9 @@ ActiveRecord::Schema.define(:version => 20130702125021) do
     t.text     "address"
     t.string   "status",             :default => "pending"
     t.datetime "status_change_date"
+    t.integer  "price_cents",        :default => 0,         :null => false
+    t.string   "price_currency",     :default => "USD",     :null => false
+    t.integer  "discount",           :default => 100
   end
 
   add_index "orders", ["user_id"], :name => "index_orders_on_user_id"
@@ -68,6 +71,7 @@ ActiveRecord::Schema.define(:version => 20130702125021) do
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
     t.boolean  "in_cart",    :default => false
+    t.integer  "quantity",   :default => 0
   end
 
   create_table "products", :force => true do |t|
@@ -77,7 +81,7 @@ ActiveRecord::Schema.define(:version => 20130702125021) do
     t.text     "description"
     t.string   "photo"
     t.boolean  "on_sale",             :default => false
-    t.integer  "discount"
+    t.integer  "discount",            :default => 100
     t.integer  "order_id"
     t.integer  "quantity",            :default => 1
     t.integer  "base_price_cents",    :default => 0,     :null => false

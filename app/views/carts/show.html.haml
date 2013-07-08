@@ -1,7 +1,7 @@
 .heading
-  %h3= "#{current_user.display_name}'s' cart"
+  %h3= "#{current_user_presenter.display_name}'s' cart"
 .order_menu
-  -if current_user.guest?
+  -if current_user_presenter.guest?
     "You need to log in to purchase products"
   -else
     =link_to 'Order', new_order_path, class: 'btn btn-primary'

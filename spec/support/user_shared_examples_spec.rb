@@ -1,19 +1,18 @@
-require "spec_helper"
+# require "spec_helper"
 
 shared_examples_for "user" do
 
   subject{page}
 
   before(:each) do
-    @products = FactoryGirl.create_list(:product, 2, :on_sale, quantity: 3)
-    @product = @products.first
+    @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 2, quantity: 3)
+    @product =  @products.first
     visit '/products' 
   end
 
   context "while browsing products" do
-
+    
     it {should have_short_product(@products.first)}
-    it {pending; should have_selector(".product .quantity")}
 
     context "adds product to his cart" do
       before(:each) do
@@ -79,9 +78,9 @@ shared_examples_for "user" do
   context "while browsing categories" do
     before(:each) do
       @categories =['Category_1', 'Category_2'] 
-      @products.first.add category: @categories.first
-      @products.first.add category: @categories.last
-      @products.last.add category: @categories.last
+      @products.first.product.add category: @categories.first
+      @products.first.product.add category: @categories.last
+      @products.last.product.add category: @categories.last
       visit '/categories'
     end
 
@@ -101,7 +100,7 @@ shared_examples_for "user" do
       click_link @categories.last 
     end 
 
-    it {should have_short_product(@products.last)}
+    it {should have_short_product(@products.last), "#{page.find("body").native}"}
     it {should have_short_product(@products.first)}
   end
 end
@@ -134,26 +133,25 @@ shared_examples_for "user who can't" do
 
   describe "can't" do
 
-  describe "view another user’s"  do
-    before(:each) do
-      @other_user = FactoryGirl.create(:user, first_name: "Abe", last_name: "Lincoln")
-      @product = FactoryGirl.create(:product, :on_sale)
-      @other_user.add product: @product 
-    end
-
-    describe "profile" do
+    describe "view another user’s"  do
       before(:each) do
-        visit user_path(@other_user)
+        @other_user = UserPresenter.new FactoryGirl.create(:user, first_name: "Abe", last_name: "Lincoln")
+        @product = FactoryGirl.create(:product, :on_sale)
+        @other_user.add product: @product 
       end
 
-      it{ pending; should have_content("You can't")}
-      it{ should_not have_content(@other_user.full_name)}
-    end
+      describe "profile" do
+        before(:each) do
+          visit user_path(@other_user)
+        end
 
-    describe 'cart' do
-      before(:each) do
-        visit cart_path(@other_user.cart)
+        it{ should_not have_content(@other_user.full_name)}
       end
+
+      describe 'cart' do
+        before(:each) do
+          visit cart_path(@other_user.cart)
+        end
 
       # it{ should have_content("You can't")}
       it{ should_not have_content("#{@other_user.display_name} cart")}
@@ -168,13 +166,12 @@ shared_examples_for "user who can't" do
         visit order_path(@order)
       end
 
-      it{ pending; should have_content("You can't")}
       it{ should_not have_content(@other_user.display_name)}
       it {should_not have_content("Order page")}
     end
   end
 
- 
+
   it "view the administrator screens or use administrator functionality" do
     visit admin_dashboard_path
     should_not have_content("Administrator Dashboard")

@@ -11,10 +11,11 @@ namespace :db do
       email: 'kham@gmail.com',
       password: 'megamega',
       password_confirmation: 'megamega',
-      admin: true
       )
+    admin.promote_to_admin
+    admin.save
 
-    25.times do 
+    40.times do 
       Product.create!(
         title: Faker::Lorem.sentence(rand(4)+1),
         description: Faker::Lorem.paragraph(3),
@@ -24,6 +25,8 @@ namespace :db do
         on_sale: true
         )
     end
+
+    Product.all.sample(10).map{|p| p.on_discount rand(100)}
 
     4.times do
       password = Faker::Lorem.word
@@ -43,7 +46,7 @@ namespace :db do
     end 
 
     Category.all.each do |category|
-      Product.all.sample(6).each do |product|
+      Product.all.sample(11).each do |product|
         category.add product: product
       end
     end

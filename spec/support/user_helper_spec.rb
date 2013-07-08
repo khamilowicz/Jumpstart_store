@@ -1,17 +1,17 @@
-require "spec_helper"
+# require "spec_helper"
 
-  def create_order products=nil
-    products = FactoryGirl.create_list(:product, 1) unless products
-    user = FactoryGirl.create(:user)
-    products.each do |product|
-      user.add product: product
-    end
-    order = user.orders.build
-    order.address = user.address
-    order.transfer_products
-    order.save
-    order
+def create_order products=nil
+  products = FactoryGirl.create_list(:product, 1) unless products
+  user = FactoryGirl.create(:user)
+  products.each do |product|
+    user.add product: product
   end
+  order = user.orders.build
+  order.address = user.address
+  order.transfer_products
+  order.save
+  order
+end
 
 def add_products_to_cart products
   visit products_path
@@ -40,7 +40,7 @@ def order_some_products_for_real products
 end
 
 def current_user
- user
+ user.kind_of?(UserPresenter) ? user.user : user
 end
 
 def order_some_products products
@@ -86,7 +86,7 @@ end
 
 def put_on_sale stuff
   stuff = [stuff] unless stuff.kind_of?(Array)
-  names = stuff.first.kind_of?(Product) ? stuff.map(&:title) : stuff
+  names = stuff.first.respond_to?(:title) ? stuff.map(&:title) : stuff
   visit new_sale_path
   fill_in "discount", with: '50'
   names.each do |name|
