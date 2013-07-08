@@ -17,8 +17,8 @@
 
     it "log out" do 
       click_link "Log out"
-      should_not have_content(user.display_name)
-      should_not have_content("Log out")
+      should have_no_content(user.display_name)
+      should have_no_content("Log out")
       should have_content("Guest")
       should have_link("Log in")
     end
