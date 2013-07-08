@@ -16,7 +16,7 @@ class OrdersController < ApplicationController
 	end
 
 	def filter
-		@orders = Order.all_by_status(params[:status])
+		@orders = Order.find_by_status(params[:status])
 		respond_to do |format|
 			format.html {render 'index'}
 			format.js {render :index}

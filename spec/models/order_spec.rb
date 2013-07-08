@@ -28,7 +28,7 @@ describe Order do
     end
   end
 
-  describe ".all_by_status" do
+  describe ".find_by_status" do
    let!(:order_can){ create_order }
    let!(:order_sent){ create_order }
 
@@ -40,11 +40,11 @@ describe Order do
   it{ Order.all.should include(order_can, order_sent)}
 
   it{
-    Order.all_by_status(:shipped).
+    Order.find_by_status(:shipped).
     should include(order_sent)
   }
   it{
-    Order.all_by_status(:shipped).
+    Order.find_by_status(:shipped).
     should_not include(order_can)
   }
 end
@@ -116,7 +116,7 @@ describe "products" do
 end
 
 context "searching" do
-  describe ".all_by_value" do
+  describe ".find_by_value" do
 
     let(:price_10){ Money.parse("$10")}
     let(:price_5){ Money.parse("$5")}
@@ -136,37 +136,37 @@ context "searching" do
     it{order_price_10.total_price.should eq(price_5*2)}
 
     describe "more" do
-      subject{ Order.all_by_value('more', '$20')}
+      subject{ Order.find_by_value('more', '$20')}
 
       it{ should include(order_price_30) }
       it{ should_not include(order_price_10) }
     end
 
     describe "less" do
-      subject{ Order.all_by_value('less', '$20')}
+      subject{ Order.find_by_value('less', '$20')}
 
       it{ should_not include(order_price_30) }
       it{ should include(order_price_10) }
     end
 
     describe "equal" do
-      subject{ Order.all_by_value('equal', '$10')}
+      subject{ Order.find_by_value('equal', '$10')}
 
       it{ should_not include(order_price_30) }
       it{ should include(order_price_10) }
     end
   end
 
-  describe ".all_by_date" do
+  describe ".find_by_date" do
     let(:order_later){ FactoryGirl.create(:order, created_at: Date.new(2010, 10, 11)) }
     let(:order_earlier){ FactoryGirl.create(:order, created_at: Date.new(2008, 10, 10)) }
-    subject{ Order.all_by_date('after', "2010", "10", "10") }
+    subject{ Order.find_by_date('after', "2010", "10", "10") }
     
     it{should include(order_later)}
     it{should_not include(order_earlier)}
   end
 
-  describe ".all_by_email" do
+  describe ".find_by_email" do
     let(:user){ FactoryGirl.create(:user) }
     let(:user_2){ FactoryGirl.create(:user) }
     let(:order){ FactoryGirl.create(:order) }
@@ -177,7 +177,7 @@ context "searching" do
       user_2.orders << order_2
     end
 
-    subject{ Order.all_by_email(user.email)}
+    subject{ Order.find_by_email(user.email)}
     it{ should include(order)}
     it{ should_not include(order_2)}
   end
