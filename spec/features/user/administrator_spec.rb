@@ -251,16 +251,20 @@ end
 
 context "search order using a builder-style interface (like Google’s 'Advanced Search;) allowing them to specify any of these:" do
   before(:each) do
-    @pending_order = FactoryGirl.create(:order, status: 'pending', user: FactoryGirl.create(:user))
-    @cancelled_order = FactoryGirl.create(:order, status: 'cancelled', user: FactoryGirl.create(:user))
-    product_11 = ProductPresenter.new FactoryGirl.create(:product, base_price: 11)
-    product_9 = ProductPresenter.new  FactoryGirl.create(:product, base_price: 9)
-    @pending_order.add product: product_11.product
+    # @pending_order = FactoryGirl.create(:order, status: 'pending', user: FactoryGirl.create(:user))
+    # @cancelled_order = FactoryGirl.create(:order, status: 'cancelled', user: FactoryGirl.create(:user))
+    product_11 = ProductPresenter.new FactoryGirl.create(:product, base_price: 1100)
+    product_9 = ProductPresenter.new  FactoryGirl.create(:product, base_price: 900)
+
+    @pending_order = create_order [product_11.product]
     @pending_order.created_at = Date.new(2011, 10,10)
-    @cancelled_order.add product: product_9.product
-    @cancelled_order.created_at = Date.new(2008, 10,10)
     @pending_order.save
+    
+    @cancelled_order = create_order [product_9.product]
+    @cancelled_order.created_at = Date.new(2008, 10,10)
+    @cancelled_order.set_status 'cancel'
     @cancelled_order.save
+
     click_link 'Search'
   end
 
@@ -270,12 +274,15 @@ context "search order using a builder-style interface (like Google’s 'Advanced
     page.should have_short_order(@pending_order), "#{page.find('body').native}"
   end
 
+  it{ @pending_order.total_price.should == Money.parse('$11')}
+  it{ @cancelled_order.total_price.should == Money.parse('$9')}
+
   it 'Order total (drop-down for >, <, = and a text field for dollar-with-cents)' do
-    fill_in(:total_value, with: 10)
+    fill_in('search[value][total_value]', with: '$10')
     select('more', :from => 'search[value][value]')
     click_button "Search"
-    page.should have_short_order(@pending_order), "#{page.find('body').native}"
     page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
+    page.should have_short_order(@pending_order), "#{page.find('body').native}"
   end
 
   it 'Order date (drop-down for >, <, = and a text field for a date)' do
