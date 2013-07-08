@@ -1,5 +1,4 @@
 require "spec_helper"
-# require_relative './user_helper_spec'
 
 describe "Administrator" do
 
@@ -266,24 +265,24 @@ context "search order using a builder-style interface (like Google’s 'Advanced
   end
 
   it 'Status (drop-down)' do
-    select('pending', from: 'search[status]')
+    select('pending', from: 'search[status][status]')
     click_button "Search"
     page.should have_short_order(@pending_order), "#{page.find('body').native}"
   end
 
   it 'Order total (drop-down for >, <, = and a text field for dollar-with-cents)' do
     fill_in(:total_value, with: 10)
-    select('more', :from => 'search[value]')
+    select('more', :from => 'search[value][value]')
     click_button "Search"
     page.should have_short_order(@pending_order), "#{page.find('body').native}"
     page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
   end
 
   it 'Order date (drop-down for >, <, = and a text field for a date)' do
-    select("after", from: 'search[date]')
-    select('2010', from: 'search[date_value(1i)]')
-    select('October', from: 'search[date_value(2i)]')
-    select('10', from: 'search[date_value(3i)]')
+    select("after", from: 'search[date][date]')
+    select('2010', from: 'search[date][date_value(1i)]')
+    select('October', from: 'search[date][date_value(2i)]')
+    select('10', from: 'search[date][date_value(3i)]')
     click_button "Search"
     page.should have_short_order(@pending_order), "#{page.find('body').native}"
     page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
