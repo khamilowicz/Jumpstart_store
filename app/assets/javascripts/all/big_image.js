@@ -35,16 +35,11 @@ function update_big_image(){
   });
 };
 
-function change_slogan(){
-  var chunk = $(document).height()/slogans.length;
-  $('.big_product_image .caption.title').remove();
-  var slogan = slogans[0];
-  for(var i=1; i<slogans.length; i++){
-    if((window.pageYOffset) > (i*chunk)){ 
-      slogan = slogans[i];
-    }
-  }
-  slogan_format(slogan);
+function change_slogan () {
+ var chunk = $(document).height()/slogans.length;
+ $('.big_product_image .caption.title').remove();
+ var slogan = slogans[parseInt(window.pageYOffset/chunk)];
+ slogan_format(slogan);
 }
 
 $(document).ready(function() {
