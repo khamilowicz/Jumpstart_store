@@ -1,4 +1,4 @@
-require "spec_helper"
+# require "spec_helper"
 
 def create_order products=nil
   products = FactoryGirl.create_list(:product, 1) unless products
