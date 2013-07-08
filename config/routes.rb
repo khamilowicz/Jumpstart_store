@@ -13,14 +13,7 @@ NewStore::Application.routes.draw do
 
   get 'search' => 'search#new', as: 'search'
   post 'search' => 'search#show', as: 'searches'
-  # get 'sales/new'
-  # post 'sales/create'
-  # get 'sales' => 'sales#index'
-  # delete 'sales' => 'sales#delete'
-
-  # get 'orders' => 'orders#index', as: 'orders'
-  # get 'products' => 'products#index', as: 'products'
-  # get 'orders/create' => 'orders#create', as: 'create'
+  post 'search_product' => 'search#new_product', as: 'search_product'
 
   resources :orders, except: [:create] do 
     collection do
