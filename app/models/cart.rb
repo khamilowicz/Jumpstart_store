@@ -11,5 +11,4 @@ class Cart
   def total_price
     self.products.total_price
   end
-	
 end

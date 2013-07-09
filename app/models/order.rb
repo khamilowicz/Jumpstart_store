@@ -85,7 +85,7 @@ class Order < ActiveRecord::Base
 	end
 
 	def add param
-		self.order_products.new.add product: param[:product] if param[:product]
+		self.order_products.new.add(param).save if param[:product]
 	end
 
 	private
