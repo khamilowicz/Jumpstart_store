@@ -1,4 +1,4 @@
-  $(".products").html("<%= j render partial: 'products/short', collection: @category.products, as: :product %>");
+  $(".products").html("<%= j render partial: 'products/short', collection: @products_presenter, as: :product %>");
   $('.paginate').html("<%= j paginate @products %>");
 
   jQuery(document).ready(function($) {

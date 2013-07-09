@@ -33,15 +33,30 @@ class Product < ActiveRecord::Base
 
   delegate :rating, to: :reviews
 
-  def photo
-    self.assets.first.photo
+  class << self
+
+    def start_selling
+      self.update_all(on_sale: true);
+    end
+
+    def on_sale?
+      self.where(on_sale: true).count == self.count
+    end
+
+    def retire
+      self.update_all(on_sale: false)
+    end
+
+    def on_discount discount
+      self.update_all(discount: discount)
+    end
+
+    def off_discount
+      self.update_all(discount: 100)
+    end
   end
 
-  def photos
-    Asset.photos_for(self)
-  end
-
-  def add param 
+   def add param 
     add_review param[:review] if param[:review]
     add_to_category param[:category] if param[:category]
   end
@@ -50,36 +65,16 @@ class Product < ActiveRecord::Base
     self.on_sale = true; self.save
   end
 
-  def self.start_selling
-    self.update_all(on_sale: true);
-  end
-
-  def self.on_sale?
-    self.where(on_sale: true).count == self.count
-  end
-
   def retire
     self.on_sale = false; self.save
-  end
-
-  def self.retire
-    self.update_all(on_sale: false)
   end
 
   def on_discount discount
     self.discount = discount; self.save
   end
 
-  def self.on_discount discount
-    self.update_all(discount: discount)
-  end
-
   def on_discount?
     self.discount < 100
-  end
-
-  def self.off_discount
-    self.update_all(discount: 100)
   end
 
   def off_discount
@@ -94,6 +89,14 @@ class Product < ActiveRecord::Base
     self.quantity +=1
     yield
     self.quantity -=1
+  end
+
+  def photo
+    self.assets.first.photo
+  end
+
+  def photos
+    Asset.photos_for(self)
   end
 
   private
