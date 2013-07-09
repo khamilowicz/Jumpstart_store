@@ -21,7 +21,6 @@ class Order < ActiveRecord::Base
 		'at' => '=', 'equal' => '='
 	}
 
-
 	validates_presence_of :user, :address
 	validates_inclusion_of :status, in: STATUSES.values
 
