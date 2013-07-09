@@ -31,41 +31,60 @@ describe Category do
     category.add product: product
   end
 
-
-     context "adds unique products" do
-      it {expect{ category.add product: product}.
-      not_to change{ category.products.size} }
-    end
-    
+  context "adds unique products" do
+    it {expect{ category.add product: product}.
+    not_to change{ category.products.size} }
   end
 
-  describe "#products" do
+end
 
-    let(:product){FactoryGirl.create(:product)}
-    before{ c1.add product: product}
+describe "#products" do
 
-    subject{ c1.products}
+  let(:product){FactoryGirl.create(:product)}
+  before{ c1.add product: product}
 
-    it{ should include(product)}
+  subject{ c1.products}
 
-    describe "finds products by category" do
-      let(:product_1){FactoryGirl.create(:product)}
-      let(:product_11){FactoryGirl.create(:product)}
-      let(:product_2){FactoryGirl.create(:product)}
+  it{ should include(product)}
 
-      before do
-        product_1.add category: "Category_1"
-        product_11.add category: "Category_1"
-        product_2.add category: "Category_2"
-      end
+  describe "finds products by category" do
+    let(:product_1){FactoryGirl.create(:product)}
+    let(:product_11){FactoryGirl.create(:product)}
+    let(:product_2){FactoryGirl.create(:product)}
 
-      subject{ Category.find_products_for("Category_1")}
-
-      it{ should include(product_1, product_11)}
-      it{ should_not include(product_2)}
-      it{ Category.find_products_for("Category_2").should include(product_2)}
+    before do
+      product_1.add category: "Category_1"
+      product_11.add category: "Category_1"
+      product_2.add category: "Category_2"
     end
+
+    subject{ Category.find_products_for("Category_1")}
+
+    it{ should include(product_1, product_11)}
+    it{ should_not include(product_2)}
+    it{ Category.find_products_for("Category_2").should include(product_2)}
   end
+end
+
+describe "#products_for_user" do
+  let(:user){ FactoryGirl.create(:user)}
+  let(:products){ FactoryGirl.create_list(:product, 3)}
+  
+  before(:each) do
+    user.add product: products[0]
+    user.add product: products[1]
+    category.add product: products[1]
+    category.add product: products[2]
+  end
+  it{ user.products.should include(*products[0,2])}
+  it{ user.products.should_not include(products[2])}
+
+  it{ category.products.should include(*products[1,2])}
+  it{ category.products.should_not include(products[0])}
+
+  it{ category.products_for_user(user).should include(products[1])}
+  it{ category.products_for_user(user).should_not include(products[0], products[2])}
+end
 end
 
 describe "total price" do
@@ -106,6 +125,7 @@ describe "concerning putting on sale" do
 
   its(:all_on_sale?){ should be_false}
   it{ expect{ category.start_selling}.to change{category.all_on_sale?}.to(true)}
+  
   describe "category products" do
     let(:products){ category.products}
     
@@ -113,10 +133,10 @@ describe "concerning putting on sale" do
     it{ expect{ products.first.start_selling}.to_not change{category.all_on_sale?}.to(true)}
   end
 
-  describe "discount" do
+  describe "on_discount" do
     before {category.start_selling}
 
-    it{ expect{ category.discount 50}.to change{category.total_price}.from(product_price).to(product_price/2)}
+    it{ expect{ category.on_discount 50}.to change{category.total_price}.from(product_price).to(product_price/2)}
   end
 end
 end

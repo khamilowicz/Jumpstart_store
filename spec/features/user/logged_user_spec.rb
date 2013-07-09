@@ -48,7 +48,7 @@
         end
 
         it{should have_short_product( products.first) }
-        it{ should have_selector('.total', text: "Total for order: $3.0")}
+        it{ should have_selector('.total', text: "Total for order: $3")}
       end
 
       context "after placing it" do

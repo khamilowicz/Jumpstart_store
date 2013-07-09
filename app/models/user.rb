@@ -14,9 +14,6 @@ class User < ActiveRecord::Base
 	has_many :product_users
 	has_many :products, through: :product_users
 	has_many :orders
-	has_one :cart
-
-	after_create :create_cart
 
 	class << self
 
@@ -26,6 +23,10 @@ class User < ActiveRecord::Base
 			user_guest.save
 			user_guest
 		end
+	end
+
+	def cart
+		Cart.new(self)
 	end
 
 	def add param

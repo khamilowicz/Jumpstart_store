@@ -18,7 +18,6 @@ class ProductCategoryManagerController < ApplicationController
   end
 
   def join_many
-
     @product_category_manager = ProductCategoryManager.new params[:product_category_manager]
     @product_category_manager.join
 

@@ -21,14 +21,15 @@ class OrderProduct < ActiveRecord::Base
     end
   end
 
-  def convert prod
-    self.product = prod
-    self.quantity = ProductUser.quantity(prod, self.order.user)
-    self
+  def self.add params
+    n = self.new.add params
+    n
   end
 
   def add params
-    self.convert(params[:product])
+    self.product = params[:product]
+    self.quantity = ProductUser.quantity(params[:product], self.order.user)
+    self
   end
 
   def subtotal

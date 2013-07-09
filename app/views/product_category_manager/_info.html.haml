@@ -1,5 +1,5 @@
 .info.alert.alert-info
-  = "Added #{pluralize(pcm.product.size, 'product')} :"
+  = "Added #{pluralize(pcm.product_size, 'product')} :"
   - pcm.products.each do |product|
     %ul
       %li= link_to product.title, product_path(product)

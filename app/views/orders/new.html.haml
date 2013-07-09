@@ -1,9 +1,9 @@
 .order_new
   %h2 Order page
   .stats
-    %h3.total= "Total for order: $#{current_user.cart.total_price}"
+    %h3.total= "Total for order: #{humanized_money_with_symbol @cart.total_price}"
   .span12.form_order
-    = render 'payment'
+    = render partial: 'payment', locals: {cart: @cart}
   .products
     = render partial: 'products/inline', collection: @products, as: :product
 =javascript_include_tag "pages/paymill"
