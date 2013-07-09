@@ -4,6 +4,10 @@ class Cart
     @user = user
   end
 
+  def currency
+    self.total_price.currency
+  end
+
 	def products
     @user.products.joins(:product_users).where(product_users: {in_cart: true})
 	end
