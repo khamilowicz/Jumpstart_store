@@ -56,9 +56,10 @@ class Product < ActiveRecord::Base
     end
   end
 
-   def add param 
+  def add param 
     add_review param[:review] if param[:review]
     add_to_category param[:category] if param[:category]
+    add_photos param[:photos] if param[:photos]
   end
 
   def start_selling
@@ -111,6 +112,13 @@ class Product < ActiveRecord::Base
 
   def add_review review
     reviews << review
+  end
+
+  def add_photos photos
+    photos.each do |photo|
+      self.assets.create({photo: photo})
+    end
+    
   end
 
   def set_default_discount_value

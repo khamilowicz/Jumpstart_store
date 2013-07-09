@@ -16,40 +16,33 @@ class ProductsController < ApplicationController
 	def update
 		@product = Product.find(params[:id])
 		@photos = params[:assets][:photos]
-		@photos.each do |value|
-			photo = Asset.create({photo: value})
-			@product.assets << photo
-		end
+		@product.add photos: @photos
 
 		if @product.update_attributes(params[:product])
-		# binding.pry
-		redirect_to products_path, notice: "Successfully updated product"
-	else
-		redirect_to edit_product_path(@product), notice: "Error"
-	end
-end
-
-def create
-
-	product = Product.new(params[:product])
-
-	product.start_selling
-
-	if product.save
-		@photos = params[:assets][:photos]
-		@photos.each do |value|
-			photo = Asset.create({photo: value})
-			product.assets << photo
+			redirect_to products_path, notice: "Successfully updated product"
+		else
+			redirect_to edit_product_path(@product), notice: "Error"
 		end
-
-		redirect_to products_path, notice: "Successfully created product"
-	else
-		redirect_to new_product_path, notice: "Error"
 	end
-end
 
-def show
-	@product_presenter = ProductPresenter.new Product.find(params[:id])
-end
+	def create
+
+		product = Product.new(params[:product])
+
+		product.start_selling
+
+		if product.save
+			@photos = params[:assets][:photos]
+			product.add photos: @photos
+
+			redirect_to products_path, notice: "Successfully created product"
+		else
+			redirect_to new_product_path, notice: "Error"
+		end
+	end
+
+	def show
+		@product_presenter = ProductPresenter.new Product.find(params[:id])
+	end
 
 end

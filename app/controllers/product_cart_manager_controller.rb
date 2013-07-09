@@ -5,10 +5,9 @@ class ProductCartManagerController < ApplicationController
     user = specified_user
     user.add product: product
 
-
     respond_to do |format|
-      format.html {redirect_to products_path, notice: "#{product.title} added to cart"}
-      # format.html { render controller: 'products', action: 'index'}
+      format.html {redirect_to :back, notice: "#{product.title} added to cart"}
+      format.js {render :back}
     end
   end
 
@@ -19,6 +18,7 @@ class ProductCartManagerController < ApplicationController
 
     respond_to do |format|
       format.html {redirect_to :back, notice: "#{product.title} removed from cart"}
+      format.js {render :back}
     end
   end
 

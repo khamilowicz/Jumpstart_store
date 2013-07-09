@@ -1,4 +1,6 @@
 $('.products').html("<%= j render partial: 'products/short', collection: @products_presenter, as: :product %>");
+  $('.paginate').html("<%= j paginate @products, remote: true %>");
+
 
 $(function() {
   $('.cart_btn').bind('ajax:beforeSend', function() {
