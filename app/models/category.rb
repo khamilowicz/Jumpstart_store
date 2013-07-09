@@ -15,7 +15,7 @@ class Category < ActiveRecord::Base
    end
 
    def get category_name
-     Category.where(name: category_name).first_or_create do |category|
+     self.where(name: category_name).first_or_create do |category|
       category.name = category_name
     end
   end
@@ -30,7 +30,7 @@ def add param
 end
 
 def products_for_user user 
-  user.products & self.products
+  self.products.joins(:product_users).where(product_users: {user_id: user.id})
 end
 
 def total_price
@@ -52,6 +52,6 @@ end
 private 
 
 def add_product product
-  self.products << product unless self.products.any?{|prod| prod == product}
+  self.products << product unless self.products.where(id: product.id).any?
 end
 end
