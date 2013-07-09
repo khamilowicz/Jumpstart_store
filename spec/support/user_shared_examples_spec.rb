@@ -11,7 +11,7 @@ shared_examples_for "user" do
   end
 
   context "while browsing products" do
-    
+
     it {should have_short_product(@products.first)}
 
     context "adds product to his cart" do
@@ -124,8 +124,6 @@ context "while viewing his cart" do
   end 
 end
 
-it 'search for products in the whole site'
-it 'search through "My Orders" for matches in the item name or description'
 end
 end
 
@@ -146,39 +144,35 @@ shared_examples_for "user who can't" do
         end
 
         it{ should_not have_content(@other_user.full_name)}
+        it{ should have_content("not allowed")}
       end
 
       describe 'cart' do
         before(:each) do
-          visit cart_path(@other_user.cart)
+          visit cart_path
         end
 
-      # it{ should have_content("You can't")}
-      it{ should_not have_content("#{@other_user.display_name} cart")}
-    end
-
-    describe 'order' do 
-      before(:each) do
-        @order = @other_user.orders.new
-        @order.transfer_products
-        @order.address = 'lala'
-        @order.save
-        visit order_path(@order)
+        it{ should have_no_content("#{@other_user.display_name} cart")}
       end
 
-      it{ should_not have_content(@other_user.display_name)}
-      it {should_not have_content("Order page")}
+      describe 'order' do 
+        before(:each) do
+          @order = @other_user.orders.new
+          @order.transfer_products
+          @order.address = 'lala'
+          @order.save
+          visit order_path(@order)
+        end
+        it{ should have_content("not allowed")}
+        it{ should_not have_content(@other_user.display_name)}
+        it {should_not have_content("Order page")}
+      end
     end
-  end
 
 
-  it "view the administrator screens or use administrator functionality" do
-    visit admin_dashboard_path
-    should_not have_content("Administrator Dashboard")
-  end
-
-  it "make himself an administrator"
-
-end
-
+    it "view the administrator screens or use administrator functionality" do
+      visit admin_dashboard_path
+      should_not have_content("Administrator Dashboard")
+    end
+  end 
 end

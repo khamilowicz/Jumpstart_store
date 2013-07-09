@@ -9,6 +9,12 @@ end
 
 end
 
+RSpec::Matchers.define :have_inline_order do |order|
+  match do |page_content|
+    page_content.should have_content(order.created_at.strftime("%e %b %Y"))
+  end
+end
+
 RSpec::Matchers.define :have_inline_product do |products|
   match do |page_content|
     selector = ".product.inline.#{product.title_param}" 

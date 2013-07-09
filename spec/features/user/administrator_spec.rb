@@ -48,10 +48,10 @@ describe "Administrator" do
         click_link @category_name
       end
 
-it{ 
-      should have_content(@category_name)
-      should have_short_product(@product)
-}
+      it{ 
+        should have_content(@category_name)
+        should have_short_product(@product)
+      }
     end
 
 
@@ -99,7 +99,13 @@ it{
     end
   end
 
-  it "Retire a product from being sold, which hides it from browsing by any non-administrator"
+  it "retire a product from being sold, which hides it from browsing by any non-administrator" do
+    @product = FactoryGirl.create(:product)
+    visit edit_product_path(@product)
+    uncheck :on_sale
+    find("form input[name='commit']").click
+    Product.find(@product.id).should_not be_on_sale
+  end
 
   context "sees a listing of all orders" do
     before(:each) do
@@ -194,13 +200,25 @@ it{
         end
       end 
     end
-    it 'View and edit orders; may change quantity or remove products from orders with the status of pending or paid'
-    it 'Change the status of an order according to the rules as outlined above'
+    it 'View and edit orders; may change quantity or remove products from orders with the status of pending or paid' 
+    it 'Change the status of an order according to the rules as outlined above' do
+      Order.all.each do |order|
+        page.should have_inline_order(order)
+      end
+      should have_link("Mark as shipped")
+      should have_link("Mark as returned")
+      should have_link("Cancel")
+    end
   end
 end
 
 context "not allowed to" do
-  it 'modify any personal data aside from their own'
+  it 'modify any personal data aside from their own' do
+    @user2 = FactoryGirl.create(:user, first_name: "Neil")
+    visit edit_user_path(@user2)
+    page.should have_no_content(@user2.first_name)
+    page.should have_content("not allowed")
+  end
 end
 
 context "he may" do

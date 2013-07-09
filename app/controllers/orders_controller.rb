@@ -53,8 +53,8 @@ class OrdersController < ApplicationController
 
 	def authorize_user
 		unless current_user.admin?
-			@order = Order.find(params[:order_id] || params[:id])
-			redirect_to(root_url, :notice => "You can't see other user's order") unless current_user.id == @order.user.id
+			user_id = Order.joins(:user).find(params[:order_id] || params[:id]).user.id
+			redirect_to(root_url, :notice => "You are not allowed to see other user's order") unless current_user.id == user_id
 		end
 	end
 end

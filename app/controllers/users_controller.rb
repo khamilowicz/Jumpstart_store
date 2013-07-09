@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   before_filter :ensure_not_guest, except: [:new, :create]
-  before_filter :authorize_user, except: [:new, :create]
+  before_filter :authorize_user_or_admin, only: [:show]
+  before_filter :authorize_admin, only: [:index]
+  before_filter :authorize_user, except: [:new, :create, :show]
 
   def show
     @user = UserPresenter.new User.find(params[:id])
@@ -11,7 +13,7 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = current_user
+    @user = User.find(params[:id])
   end
 
   def update
@@ -51,11 +53,6 @@ class UsersController < ApplicationController
     end
   end
   
-  private
 
-  def authorize_user
-    unless current_user.id.to_s == params[:id] || current_user.admin?
-      redirect_to root_url, notice: "You can't see other user's profile" 
-    end
-  end
+
 end
