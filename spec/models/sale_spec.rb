@@ -7,7 +7,7 @@ describe Sale do
     products.each do |prod|
       @products_hash[prod.id] = ''
     end
-    @sale = Sale.new products: @products_hash, discount: 50
+    @sale = Sale.new_from_params products: @products_hash, discount: 50
   end
 
   it{@sale.discount_all; @sale.products.should include(*products)}

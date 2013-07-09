@@ -10,10 +10,18 @@ class Sale
     Product.where('discount < ?', 100).all
   end
 
-  def initialize params
-    @categories_id = params[:categories].keys if params[:categories]
-    @products_id = params[:products].keys if params[:products]
-    @discount = params[:discount].to_i
+  def self.new_from_params params
+    categories_id = params[:categories].keys if params[:categories]
+    products_id = params[:products].keys if params[:products]
+    discount = params[:discount].to_i
+
+    self.new discount, products_id, categories_id
+  end
+
+  def initialize discount, products_id, categories_id
+    @products_id = products_id
+    @categories_id = categories_id
+    @discount = discount
   end
 
   def discount_all

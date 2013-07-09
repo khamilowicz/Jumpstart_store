@@ -18,7 +18,7 @@ class SalesController < ApplicationController
   end
 
   def create
-    @sale = Sale.new params
+    @sale = Sale.new_from_params params
     @sale.discount_all
     
     redirect_to products_path
