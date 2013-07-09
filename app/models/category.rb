@@ -23,7 +23,6 @@ class Category < ActiveRecord::Base
   def list_categories
     self.pluck(:name).join(', ')
   end
-
 end
 
 def add param
