@@ -23,7 +23,6 @@ class UsersController < ApplicationController
       flash[:errors] = 'Something went wrong'
       render :edit
     end
-
   end
 
   def new
@@ -51,6 +50,7 @@ class UsersController < ApplicationController
       render "new"
     end
   end
+  
   private
 
   def authorize_user

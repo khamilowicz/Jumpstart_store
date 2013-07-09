@@ -15,7 +15,7 @@ class Category < ActiveRecord::Base
    end
 
    def get category_name
-     Category.where(name: category_name).first_or_create do |category|
+     self.where(name: category_name).first_or_create do |category|
       category.name = category_name
     end
   end
@@ -23,7 +23,6 @@ class Category < ActiveRecord::Base
   def list_categories
     self.pluck(:name).join(', ')
   end
-
 end
 
 def add param
@@ -31,7 +30,7 @@ def add param
 end
 
 def products_for_user user 
-  user.products & self.products
+  self.products.joins(:product_users).where(product_users: {user_id: user.id})
 end
 
 def total_price
@@ -39,20 +38,24 @@ def total_price
 end
 
 def all_on_sale?
- self.products.all?(&:on_sale?)
+ self.products.on_sale?
 end
 
 def start_selling
- self.products.each(&:start_selling)
+ self.products.start_selling
 end
 
-def discount percent
- self.products.each{|product| product.on_discount percent}
+def on_discount percent
+ self.products.on_discount percent
+end
+
+def self.on_discount percent
+ self.products.on_discount percent
 end
 
 private 
 
 def add_product product
-  self.products << product unless self.products.any?{|prod| prod == product}
+  self.products << product unless self.products.where(id: product.id).any?
 end
 end

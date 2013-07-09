@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130707194139) do
+ActiveRecord::Schema.define(:version => 20130709103242) do
 
   create_table "assets", :force => true do |t|
     t.integer  "product_id"
@@ -23,14 +23,6 @@ ActiveRecord::Schema.define(:version => 20130707194139) do
     t.datetime "photo_updated_at"
     t.text     "description"
   end
-
-  create_table "carts", :force => true do |t|
-    t.integer  "user_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "carts", ["user_id"], :name => "index_carts_on_user_id"
 
   create_table "categories", :force => true do |t|
     t.datetime "created_at", :null => false

@@ -1,6 +1,6 @@
-.paginate= paginate @products
+.paginate= paginate @products, remote: true
 .products.span12
   =render partial: 'products/short', collection: @products_presenter, as: :product
-.paginate= paginate @products
+.paginate= paginate @products, remote: true
 - content_for(:category_bar) do
   =render 'menu/right'

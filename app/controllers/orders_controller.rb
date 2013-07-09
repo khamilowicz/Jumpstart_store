@@ -5,6 +5,7 @@ class OrdersController < ApplicationController
 
 	def new
 		@products = ProductPresenter.new_from_array current_user.cart.products
+		@cart = current_user.cart
 	end
 
 	def change_status
@@ -24,13 +25,12 @@ class OrdersController < ApplicationController
 	end
 
 	def create
-		if PaymillManager.transaction(current_user, params[:paymillToken], 'EUR')
-			@order = Order.new
-			@order.user = current_user
-			@order.address = params[:address]
+		if PaymillManager.transaction(current_user, params[:paymillToken], current_user.cart.currency)
+			@order = Order.init current_user, params[:address]
 			@order.transfer_products
 			@order.pay
 		end
+
 		if @order.save
 			render :show, notice: "Order is processed"
 		else

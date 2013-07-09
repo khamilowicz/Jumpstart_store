@@ -78,6 +78,20 @@ describe Product do
         its(:find_on_sale){ product.start_selling; should include(product)}
       end
 
+      describe "for class" do
+        before(:each) do
+          FactoryGirl.create_list(:product, 2)
+        end
+        it{ Product.on_sale?.should be_true}
+      end
+
+    end
+
+    describe ".start_selling" do
+      before(:each) do
+        FactoryGirl.create_list(:product, 2, on_sale: false)
+      end
+      it{ expect{Product.start_selling}.to change{ Product.on_sale?}.from(false).to(true)}
     end
 
     describe "discounts" do
@@ -94,6 +108,16 @@ describe Product do
       }
 
     end
+
+  describe "for class" do
+    let(:products){FactoryGirl.create_list(:product, 3)}
+    before(:each) do
+      products
+      Product.limit(2).on_discount 50
+    end
+    it{ Product.limit(2).all.each{ |p| p.should be_on_discount}}
+    it{ Product.last.should_not be_on_discount}
+  end
   end
   describe "#users" do
 

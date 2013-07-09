@@ -59,5 +59,4 @@ class ProductUser < ActiveRecord::Base
   def set_in_cart_status
    self.in_cart = true
  end
-
 end

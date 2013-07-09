@@ -41,6 +41,13 @@ class Order < ActiveRecord::Base
 
 	before_save :set_price_and_discount
 
+	def self.init user, address
+		order = self.new
+		order.user = user
+		order.set_address address if address
+		order
+	end
+
 	def set_address address=nil
 		self.address = address || self.user.address
 	end
@@ -71,7 +78,7 @@ class Order < ActiveRecord::Base
 	end
 
 	def transfer_products
-		self.set_address
+		self.set_address unless self.address
 		self.save
 		super from: self.user, to: self
 	end
@@ -85,7 +92,7 @@ class Order < ActiveRecord::Base
 	end
 
 	def add param
-		self.order_products.new.add product: param[:product] if param[:product]
+		self.order_products.new.add(param).save if param[:product]
 	end
 
 	private

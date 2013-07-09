@@ -50,25 +50,26 @@ describe Order do
 end
 
 describe "total  price and total discount" do
-  let(:price){ Money.parse("$1") }
-  let(:products){FactoryGirl.create_list(:product,3, base_price: 100)}
+  let(:price){ Money.parse("$1")}
+  let(:total_price){ price*3}
+  let(:products){FactoryGirl.create_list(:product,3, base_price: price.cents)}
   
   it{ 
     expect{ products.each{|p| p.on_discount 50}}.
-    to change{ create_order(products).total_price }.
+    to change{ build_order(products).total_price }.
     from(Money.parse(price*3)).
     to(Money.parse(price*3/2))
   }
 
   it{ 
     expect{ products.each{|p| p.on_discount 50}}.
-    to change{ create_order(products).total_discount}.
+    to change{ build_order(products).total_discount}.
     from(0).
     to(50)
   }
   it{ 
     expect{ products.each{|p| p.on_discount 50}}.
-    to change{ create_order(products).has_discount?}.
+    to change{ build_order(products).has_discount?}.
     from(false).
     to(true)
   }
@@ -97,7 +98,7 @@ end
 describe "products" do
   let(:user){ FactoryGirl.create(:user)}
   let(:products){ FactoryGirl.create_list(:product, 2, quantity: 3)}
-  let(:order){ user.orders.create}
+  let(:order){ user.orders.new}
   let(:product){products.first}
   before { products.each {|product| user.add product: product} }
 
