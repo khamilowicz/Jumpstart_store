@@ -38,15 +38,15 @@ def total_price
 end
 
 def all_on_sale?
- self.products.all?(&:on_sale?)
+ self.products.on_sale?
 end
 
 def start_selling
- self.products.each(&:start_selling)
+ self.products.start_selling
 end
 
-def discount percent
- self.products.each{|product| product.on_discount percent}
+def on_discount percent
+ self.products.on_discount percent
 end
 
 private 

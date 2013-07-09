@@ -5,7 +5,7 @@ class SalesController < ApplicationController
   def delete
     @product = Product.find(params[:product])
     @product.off_discount
-    @products = Product.where('discount !=?', 100).all
+    @products = ProductPresenter.new_from_array Sale.products
 
     respond_to do |format|
       format.html {redirect_to sales_url}
@@ -14,12 +14,12 @@ class SalesController < ApplicationController
   end
 
   def index
-    @products = ProductPresenter.new_from_array Product.where('discount !=?', 100).all
+    @products = ProductPresenter.new_from_array Sale.products
   end
 
   def create
-    Sale.build params
-    Sale.discount_all
+    @sale = Sale.new params
+    @sale.discount_all
     
     redirect_to products_path
   end

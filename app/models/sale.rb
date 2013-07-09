@@ -1,15 +1,21 @@
 class Sale
 
-  def self.build params
-    @@categories, @@products, @@discount = params[:categories], params[:products], params[:discount].to_i
+  def self.products
+    Product.where('discount < ?', 100).all
   end
 
-  def self.discount_all
-    @@categories.to_a.each do |id, _|
-      Category.find(id).discount @@discount
+  def initialize params
+    @categories = params[:categories]
+    @products = params[:products]
+    @discount = params[:discount]
+  end
+
+  def discount_all
+    @categories.to_a.each do |id, _|
+      Category.find(id).on_discount @discount
     end
-    @@products.to_a.each do |id, _|
-      Product.find(id).on_discount @@discount
+    @products.to_a.each do |id, _|
+      Product.find(id).on_discount @discount
     end
   end
 end

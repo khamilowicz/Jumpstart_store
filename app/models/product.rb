@@ -50,16 +50,36 @@ class Product < ActiveRecord::Base
     self.on_sale = true; self.save
   end
 
+  def self.start_selling
+    self.update_all(on_sale: true);
+  end
+
+  def self.on_sale?
+    self.where(on_sale: true).count == self.count
+  end
+
   def retire
     self.on_sale = false; self.save
+  end
+
+  def self.retire
+    self.update_all(on_sale: false)
   end
 
   def on_discount discount
     self.discount = discount; self.save
   end
 
+  def self.on_discount discount
+    self.update_all(discount: discount)
+  end
+
   def on_discount?
     discount < 100
+  end
+
+  def self.off_discount
+    self.update_all(discount: 100)
   end
 
   def off_discount
