@@ -49,6 +49,10 @@ def on_discount percent
  self.products.on_discount percent
 end
 
+def self.on_discount percent
+ self.products.on_discount percent
+end
+
 private 
 
 def add_product product

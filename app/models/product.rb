@@ -75,7 +75,7 @@ class Product < ActiveRecord::Base
   end
 
   def on_discount?
-    discount < 100
+    self.discount < 100
   end
 
   def self.off_discount
