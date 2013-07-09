@@ -21,6 +21,7 @@ class Order < ActiveRecord::Base
 		'at' => '=', 'equal' => '='
 	}
 
+
 	validates_presence_of :user, :address
 	validates_inclusion_of :status, in: STATUSES.values
 
@@ -40,6 +41,13 @@ class Order < ActiveRecord::Base
 	alias_attribute :products, :order_products
 
 	before_save :set_price_and_discount
+
+	def self.init user, address
+		order = self.new
+		order.user = user
+		order.set_address address if address
+		order
+	end
 
 	def set_address address=nil
 		self.address = address || self.user.address
@@ -71,7 +79,7 @@ class Order < ActiveRecord::Base
 	end
 
 	def transfer_products
-		self.set_address
+		self.set_address unless self.address
 		self.save
 		super from: self.user, to: self
 	end

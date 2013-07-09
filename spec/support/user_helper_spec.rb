@@ -50,10 +50,8 @@ end
 
 def order_some_products products
   add_products_to_cart products
-  order = Order.new
-  order.user = current_user
+  order = Order.init current_user, "some address"
   order.transfer_products
-  order.address = "some address"
   order.pay
   order.save
 end
