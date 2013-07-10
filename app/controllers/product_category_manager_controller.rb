@@ -1,4 +1,5 @@
 class ProductCategoryManagerController < ApplicationController
+  before_filter :authorize_admin
 
   def new
     @product = Product.find(params[:product_id])

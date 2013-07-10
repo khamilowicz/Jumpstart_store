@@ -52,13 +52,12 @@ end
 describe "total  price and total discount" do
   let(:price){ Money.parse("$1")}
   let(:total_price){ price*3}
-  let(:products){FactoryGirl.create_list(:product,3, base_price: price.cents)}
+  let(:products){FactoryGirl.create_list(:product,3, quantity: 2, base_price: price.cents)}
   
   it{ 
-    expect{ products.each{|p| p.on_discount 50}}.
-    to change{ build_order(products).total_price }.
-    from(Money.parse(price*3)).
-    to(Money.parse(price*3/2))
+    build_order(products).total_price.should == price*3
+    products.each{|p| p.on_discount 50}
+    build_order(products).total_price.should == price*3/2
   }
 
   it{ 

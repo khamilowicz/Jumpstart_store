@@ -26,10 +26,12 @@ class Product < ActiveRecord::Base
   has_many :reviews
   has_many :assets
 
-  after_initialize :set_default_discount_value
-  after_create :create_asset
+  has_and_belongs_to_many :sales
 
-  accepts_nested_attributes_for :assets
+  after_create :create_asset
+  before_save :set_discount
+
+  accepts_nested_attributes_for :assets, :sales
 
   delegate :rating, to: :reviews
 
@@ -47,12 +49,15 @@ class Product < ActiveRecord::Base
       self.update_all(on_sale: false)
     end
 
-    def on_discount discount
-      self.update_all(discount: discount)
+    def on_discount discount, name=nil
+      self.all.each do|product|
+        product.on_discount discount, name
+      end
     end
 
-    def off_discount
-      self.update_all(discount: 100)
+    def off_discount identifier=nil
+      #identifier - sale obj, name or percent. if nil - every sale
+      self.sales.off_discount identifier
     end
   end
 
@@ -70,16 +75,21 @@ class Product < ActiveRecord::Base
     self.on_sale = false; self.save
   end
 
-  def on_discount discount
-    self.discount = discount; self.save
+  def on_discount percent, name=nil
+    Sale.attach(self, percent, name)
+    self.save
   end
 
   def on_discount?
-    self.discount < 100
+    self.sales.any?
   end
 
-  def off_discount
-    self.discount = 100; self.save
+  def off_discount identifier=nil
+    Sale.detach(self, identifier)
+  end
+
+  def discount
+    self.sales.get_discount
   end
 
   def out_of_stock?
@@ -93,7 +103,7 @@ class Product < ActiveRecord::Base
   end
 
   def photo
-    self.assets.first.photo
+    self.assets.all.sample.photo
   end
 
   def photos
@@ -118,10 +128,12 @@ class Product < ActiveRecord::Base
     photos.each do |photo|
       self.assets.create({photo: photo})
     end
-    
   end
 
-  def set_default_discount_value
-    self.discount ||= 100
+  def set_discount
+    # self.discount= is a column in db, and self.discount is calculated
+    self.discount = self.discount || 100
   end
+
+
 end

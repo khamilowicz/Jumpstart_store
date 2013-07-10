@@ -1,20 +1,8 @@
 .sale
-  .product.inline
-    -if product_counter == 0
-      .header.row
-        .span3.title
-          Title
-        .span1.base_price
-          Base price
-        .span1.price
-          Price
-        .span1.quantity
-          Discount
-        .span1
-          End sale
-    .product.row
-      .span3.title= link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} 
-      .span1= "$#{product.base_price}"
-      .span1= "$#{product.price}"
-      .span1= "#{product.discount}%"
-      .span1= link_to "X", sales_path({product: product.id}), method: :delete, remote: true
+  .row
+    %h4.span7= sale.name.blank? ? "Unnamed" : sale.name
+    .span1
+    %h4.span2= "#{sale.discount}%"
+    %h4.span2= link_to "X", sales_path({sale: sale}), method: :delete, remote: true
+  .row  
+    = render partial: 'inline_product', locals: {sale: sale}, collection: ProductPresenter.new_from_array(sale.products), as: :product

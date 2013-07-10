@@ -1,1 +1,10 @@
-$('.sales').html("<%= j render( partial: 'sales/short', collection: @products, as: :product) %>");
+$('.sales').html("<%= j render( partial: 'sales/short', collection: @sales, as: :sale) %>");
+$('.footer').html("<%= j render 'menu/footer' %>");
+
+$(function() {
+ 
+  $('.product .remove a').on( 'click', function() {
+
+   $(this).closest('.product').slideUp();
+  });
+});

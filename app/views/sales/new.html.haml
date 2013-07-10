@@ -5,10 +5,18 @@
       .span1
       .span11
         = submit_tag "Submit", class: 'btn btn-primary'
-        .discount
-          = label_tag :discount, "Discount"
-          = number_field_tag :discount, '', {value: 100, max: 100, min: 0, class: 'input-mini'}
-          %span.help-inline Percent of base price
+        .row
+          .span3.name
+            = label_tag :name, "Sale name"
+            = text_field_tag :name, '', {placeholder: "Can be blank"}
+          .span1
+          .span5
+            = label_tag :name_from_select
+            = select_tag :name_from_select, options_from_collection_for_select(Sale.all, 'name', 'name'), include_blank: ''
+          .span3.discount
+            = label_tag :discount, "Discount"
+            = number_field_tag :discount, '', {value: 100, max: 100, min: 0, class: 'input-mini'}
+            %span.help-inline Percent of base price
     .row
       .span1
       .span4.categories

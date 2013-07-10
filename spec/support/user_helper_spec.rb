@@ -87,12 +87,11 @@ def add_to_category product, category_name
   click_button "Submit"
 end
 
-def put_on_sale stuff
-  stuff = [stuff] unless stuff.kind_of?(Array)
-  names = stuff.first.respond_to?(:title) ? stuff.map(&:title) : stuff
+def put_on_sale stuff, name=nil
   visit new_sale_path
+  fill_in 'name', with: (name || "Some kind of sale")
   fill_in "discount", with: '50'
-  names.each do |name|
+  stuff.each do |name|
     check name 
   end
   click_button "Submit"
