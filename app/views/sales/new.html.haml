@@ -5,10 +5,15 @@
       .span1
       .span11
         = submit_tag "Submit", class: 'btn btn-primary'
-        .discount
-          = label_tag :discount, "Discount"
-          = number_field_tag :discount, '', {value: 100, max: 100, min: 0, class: 'input-mini'}
-          %span.help-inline Percent of base price
+        .row
+          .span3.name
+            = label_tag :name, "Sale name"
+            = text_field_tag :name, '', {placeholder: "Can be blank"}
+          .span2
+          .span7.discount
+            = label_tag :discount, "Discount"
+            = number_field_tag :discount, '', {value: 100, max: 100, min: 0, class: 'input-mini'}
+            %span.help-inline Percent of base price
     .row
       .span1
       .span4.categories

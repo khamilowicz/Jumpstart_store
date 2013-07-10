@@ -244,10 +244,11 @@ context "he may" do
   describe "create a sale" do
 
     it "for products" do
-      put_on_sale @products_in_category.map(:title)
+      put_on_sale @products_in_category.map(:title), "Sale for products"
+      visit sales_path
+      page.should have_content("Sale for products")
       visit product_path(@products_in_category.last) 
-      save_and_open_page
-      should have_selector(".price", text: (@products_in_category.last.price*0.5).to_s)
+      page.should have_content(@products_in_category.last.price*0.5)
     end
 
     it "for categories" do

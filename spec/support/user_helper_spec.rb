@@ -87,8 +87,9 @@ def add_to_category product, category_name
   click_button "Submit"
 end
 
-def put_on_sale stuff
+def put_on_sale stuff, name=nil
   visit new_sale_path
+  fill_in 'name', with: (name || "Some kind of sale")
   fill_in "discount", with: '50'
   stuff.each do |name|
     check name 

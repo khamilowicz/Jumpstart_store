@@ -12,9 +12,10 @@ class Sale < ActiveRecord::Base
   def self.new_from_params params
     categories_id = params[:categories].keys if params[:categories]
     products_id = params[:products].keys if params[:products]
+    name = params[:name] if params[:name]
     discount = params[:discount].to_i
 
-    dis = self.new.construct( discount, products_id, categories_id)
+    dis = self.new.construct( discount, name, products_id, categories_id)
     dis.save
     dis
   end
@@ -56,9 +57,9 @@ class Sale < ActiveRecord::Base
     discount_o
   end
 
-  def construct discount, products_id, categories_id
+  def construct discount, name, products_id, categories_id
     s = Sale.new
-    s.name = ''
+    s.name = name
     s.discount = discount
     s.products << Product.find(products_id) if products_id
     s.categories << Category.find(categories_id) if categories_id
@@ -76,6 +77,4 @@ class Sale < ActiveRecord::Base
   def remove_product product
     self.products.delete product
   end
-
-
 end
