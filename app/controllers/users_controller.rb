@@ -46,11 +46,24 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
 
     if @user.save
-      UserRegistration.registration_confirmation(@user).deliver
+      # UserRegistration.registration_confirmation(@user).deliver
       redirect_to new_session_path, notice: 'Successfully signed up'
     else
       flash[:errors] = "Something went wrong"
       render "new"
+    end
+  end
+
+  def confirmation
+    user = User.where(email: params[:email]).first
+    if params[:key] == BCrypt::Password.create(user.email)
+      user.activated = true
+      user.save
+      flash[:notice] = "Registration is finished"
+      redirect_to user_path(user)
+    else
+      flash[:errors] = "Your key is wrong"
+      redirect_to products_path
     end
   end
 end

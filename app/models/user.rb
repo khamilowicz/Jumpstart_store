@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
 		def create_guest
 			user_guest = new
 			user_guest.guest = true
+			user_guest.password_digest = 'lala'
 			user_guest.save
 			user_guest
 		end
