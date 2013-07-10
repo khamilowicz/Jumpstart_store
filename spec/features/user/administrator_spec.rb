@@ -244,6 +244,7 @@ context "he may" do
     it "for products" do
       put_on_sale @products_in_category
       visit product_path(@products_in_category.last) 
+      save_and_open_page
       should have_selector(".price", text: (@products_in_category.last.price*0.5).to_s)
     end
 

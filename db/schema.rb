@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130709103242) do
+ActiveRecord::Schema.define(:version => 20130710015329) do
 
   create_table "assets", :force => true do |t|
     t.integer  "product_id"
@@ -28,6 +28,11 @@ ActiveRecord::Schema.define(:version => 20130709103242) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.string   "name"
+  end
+
+  create_table "categories_sales", :force => true do |t|
+    t.integer "category_id"
+    t.integer "sale_id"
   end
 
   create_table "category_products", :force => true do |t|
@@ -80,6 +85,11 @@ ActiveRecord::Schema.define(:version => 20130709103242) do
     t.string   "base_price_currency", :default => "USD", :null => false
   end
 
+  create_table "products_sales", :force => true do |t|
+    t.integer "product_id"
+    t.integer "sale_id"
+  end
+
   create_table "reviews", :force => true do |t|
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
@@ -88,6 +98,13 @@ ActiveRecord::Schema.define(:version => 20130709103242) do
     t.integer  "note"
     t.integer  "user_id"
     t.integer  "product_id"
+  end
+
+  create_table "sales", :force => true do |t|
+    t.integer  "discount"
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|

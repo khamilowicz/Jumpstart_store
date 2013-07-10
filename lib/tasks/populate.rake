@@ -20,13 +20,16 @@ namespace :db do
         title: Faker::Lorem.sentence(rand(4)+1),
         description: Faker::Lorem.paragraph(3),
         base_price: Money.new(rand(10000), "USD"),
-        discount: 100,
         quantity: rand(20),
         on_sale: true
         )
     end
 
-    Product.all.sample(10).map{|p| p.on_discount rand(100)}
+sales = []
+4.times{
+sales << [rand(100), Faker::Lorem.sentence(3)]
+}
+    Product.all.sample(10).map{|p| p.on_discount(*sales.sample)}
 
     4.times do
       password = Faker::Lorem.word

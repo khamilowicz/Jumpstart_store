@@ -1,20 +1,70 @@
 require "spec_helper"
 
 describe Sale do
+  it{should respond_to(:discount)}
+  it{ should validate_presence_of(:discount)}
+  it{should respond_to(:name)}
+  it{should have_and_belong_to_many(:products)}
+  it{should validate_numericality_of(:discount)}
+  it{ should_not allow_value(100).for(:discount)}
+  it{ should_not allow_value(0).for(:discount)}
+
   let(:products){ FactoryGirl.create_list(:product, 2)}
-  before(:each) do
-    @products_hash = {}
-    products.each do |prod|
-      @products_hash[prod.id] = ''
+
+  describe "creation" do
+    before(:each) do
+      @product = FactoryGirl.create(:product)
+      @product.on_discount 10, 'sale'
     end
-    @sale = Sale.new_from_params products: @products_hash, discount: 50
+
+    subject{ @product.sales.first}
+
+    it{ @product.sales.should have(1).item}
+    its(:name){should eq('sale')}
+    its(:discount){should eq(10)}
+
+    describe "#get_discount" do
+      it{ @product.sales.get_discount.should eq(10)}
+      it{
+        expect{@product.on_discount 13}
+        .to change{@product.sales.get_discount}
+        .from(10).to(13)
+      }
+      it{
+        expect{@product.on_discount 9}
+        .to_not change{@product.sales.get_discount}
+      }
+
+    end
+
+    describe "and removement" do
+      before(:each) do
+        @product.off_discount 'sale'
+      end
+      subject{ @product.sales}
+      it{ should be_empty}
+    end
   end
 
-  it{@sale.discount_all; @sale.products.should include(*products)}
+  describe "created from params" do
 
-  it{
-    expect{ @sale.discount_all}
-    .to change{ Product.all.all?(&:on_discount?)}
-    .from(false).to(true)  
-  }
+    before(:each) do
+      @products_hash = {}
+      products.each do |prod|
+        @products_hash[prod.id] = ''
+      end
+    end
+
+    def make_sale
+     Sale.new_from_params products: @products_hash, discount: 50 
+    end
+
+    it{ make_sale.products.should include(*products)}
+
+    it{
+      expect{ make_sale}
+      .to change{ Product.all.all?(&:on_discount?)}
+      .from(false).to(true)  
+    }
+  end
 end

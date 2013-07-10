@@ -4,6 +4,8 @@ class Category < ActiveRecord::Base
   has_many :category_products
   has_many :products, through: :category_products
 
+  has_and_belongs_to_many :sales
+
   class << self
 
     def get_by_name name
