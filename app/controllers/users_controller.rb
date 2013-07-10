@@ -46,13 +46,11 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
 
     if @user.save
+      UserRegistration.registration_confirmation(@user).deliver
       redirect_to new_session_path, notice: 'Successfully signed up'
     else
       flash[:errors] = "Something went wrong"
       render "new"
     end
   end
-  
-
-
 end

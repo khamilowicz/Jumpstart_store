@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130710015329) do
+ActiveRecord::Schema.define(:version => 20130710193532) do
 
   create_table "assets", :force => true do |t|
     t.integer  "product_id"
@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(:version => 20130710015329) do
     t.string   "last_name"
     t.string   "password"
     t.string   "address"
+    t.boolean  "activated",  :default => false
   end
 
 end

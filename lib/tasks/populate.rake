@@ -11,6 +11,7 @@ namespace :db do
       email: 'kham@gmail.com',
       password: 'megamega',
       password_confirmation: 'megamega',
+      activated: true
       )
     admin.promote_to_admin
     admin.save
@@ -52,7 +53,8 @@ namespace :db do
         last_name: Faker::Name.last_name,
         email: Faker::Internet.email, 
         password: password,
-        password_confirmation: password
+        password_confirmation: password,
+        activated: true
         )
     end
 
