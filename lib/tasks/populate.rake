@@ -11,8 +11,8 @@ namespace :db do
       email: 'kham@gmail.com',
       password: 'megamega',
       password_confirmation: 'megamega',
-      activated: true
       )
+    admin.activated = true
     admin.promote_to_admin
     admin.save
 
@@ -48,14 +48,15 @@ namespace :db do
 
     4.times do
       password = Faker::Lorem.word
-      User.create!(
+      user = User.create!(
         first_name: Faker::Name.first_name,
         last_name: Faker::Name.last_name,
         email: Faker::Internet.email, 
         password: password,
         password_confirmation: password,
-        activated: true
         )
+      user.activated = true
+      user.save
     end
 
     5.times do 
