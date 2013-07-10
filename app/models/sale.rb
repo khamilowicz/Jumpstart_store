@@ -10,12 +10,19 @@ class Sale < ActiveRecord::Base
   validates_presence_of :discount
 
   def self.new_from_params params
-    categories_id = params[:categories].keys if params[:categories]
-    products_id = params[:products].keys if params[:products]
-    name = params[:name] if params[:name]
-    discount = params[:discount].to_i
+    unless params[:name_from_select].blank?
+      dis = Sale.where(name: params[:name_from_select]).first
+      dis.discount = params[:discount] if params[:discount]
+      dis.products << Product.find(params[:products].keys) if params[:products]
+      dis.categories << Category.find(params[:categories].keys) if params[:categories]
+    else
+      categories_id = params[:categories].keys if params[:categories]
+      products_id = params[:products].keys if params[:products]
+      name = params[:name] if params[:name]
+      discount = params[:discount].to_i
 
-    dis = self.new.construct( discount, name, products_id, categories_id)
+      dis = self.new.construct( discount, name, products_id, categories_id)
+    end
     dis.save
     dis
   end
@@ -70,11 +77,11 @@ class Sale < ActiveRecord::Base
   def remove params={}
    remove_product params[:product] if params[:product]
    Sale.delete self if params.empty?
-  end
+ end
 
-  private
+ private
 
-  def remove_product product
-    self.products.delete product
-  end
+ def remove_product product
+  self.products.delete product
+end
 end

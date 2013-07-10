@@ -1,5 +1,3 @@
-$('.sales').html("<%= j render( partial: 'sales/short', collection: @sales, as: :sale) %>");
-
 $(function() {
  
   $('.product .remove a').on( 'click', function() {

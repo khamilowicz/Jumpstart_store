@@ -33,12 +33,14 @@ namespace :db do
 
 
     Dir[File.join(Rails.root, '/app/assets/images/*')].each do |image_path|
-      File.open(image_path, 'r') do |file|
-        Product.all.sample(12).each do |product|
-          asset = Asset.new
-          asset.photo = file
-          asset.save
-          product.assets << asset
+      unless File.directory?(image_path)
+        File.open(image_path, 'r') do |file|
+          asset = Asset.create(
+            photo: file
+            )
+          Product.all.sample(18).each do |product|
+            product.assets << asset
+          end
         end
       end
     end

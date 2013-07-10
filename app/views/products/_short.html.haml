@@ -3,7 +3,7 @@
     .product_thumbnail.thumbnail{data: {photo: product.photo.url, title: product.title}}
       = link_to image_tag(product.photo.url), product_path(product)
   .row.span12
-    %h3.title=link_to product.title_shorter, product_path(product)
+    %h3.title=link_to product.title_shorter, product_path(product), {data: {photo: product.photo.url, title: product.title}}
   .row.span12
     .price= product_price product
   .row.span12

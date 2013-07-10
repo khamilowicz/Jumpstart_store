@@ -103,7 +103,7 @@ class Product < ActiveRecord::Base
   end
 
   def photo
-    self.assets.first.photo
+    self.assets.all.sample.photo
   end
 
   def photos
