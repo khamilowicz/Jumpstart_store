@@ -25,11 +25,23 @@ namespace :db do
         )
     end
 
-sales = []
-4.times{
-sales << [rand(100), Faker::Lorem.sentence(3)]
-}
+    sales = []
+    4.times{
+      sales << [rand(100), Faker::Lorem.sentence(3)]
+    }
     Product.all.sample(10).map{|p| p.on_discount(*sales.sample)}
+
+
+    Dir[File.join(Rails.root, '/app/assets/images/*')].each do |image_path|
+      File.open(image_path, 'r') do |file|
+        Product.all.sample(12).each do |product|
+          asset = Asset.new
+          asset.photo = file
+          asset.save
+          product.assets << asset
+        end
+      end
+    end
 
     4.times do
       password = Faker::Lorem.word
