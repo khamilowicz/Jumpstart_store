@@ -108,17 +108,43 @@ describe Product do
         }.from(100)
       }
 
+      describe "#off_discount" do
+
+        before(:each) do
+          product.on_discount 50
+        end
+
+        it{ 
+          expect{ product.off_discount}.
+          to change{ product.discount}.
+          from(50).to(100)
+        }
+      end
+
+      describe ".off_discount" do
+        before(:each) do
+          products = FactoryGirl.create_list(:product, 3)
+          products.each { |p| p.on_discount 50 }
+        end
+        it{ 
+          expect{ Product.off_discount}.
+          to change{ Product.discount }.
+          from(50).to(100)
+        }
+
+      end
+
     end
 
-  describe "for class" do
-    let(:products){FactoryGirl.create_list(:product, 3)}
-    before(:each) do
-      products
-      Product.limit(2).on_discount 50
+    describe "for class" do
+      let(:products){FactoryGirl.create_list(:product, 3)}
+      before(:each) do
+        products
+        Product.limit(2).on_discount 50
+      end
+      it{ Product.limit(2).all.each{ |p| p.should be_on_discount}}
+      it{ Product.last.should_not be_on_discount}
     end
-    it{ Product.limit(2).all.each{ |p| p.should be_on_discount}}
-    it{ Product.last.should_not be_on_discount}
-  end
   end
   describe "#users" do
 

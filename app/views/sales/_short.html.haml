@@ -1,8 +1,8 @@
 .sale
   .row
-    %h4.span7= sale.name
-    %h4.span2= "#{sale.discount}%"
+    %h4.span7= sale.name.blank? ? "Unnamed" : sale.name
     .span1
-    %h4.span2= link_to "X", sales_path({sale: sale.id}), method: :delete, remote: true
+    %h4.span2= "#{sale.discount}%"
+    %h4.span2= link_to "X", sales_path({sale: sale}), method: :delete
   .row  
-    = render partial: 'inline_product', collection: ProductPresenter.new_from_array(sale.products), as: :product
+    = render partial: 'inline_product', locals: {sale: sale}, collection: ProductPresenter.new_from_array(sale.products), as: :product

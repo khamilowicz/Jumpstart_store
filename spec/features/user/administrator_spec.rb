@@ -231,8 +231,10 @@ context "he may" do
     @product = @products.last
   end
 
+  it{ @products_in_category.first.categories.should_not be_empty}
+
   it "View a list of all active sales" do 
-    put_on_sale @products_in_category
+    put_on_sale @products_in_category.map(:title)
     visit sales_path
 
     should_not have_content(@product.title) 
@@ -242,7 +244,7 @@ context "he may" do
   describe "create a sale" do
 
     it "for products" do
-      put_on_sale @products_in_category
+      put_on_sale @products_in_category.map(:title)
       visit product_path(@products_in_category.last) 
       save_and_open_page
       should have_selector(".price", text: (@products_in_category.last.price*0.5).to_s)
@@ -251,7 +253,8 @@ context "he may" do
     it "for categories" do
       put_on_sale @category
       @products_in_category.each do |product| 
-       visit product_path(product) 
+       visit product_path(product)
+       product.sales.should_not be_empty
        should have_selector(".price", text: (product.price*0.5).to_s), "#{page.find('body').native}"
      end
    end
@@ -259,7 +262,7 @@ context "he may" do
 
    describe "End a sale" do
     before(:each) do
-      put_on_sale @product
+      put_on_sale [@product].map(:title)
       visit sales_path
       within('.sale'){ click_link 'X'}
       visit sales_path

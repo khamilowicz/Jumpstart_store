@@ -1,22 +1,24 @@
-.product.inline{class: product.title_param}
-  -if product_counter == 0
-    .row
-      .span4.title
-        Title
-      .span1.base_price
-        Base Price
-      .span1.price
-        Price
-      .span1.discount
-        Discount
-      .span2.quantity
-        Quantity
-      .span2
-        Remove
-  .product.row
-    .span4.title= link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} 
-    .span1.base_price= "$#{product.base_price}"
-    .span1.price= "$#{product.price}"
-    .span1.discount= "#{product.discount}%"
-    .span2.quantity= product.quantity_for(current_user)
-    .span2.remove= link_to "X", remove_from_cart_user_product_path(current_user, product), remote: true
+.row
+  .span1
+  .span11.product.inline{class: product.title_param}
+    -if product_counter == 0
+      .row
+        .span6.title
+          Title
+        .span1.base_price
+          Base Price
+        .span1.price
+          Price
+        .span1.discount
+          Discount
+        .span1.quantity
+          Quantity
+        .span1
+          Remove
+    .product.row
+      .span6.title= link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} 
+      .span1.base_price= "$#{product.base_price}"
+      .span1.price= "$#{product.price}"
+      .span1.discount= "#{product.discount}%"
+      .span1.quantity= product.quantity
+      .span1.remove= link_to "X", sales_path({sale: sale, product: product}), method: :delete

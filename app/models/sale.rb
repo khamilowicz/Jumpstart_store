@@ -20,7 +20,7 @@ class Sale < ActiveRecord::Base
   end
 
   def self.get_discount
-    self.maximum(:discount) || 100
+    self.minimum(:discount) || 100
   end
 
   def self.attach product, percent, name=nil
@@ -64,6 +64,17 @@ class Sale < ActiveRecord::Base
     s.categories << Category.find(categories_id) if categories_id
     s.save
     s
+  end
+
+  def remove params={}
+   remove_product params[:product] if params[:product]
+   Sale.delete self if params.empty?
+  end
+
+  private
+
+  def remove_product product
+    self.products.delete product
   end
 
 

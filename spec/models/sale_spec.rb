@@ -38,11 +38,17 @@ describe Sale do
     end
 
     describe "and removement" do
-      before(:each) do
-        @product.off_discount 'sale'
-      end
-      subject{ @product.sales}
-      it{ should be_empty}
+      subject{ @product.sales.first}
+      it{ expect{
+       subject.remove product: @product}.
+       to change{ @product.discount}.
+       from(10).to(100)
+     }
+     it{ expect{
+      subject.remove }.
+      to change{ Sale.where(id: subject.id).first }.
+      from(subject).to(nil)
+    }
     end
   end
 
