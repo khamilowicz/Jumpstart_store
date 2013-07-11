@@ -20,8 +20,10 @@ test:
 
 production:
   adapter: postgresql
-  database: db/production.pg
+  database: production
   username: kham
-  password: password
+  password: postgres
   pool: 5
   timeout: 5000
+  host: localhost
+  encoding: unicode
