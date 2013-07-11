@@ -19,7 +19,6 @@ $(document).ready(function() {
 
     return false;
   });
-
 });
 
 function PaymillResponseHandler(error, result) {

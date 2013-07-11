@@ -20,7 +20,7 @@ group :assets do
 
   gem 'less-rails'
   gem 'uglifier'
-  gem 'compass-rails'
+  # gem 'compass-rails'
   gem 'twitter-bootstrap-rails'
 end
 
@@ -71,7 +71,7 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 # gem 'unicorn'
 
 # Deploy with Capistrano
-# gem 'capistrano'
+gem 'capistrano'
 
 # To use debugger
 # gem 'debugger'
