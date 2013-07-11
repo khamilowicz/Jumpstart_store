@@ -1,5 +1,12 @@
 @import 'formMixins';
 
+.sales{
+  margin-bottom: 5em;
+}
+.sale{
+  margin-bottom: 2em;
+}
+
 .new_sales{
         @include checkbox_area;
         

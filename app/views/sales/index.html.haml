@@ -1,3 +1,6 @@
-%h3= link_to "New sale", new_sale_path
-.sales
-  = render partial: 'sales/short', collection: @products, as: :product
+%h3= link_to "New sale", new_sale_path, class: 'btn btn-primary'
+.row
+  .span1
+  .sales.span11
+    = render partial: 'sales/short', collection: @sales, as: :sale
+= javascript_include_tag 'pages/sale'

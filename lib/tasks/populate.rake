@@ -12,6 +12,7 @@ namespace :db do
       password: 'megamega',
       password_confirmation: 'megamega',
       )
+    admin.activated = true
     admin.promote_to_admin
     admin.save
 
@@ -20,23 +21,42 @@ namespace :db do
         title: Faker::Lorem.sentence(rand(4)+1),
         description: Faker::Lorem.paragraph(3),
         base_price: Money.new(rand(10000), "USD"),
-        discount: 100,
         quantity: rand(20),
         on_sale: true
         )
     end
 
-    Product.all.sample(10).map{|p| p.on_discount rand(100)}
+    sales = []
+    4.times{
+      sales << [rand(100), Faker::Lorem.sentence(3)]
+    }
+    Product.all.sample(10).map{|p| p.on_discount(*sales.sample)}
+
+
+    Dir[File.join(Rails.root, '/app/assets/images/*')].each do |image_path|
+      unless File.directory?(image_path)
+        File.open(image_path, 'r') do |file|
+          asset = Asset.create(
+            photo: file
+            )
+          Product.all.sample(18).each do |product|
+            product.assets << asset
+          end
+        end
+      end
+    end
 
     4.times do
       password = Faker::Lorem.word
-      User.create!(
+      user = User.create!(
         first_name: Faker::Name.first_name,
         last_name: Faker::Name.last_name,
         email: Faker::Internet.email, 
         password: password,
-        password_confirmation: password
+        password_confirmation: password,
         )
+      user.activated = true
+      user.save
     end
 
     5.times do 

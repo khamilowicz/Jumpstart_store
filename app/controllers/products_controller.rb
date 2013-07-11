@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+	before_filter :authorize_admin, except: [:index, :show]
 
 	def index
 		@products = Product.find_on_sale.page params[:page]
@@ -15,8 +16,10 @@ class ProductsController < ApplicationController
 
 	def update
 		@product = Product.find(params[:id])
-		@photos = params[:assets][:photos]
-		@product.add photos: @photos
+		if params[:assets]
+			@photos = params[:assets][:photos] 
+			@product.add photos: @photos
+		end
 
 		if @product.update_attributes(params[:product])
 			redirect_to products_path, notice: "Successfully updated product"
@@ -32,9 +35,10 @@ class ProductsController < ApplicationController
 		product.start_selling
 
 		if product.save
-			@photos = params[:assets][:photos]
-			product.add photos: @photos
-
+			if params[:assets]
+				@photos = params[:assets][:photos] 
+				product.add photos: @photos
+			end
 			redirect_to products_path, notice: "Successfully created product"
 		else
 			redirect_to new_product_path, notice: "Error"

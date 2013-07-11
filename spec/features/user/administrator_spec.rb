@@ -48,10 +48,10 @@ describe "Administrator" do
         click_link @category_name
       end
 
-it{ 
-      should have_content(@category_name)
-      should have_short_product(@product)
-}
+      it{ 
+        should have_content(@category_name)
+        should have_short_product(@product)
+      }
     end
 
 
@@ -99,7 +99,13 @@ it{
     end
   end
 
-  it "Retire a product from being sold, which hides it from browsing by any non-administrator"
+  it "retire a product from being sold, which hides it from browsing by any non-administrator" do
+    @product = FactoryGirl.create(:product)
+    visit edit_product_path(@product)
+    uncheck :on_sale
+    find("form input[name='commit']").click
+    Product.find(@product.id).should_not be_on_sale
+  end
 
   context "sees a listing of all orders" do
     before(:each) do
@@ -194,13 +200,25 @@ it{
         end
       end 
     end
-    it 'View and edit orders; may change quantity or remove products from orders with the status of pending or paid'
-    it 'Change the status of an order according to the rules as outlined above'
+    it 'View and edit orders; may change quantity or remove products from orders with the status of pending or paid' 
+    it 'Change the status of an order according to the rules as outlined above' do
+      Order.all.each do |order|
+        page.should have_inline_order(order)
+      end
+      should have_link("Mark as shipped")
+      should have_link("Mark as returned")
+      should have_link("Cancel")
+    end
   end
 end
 
 context "not allowed to" do
-  it 'modify any personal data aside from their own'
+  it 'modify any personal data aside from their own' do
+    @user2 = FactoryGirl.create(:user, first_name: "Neil")
+    visit edit_user_path(@user2)
+    page.should have_no_content(@user2.first_name)
+    page.should have_content("not allowed")
+  end
 end
 
 context "he may" do
@@ -213,8 +231,10 @@ context "he may" do
     @product = @products.last
   end
 
+  it{ @products_in_category.first.categories.should_not be_empty}
+
   it "View a list of all active sales" do 
-    put_on_sale @products_in_category
+    put_on_sale @products_in_category.map(:title)
     visit sales_path
 
     should_not have_content(@product.title) 
@@ -224,15 +244,18 @@ context "he may" do
   describe "create a sale" do
 
     it "for products" do
-      put_on_sale @products_in_category
+      put_on_sale @products_in_category.map(:title), "Sale for products"
+      visit sales_path
+      page.should have_content("Sale for products")
       visit product_path(@products_in_category.last) 
-      should have_selector(".price", text: (@products_in_category.last.price*0.5).to_s)
+      page.should have_content(@products_in_category.last.price*0.5)
     end
 
     it "for categories" do
       put_on_sale @category
       @products_in_category.each do |product| 
-       visit product_path(product) 
+       visit product_path(product)
+       product.sales.should_not be_empty
        should have_selector(".price", text: (product.price*0.5).to_s), "#{page.find('body').native}"
      end
    end
@@ -240,7 +263,7 @@ context "he may" do
 
    describe "End a sale" do
     before(:each) do
-      put_on_sale @product
+      put_on_sale [@product].map(:title)
       visit sales_path
       within('.sale'){ click_link 'X'}
       visit sales_path

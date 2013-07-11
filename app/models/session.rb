@@ -6,8 +6,12 @@ class Session
 
   class << self
     def authenticate params
-      iemail, ipassword = params[:email], params[:password]
-      return User.where(email: iemail, password: ipassword).first
+      user = User.where(email: params[:email]).first
+      if user && user.authenticate(params[:password])
+        user
+      else 
+        nil
+      end
     end
   end
 

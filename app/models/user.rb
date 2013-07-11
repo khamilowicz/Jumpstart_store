@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
 
 	extend TransferProducts
 
+	has_secure_password
+
 	attr_accessible :first_name, :last_name, :email, :password, :address, :password_confirmation
 	
 	validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, unless: :guest?
@@ -20,6 +22,7 @@ class User < ActiveRecord::Base
 		def create_guest
 			user_guest = new
 			user_guest.guest = true
+			user_guest.password_digest = 'lala'
 			user_guest.save
 			user_guest
 		end

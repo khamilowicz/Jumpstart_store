@@ -137,7 +137,15 @@
       end
 
       describe "Place a 'Two-Click' order from any active product page." do
-        it "The first click asks 'Place an order for ‘X’? and if you then click 'OK', the order is completed."
+        before(:each) do
+          visit product_path(products.first)
+        end
+        it "The first click asks 'Place an order for ‘X’? and if you then click 'OK', the order is completed." do
+          pending
+          should have_button("Order")
+          click_button("Order")
+          user.orders.last.products.last.product.should eq(products.first)
+        end
       end
     end
   end

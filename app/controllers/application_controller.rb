@@ -20,17 +20,33 @@ class ApplicationController < ActionController::Base
 	
 	def ensure_not_guest
 		if current_user.guest?
-			flash[:errors] =  "You can't see this content. Log in first"
+			flash[:errors] =  "You are not allowed see this content. Log in first"
 			redirect_to root_url
 		end
 	end
+	
+  def authorize_admin
+    unless current_user.admin?
+     flash[:notice] = "You are not allowed to see this content"
+     redirect_to root_url
+   end 
+ end
 
-	def authorize_admin
-		unless current_user.admin?
-			flash[:errors] = "You have to be an admin" 
-			redirect_to root_url
-		end
-	end
+   def authorize_user
+    unless current_user.id.to_s == params[:id] 
+      flash[:notice] = "You are not allowed to see this content"
+      redirect_to root_url
+    end
+  end
+
+
+ def authorize_user_or_admin
+  unless current_user.id.to_s == params[:id] or current_user.admin?
+    flash[:notice] = "You are not allowed to see this content"
+    redirect_to root_url
+  end
+end
+
 
 	helper_method :current_user, :current_user_presenter
 end
