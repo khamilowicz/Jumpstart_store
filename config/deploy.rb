@@ -7,6 +7,7 @@ set :scm, :git # You can set :scm explicitly or Capistrano will make an intellig
 role :web, "localhost"                          # Your HTTP server, Apache/etc
 role :app, "localhost"                          # This may be the same as your `Web` server
 role :db,  "localhost", :primary => true # This is where Rails migrations will run
+
 # role :db,  "your slave db-server here"
 
 # if you want to clean up old releases on each deploy uncomment this:

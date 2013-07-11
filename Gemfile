@@ -20,7 +20,7 @@ group :assets do
 
   gem 'less-rails'
   gem 'uglifier'
-  gem 'compass-rails'
+  # gem 'compass-rails'
   gem 'twitter-bootstrap-rails'
 end
 
