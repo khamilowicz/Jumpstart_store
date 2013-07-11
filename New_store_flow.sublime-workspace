@@ -551,7 +551,23 @@
 			"file": "Gemfile",
 			"settings":
 			{
-				"buffer_size": 1318,
+				"buffer_size": 1316,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Capfile",
+			"settings":
+			{
+				"buffer_size": 172,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "config/deploy.rb",
+			"settings":
+			{
+				"buffer_size": 1195,
 				"line_ending": "Unix"
 			}
 		}
@@ -559,16 +575,28 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 392.0,
+		"height": 327.0,
 		"selected_items":
 		[
 			[
-				"dele",
-				"File: Delete"
+				"gicu",
+				"Git: Custom Command"
+			],
+			[
+				"gitcus",
+				"Git: Custom Command"
+			],
+			[
+				"gitcomi",
+				"Git: Commit"
 			],
 			[
 				"gitad",
 				"Git: Add..."
+			],
+			[
+				"dele",
+				"File: Delete"
 			],
 			[
 				"gitcom",
@@ -585,10 +613,6 @@
 			[
 				"reili",
 				"Indentation: Reindent Lines"
-			],
-			[
-				"gitcomi",
-				"Git: Commit"
 			],
 			[
 				"giad",
@@ -1065,14 +1089,6 @@
 			[
 				"instal",
 				"Package Control: Install Package"
-			],
-			[
-				"synhaml",
-				"Set Syntax: Ruby Haml"
-			],
-			[
-				"gitcomm",
-				"Git: Custom Command"
 			]
 		],
 		"width": 530.0
@@ -1403,7 +1419,7 @@
 	"groups":
 	[
 		{
-			"selected": 8,
+			"selected": 10,
 			"sheets":
 			[
 				{
@@ -1418,8 +1434,8 @@
 						"selection":
 						[
 							[
-								64,
-								64
+								63,
+								63
 							]
 						],
 						"settings":
@@ -1444,8 +1460,8 @@
 						"selection":
 						[
 							[
-								174,
-								174
+								173,
+								173
 							]
 						],
 						"settings":
@@ -1470,8 +1486,8 @@
 						"selection":
 						[
 							[
-								98,
-								98
+								97,
+								97
 							]
 						],
 						"settings":
@@ -1496,8 +1512,8 @@
 						"selection":
 						[
 							[
-								1188,
-								1188
+								1187,
+								1187
 							]
 						],
 						"settings":
@@ -1550,8 +1566,8 @@
 						"selection":
 						[
 							[
-								84,
-								84
+								83,
+								83
 							]
 						],
 						"settings":
@@ -1576,8 +1592,8 @@
 						"selection":
 						[
 							[
-								997,
-								997
+								996,
+								996
 							]
 						],
 						"settings":
@@ -1603,8 +1619,8 @@
 						"selection":
 						[
 							[
-								260,
-								260
+								259,
+								259
 							]
 						],
 						"settings":
@@ -1624,15 +1640,15 @@
 					"file": "Gemfile",
 					"settings":
 					{
-						"buffer_size": 1318,
+						"buffer_size": 1316,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								806,
-								806
+								1263,
+								1263
 							]
 						],
 						"settings":
@@ -1643,6 +1659,58 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 765.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "Capfile",
+					"settings":
+					{
+						"buffer_size": 172,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "config/deploy.rb",
+					"settings":
+					{
+						"buffer_size": 1195,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								775,
+								775
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1699,6 +1767,14 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"dep",
+				"config/deploy.rb"
+			],
+			[
+				"cap",
+				"Capfile"
+			],
 			[
 				"jointab",
 				"db/migrate/20130710224547_create_join_table_user_sale.rb"
@@ -2202,14 +2278,6 @@
 			[
 				"ordernew",
 				"app/views/orders/new.html.haml"
-			],
-			[
-				"paymi",
-				"app/models/paymill_manager.rb"
-			],
-			[
-				"ordocon",
-				"app/controllers/product_category_manager_controller.rb"
 			]
 		],
 		"width": 0.0
@@ -2241,7 +2309,7 @@
 	"show_minimap": true,
 	"show_open_files": true,
 	"show_tabs": true,
-	"side_bar_visible": true,
+	"side_bar_visible": false,
 	"side_bar_width": 274.0,
 	"status_bar_visible": true
 }
