@@ -9,8 +9,8 @@ server 'localhost', :web, :app, :db, primary: true
 
 ssh_options[:port] = 2020
 
-set :user, 'root'
-set :use_sudo, true
+set :user, 'vagrant'
+set :use_sudo, false
 
 # role :db,  "your slave db-server here"
 

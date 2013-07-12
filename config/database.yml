@@ -21,8 +21,8 @@ test:
 production:
   adapter: postgresql
   database: production
-  username: kham
-  password: postgres
+  username: vagrant
+  password: password
   pool: 5
   timeout: 5000
   host: localhost
