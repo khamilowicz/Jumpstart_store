@@ -22,6 +22,7 @@ def create
   review.user = current_user
 
   if review.save
+    @product_presenter = ProductPresenter.new @product
     redirect_to product_path(@product)
   else
     redirect_to products_path, error: review.errors, notice: "Error"

@@ -3,12 +3,12 @@ $('.products').html("<%= j render partial: 'products/short', collection: @produc
 
 
 $(function() {
-  $('.cart_btn').bind('ajax:beforeSend', function() {
-    $(this).button("loading")
-  });
-  $('.cart_btn').bind('ajax:success', function() {
-    $(this).button('reset');
-  });
+  // $('.cart_btn').bind('ajax:beforeSend', function() {
+  //   $(this).button("loading")
+  // });
+  // $('.cart_btn').bind('ajax:success', function() {
+  //   $(this).button('reset');
+  // });
 
   $(".product_thumbnail, .product .title a").on('mouseenter', update_big_image);
   $('li.category').removeClass("active");

@@ -1,6 +1,6 @@
 .new_review
   %h4 Review
-  =simple_form_for [product, review], defaults: { label: false} do |f|
+  =simple_form_for [product, review], defaults: { label: false}, remote: true do |f|
     .row
       .span6
         = f.input :title, placeholder: 'Title'
