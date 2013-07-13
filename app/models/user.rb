@@ -17,6 +17,8 @@ class User < ActiveRecord::Base
 	has_many :products, through: :product_users
 	has_many :orders
 
+	has_one :address
+
 	class << self
 
 		def create_guest
