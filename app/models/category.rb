@@ -25,6 +25,10 @@ class Category < ActiveRecord::Base
   def list_categories
     self.pluck(:name).join(', ')
   end
+
+  def get_discount
+    self.all.collect{ |category| category.sales.get_discount || 100}.min
+  end
 end
 
 def add param

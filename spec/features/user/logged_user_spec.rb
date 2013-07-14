@@ -30,8 +30,8 @@
         # page.should_not have_content("Email"), "#{page.find("body").native}"
 
         click_link "Edit profile"
-        fill_in :address, with: "Other address"
-        click_button "Submit"
+        fill_address "Other address"
+        find("form input[name='commit']").click
         page.should have_content("Update successfull")
         page.should have_content("Other address") 
       end

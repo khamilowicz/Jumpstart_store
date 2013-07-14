@@ -3,6 +3,7 @@
   =link_to "Edit profile", edit_user_path(@user)
   .display_name="Display name: #{@user.display_name}"
   .email="Email: #{@user.email}"
+  .address="Address: #{@user.address}"
 
   .orders_block
     %h3.order_text.btn.span12 Orders
@@ -15,4 +16,4 @@
     -if @user.products.empty?
       User has no products in cart
     -else
-      .cart=render partial: 'products/inline', collection: @user.products_uniq, as: :product
+      .cart=render partial: 'products/inline', collection: ProductPresenter.new_from_array(@user.products), as: :product

@@ -5,13 +5,10 @@ class ProductCartManagerController < ApplicationController
     user = specified_user
     user.add product: @product
 
-    # @products = Product.find_on_sale.page params[:page]
-    # @products_presenter = ProductPresenter.new_from_array @products
-
     @product_presenter = ProductPresenter.new @product
 
     respond_to do |format|
-      format.html {redirect_to :back, notice: "#{product.title} added to cart"}
+        format.html {redirect_to :back, notice: "#{@product.title} added to cart"}
       format.js {render 'products/update_short'}
     end
   end

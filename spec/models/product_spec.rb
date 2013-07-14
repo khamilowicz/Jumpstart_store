@@ -10,9 +10,6 @@ describe Product do
   it{ should allow_value(1).for(:base_price)}
   it{ should have_and_belong_to_many(:sales)}
   it{ monetize(:base_price).should be_true}
-  # it{ should_not allow_value(1.101).for(:base_price)}
-  # it{ should_not allow_value(-1).for(:base_price).with_message("base_price_cents must be greater than 0 (-100)")}
-  # it{ should_not allow_value('some string').for(:base_price)}
   it{ should_not allow_value(nil).for(:base_price_cents)}
   it{ should respond_to(:quantity)}
   it{ FactoryGirl.create(:product).quantity.should eq(1)}
@@ -127,11 +124,11 @@ describe Product do
           products.each { |p| p.on_discount 50 }
         end
         it{ 
+          pending
           expect{ Product.off_discount}.
           to change{ Product.discount }.
           from(50).to(100)
         }
-
       end
 
     end

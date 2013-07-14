@@ -32,4 +32,9 @@ describe Address do
 
       it{ "#{address}".should eq("USA 80-130 Washington Pensylwania 10/15")}
     end
+
+    describe "factory" do
+      let(:address){FactoryGirl.build(:address)}
+      it{ "#{address}".should eq("USA 80-130 Washington Pensylwania 10/15")}
+    end
   end

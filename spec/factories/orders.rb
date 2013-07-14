@@ -3,9 +3,10 @@
 FactoryGirl.define do
   factory :order do
 
-  	address "Some address"
     after(:build) do |order|
-    	order.user = FactoryGirl.create(:user, :with_products)
+      user = FactoryGirl.create(:user, :with_products)
+      order.user = user
+      order.address = user.address
       order.transfer_products
     end
   end

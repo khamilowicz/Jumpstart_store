@@ -10,19 +10,15 @@ class Sale < ActiveRecord::Base
   validates_presence_of :discount
 
   def self.new_from_params params
-    unless params[:name_from_select].blank?
-      dis = Sale.where(name: params[:name_from_select]).first
-      dis.discount = params[:discount] if params[:discount]
-      dis.products << Product.find(params[:products].keys) if params[:products]
-      dis.categories << Category.find(params[:categories].keys) if params[:categories]
-    else
-      categories_id = params[:categories].keys if params[:categories]
-      products_id = params[:products].keys if params[:products]
-      name = params[:name] if params[:name]
-      discount = params[:discount].to_i
 
-      dis = self.new.construct( discount, name, products_id, categories_id)
-    end
+    discount = params[:discount].to_i
+    categories_id = params[:categories].keys if params[:categories]
+    products_id = params[:products].keys if params[:products]
+    name = params[:name] if params[:name]
+
+    dis = self.where(name: params[:name_from_select])
+    .first_or_initialize
+    .construct( discount, name, products_id, categories_id)
     dis.save
     dis
   end
@@ -68,20 +64,25 @@ class Sale < ActiveRecord::Base
     s = Sale.new
     s.name = name
     s.discount = discount
+    if categories_id
+      products_id ||= []
+      products_id << CategoryProduct.where(category_id: categories_id).pluck(:product_id)
+      s.categories << Category.find(categories_id) 
+    end
     s.products << Product.find(products_id) if products_id
-    s.categories << Category.find(categories_id) if categories_id
-    s.save
-    s
-  end
 
-  def remove params={}
-   remove_product params[:product] if params[:product]
-   Sale.delete self if params.empty?
- end
+  s.save
+  s
+end
 
- private
+def remove params={}
+ remove_product params[:product] if params[:product]
+ Sale.delete self if params.empty?
+end
 
- def remove_product product
+private
+
+def remove_product product
   self.products.delete product
 end
 end
