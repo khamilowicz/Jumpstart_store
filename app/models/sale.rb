@@ -3,7 +3,6 @@ class Sale < ActiveRecord::Base
   has_and_belongs_to_many :products
   has_and_belongs_to_many :categories
 
-  attr_reader :products_id
   attr_accessible :name, :discount
 
   validates :discount, numericality: {greater_than: 0, less_than: 100 }, presence: true
@@ -21,9 +20,9 @@ class Sale < ActiveRecord::Base
     end
 
     def attach product, percent, name=nil
-      Sale.where(name: name).first_or_create do |dis|
-       dis.discount = percent
-       dis.name = name
+      Sale.where(name: name).first_or_create do |sale|
+       sale.discount = percent
+       sale.name = name
      end.products << product
    end
 
@@ -31,7 +30,7 @@ class Sale < ActiveRecord::Base
     product.sales.get_by_identifier(identifier).destroy_all
   end
 
-  def on_discount percent, name=nil
+  def set_discount percent, name=nil
     self.create( discount: percent, name: name)
   end
 

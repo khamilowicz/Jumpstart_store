@@ -42,7 +42,7 @@ shared_examples_for "user" do
         @discount = 50
         product = @products.first
         product.base_price = @price
-        product.on_discount @discount
+        product.set_discount @discount
         product.save
         visit products_path
       end
@@ -167,7 +167,6 @@ shared_examples_for "user who can't" do
         it {should_not have_content("Order page")}
       end
     end
-
 
     it "view the administrator screens or use administrator functionality" do
       pending "add lots of admin's paths"

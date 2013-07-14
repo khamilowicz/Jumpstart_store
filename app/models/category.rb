@@ -51,12 +51,12 @@ def start_selling
  self.products.start_selling
 end
 
-def on_discount percent
- self.products.on_discount percent
+def set_discount percent
+ self.products.set_discount percent
 end
 
-def self.on_discount percent
- self.products.on_discount percent
+def self.set_discount percent
+ self.products.set_discount percent
 end
 
 private 

@@ -17,7 +17,7 @@ describe Sale do
 
       before(:each) do
         @product = FactoryGirl.create(:product)
-        @product.on_discount 10, 'sale'
+        @product.set_discount 10, 'sale'
       end
 
       subject{ @product.sales.first}
@@ -29,12 +29,12 @@ describe Sale do
       describe "#get_discount" do
         it{ @product.sales.get_discount.should eq(10)}
         it{
-          expect{@product.on_discount 9}
+          expect{@product.set_discount 9}
           .to change{@product.sales.get_discount}
           .from(10).to(9)
         }
         it{
-          expect{@product.on_discount 13}
+          expect{@product.set_discount 13}
           .to_not change{@product.sales.get_discount}
         }
 
@@ -62,7 +62,7 @@ describe Sale do
         product.add category: "Category one"
       end
       @product_not_in_category = FactoryGirl.create(:product)
-      Category.get('Category one').on_discount 50
+      Category.get('Category one').set_discount 50
     end
 
     it{ @products.each { |product| product.discount.should eq(50) }}

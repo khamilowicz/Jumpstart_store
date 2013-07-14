@@ -56,18 +56,18 @@ describe "total  price and total discount" do
   
   it{ 
     build_order(products).total_price.should == price*3
-    products.each{|p| p.on_discount 50}
+    products.each{|p| p.set_discount 50}
     build_order(products).total_price.should == price*3/2
   }
 
   it{ 
-    expect{ products.each{|p| p.on_discount 50}}.
+    expect{ products.each{|p| p.set_discount 50}}.
     to change{ build_order(products).total_discount}.
     from(0).
     to(50)
   }
   it{ 
-    expect{ products.each{|p| p.on_discount 50}}.
+    expect{ products.each{|p| p.set_discount 50}}.
     to change{ build_order(products).has_discount?}.
     from(false).
     to(true)
@@ -79,16 +79,16 @@ describe "total  price and total discount" do
     end
 
     it{
-      expect{ products.each{|p| p.on_discount 50}}.
+      expect{ products.each{|p| p.set_discount 50}}.
       to_not change{ @order.total_price }
     }
 
     it{ 
-      expect{ products.each{|p| p.on_discount 50}}.
+      expect{ products.each{|p| p.set_discount 50}}.
       to_not change{ @order.total_discount}
     }
     it{ 
-      expect{ products.each{|p| p.on_discount 50}}.
+      expect{ products.each{|p| p.set_discount 50}}.
       to_not change{ @order.has_discount?}
     } 
   end

@@ -133,10 +133,10 @@ describe "concerning putting on sale" do
     it{ expect{ products.first.start_selling}.to_not change{category.all_on_sale?}.to(true)}
   end
 
-  describe "on_discount" do
+  describe "set_discount" do
     before {category.start_selling}
 
-    it{ expect{ category.on_discount 50}.to change{category.total_price}.from(product_price).to(product_price/2)}
+    it{ expect{ category.set_discount 50}.to change{category.total_price}.from(product_price).to(product_price/2)}
   end
 end
 end

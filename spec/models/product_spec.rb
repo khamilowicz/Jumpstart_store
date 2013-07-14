@@ -95,12 +95,12 @@ describe Product do
     describe "discounts" do
       let(:product){FactoryGirl.build(:product)}
       
-      it{ expect{product.on_discount 50}.to change{
+      it{ expect{product.set_discount 50}.to change{
         product.discount
         }.from(100).to(50)
       }
 
-      it{ expect{product.on_discount 50; product.off_discount}.to_not change{
+      it{ expect{product.set_discount 50; product.off_discount}.to_not change{
         product.discount
         }.from(100)
       }
@@ -108,7 +108,7 @@ describe Product do
       describe "#off_discount" do
 
         before(:each) do
-          product.on_discount 50
+          product.set_discount 50
         end
 
         it{ 
@@ -121,7 +121,7 @@ describe Product do
       describe ".off_discount" do
         before(:each) do
           products = FactoryGirl.create_list(:product, 3)
-          products.each { |p| p.on_discount 50 }
+          products.each { |p| p.set_discount 50 }
         end
         it{ 
           pending
@@ -137,7 +137,7 @@ describe Product do
       let(:products){FactoryGirl.create_list(:product, 3)}
       before(:each) do
         products
-        Product.limit(2).on_discount 50
+        Product.limit(2).set_discount 50
       end
       it{ Product.limit(2).all.each{ |p| p.should be_on_discount}}
       it{ Product.last.should_not be_on_discount}

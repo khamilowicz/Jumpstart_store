@@ -29,7 +29,7 @@ class Product < ActiveRecord::Base
   has_and_belongs_to_many :sales
 
   after_create :create_asset
-  before_save :set_discount
+  before_save :save_total_discount
 
   accepts_nested_attributes_for :assets, :sales
 
@@ -49,9 +49,9 @@ class Product < ActiveRecord::Base
       self.update_all(on_sale: false)
     end
 
-    def on_discount discount, name=nil
-      self.all.each do|product|
-        product.on_discount discount, name
+    def set_discount discount, name=nil
+      self.all.each do |product|
+        product.set_discount discount, name
       end
     end
 
@@ -75,7 +75,7 @@ class Product < ActiveRecord::Base
     self.on_sale = false; self.save
   end
 
-  def on_discount percent, name=nil
+  def set_discount percent, name=nil
     Sale.attach(self, percent, name); self.save
   end
 
@@ -125,7 +125,7 @@ class Product < ActiveRecord::Base
     end
   end
 
-  def set_discount
+  def save_total_discount
     # self.discount= is a column in db, and self.discount is calculated
     self.discount = self.discount || 100
   end
