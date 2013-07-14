@@ -10,7 +10,7 @@ namespace :db do
       last_name: "Khamilowicz",
       email: 'kham@gmail.com',
       password: 'megamega',
-      password_confirmation: 'megamega',
+      password_confirmation: 'megamega'
       )
     admin.activated = true
     admin.promote_to_admin

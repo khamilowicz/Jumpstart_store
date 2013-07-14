@@ -6,6 +6,7 @@ class OrdersController < ApplicationController
 	def new
 		@products = ProductPresenter.new_from_array current_user.cart.products
 		@cart = current_user.cart
+		@order = current_user.orders.new
 	end
 
 	def change_status

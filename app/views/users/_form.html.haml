@@ -1,0 +1,8 @@
+=simple_form_for user, defaults: {required: true} do |f|
+  =f.input :first_name   
+  =f.input :last_name   
+  =f.input :email   
+  =f.input :password   
+  =f.input :password_confirmation   
+  = render partial: 'addresses/address', address: ( user.address || Address.new), locals: {form: f}
+  =f.button :submit

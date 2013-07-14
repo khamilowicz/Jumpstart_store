@@ -1,0 +1,13 @@
+=form.fields_for :address do |address|
+  =address.label :country
+  =address.text_field :country
+  =address.label :city
+  =address.text_field :city
+  =address.label :zip_code
+  =address.number_field :zip_code
+  =address.label :street
+  =address.text_field :street
+  =address.label :house_nr
+  =address.number_field :house_nr
+  =address.label :door_nr
+  =address.number_field :door_nr

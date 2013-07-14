@@ -4,18 +4,24 @@ class User < ActiveRecord::Base
 
 	has_secure_password
 
-	attr_accessible :first_name, :last_name, :email, :password, :address, :password_confirmation
+	has_one :address
+	accepts_nested_attributes_for :address
+
+	attr_accessible :first_name, :last_name, :email, :password, :password_confirmation, :address_attributes
 	
 	validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, unless: :guest?
 	validates_uniqueness_of :email, unless: :guest?
 	validates_presence_of :first_name, :last_name, unless: :guest?
 	validates :nick, length: {minimum: 2, maximum: 32}, allow_nil: true, unless: :guest?
-	validates_presence_of :password, unless: :guest?
+	validates_presence_of :password, on: :create, unless: :guest?
 	validates :password, confirmation: true
 
 	has_many :product_users
 	has_many :products, through: :product_users
 	has_many :orders
+
+
+	after_create :create_address
 
 	class << self
 

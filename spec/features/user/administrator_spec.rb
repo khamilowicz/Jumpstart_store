@@ -120,7 +120,7 @@ describe "Administrator" do
         end
         order = @user.orders.create
         order.transfer_products
-        order.address = "some address"
+        order.address = FactoryGirl.create(:address)
         order.save
         Order.all.last.send method
       end
@@ -224,7 +224,9 @@ end
 context "he may" do
 
   before(:each) do
-    @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 3)
+    @price = 1000
+    @money_price = Money.new(@price, 'USD')
+    @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 3, base_price: @price)
     @category = ['Category_1']
     @products_in_category = @products[0,2]
     @products_in_category.each {|p| p.add category: @category.first}
@@ -234,7 +236,7 @@ context "he may" do
   it{ @products_in_category.first.categories.should_not be_empty}
 
   it "View a list of all active sales" do 
-    put_on_sale @products_in_category.map(:title)
+    put_on_sale @products_in_category.map(&:title)
     visit sales_path
 
     should_not have_content(@product.title) 
@@ -244,11 +246,11 @@ context "he may" do
   describe "create a sale" do
 
     it "for products" do
-      put_on_sale @products_in_category.map(:title), "Sale for products"
+      put_on_sale @products_in_category.map(&:title), "Sale for products"
       visit sales_path
-      page.should have_content("Sale for products")
-      visit product_path(@products_in_category.last) 
-      page.should have_content(@products_in_category.last.price*0.5)
+      page.should have_short_product(@products_in_category.first)
+      visit product_path(@products_in_category.first) 
+      page.should have_content(@money_price*0.5)
     end
 
     it "for categories" do
@@ -256,14 +258,14 @@ context "he may" do
       @products_in_category.each do |product| 
        visit product_path(product)
        product.sales.should_not be_empty
-       should have_selector(".price", text: (product.price*0.5).to_s), "#{page.find('body').native}"
+       should have_selector(".price", text: ((@money_price*0.5).to_s)), "#{page.find('body').native}"
      end
    end
 
 
    describe "End a sale" do
     before(:each) do
-      put_on_sale [@product].map(:title)
+      put_on_sale [@product].map(&:title)
       visit sales_path
       within('.sale'){ click_link 'X'}
       visit sales_path

@@ -7,7 +7,10 @@ FactoryGirl.define do
     sequence(:email){|n| "#{n}@gmail.com"}
     password 'secret'
     password_confirmation 'secret'
-    address "Some address"
+
+    before(:create) do |user,evaluator|
+      user.address = FactoryGirl.create(:address)
+    end
 
     trait :guest do
       guest true

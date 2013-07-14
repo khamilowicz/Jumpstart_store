@@ -50,7 +50,7 @@ end
 
 def order_some_products products
   add_products_to_cart products
-  order = Order.init current_user, "some address"
+  order = Order.init current_user, FactoryGirl.create(:address)
   order.transfer_products
   order.pay
   order.save
@@ -95,4 +95,13 @@ def put_on_sale stuff, name=nil
     check name 
   end
   click_button "Submit"
+end
+
+def fill_address street=nil
+fill_in 'Country', with: "USA"
+        fill_in 'City', with: "Washington"
+        fill_in 'Zip code', with: "80130"
+        fill_in 'Street', with: (street || "Pensylwania")
+        fill_in 'House nr', with: 10
+        fill_in 'Door nr', with: 15
 end

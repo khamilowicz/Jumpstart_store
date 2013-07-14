@@ -1,4 +1,4 @@
-# require "spec_helper"
+  # require "spec_helper"
 
 shared_examples_for "user" do
 
@@ -159,7 +159,6 @@ shared_examples_for "user who can't" do
         before(:each) do
           @order = @other_user.orders.new
           @order.transfer_products
-          @order.address = 'lala'
           @order.save
           visit order_path(@order)
         end

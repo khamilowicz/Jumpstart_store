@@ -11,7 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130710194617) do
+ActiveRecord::Schema.define(:version => 20130713163836) do
+
+  create_table "addresses", :force => true do |t|
+    t.string  "country"
+    t.string  "city"
+    t.integer "zip_code"
+    t.string  "street"
+    t.integer "house_nr"
+    t.integer "door_nr"
+    t.integer "user_id"
+    t.integer "order_id"
+  end
 
   create_table "assets", :force => true do |t|
     t.integer  "product_id"
@@ -52,7 +63,6 @@ ActiveRecord::Schema.define(:version => 20130710194617) do
     t.integer  "user_id"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
-    t.text     "address"
     t.string   "status",             :default => "pending"
     t.datetime "status_change_date"
     t.integer  "price_cents",        :default => 0,         :null => false
@@ -117,7 +127,6 @@ ActiveRecord::Schema.define(:version => 20130710194617) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "password_digest"
-    t.string   "address"
     t.boolean  "activated",       :default => false
   end
 

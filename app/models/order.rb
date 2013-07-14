@@ -3,7 +3,10 @@ class Order < ActiveRecord::Base
 
 	belongs_to :user
 	has_many :order_products
+	has_one :address
 	monetize :price_cents
+	has_one :address
+	accepts_nested_attributes_for :address
 
 	include TransferProducts
 
