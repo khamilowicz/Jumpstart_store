@@ -40,6 +40,10 @@
       @product.to_param
     end 
 
+    def photo
+      @product.photos.last
+    end
+
     def title_param
       @product.title.parameterize
     end

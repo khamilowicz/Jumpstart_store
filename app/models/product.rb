@@ -62,9 +62,9 @@ class Product < ActiveRecord::Base
   end
 
   def add param 
-    add_review param[:review] if param[:review]
-    add_to_category param[:category] if param[:category]
-    add_photos param[:photos] if param[:photos]
+    param.each do |name, items|
+      self.send "add_#{name}", items
+    end
   end
 
   def start_selling
@@ -76,8 +76,7 @@ class Product < ActiveRecord::Base
   end
 
   def on_discount percent, name=nil
-    Sale.attach(self, percent, name)
-    self.save
+    Sale.attach(self, percent, name); self.save
   end
 
   def on_discount?
@@ -102,10 +101,6 @@ class Product < ActiveRecord::Base
     self.quantity -=1
   end
 
-  def photo
-    self.assets.all.sample.photo
-  end
-
   def photos
     Asset.photos_for(self)
   end
@@ -116,7 +111,7 @@ class Product < ActiveRecord::Base
     self.assets.create
   end
 
-  def add_to_category category
+  def add_category category
     Category.get(category).add product: self
   end
 
@@ -134,6 +129,4 @@ class Product < ActiveRecord::Base
     # self.discount= is a column in db, and self.discount is calculated
     self.discount = self.discount || 100
   end
-
-
 end
