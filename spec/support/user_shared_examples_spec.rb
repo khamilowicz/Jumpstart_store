@@ -170,6 +170,7 @@ shared_examples_for "user who can't" do
 
 
     it "view the administrator screens or use administrator functionality" do
+      pending "add lots of admin's paths"
       visit admin_dashboard_path
       should_not have_content("Administrator Dashboard")
     end

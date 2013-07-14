@@ -1,4 +1,5 @@
 class OrdersController < ApplicationController
+
 	before_filter :ensure_not_guest
 	before_filter :authorize_user, except: [:new, :create, :index]
 	before_filter :authorize_admin, except: [:filter, :create, :new, :show, :index]
