@@ -1,27 +1,28 @@
 .product.product_full.span12
   .row.top_title
     .span9.title
-      %h1= @product_presenter.title
-    %h2.price.span3= "$#{@product_presenter.price}"
+      %h1= @product.title
+    %h2.price.span3= humanized_money_with_symbol @product.price
   .row.note_bar
-    .overall_note= note_in_stars(@product_presenter.rating)
+    .overall_note= note_in_stars @product.rating
   .row.buttons
-    %h2.btn.btn-primary.add_to_cart= link_to("Add to cart", add_to_cart_user_product_path(current_user, @product_presenter)) if @product_presenter.on_sale?
-    .span2=link_to 'Edit product', edit_product_path(@product_presenter) if current_user.admin?
+    %h2.btn.btn-primary.add_to_cart
+      = link_to("Add to cart", add_to_cart_user_product_path(current_user, @product)) if @product.on_sale?
+    .span2=link_to 'Edit product', edit_product_path(@product) if current_user.admin?
     .span2.order_product= link_to_unless current_user.guest?, 'Order', '#'
   .row.overview
     .span6
-      = render partial: 'menu/carousel', locals: {item_thing: @product_presenter}
+      = render partial: 'menu/carousel', locals: {item_thing: @product}
     .image=# image_tag @product.photo.url
     .span6
       .row
         %p.description
-          = @product_presenter.description
+          = @product.description
       .row.categories
         Categories:
-        = @product_presenter.list_categories
-        .add_to_category= link_to "Add to category", product_add_to_category_path(@product_presenter) if current_user.admin?
+        = @product.list_categories
+        .add_to_category= link_to "Add to category", product_add_to_category_path(@product) if current_user.admin?
   .row.review_bar
-    =render partial: 'reviews/new', locals: {product: @product_presenter.product, review: Review.new}
+    =render partial: 'reviews/new', locals: {product: @product.product, review: Review.new}
   .row.reviews
-    =render @product_presenter.reviews
+    =render @product.reviews

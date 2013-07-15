@@ -1,9 +1,6 @@
 .heading
   %h3= "#{current_user_presenter}'s' cart"
 .order_menu
-  -if current_user_presenter.guest?
-    "You need to log in to purchase products"
-  -else
-    =link_to 'Order', new_order_path, class: 'btn btn-primary'
+  = order_link(current_user_presenter)
 .products
-  =render partial: 'products/inline', collection: @products, as: :product
+  =render presentify(current_user_presenter.cart.products)

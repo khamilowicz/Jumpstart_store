@@ -3,7 +3,6 @@ class ProductsController < ApplicationController
 
 	def index
 		@products = Product.find_on_sale.page params[:page]
-		@products_presenter = ProductPresenter.new_from_array @products
 	end
 
 	def new
@@ -46,7 +45,7 @@ class ProductsController < ApplicationController
 	end
 
 	def show
-		@product_presenter = ProductPresenter.new Product.find(params[:id])
+		@product = ProductPresenter.new Product.find(params[:id])
 	end
 
 end
