@@ -10,4 +10,4 @@
     .was_on_sale= "Purchased on sale? #{@order.on_discount? ? 'Yes' : 'No'}"
     .discount= "Total discount: #{@order.total_discount}%"
   .products
-    =render partial: 'orders/inline_product', collection: @products, as: :product
+    =render partial: 'orders/inline_product', collection: @order_products, as: :product

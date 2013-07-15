@@ -99,7 +99,7 @@ def put_on_sale stuff, name=nil
 end
 
 def fill_address street=nil
-  fill_in 'Country', with: "USA"
+  select "United States", from: 'Country'
   fill_in 'City', with: "Washington"
   fill_in 'Zip code', with: "80130"
   fill_in 'Street', with: (street || "Pensylwania")

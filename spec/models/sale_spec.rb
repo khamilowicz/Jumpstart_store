@@ -93,6 +93,11 @@ describe "created from params" do
     .to change{ Product.all.all?(&:on_discount?)}
     .from(false).to(true)  
   }
+  it{
+    expect{ make_sale}
+    .to change{ products.first.get_discount}
+    .from(100).to(50)  
+  }
 end
 end
 context "for categories" do

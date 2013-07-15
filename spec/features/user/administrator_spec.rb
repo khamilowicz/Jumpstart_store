@@ -246,7 +246,7 @@ context "he may" do
 
     describe "for products" do
       before(:each) do
-        put_on_sale @products_in_category.map(&:title), "Sale for products"
+        put_on_sale @products_in_category.map(&:title)
         visit sales_path
       end
       it{

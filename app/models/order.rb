@@ -51,7 +51,7 @@ class Order < ActiveRecord::Base
 	end
 
 	def set_status new_status
-		if STATUSES.keys.includes? new_status
+		if STATUSES.keys.include? new_status.to_sym
 			send new_status
 		end
 	end

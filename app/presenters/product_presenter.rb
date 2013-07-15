@@ -5,7 +5,7 @@
     attr_accessor :product
 
     def price
-      Money.new @product.base_price_cents.to_i*@product.discount/100, @product.base_price_currency
+      @product.base_price*@product.get_discount/100
     end
 
     def initialize product

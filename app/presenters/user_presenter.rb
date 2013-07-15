@@ -20,12 +20,12 @@ class UserPresenter
   end
 
   def method_missing(name, *args, &block)
-    return @product.send name, *args, &block if @product.respond_to?(name)
+    return @user.send name, *args, &block if @user.respond_to?(name)
     super # otherwise
   end
 
   def respond_to?(method_id, include_private = false)
-    return true if @product.respond_to?(method_id)
+    return true if @user.respond_to?(method_id)
     super #otherwise
   end
 
