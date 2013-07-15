@@ -20,16 +20,13 @@ class User < ActiveRecord::Base
 	has_many :products, through: :product_users
 	has_many :orders
 
-	# after_initialize :build_address
-
 	class << self
 
 		def create_guest
-			user_guest = new
-			user_guest.guest = true
-			user_guest.password_digest = 'lala'
-			user_guest.save
-			user_guest
+			create do |user_guest|
+				user_guest.guest = true
+				user_guest.password_digest = 'password'
+			end
 		end
 	end
 

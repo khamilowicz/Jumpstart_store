@@ -7,8 +7,8 @@ class UserPresenter
   end
 
   def self.new_from_array users
-      users.map { |p| self.new p }
-    end
+    users.map { |p| self.new p }
+  end
 
   def full_name
     "#{user.first_name} #{user.last_name}"
@@ -19,24 +19,17 @@ class UserPresenter
     user.nick || full_name
   end
 
-  def method_missing name, *args, &block
-    if @user.respond_to?(name.to_sym)
-      @user.send name, *args, &block
-    else
-      super
-    end
+  def method_missing(name, *args, &block)
+    return @product.send name, *args, &block if @product.respond_to?(name)
+    super # otherwise
   end
 
-  def respond_to? method_name, private_method = false
-    if @user.respond_to?(method_name)
-      true
-    else
-      super
-    end
+  def respond_to?(method_id, include_private = false)
+    return true if @product.respond_to?(method_id)
+    super #otherwise
   end
 
   def to_param
     @user.to_param
   end
-
 end

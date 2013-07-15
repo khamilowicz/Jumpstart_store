@@ -17,19 +17,13 @@
     end
 
     def method_missing(name, *args, &block)
-      if @product.respond_to?(name)
-        @product.send name, *args, &block
-      else
-        super
-      end
+      return @product.send name, *args, &block if @product.respond_to?(name)
+      super # otherwise
     end
 
     def respond_to?(method_id, include_private = false)
-      if @product.respond_to?(method_id)
-        true
-      else
-        super
-      end
+      return true if @product.respond_to?(method_id)
+      super #otherwise
     end
 
     def list_categories
@@ -60,5 +54,4 @@
     def quantity_in_magazine
       self.quantity - self.product_users.quantity
     end
-
   end
