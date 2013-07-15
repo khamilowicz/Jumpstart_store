@@ -40,7 +40,7 @@ describe ProductPresenter do
   describe "discounts" do
     let(:product){ ProductPresenter.new FactoryGirl.build(:product)}
     
-    it{ expect{product.set_discount 50}.to change{
+    it{ expect{product.set_discount 50; product.save}.to change{
       product.price
       }.from(product.base_price).to(product.base_price/2)
     }

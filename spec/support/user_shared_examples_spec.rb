@@ -152,7 +152,7 @@ shared_examples_for "user who can't" do
           visit cart_path
         end
 
-        it{ should have_no_content("#{@other_user.display_name} cart")}
+        it{ should have_no_content("#{@other_user}'s' cart")}
       end
 
       describe 'order' do 
@@ -163,7 +163,7 @@ shared_examples_for "user who can't" do
           visit order_path(@order)
         end
         it{ should have_content("not allowed")}
-        it{ should_not have_content(@other_user.display_name)}
+        it{ should_not have_content(@other_user.to_s)}
         it {should_not have_content("Order page")}
       end
     end

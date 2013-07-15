@@ -43,7 +43,7 @@ describe Sale do
       describe "and removement" do
         subject{ @product.sales.first}
         it{ expect{
-         subject.remove product: @product}.
+         subject.remove(product: @product); @product.save}.
          to change{ @product.discount}.
          from(10).to(100)
        }
@@ -65,7 +65,7 @@ describe Sale do
       Category.get('Category one').set_discount 50
     end
 
-    it{ @products.each { |product| product.discount.should eq(50) }}
+    it{ @products.each { |product| product.get_discount.should eq(50) }}
     it{ @product_not_in_category.discount.should eq(100)}
   end
 end

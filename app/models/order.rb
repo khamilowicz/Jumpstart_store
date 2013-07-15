@@ -13,8 +13,8 @@ class Order < ActiveRecord::Base
 	STATUSES = {
 		:cancel => 'cancelled',
 		:pay => 'paid', 
-		:is_sent => 'shipped', 
-		:is_returned => 'returned',
+		:ship => 'shipped', 
+		:return => 'returned',
 		:is_pending => 'pending'
 	}
 
@@ -40,35 +40,29 @@ class Order < ActiveRecord::Base
 
 	alias_attribute :date_of_purchase, :created_at
 	alias_attribute :time_of_status_change, :status_change_date
+
+## IMPORTANT - products in order are wrapped into order_products
 	alias_attribute :products, :order_products
 
 	before_save :set_price_and_discount
-
-	def self.init user, address
-		order = self.new
-		order.user = user
-		order.set_address address if address
-		order
-	end
 
 	def set_address address=nil
 		self.address = address || self.user.address
 	end
 
 	def set_status new_status
-		case new_status
-		when 'ship' then self.is_sent
-		when 'cancel' then self.cancel
-		when 'return' then self.is_returned
+		if STATUSES.keys.includes? new_status
+			send new_status
 		end
 	end
 
-	def total_price
-		self.price != 0 ? self.price*self.discount/100 : sum_price
+	def total_price discount=true
+		discount_percent = discount ? self.discount/100 : 1 
+		self.price.zero? ? sum_price(discount || 'base') :  self.price*discount_percent
 	end
 
 	def total_price_without_discount
-		self.price != 0 ? self.price : sum_price('base')
+		total_price false
 	end
 
 	def total_discount
@@ -95,7 +89,7 @@ class Order < ActiveRecord::Base
 	end
 
 	def add param
-		self.order_products.new.add(param).save if param[:product]
+		self.order_products.new.add(param[:product]).save if param[:product]
 	end
 
 	private

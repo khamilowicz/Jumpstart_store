@@ -22,13 +22,12 @@ class OrderProduct < ActiveRecord::Base
   end
 
   def self.add params
-    n = self.new.add params
-    n
+    self.new.add params
   end
 
-  def add params
-    self.product = params[:product]
-    self.quantity = ProductUser.quantity(params[:product], self.order.user)
+  def add product 
+    self.product = product
+    self.quantity = ProductUser.quantity(product, self.order.user)
     self
   end
 

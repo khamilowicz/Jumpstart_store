@@ -4,6 +4,7 @@ gem 'rails', '3.2.13'
 gem 'money-rails'
 gem 'simple_form'
 gem 'kaminari'
+gem 'country_select'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

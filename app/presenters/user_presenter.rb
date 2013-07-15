@@ -6,11 +6,15 @@ class UserPresenter
     @user = user
   end
 
+  def self.new_from_array users
+      users.map { |p| self.new p }
+    end
+
   def full_name
     "#{user.first_name} #{user.last_name}"
   end
 
-  def display_name
+  def to_s
     return 'Guest' if user.guest?
     user.nick || full_name
   end

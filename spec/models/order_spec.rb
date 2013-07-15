@@ -32,9 +32,9 @@ describe Order do
    let!(:order_can){ create_order }
    let!(:order_sent){ create_order }
 
-   before do
+  before do
     order_can.cancel
-    order_sent.is_sent
+    order_sent.ship
   end
 
   it{ Order.all.should include(order_can, order_sent)}

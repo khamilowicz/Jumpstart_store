@@ -5,7 +5,7 @@ namespace :db do
 
     Rake::Task['db:reset'].invoke
 
-    admin = User.create!(
+    admin = User.new(
       first_name: "Kham",
       last_name: "Khamilowicz",
       email: 'kham@gmail.com',
@@ -14,6 +14,14 @@ namespace :db do
       )
     admin.activated = true
     admin.promote_to_admin
+    admin.address = Address.create(
+      country: Faker::Lorem.word,
+      city: Faker::Lorem.word,
+      zip_code: rand(89999) + 10000,
+      street: Faker::Lorem.word,
+      house_nr: rand(100),
+      door_nr: rand(100)
+      )
     admin.save
 
     40.times do 
@@ -30,7 +38,7 @@ namespace :db do
     4.times{
       sales << [rand(100), Faker::Lorem.sentence(3)]
     }
-    Product.all.sample(10).map{|p| p.on_discount(*sales.sample)}
+    Product.all.sample(10).map{|p| p.set_discount(*sales.sample)}
 
 
     Dir[File.join(Rails.root, '/app/assets/images/*')].each do |image_path|
@@ -48,7 +56,7 @@ namespace :db do
 
     4.times do
       password = Faker::Lorem.word
-      user = User.create!(
+      user = User.new(
         first_name: Faker::Name.first_name,
         last_name: Faker::Name.last_name,
         email: Faker::Internet.email, 
@@ -56,6 +64,14 @@ namespace :db do
         password_confirmation: password,
         )
       user.activated = true
+      user.address = Address.create(
+        country: Faker::Lorem.word,
+        city: Faker::Lorem.word,
+        zip_code: rand(89999) + 10000,
+        street: Faker::Lorem.word,
+        house_nr: rand(100),
+        door_nr: rand(100)
+        )
       user.save
     end
 

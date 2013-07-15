@@ -17,7 +17,7 @@
 
     it "log out" do 
       click_link "Log out"
-      should have_no_content(user.display_name)
+      should have_no_content("#{user}")
       should have_no_content("Log out")
       should have_content("Guest")
       should have_link("Log in")
@@ -26,7 +26,7 @@
     context "in profile" do
 
       it "change his profile data" do
-        click_link user.display_name
+        click_link user.to_s
         # page.should_not have_content("Email"), "#{page.find("body").native}"
 
         click_link "Edit profile"

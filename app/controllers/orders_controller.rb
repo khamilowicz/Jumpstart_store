@@ -12,7 +12,7 @@ class OrdersController < ApplicationController
 
 	def change_status
 		order = Order.find(params[:order_id])
-		order.set_status params[:status]
+		order.status = params[:status]
 
 		@orders = Order.all
 		redirect_to orders_path, notice: "Successfully updated order status to '#{order.status}'"
@@ -28,7 +28,9 @@ class OrdersController < ApplicationController
 
 	def create
 		if PaymillManager.transaction(current_user, params[:paymillToken], current_user.cart.currency)
-			@order = Order.init current_user, params[:address]
+			@order = current_user.orders.build do |order| 
+				order.address = params[:address]
+			end
 			@order.transfer_products
 			@order.pay
 		end

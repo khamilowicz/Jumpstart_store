@@ -34,6 +34,7 @@ class Product < ActiveRecord::Base
   accepts_nested_attributes_for :assets, :sales
 
   delegate :rating, to: :reviews
+  delegate :get_discount, to: :sales
 
   class << self
 
@@ -57,7 +58,7 @@ class Product < ActiveRecord::Base
 
     def off_discount identifier=nil
       #identifier - sale obj, name or percent. if nil - every sale
-      self.sales.off_discount identifier
+      self.sales.off_discount identifier, self
     end
   end
 
@@ -67,16 +68,19 @@ class Product < ActiveRecord::Base
     end
   end
 
-  def start_selling
-    self.on_sale = true; self.save
-  end
-
-  def retire
-    self.on_sale = false; self.save
+  {'start_selling' => true, 'retire' => false}.each do |name, on_sale_value|
+    define_method name do 
+      self.on_sale = on_sale_value
+      self.save
+    end
   end
 
   def set_discount percent, name=nil
-    Sale.attach(self, percent, name); self.save
+    self.sales << Sale.set_discount( percent, name); self.save
+  end
+
+  def self.on_discount?
+    self.joins(:sales).count > 0
   end
 
   def on_discount?
@@ -84,11 +88,7 @@ class Product < ActiveRecord::Base
   end
 
   def off_discount identifier=nil
-    Sale.detach(self, identifier)
-  end
-
-  def discount
-    self.sales.get_discount
+    self.sales.destroy_all
   end
 
   def out_of_stock?
@@ -126,7 +126,6 @@ class Product < ActiveRecord::Base
   end
 
   def save_total_discount
-    # self.discount= is a column in db, and self.discount is calculated
-    self.discount = self.discount || 100
+    self.discount = self.get_discount || 100
   end
 end

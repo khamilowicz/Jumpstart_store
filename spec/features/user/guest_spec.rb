@@ -37,7 +37,7 @@ describe "guest" do
     end
     
     it { should have_content( "Successfully logged in")}
-    it { should have_content(@user.display_name)}
+    it { should have_content("#{@user}")}
     it { should_not have_link("Log in")}
     it { should have_link("Log out")}
     it "which doesn't clear the cart" do

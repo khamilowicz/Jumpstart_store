@@ -288,7 +288,7 @@ context "search order using a builder-style interface (like Google’s 'Advanced
     
     @cancelled_order = create_order [product_9.product]
     @cancelled_order.created_at = Date.new(2008, 10,10)
-    @cancelled_order.set_status 'cancel'
+    @cancelled_order.cancel
     @cancelled_order.save
 
     click_link 'Search'
