@@ -10,9 +10,23 @@ class Sale < ActiveRecord::Base
   class << self
 
     def new_from_params params
-      self.where(name: params[:name_from_select])
-      .first_or_initialize
-      .construct(params)
+      sale = self.where(name: params[:name_from_select])
+      .first_or_initialize 
+
+      sale.discount = params[:discount]
+
+      products_id = params[:products] ? params[:products].keys : []
+
+      if params[:categories]
+        categories_id = params[:categories].keys
+        products_id << CategoryProduct.where(category_id: categories_id).pluck(:product_id)
+        sale.categories << Category.find(categories_id) 
+      end
+
+      sale.products << Product.find(products_id)
+      sale.name = params[:name] unless params[:name].blank?
+      sale.save
+      sale
     end
 
     def get_discount
@@ -30,24 +44,6 @@ class Sale < ActiveRecord::Base
       else self.scoped
       end
     end
-  end
-
-  def construct params
-    sale = Sale.new(
-      name: params[:name_from_select] || params[:name],
-      discount: params[:discount]
-      )
-    products_id = params[:products] ? params[:products].keys : []
-
-    if params[:categories]
-      categories_id = params[:categories].keys
-      products_id << CategoryProduct.where(category_id: categories_id).pluck(:product_id)
-      sale.categories << Category.find(categories_id) 
-    end
-
-    sale.products << Product.find(products_id)
-    sale.save
-    sale
   end
 
   def remove params={}

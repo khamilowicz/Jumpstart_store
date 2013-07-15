@@ -1,6 +1,6 @@
 $(function() {
  
-  $('.product .remove a').on( 'click', function() {
+  $('.product .remove_product a').on( 'click', function() {
    $(this).closest('.product').slideUp();
  });
 });

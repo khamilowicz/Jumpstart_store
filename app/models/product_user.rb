@@ -53,6 +53,13 @@ class ProductUser < ActiveRecord::Base
     self.quantity == 0
   end
 
+  def self.total_price
+    ## TODO: refactor this mess
+    self.includes(:product).all.inject(Money.new(0, 'USD')) do |sum, op|
+      sum += op.product.base_price*op.product.get_discount*op.quantity/100
+    end
+  end
+
   private
 
   def set_in_cart_status

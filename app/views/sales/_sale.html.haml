@@ -5,4 +5,4 @@
     %h4.span2= "#{sale.discount}%"
     %h4.span2.remove.sale= link_to "X", sales_path({sale: sale}), method: :delete, remote: true
   .row  
-    = render partial: 'inline_product', locals: {sale: sale}, collection: presentify(sale.products), as: :product
+    = render partial: 'products_list', locals: {sale: sale, products: presentify(sale.products)}

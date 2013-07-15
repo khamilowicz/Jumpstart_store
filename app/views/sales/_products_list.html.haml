@@ -1,0 +1,14 @@
+.row.table_header
+  .span6.title
+    Title
+  .span1.base_price
+    Base Price
+  .span1.price
+    Price
+  .span1.discount
+    Discount
+  .span1.quantity
+    Quantity
+  .span1
+    Remove
+=render partial: 'inline_product', collection: products, as: :product, locals: {sale: sale}

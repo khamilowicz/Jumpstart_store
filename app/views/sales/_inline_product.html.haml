@@ -1,24 +1,8 @@
 .row
-  .span1
-  .span11.product.inline{class: product.title_param}
-    -if product_counter == 0
-      .row
-        .span6.title
-          Title
-        .span1.base_price
-          Base Price
-        .span1.price
-          Price
-        .span1.discount
-          Discount
-        .span1.quantity
-          Quantity
-        .span1
-          Remove
-    .product.row
-      .span6.title= link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} 
-      .span1.base_price= "$#{product.base_price}"
-      .span1.price= "$#{product.price}"
-      .span1.discount= "#{product.discount}%"
-      .span1.quantity= product.quantity
-      .span1.remove.product= link_to "X", sales_path({sale: sale, product: product}), method: :delete, remote: true
+  .span12.product.inline.row{class: product.title_param}
+    .span6.title= link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} 
+    .span1.base_price= "$#{product.base_price}"
+    .span1.price= "$#{product.price}"
+    .span1.discount= "#{product.discount}%"
+    .span1.quantity= product.quantity
+    .span1.remove_product= link_to "X", sales_path({sale: sale, product: product}), method: :delete, remote: true

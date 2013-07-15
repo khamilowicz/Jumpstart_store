@@ -2,7 +2,8 @@
   .row.top_title
     .span9.title
       %h1= @product.title
-    %h2.price.span3= humanized_money_with_symbol @product.price
+    %h2
+      .price.span3= humanized_money_with_symbol @product.price
   .row.note_bar
     .overall_note= note_in_stars @product.rating
   .row.buttons

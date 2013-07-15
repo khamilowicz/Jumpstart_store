@@ -1,5 +1,5 @@
 .category.inline
   .name
-    =category.name
+    =link_to category.name, category_path(category)
   .products
     =render presentify(category.products)

@@ -10,8 +10,8 @@ class ProductCartManagerController < ApplicationController
     @product_presenter = ProductPresenter.new Product.find(params[:product])
 
     respond_to do |format|
-        format.html {redirect_to :back, notice: "#{@product.title} added to cart"}
-      format.js {render 'products/update_short'}
+      format.html {redirect_to :back, notice: "#{@product.title} added to cart"}
+      format.js {render 'products/update_product'}
     end
   end
 
@@ -22,8 +22,8 @@ class ProductCartManagerController < ApplicationController
     @product_presenter = ProductPresenter.new Product.find(params[:product])
 
     respond_to do |format|
-      format.html {redirect_to :back, notice: "#{product.title} removed from cart"}
-      format.js {render 'products/update_short'}
+      format.html {redirect_to :back, notice: "#{@product.title} removed from cart"}
+      format.js {render 'products/update_product'}
     end
   end
 
