@@ -12,24 +12,24 @@ class Order < ActiveRecord::Base
 	include TransferProducts
 
 	STATUSES = {
-		:cancel => 'cancelled',
-		:pay => 'paid', 
-		:ship => 'shipped', 
-		:return => 'returned',
+		:cancel 		=> 'cancelled',
+		:pay 				=> 'paid', 
+		:ship 			=> 'shipped', 
+		:return 		=> 'returned',
 		:is_pending => 'pending'
 	}
 
 	COMPARISONS = {
-		'before' => '<', 'less' => '<',
-		'after' => '>', 'more' => '>',
-		'at' => '=', 'equal' => '='
+		'before' 	=> '<', 'less'		=> '<',
+		'after' 	=> '>', 'more'	 	=> '>',
+		'at' 			=> '=', 'equal' 	=> '='
 	}
 
 	validates_presence_of :user, :address
 	validates_inclusion_of :status, in: STATUSES.values
 
 	scope :find_by_status, ->(status){ where(status: status)}
-	scope :find_by_email, ->(email){ includes(:user).where(users: {email: email})}
+	scope :find_by_email, ->(email){ joins(:user).where(users: {email: email})}
 	scope :find_by_date, ->(sign_word, year, month, day){ 
 		where("created_at #{COMPARISONS[sign_word]} ?", Date.new(year.to_i,month.to_i,day.to_i)) 
 	}
@@ -42,7 +42,7 @@ class Order < ActiveRecord::Base
 	alias_attribute :date_of_purchase, :created_at
 	alias_attribute :time_of_status_change, :status_change_date
 
-	delegate :on_discount?, to: :products
+	delegate :total_price, :on_discount?, to: :order_products
 
 	before_save :set_price_and_discount
 
@@ -56,17 +56,8 @@ class Order < ActiveRecord::Base
 		end
 	end
 
-	def total_price discount=true
-		discount_percent = discount ? self.discount/100 : 1 
-		self.price.zero? ? sum_price(discount || 'base') :  self.price*discount_percent
-	end
-
-	def total_price_without_discount
-		total_price false
-	end
-
 	def total_discount
-		return 100 if total_price_without_discount == 0
+		return 100 if total_price_without_discount.cents.zero?
 		(total_price_without_discount.cents - total_price.cents)*100/total_price_without_discount.cents
 	end
 
@@ -90,13 +81,13 @@ class Order < ActiveRecord::Base
 
 	private
 
-	def set_price_and_discount
-		self.price = total_price_without_discount
-		self.discount = total_discount if self.on_discount?
+	def total_price_without_discount
+		total_price 'base'
 	end
 
-	def sum_price price=nil
-		self.order_products.total_price price
+	def set_price_and_discount
+		self.price = total_price_without_discount
+		self.discount = total_discount 
 	end
 
 	def update_status_date

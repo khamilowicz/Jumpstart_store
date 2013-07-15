@@ -53,25 +53,25 @@ describe "total  price and total discount" do
   let(:price){ Money.parse("$1")}
   let(:total_price){ price*3}
   let(:products){FactoryGirl.create_list(:product,3, quantity: 2, base_price: price.cents)}
-  let(:order){ build_order(products)}
+   
   it{ 
      expect{ products.each{|p| p.set_discount 50}}.
-    to change{ order.total_price}.
+    to change{ build_order(products).total_price}.
     from(price*3).to(price*3/2)
   }
 
   it{ 
     expect{ products.each{|p| p.set_discount 50}}.
-    to change{ order.total_discount}.
+    to change{ build_order(products).total_discount}.
     from(0).to(50)
   }
   it{ 
     expect{ products.each{|p| p.set_discount 50}}.
-    to change{ order.on_discount?}.
+    to change{ build_order(products).on_discount?}.
     from(false).to(true)
   }
   describe "doesn't change after saving order" do
-    let(:order_saved){order.save; order }
+    let(:order_saved){create_order products }
 
     it{
       expect{ products.each{|p| p.set_discount 50}}.

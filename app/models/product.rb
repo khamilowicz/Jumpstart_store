@@ -56,9 +56,14 @@ class Product < ActiveRecord::Base
       end
     end
 
+    def get_discount 
+      self.all.map{|product| product.get_discount }.min
+    end
+
     def off_discount identifier=nil
       #identifier - sale obj, name or percent. if nil - every sale
-      self.sales.off_discount identifier, self
+      # self.sales.off_discount identifier, self
+      # self.all.each { |p| p.sales.off_discount identifier, self }
     end
   end
 

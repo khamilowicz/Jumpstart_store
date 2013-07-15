@@ -127,10 +127,9 @@ describe Product do
           products = FactoryGirl.create_list(:product, 3)
           products.each { |p| p.set_discount 50 }
         end
-        it{ 
-          pending
+        it{ pending
           expect{ Product.off_discount}.
-          to change{ Product.discount }.
+          to change{ Product.get_discount }.
           from(50).to(100)
         }
       end
