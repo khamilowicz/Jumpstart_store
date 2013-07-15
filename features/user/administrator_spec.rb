@@ -33,7 +33,8 @@ describe "Administrator" do
            create_new_product product_2
          end
 
-         it {    should have_content("Successfully updated product")
+         it {    
+          should have_content("Successfully updated product")
           should_not have_short_product(product)
           should have_short_product(product_2)}
         end
@@ -182,7 +183,7 @@ describe "Administrator" do
 
     context "On the order 'dashboard' they can:" do
       before(:each) do
-        @order = Order.last
+        @order ||= Order.last
       end
       context "View details of an individual order, including:" do
         before(:each) do
@@ -191,25 +192,23 @@ describe "Administrator" do
 
         it "If purchased on sale, original price, sale percentage and adjusted price" do
           should have_content("Purchased on sale? No")
-        end
-        it "Subtotal for the order" do
-          should have_content("Total price: $#{@order.total_price}")
-        end
-        it "Discount for the order" do
-          should have_content("Total discount: #{@order.total_discount}")
-        end
-      end 
-    end
-    it 'View and edit orders; may change quantity or remove products from orders with the status of pending or paid' 
-    it 'Change the status of an order according to the rules as outlined above' do
-      Order.all.each do |order|
-        page.should have_inline_order(order)
+        # it "Subtotal for the order" do
+        should have_content("Total price: $#{@order.total_price}")
+        # it "Discount for the order" do
+        should have_content("Total discount: #{@order.total_discount}")
       end
-      should have_link("Mark as shipped")
-      should have_link("Mark as returned")
-      should have_link("Cancel")
-    end
+    end 
   end
+  it 'View and edit orders; may change quantity or remove products from orders with the status of pending or paid' 
+  it 'Change the status of an order according to the rules as outlined above' do
+    Order.all.each do |order|
+      page.should have_inline_order(order)
+    end
+    should have_link("Mark as shipped")
+    should have_link("Mark as returned")
+    should have_link("Cancel")
+  end
+end
 end
 
 context "not allowed to" do
@@ -224,11 +223,11 @@ end
 context "he may" do
 
   before(:each) do
-    @price = 1000
-    @money_price = Money.new(@price, 'USD')
-    @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 3, base_price: @price)
-    @category = ['Category_1']
-    @products_in_category = @products[0,2]
+    @price ||= 1000
+    @money_price ||= Money.new(@price, 'USD')
+    @products ||= ProductPresenter.new_from_array FactoryGirl.create_list(:product, 3, base_price: @price)
+    @category ||= ['Category_1']
+    @products_in_category ||= @products[0,2]
     @products_in_category.each {|p| p.add category: @category.first}
     @product = @products.last
   end
@@ -245,12 +244,27 @@ context "he may" do
 
   describe "create a sale" do
 
-    it "for products" do
-      put_on_sale @products_in_category.map(&:title), "Sale for products"
-      visit sales_path
-      page.should have_short_product(@products_in_category.first)
-      visit product_path(@products_in_category.first) 
-      page.should have_content(@money_price*0.5)
+    describe "for products" do
+      before(:each) do
+        put_on_sale @products_in_category.map(&:title), "Sale for products"
+        visit sales_path
+      end
+      it{
+        page.should have_short_product(@products_in_category.first)
+        visit product_path(@products_in_category.first) 
+        page.should have_content(@money_price*0.5)
+      }
+
+      describe "End a sale" do
+        before(:each) do
+          # put_on_sale [@product].map(&:title)
+          visit sales_path
+          within('.sale'){ click_link 'X'}
+          visit sales_path
+        end
+
+        it { should_not have_short_product(@product) }
+      end
     end
 
     it "for categories" do
@@ -261,35 +275,25 @@ context "he may" do
        should have_selector(".price", text: ((@money_price*0.5).to_s)), "#{page.find('body').native}"
      end
    end
+ end
 
-
-   describe "End a sale" do
-    before(:each) do
-      put_on_sale [@product].map(&:title)
-      visit sales_path
-      within('.sale'){ click_link 'X'}
-      visit sales_path
-    end
-
-    it { should_not have_short_product(@product) }
-  end
-end
-
-
-context "search order using a builder-style interface (like Google’s 'Advanced Search;) allowing them to specify any of these:" do
+ context "search order using a builder-style interface (like Google’s 'Advanced Search;) allowing them to specify any of these:" do
   before(:each) do
 
-    product_11 = ProductPresenter.new FactoryGirl.create(:product, base_price: 1100)
-    product_9 = ProductPresenter.new  FactoryGirl.create(:product, base_price: 900)
-
-    @pending_order = create_order [product_11.product]
-    @pending_order.created_at = Date.new(2011, 10,10)
-    @pending_order.save
+    product_11 ||= ProductPresenter.new FactoryGirl.create(:product, base_price: 1100)
+    product_9 ||= ProductPresenter.new  FactoryGirl.create(:product, base_price: 900)
+    unless @pending_order
+      @pending_order = create_order [product_11.product]
+      @pending_order.created_at = Date.new(2011, 10,10)
+      @pending_order.save
+    end
     
-    @cancelled_order = create_order [product_9.product]
-    @cancelled_order.created_at = Date.new(2008, 10,10)
-    @cancelled_order.cancel
-    @cancelled_order.save
+    unless @cancelled_order
+      @cancelled_order = create_order [product_9.product]
+      @cancelled_order.created_at = Date.new(2008, 10,10)
+      @cancelled_order.cancel
+      @cancelled_order.save
+    end
 
     click_link 'Search'
   end
