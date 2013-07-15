@@ -1,3 +1,4 @@
+-product_counter ||= nil
 .product.row.inline{class: product.title_param, id: product_counter}
   .span7.title= link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} 
   .span1.price= "$#{product.price}"
