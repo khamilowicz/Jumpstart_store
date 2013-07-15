@@ -3,11 +3,11 @@ class ProductCartManagerController < ApplicationController
   skip_before_filter :ensure_not_guest
 
   def join
-    @product = Product.find(params[:id])
+    @product = Product.find(params[:product])
     user = specified_user
     user.add product: @product
 
-    @product_presenter = ProductPresenter.new @product
+    @product_presenter = ProductPresenter.new Product.find(params[:product])
 
     respond_to do |format|
         format.html {redirect_to :back, notice: "#{@product.title} added to cart"}
@@ -16,10 +16,10 @@ class ProductCartManagerController < ApplicationController
   end
 
   def destroy
-    product = Product.find(params[:id])
+    @product = Product.find(params[:product])
     user = specified_user
-    user.remove product: product
-    @product_presenter = ProductPresenter.new product
+    user.remove product: @product
+    @product_presenter = ProductPresenter.new Product.find(params[:product])
 
     respond_to do |format|
       format.html {redirect_to :back, notice: "#{product.title} removed from cart"}

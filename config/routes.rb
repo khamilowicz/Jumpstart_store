@@ -37,13 +37,16 @@ NewStore::Application.routes.draw do
     member do
       get '/cart' => 'carts#show', as: 'cart'
     end
-    resources :products, only: [] do 
-      member do 
+  end
+  #   resources :products, only: [] do 
+  #     member do 
+  #       get 'add_to_cart' => 'product_cart_manager#join' 
+  #       get 'remove_from_cart' => 'product_cart_manager#destroy' 
+  #     end
+  #   end
+  # end
         get 'add_to_cart' => 'product_cart_manager#join' 
         get 'remove_from_cart' => 'product_cart_manager#destroy' 
-      end
-    end
-  end
 
 
   get '/categories' => 'categories#index'

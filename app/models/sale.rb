@@ -34,7 +34,7 @@ class Sale < ActiveRecord::Base
 
   def construct params
     sale = Sale.new(
-      name: params[:name],
+      name: params[:name_from_select] || params[:name],
       discount: params[:discount]
       )
     products_id = params[:products] ? params[:products].keys : []

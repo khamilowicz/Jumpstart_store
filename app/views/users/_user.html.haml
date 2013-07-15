@@ -1,0 +1,8 @@
+.user
+  %h4=link_to user, user_path(user), {style: "#{ user.admin? ? 'color: red' : ''} "}
+  .full_name=user.full_name
+  .stats
+    ="Number of products in cart: #{user.products.count}"
+    ="Member since: #{user.created_at}"
+  .edit
+    =link_to "Delete user", user_path(user), method: :delete, confirm: "Are you sure?"

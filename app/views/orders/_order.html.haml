@@ -1,0 +1,25 @@
+- user_presenter = UserPresenter.new order.user
+.order.inline
+  -if order_counter == 0
+    .header.row
+      .span1
+      .span3.user
+        Purchaser
+      .span2.date
+        Date
+      .span2.total
+        Total
+      .span2.status
+        Status
+      - if current_user.admin?
+        .span2
+          Change status
+  .order.row
+    .span1= link_to "Show", order_path(order)
+    .span3.user= user_presenter.full_name
+    .span2= order.created_at.strftime("%e %b %Y")
+    .span2= "$#{order.total_price}"
+    .span2= order.status
+    -if current_user.admin?
+      .span2
+        =change_status_link(order)

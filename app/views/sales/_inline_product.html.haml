@@ -21,4 +21,4 @@
       .span1.price= "$#{product.price}"
       .span1.discount= "#{product.discount}%"
       .span1.quantity= product.quantity
-      .span1.remove= link_to "X", sales_path({sale: sale, product: product}), method: :delete, remote: true
+      .span1.remove.product= link_to "X", sales_path({sale: sale, product: product}), method: :delete, remote: true
