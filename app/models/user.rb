@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
 	
 	validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, unless: :guest?
 	validates_uniqueness_of :email, unless: :guest?
-	validates_presence_of :first_name, :last_name, unless: :guest?
+	validates_presence_of :first_name, :last_name, :address, unless: :guest?
 	validates :nick, length: {minimum: 2, maximum: 32}, allow_nil: true, unless: :guest?
 	validates_presence_of :password, on: :create, unless: :guest?
 	validates :password, confirmation: true
@@ -20,17 +20,13 @@ class User < ActiveRecord::Base
 	has_many :products, through: :product_users
 	has_many :orders
 
-
-	after_create :create_address
-
 	class << self
 
 		def create_guest
-			user_guest = new
-			user_guest.guest = true
-			user_guest.password_digest = 'lala'
-			user_guest.save
-			user_guest
+			create do |user_guest|
+				user_guest.guest = true
+				user_guest.password_digest = 'password'
+			end
 		end
 	end
 
@@ -38,12 +34,10 @@ class User < ActiveRecord::Base
 		Cart.new(self)
 	end
 
-	def add param
-		add_product param[:product]	if param[:product]
-	end
-
-	def remove param
-		remove_product param[:product]	if param[:product]
+	%w{add remove}.each do |prefix|
+		define_method prefix do |param|
+			param.each { |obj_name, object| send "#{prefix}_#{obj_name}", object }
+		end
 	end
 
 	def promote_to_admin

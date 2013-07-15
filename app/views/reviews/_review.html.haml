@@ -1,7 +1,7 @@
 .review
   =link_to "Edit review", edit_product_review_path(review.product, review) if review.created_at > 15.minutes.ago
   = "Review submitted #{review.created_at.getlocal.strftime("%H:%M  %e/%m/%y")}"
-  .reviewer=review.reviewer_name
+  .reviewer=review.reviewer
   .title=review.title
   .body=review.body
   = note_in_stars(review.note)

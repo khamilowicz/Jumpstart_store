@@ -31,8 +31,7 @@ class ProductUser < ActiveRecord::Base
 
     def quantity product=nil, user=nil
       if product && user
-        pu = ProductUser.where(product_id: product.id, user_id: user.id).first
-        pu.nil? ? 0 : pu.quantity
+        ProductUser.where(product_id: product.id, user_id: user.id).first.try(:quantity) || 0
       else
         quantity_all
       end 

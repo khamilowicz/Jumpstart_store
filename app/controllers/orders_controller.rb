@@ -1,4 +1,5 @@
 class OrdersController < ApplicationController
+
 	before_filter :ensure_not_guest
 	before_filter :authorize_user, except: [:new, :create, :index]
 	before_filter :authorize_admin, except: [:filter, :create, :new, :show, :index]
@@ -13,8 +14,13 @@ class OrdersController < ApplicationController
 		order = Order.find(params[:order_id])
 		order.set_status params[:status]
 
-		@orders = Order.all
-		redirect_to orders_path, notice: "Successfully updated order status to '#{order.status}'"
+		if order.save
+			@orders = Order.all
+			redirect_to orders_path, notice: "Successfully updated order status to '#{order.status}'"
+		else
+			flash[:error] = "Something went wrong"
+			render :change_status
+		end
 	end
 
 	def filter
@@ -27,7 +33,9 @@ class OrdersController < ApplicationController
 
 	def create
 		if PaymillManager.transaction(current_user, params[:paymillToken], current_user.cart.currency)
-			@order = Order.init current_user, params[:address]
+			@order = current_user.orders.build do |order| 
+				order.address = params[:address]
+			end
 			@order.transfer_products
 			@order.pay
 		end
@@ -47,7 +55,7 @@ class OrdersController < ApplicationController
 	def show
 		@order = Order.find(params[:id])
 		@user = UserPresenter.new @order.user
-		@products = ProductPresenter.new_from_array @order.products
+		@order_products = ProductPresenter.new_from_array @order.order_products
 	end
 
 	private

@@ -1,4 +1,6 @@
 class ProductCartManagerController < ApplicationController
+  
+  skip_before_filter :ensure_not_guest
 
   def join
     @product = Product.find(params[:id])

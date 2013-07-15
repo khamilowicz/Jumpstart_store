@@ -28,7 +28,7 @@ end
 RSpec::Matchers.define :have_review do |review|
   match do |page_content|
     within('.review'){
-      page_content.should have_selector('.reviewer', text: review.reviewer_name)
+      page_content.should have_selector('.reviewer', text: review.reviewer.to_s)
       page_content.should have_selector('.title', text: review.title)
       page_content.should have_selector('.body', text: review.body)
       page_content.should have_note(review.note)
@@ -36,7 +36,7 @@ RSpec::Matchers.define :have_review do |review|
   end
 
   failure_message_for_should do |page_content|
-    "Expected #{page_content.find('.review').native} to have #{review.reviewer_name}, #{review.title}, #{review.body} and #{review.note} stars"
+    "Expected #{page_content.find('.review').native} to have #{review.reviewer}, #{review.title}, #{review.body} and #{review.note} stars"
   end
 end
 

@@ -3,7 +3,7 @@
     .navbar-inner
       .brand=link_to "Shop", root_url
       %ul.nav
-        %li=link_to current_user_presenter.display_name, user_path(current_user)
+        %li=link_to current_user_presenter, user_path(current_user)
         %li=link_to "Products", products_path
         %li=link_to "My cart", cart_path
         %li=link_to "Orders", orders_path

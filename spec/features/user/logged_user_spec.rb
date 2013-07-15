@@ -17,7 +17,7 @@
 
     it "log out" do 
       click_link "Log out"
-      should have_no_content(user.display_name)
+      should have_no_content("#{user}")
       should have_no_content("Log out")
       should have_content("Guest")
       should have_link("Log in")
@@ -26,7 +26,7 @@
     context "in profile" do
 
       it "change his profile data" do
-        click_link user.display_name
+        click_link user.to_s
         # page.should_not have_content("Email"), "#{page.find("body").native}"
 
         click_link "Edit profile"
@@ -90,29 +90,29 @@
                 should have_selector(".product .quantity", text: @quantity_of_products_in_order.to_s)
               }
             end
-          end
+          # end
 
-          it "links to each product page" do 
+          # it "links to each product page" do 
             order.products.each do |product|
               within('.products'){
                 should have_link(product.title)
               }
             end
-          end
+          # end
 
-          it "the current status" do
+          # it "the current status" do
             should have_selector(".status", content: order.status)
-          end
+          # end
 
-          it "order total price" do 
+          # it "order total price" do 
             should have_selector(".total_price", content: order.total_price)
-          end
+          # end
 
-          it "date/time order was submitted" do
+          # it "date/time order was submitted" do
             should have_selector(".submit_date", content: order.date_of_purchase)
-          end
+          # end
 
-          it "if shipped or cancelled, display a timestamp when that action took place" do
+          # it "if shipped or cancelled, display a timestamp when that action took place" do
             should have_selector(".status", content: order.status_change_date)
           end
 
