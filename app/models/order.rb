@@ -3,6 +3,7 @@ class Order < ActiveRecord::Base
 
 	belongs_to :user
 	has_many :order_products
+	has_many :products, through: :order_products
 	has_one :address
 	monetize :price_cents
 	has_one :address
@@ -41,8 +42,7 @@ class Order < ActiveRecord::Base
 	alias_attribute :date_of_purchase, :created_at
 	alias_attribute :time_of_status_change, :status_change_date
 
-## IMPORTANT - products in order are wrapped into order_products
-	alias_attribute :products, :order_products
+	delegate :on_discount?, to: :products
 
 	before_save :set_price_and_discount
 
@@ -70,10 +70,6 @@ class Order < ActiveRecord::Base
 		(total_price_without_discount.cents - total_price.cents)*100/total_price_without_discount.cents
 	end
 
-	def has_discount?
-		self.products.any?(&:on_discount?)
-	end
-
 	def transfer_products
 		self.set_address unless self.address
 		self.save
@@ -96,11 +92,11 @@ class Order < ActiveRecord::Base
 
 	def set_price_and_discount
 		self.price = total_price_without_discount
-		self.discount = total_discount if self.has_discount?
+		self.discount = total_discount if self.on_discount?
 	end
 
 	def sum_price price=nil
-		self.products.total_price price
+		self.order_products.total_price price
 	end
 
 	def update_status_date

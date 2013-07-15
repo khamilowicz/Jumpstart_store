@@ -68,7 +68,7 @@ describe "total  price and total discount" do
   }
   it{ 
     expect{ products.each{|p| p.set_discount 50}}.
-    to change{ build_order(products).has_discount?}.
+    to change{ build_order(products).on_discount?}.
     from(false).
     to(true)
   }
@@ -89,7 +89,7 @@ describe "total  price and total discount" do
     }
     it{ 
       expect{ products.each{|p| p.set_discount 50}}.
-      to_not change{ @order.has_discount?}
+      to_not change{ @order.on_discount?}
     } 
   end
 end
@@ -103,12 +103,11 @@ describe "products" do
 
   describe "transfer" do
     before { order.transfer_products}
-    subject{ order.products.first}
+    subject{ order.order_products.first}
 
     it{ user.products.should be_empty}
     it{ order.products.map(&:title).should include(product.title)}
 
-    it{ should be_kind_of(OrderProduct)}
     its(:quantity){should_not eq(3)}
     its(:quantity){should eq(1)}
   end

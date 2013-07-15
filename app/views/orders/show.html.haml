@@ -7,7 +7,7 @@
   .submit_date= "Was purchased #{@order.date_of_purchase.strftime("%d %b %Y")}"
   .total_price= "Total price: $#{@order.total_price}"
   .sale
-    .was_on_sale= "Purchased on sale? #{@order.has_discount? ? 'Yes' : 'No'}"
+    .was_on_sale= "Purchased on sale? #{@order.on_discount? ? 'Yes' : 'No'}"
     .discount= "Total discount: #{@order.total_discount}%"
   .products
     =render partial: 'orders/inline_product', collection: @products, as: :product
