@@ -30,11 +30,9 @@ class ProductCategoryManager
   end
 
   def join
-    products.each do |product|
       categories.each do |category|
-        category.add product: product
+        category.add product: products
       end
-    end
   end
 
   def persisted?

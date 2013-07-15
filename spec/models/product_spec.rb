@@ -133,7 +133,6 @@ describe Product do
           from(50).to(100)
         }
       end
-
     end
 
     describe "for class" do

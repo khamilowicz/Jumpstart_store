@@ -36,6 +36,12 @@ describe Category do
     not_to change{ category.products.size} }
   end
 
+  context "adds many products at a time" do
+    let(:other_product){ FactoryGirl.create(:product)}
+    it {expect{ category.add product: [product, other_product]}.
+    to change{ category.products.size}.by(2) }
+  end
+
 end
 
 describe "#products" do

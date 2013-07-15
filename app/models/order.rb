@@ -5,9 +5,9 @@ class Order < ActiveRecord::Base
 	has_many :order_products
 	has_many :products, through: :order_products
 	has_one :address
-	monetize :price_cents
 	has_one :address
 	accepts_nested_attributes_for :address
+	monetize :price_cents
 
 	include TransferProducts
 
