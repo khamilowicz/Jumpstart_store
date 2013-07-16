@@ -42,7 +42,7 @@
     def title_param
       @product.title.parameterize
     end
-
+    
     def title_shorter
       title = @product.title
       title.length > 25 ? title[0,25] + '...' : title

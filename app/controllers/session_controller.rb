@@ -5,6 +5,7 @@ class SessionController < ApplicationController
 
 	def delete
 		session[:current_user_id] = nil
+		clean_current_user_cache
 		redirect_to new_session_path, notice: "You are logged out"
 	end
 

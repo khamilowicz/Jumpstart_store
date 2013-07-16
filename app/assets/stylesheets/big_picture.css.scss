@@ -20,6 +20,11 @@
 
     .image{
       min-height: 30em;
+      -webkit-transition-duration: 1.25s;
+         -moz-transition-duration: 1.25s;
+          -ms-transition-duration: 1.25s;
+           -o-transition-duration: 1.25s;
+              transition-duration: 1.25s;
     }
     overflow: visible;
     .caption.title{

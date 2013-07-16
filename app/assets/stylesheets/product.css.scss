@@ -37,7 +37,7 @@
   margin-bottom: 1em;
   margin-left: 0;
   margin-right: 0.5em;
-  height: 36em;
+  height: 37em;
   .row{
     // border-bottom: 1px solid gray;
   }
@@ -52,11 +52,11 @@
   }
 
   .cart_btn{
-   // -webkit-transition-duration: 1s;
-   //    -moz-transition-duration: 1s;
-   //     -ms-transition-duration: 1s;
-   //      -o-transition-duration: 1s;
-   //         transition-duration: 1s;
+   -webkit-transition-duration: 1s;
+      -moz-transition-duration: 1s;
+       -ms-transition-duration: 1s;
+        -o-transition-duration: 1s;
+           transition-duration: 1s;
     &.many{height: 1em}
     &.single{
       height: 6em;

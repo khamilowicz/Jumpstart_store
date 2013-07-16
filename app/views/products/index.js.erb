@@ -10,6 +10,10 @@ $(function() {
   //   $(this).button('reset');
   // });
 
+$('.cart_btn').on('click', function() {
+  $(this).css('height', '1em');
+});
+
   $(".product_thumbnail, .product .title a").on('mouseenter', update_big_image);
   $('li.category').removeClass("active");
   $("li.category.all").addClass("active");
