@@ -20,6 +20,8 @@ class User < ActiveRecord::Base
 	has_many :products, through: :product_users
 	has_many :orders
 
+	delegate :empty?, to: :cart, prefix: true
+
 	class << self
 
 		def create_guest

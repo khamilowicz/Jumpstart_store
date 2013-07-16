@@ -70,9 +70,9 @@ class Product < ActiveRecord::Base
   def add param 
     param.each do |name, items|
       self.send "add_#{name}", items
-    end
+    end 
   end
-
+  
   {'start_selling' => true, 'retire' => false}.each do |name, on_sale_value|
     define_method name do 
       self.on_sale = on_sale_value
@@ -89,7 +89,7 @@ class Product < ActiveRecord::Base
   end
 
   def on_discount?
-    self.sales.any?
+    self.sales.count > 0
   end
 
   def off_discount identifier=nil

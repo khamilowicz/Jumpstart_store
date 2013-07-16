@@ -72,7 +72,6 @@ end
 
 describe "created from params" do
 
-
   context "for products" do
 
     before(:each) do

@@ -1,10 +1,14 @@
-$('.sales').html("<%= j render( partial: 'sales/short', collection: @sales, as: :sale) %>");
+$('.sales').html("<%= j render(@sales) %>");
 $('.footer').html("<%= j render 'menu/footer' %>");
 
 $(function() {
  
-  $('.product .remove a').on( 'click', function() {
+  $('.product > .remove.product > a').on( 'click', function() {
 
    $(this).closest('.product').slideUp();
+  });
+   $('.sale > .remove.sale > a').on( 'click', function() {
+
+   $(this).closest('.sale').slideUp();
   });
 });

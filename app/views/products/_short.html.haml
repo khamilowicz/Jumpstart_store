@@ -1,3 +1,4 @@
+-product_counter ||= nil
 .span4.product.short.well{class: product.title_param, id: product_counter }
   .row.span12
     .product_thumbnail.thumbnail{data: {photo: product.photo.url, title: product.title}}
@@ -9,7 +10,7 @@
   .row.span12
     .price.discount= saving_text product
   .row.span12
-    =link_to adding_text(product), add_to_cart_user_product_path(current_user, product), remote: true, class: "span12 btn btn-primary cart_btn #{adding_class product}", data: {:'loading-text' => 'Processing...'}
+    =link_to adding_text(product), add_to_cart_path({user_id: current_user.id, product: product}), remote: true, class: "span12 btn btn-primary cart_btn #{adding_class product}" , data: {:'loading-text' => 'Processing...'}
   .row.span12
     .span3= quantity product
     .span4

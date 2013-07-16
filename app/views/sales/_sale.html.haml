@@ -1,0 +1,8 @@
+.sale
+  .row
+    %h4.span7= sale.name.blank? ? "Unnamed" : sale.name
+    .span1
+    %h4.span2= "#{sale.discount}%"
+    %h4.span2.remove.sale= link_to "X", sales_path({sale: sale}), method: :delete, remote: true
+  .row  
+    = render partial: 'products_list', locals: {sale: sale, products: presentify(sale.products)}

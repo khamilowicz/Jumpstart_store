@@ -252,7 +252,7 @@ context "he may" do
       it{
         page.should have_short_product(@products_in_category.first)
         visit product_path(@products_in_category.first) 
-        page.should have_content(@money_price*0.5)
+        page.should have_content("$5")
       }
 
       describe "End a sale" do
@@ -272,7 +272,7 @@ context "he may" do
       @products_in_category.each do |product| 
        visit product_path(product)
        product.sales.should_not be_empty
-       should have_selector(".price", text: ((@money_price*0.5).to_s)), "#{page.find('body').native}"
+       should have_content("$5")
      end
    end
  end

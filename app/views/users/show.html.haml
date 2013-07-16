@@ -6,14 +6,14 @@
   .address="Address: #{@user.address}"
 
   .orders_block
-    %h3.order_text.btn.span12 Orders
-    -if @user.orders
-      .orders=render partial: 'orders/inline', collection: @user.orders, as: :order
+    -if @user.orders.empty?
+      %h3.order_text.btn.span12 User has no orders
     -else
-      User has no orders
+      %h3.order_text.btn.span12 Orders
+      .orders=render @user.orders
   .products_block
     %h3.cart_text.btn.span12 Cart
     -if @user.products.empty?
       User has no products in cart
     -else
-      .cart=render partial: 'products/inline', collection: ProductPresenter.new_from_array(@user.products), as: :product
+      .cart=render presentify(@user.products)

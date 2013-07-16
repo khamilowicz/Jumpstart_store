@@ -1,0 +1,8 @@
+$('.product.short.' + "<%= j @product_presenter.title_param %>")
+  .replaceWith("<%= j render( partial: 'products/short', locals: {product: @product_presenter}) %>");
+
+$('.products .inline.' + "<%= j @product_presenter.title_param %>")
+  .replaceWith("<%= j render @product_presenter if @product_presenter %>");
+$('.product.short.' + "<%= j @product_presenter.title_param %>" + 'a.btn.disabled')
+  .button('reset');
+

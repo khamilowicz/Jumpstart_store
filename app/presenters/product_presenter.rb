@@ -10,10 +10,11 @@
 
     def initialize product
       @product = product
+      return nil if product == nil
     end
 
     def self.new_from_array products
-      products.map { |p| self.new p }
+      Array(products).map { |p| self.new p }
     end
 
     def method_missing(name, *args, &block)
@@ -41,7 +42,7 @@
     def title_param
       @product.title.parameterize
     end
-
+    
     def title_shorter
       title = @product.title
       title.length > 25 ? title[0,25] + '...' : title
