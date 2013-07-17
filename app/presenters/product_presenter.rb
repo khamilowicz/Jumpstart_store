@@ -2,7 +2,7 @@
 
     extend TotalPrice
     
-    attr_accessor :product, :quantity_in_magazine
+    attr_accessor :product, :quantity_in_magazine, :quantity_for_user
 
     def price
       @product.base_price*@product.get_discount/100
@@ -10,14 +10,12 @@
 
     def initialize product, user=nil
       @product = product
-      @quantity_for_user = user ? ProductUser.quantity(@product, user) : 0
-      @quantity_in_magazine = self.quantity - self.product_users.quantity
+      @quantity_for_user = user ? product.product_users.all.find { |pu| pu.user_id == user.id }.try(:quantity) : 0
+      @quantity_in_magazine = self.quantity - @product.product_users.quantity
       return nil if product == nil
     end
 
     def self.new_from_array products, user=nil
-      products_ids = Array(products).map{ |p| p.id }
-      products = Product.includes(:product_users).find(products_ids)
       Array(products).map { |p| self.new p, user }
     end
 
@@ -51,16 +49,4 @@
       title = @product.title
       title.length > 25 ? title[0,25] + '...' : title
     end
-
-    def quantity_for user
-      @quantity_for_user
-    end
-
-    # def quantity_for user
-    #   ProductUser.quantity(@product, user)
-    # end
-
-    # def quantity_in_magazine
-    #   self.quantity - self.product_users.quantity
-    # end
   end

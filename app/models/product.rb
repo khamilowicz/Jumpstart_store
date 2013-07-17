@@ -35,6 +35,7 @@ class Product < ActiveRecord::Base
 
   delegate :rating, to: :reviews
   delegate :get_discount, to: :sales
+  delegate :photos, to: :assets
 
   class << self
 
@@ -106,11 +107,7 @@ class Product < ActiveRecord::Base
     self.quantity -=1
   end
 
-  def photos
-    Asset.photos_for(self)
-  end
-
-  private
+   private
 
   def create_asset
     self.assets.create

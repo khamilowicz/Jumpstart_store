@@ -29,7 +29,7 @@ def quantity product
   text = ''
   if product.users.include?(current_user)
     text = content_tag :div, class: 'quantity' do
-      "#{product.quantity_for current_user} in cart"
+      "#{product.quantity_for_user} in cart"
     end
   end
   text
