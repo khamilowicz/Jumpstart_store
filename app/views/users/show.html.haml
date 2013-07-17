@@ -7,13 +7,15 @@
 
   .orders_block
     -if @user.orders.empty?
-      %h3.order_text.btn.span12 User has no orders
+      %h3.order_text.btn.disabled.span12 User has no orders
     -else
       %h3.order_text.btn.span12 Orders
       .orders=render @user.orders
   .products_block
-    %h3.cart_text.btn.span12 Cart
     -if @user.products.empty?
-      User has no products in cart
+      %h3.cart_text.btn.disabled.span12 User has no products in cart
     -else
-      .cart=render presentify(@user.products)
+      %h3.cart_text.btn.span12 Cart
+      .cart
+        = render 'products/table_header'
+        = render presentify(@user.products)

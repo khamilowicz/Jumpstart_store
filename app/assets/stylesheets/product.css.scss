@@ -46,8 +46,12 @@
   .price.discount{
     font-weight: bold;
   }
+  .quantity{
+    float: left;
+  }
   .remove{
-    text-align: right;
+    float: right;
+    // text-align: right;
   }
 
   .cart_btn{

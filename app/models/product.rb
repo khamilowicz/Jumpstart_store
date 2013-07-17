@@ -23,7 +23,7 @@ class Product < ActiveRecord::Base
   has_many :category_products
   has_many :categories, through: :category_products
 
-  has_many :reviews
+  has_many :reviews, order: 'created_at desc'
   has_many :assets
 
   has_and_belongs_to_many :sales

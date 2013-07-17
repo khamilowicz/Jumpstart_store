@@ -1,7 +1,18 @@
 =form.simple_fields_for :address do |addr|
-  =addr.input :country
-  =addr.input :city
-  =addr.input :zip_code
-  =addr.input :street
-  =addr.input :house_nr
-  =addr.input :door_nr
+  .controls.controls-row
+    .span5
+      =addr.label :country
+      =addr.input_field :country
+  .controls.controls-row
+    .span3
+      =addr.input :city
+    .span2
+      =addr.input :zip_code
+  .controls.controls-row
+    .span5
+      =addr.input :street
+  .controls.controls-row
+    .span3
+      =addr.input :house_nr
+    .span2
+      =addr.input :door_nr

@@ -3,22 +3,34 @@ $(function() {
     $(this).button("loading")
   });
   $('.cart_btn').bind('ajax:success', function() {
+    onWidthChanges();
     $(this).button('reset');
   });
 
   $('.carousel').carousel();
 
-  widthChanges();
-  $(window).resize(widthChanges);
+  onWidthChanges();
+  $(window).resize(onWidthChanges);
 });
 
-function widthChanges (){
-  if (window.innerWidth > 1200) {
-    ProductGrid(3);
-    console.log('hi');
-  };
-  if (window.innerWidth < 1200 && window.innerWidth > 768) {
-    ProductGrid(2);
+function onWidthChanges (){
+ hidePicture(false); 
+ if (window.innerWidth > 1200) {
+  ProductGrid(3);
+};
+if (window.innerWidth < 1200 && window.innerWidth > 768) {
+  ProductGrid(2);
+};
+if (window.innerWidth < 768) {
+ hidePicture(true); 
+};
+};
+
+function hidePicture (really) {
+  if (really) {
+    $('.big_product_container').css('display', 'none');
+  }else{
+    $('.big_product_container').css('display', 'block');
   };
 };
 

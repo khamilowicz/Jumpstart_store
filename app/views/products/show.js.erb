@@ -1,2 +1,2 @@
-$('.reviews').html("<%= j render @product_presenter.reviews %>");
-$('.overall_note').html("<%= note_in_stars(@product_presenter.rating %>");
+$('.reviews').html("<%= j render @product.reviews %>");
+$('.overall_note').html("<%= note_in_stars(@product.rating) %>");

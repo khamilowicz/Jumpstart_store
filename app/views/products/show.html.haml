@@ -22,7 +22,7 @@
         Categories:
         = @product.list_categories
         .add_to_category= link_to_if current_user.admin?, "Add to category", product_add_to_category_path(@product)
-  .row.review_bar
-    =render partial: 'reviews/new', locals: {product: @product.product, review: Review.new}
-  .row.reviews
-    =render @product.reviews
+  .row.review_bar.span12
+    .span12=render partial: 'reviews/new', locals: {product: @product.product, review: Review.new}
+  .row.reviews.span12
+    =render @product.reviews, product: @product

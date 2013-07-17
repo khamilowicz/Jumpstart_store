@@ -67,7 +67,7 @@ shared_examples_for "user" do
           visit product_path(@product)
         end
 
-        it {should have_review(@reviews.first)}
+        it {should have_review(@reviews.last)}
         it {within(".overall_note"){should have_note(1.5)}}
         it {within(".overall_note"){should_not have_note(3.5)}}
       end
