@@ -13,7 +13,7 @@ describe "Administrator" do
   context "managing products" do
     describe "creates product" do
 
-      let(:product){ ProductPresenter.new FactoryGirl.build(:product)}
+      let(:product){ ProductPresenter.new FactoryGirl.build(:product), user}
 
       before do
         visit new_product_path

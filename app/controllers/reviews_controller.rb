@@ -22,7 +22,7 @@ def create
   review.user = current_user
 
   if review.save
-    @product_presenter = ProductPresenter.new @product
+    @product_presenter = ProductPresenter.new @product, current_user
     respond_to do |format|
       format.html { redirect_to @product}
       format.js { render 'update_reviews'}

@@ -2,10 +2,12 @@
 
 shared_examples_for "user" do
 
+  let(:current_user){User.first}
+
   subject{page}
 
   before(:each) do
-    @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 2, quantity: 3)
+    @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 2, quantity: 3), current_user
     @product =  @products.first
     visit '/products' 
   end

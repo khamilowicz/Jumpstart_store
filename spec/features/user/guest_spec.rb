@@ -1,11 +1,15 @@
 require "spec_helper"
 
 describe "guest" do
+
+  subject {page}
+
+  context "while not logged in" do
+  let(:user){ User.first}
+
   it_behaves_like 'user'
   it_behaves_like "user who can't"
 
-  subject {page}
-  context "while not logged in" do
     before(:each) do
       visit '/cart'
     end

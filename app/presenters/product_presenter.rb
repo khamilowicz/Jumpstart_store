@@ -2,19 +2,23 @@
 
     extend TotalPrice
     
-    attr_accessor :product
+    attr_accessor :product, :quantity_in_magazine
 
     def price
       @product.base_price*@product.get_discount/100
     end
 
-    def initialize product
+    def initialize product, user=nil
       @product = product
+      @quantity_for_user = user ? ProductUser.quantity(@product, user) : 0
+      @quantity_in_magazine = self.quantity - self.product_users.quantity
       return nil if product == nil
     end
 
-    def self.new_from_array products
-      Array(products).map { |p| self.new p }
+    def self.new_from_array products, user=nil
+      products_ids = Array(products).map{ |p| p.id }
+      products = Product.includes(:product_users).find(products_ids)
+      Array(products).map { |p| self.new p, user }
     end
 
     def method_missing(name, *args, &block)
@@ -49,10 +53,14 @@
     end
 
     def quantity_for user
-      ProductUser.quantity(@product, user)
+      @quantity_for_user
     end
 
-    def quantity_in_magazine
-      self.quantity - self.product_users.quantity
-    end
+    # def quantity_for user
+    #   ProductUser.quantity(@product, user)
+    # end
+
+    # def quantity_in_magazine
+    #   self.quantity - self.product_users.quantity
+    # end
   end

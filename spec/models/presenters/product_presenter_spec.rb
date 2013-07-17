@@ -23,10 +23,9 @@ describe ProductPresenter do
 
     describe "#quantity_for" do
       let(:product){  FactoryGirl.create(:product, quantity: 3) }
-      let(:product_presenter){ ProductPresenter.new product }
       let(:user){ FactoryGirl.create(:user)}
 
-      it{ expect{user.add product: product}.to change{product_presenter.quantity_for(user)}.from(0).to(1)}
+      it{ expect{user.add product: product}.to change{ ProductPresenter.new(product, user).quantity_for(user)}.from(0).to(1)}
     end
   end
 

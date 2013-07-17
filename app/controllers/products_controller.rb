@@ -45,7 +45,7 @@ class ProductsController < ApplicationController
 	end
 
 	def show
-		@product = ProductPresenter.new Product.includes(:reviews, reviews: :user).find(params[:id])
+		@product = ProductPresenter.new Product.includes(:reviews, reviews: :user).find(params[:id]), current_user
 	end
 
 end

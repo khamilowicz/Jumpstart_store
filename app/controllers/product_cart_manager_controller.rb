@@ -7,7 +7,7 @@ class ProductCartManagerController < ApplicationController
     user = specified_user
     user.add product: @product
 
-    @product_presenter = ProductPresenter.new Product.find(params[:product])
+    @product_presenter = ProductPresenter.new Product.find(params[:product]), user
 
     respond_to do |format|
       format.html {redirect_to :back, notice: "#{@product.title} added to cart"}
@@ -19,7 +19,7 @@ class ProductCartManagerController < ApplicationController
     @product = Product.find(params[:product])
     user = specified_user
     user.remove product: @product
-    @product_presenter = ProductPresenter.new Product.find(params[:product])
+    @product_presenter = ProductPresenter.new Product.find(params[:product]), user
 
     respond_to do |format|
       format.html {redirect_to :back, notice: "#{@product.title} removed from cart"}
