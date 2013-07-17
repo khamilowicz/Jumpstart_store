@@ -15,7 +15,7 @@ RSpec::Matchers.define :have_inline_order do |order|
   end
 end
 
-RSpec::Matchers.define :have_inline_product do |products|
+RSpec::Matchers.define :have_inline_product do |product|
   match do |page_content|
     selector = ".product.inline.#{product.title_param}" 
     page_content.should_not have_selector(selector)

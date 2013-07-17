@@ -5,8 +5,8 @@ class SalesController < ApplicationController
   def new
   end
 
-  def delete
-    @sale = Sale.find(params[:sale])
+  def destroy
+    @sale = Sale.find(params[:id])
     @sale.remove unless params[:product]
     if params[:product]
       product = Product.find(params[:product])

@@ -2,7 +2,7 @@
 
     extend TotalPrice
     
-    attr_accessor :product, :quantity_in_magazine, :quantity_for_user
+    attr_accessor :product, :quantity_in_warehouse, :quantity_for_user
 
     def price
       @product.base_price*@product.get_discount/100
@@ -10,8 +10,8 @@
 
     def initialize product, user=nil
       @product = product
-      @quantity_for_user = user ? product.product_users.all.find { |pu| pu.user_id == user.id }.try(:quantity) : 0
-      @quantity_in_magazine = self.quantity - @product.product_users.quantity
+      @quantity_for_user = ProductUser.quantity(product, user)
+      @quantity_in_warehouse = self.quantity - @product.product_users.quantity
       return nil if product == nil
     end
 

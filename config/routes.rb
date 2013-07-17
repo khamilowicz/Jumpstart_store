@@ -1,15 +1,6 @@
 NewStore::Application.routes.draw do
 
-  get '/dashboard' => 'admins#dashboard', as: "admin_dashboard"
-
-  get '/sales/new' => 'sales#new', as: "new_sale"
-  delete '/sales' => 'sales#delete', as: "sales"
-  get '/sales' => 'sales#index', as: 'sales'
-  post '/sales' => 'sales#create'
-
-  get 'session/new' => 'session#new', as: 'new_session'
-  post 'session/create' => 'session#create', as: 'sessions'
-  delete 'session/delete' => 'session#delete', as: 'session'
+resources :sessions, only: [:new, :create, :destroy]
 
   get 'search' => 'search#new', as: 'search'
   post 'search' => 'search#show', as: 'searches'
@@ -24,36 +15,38 @@ NewStore::Application.routes.draw do
     get '/change_status' => 'orders#change_status', as: 'change_status'
   end
   
-  resources :products do
-    get '/add_to_category' => 'product_category_manager#new'
-    post '/category' => 'product_category_manager#join'
-    resources :reviews, only: [:edit, :update]
-    post '/reviews' => 'reviews#create'
+  resources :products, only: [:index, :show] do
+    resources :reviews, only: [:edit, :update, :create]
+    # post '/reviews' => 'reviews#create'
+  end
+
+  resources :sales
+
+  namespace :admin do 
+    resources :products do 
+      resources :product_categories 
+      member do 
+        get '/add_to_category' => 'product_category_manager#new'
+        post '/category' => 'product_category_manager#join'
+      end
+    end
   end
 
   get '/cart' => 'carts#show'
-  
+
   resources :users do 
     member do
       get '/cart' => 'carts#show', as: 'cart'
     end
   end
-  #   resources :products, only: [] do 
-  #     member do 
-  #       get 'add_to_cart' => 'product_cart_manager#join' 
-  #       get 'remove_from_cart' => 'product_cart_manager#destroy' 
-  #     end
-  #   end
-  # end
-        get 'add_to_cart' => 'product_cart_manager#join' 
-        get 'remove_from_cart' => 'product_cart_manager#destroy' 
 
+  get 'add_to_cart' => 'product_cart_manager#join' 
+  get 'remove_from_cart' => 'product_cart_manager#destroy'
 
   get '/categories' => 'categories#index'
   get '/categories/manage' => 'product_category_manager#new_join_many', as: 'manage_categories'
   post '/categories/manage' => 'product_category_manager#join_many', as: 'product_category_managers'
   get '/categories/:id' => 'categories#show', as: 'category'
-
 
   root to: 'products#index'
 

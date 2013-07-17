@@ -135,7 +135,7 @@ describe User do
 
         it "returns product to magazine" do
           expect{ subject.remove product: product_2
-            }.to change{ProductPresenter.new(product_2).quantity_in_magazine}.by(1)
+            }.to change{ProductPresenter.new(product_2).quantity_in_warehouse}.by(1)
           end
         end
       end

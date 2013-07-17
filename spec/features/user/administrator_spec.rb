@@ -16,7 +16,7 @@ describe "Administrator" do
       let(:product){ ProductPresenter.new FactoryGirl.build(:product), user}
 
       before do
-        visit new_product_path
+        visit new_admin_product_path
         create_new_product product
       end
 
@@ -29,7 +29,7 @@ describe "Administrator" do
        describe "and modifies them" do 
          let(:product_2){ ProductPresenter.new FactoryGirl.build(:product)}
          before do
-           visit edit_product_path(1)
+           visit edit_admin_product_path(1)
            create_new_product product_2
          end
 
@@ -55,6 +55,32 @@ describe "Administrator" do
       }
     end
 
+    describe "browse all products" do
+      let(:product_on_sale){ ProductPresenter.new FactoryGirl.create(:product)}
+      let(:product_not_on_sale){ProductPresenter.new  FactoryGirl.create(
+        :product, 
+        quantity: 5, 
+        on_sale: false
+        )}
+
+      before(:each) do
+        visit '/admin/products'
+      end
+      
+      it "as a list" do
+        page.should have_inline_product( product_on_sale)
+      end
+
+      it "both on sale and not" do
+        page.should have_inline_product(product_not_on_sale)
+      end
+
+      it "with its quantity in stock" do
+        page.should have_content("Quantity")
+        page.should have_selector('.quantity', text: '5')
+      end
+    end
+
 
     describe "assigns products to catgories" do
       before(:each) do
@@ -64,7 +90,7 @@ describe "Administrator" do
         @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 4)
 
         @product = @products.first
-        visit product_add_to_category_path(@product)
+        visit add_to_category_admin_product_path(@product)
       end
 
       it "assign to more than one category" do
@@ -102,7 +128,7 @@ describe "Administrator" do
 
   it "retire a product from being sold, which hides it from browsing by any non-administrator" do
     @product = FactoryGirl.create(:product)
-    visit edit_product_path(@product)
+    visit edit_admin_product_path(@product)
     uncheck :on_sale
     find("form input[name='commit']").click
     Product.find(@product.id).should_not be_on_sale

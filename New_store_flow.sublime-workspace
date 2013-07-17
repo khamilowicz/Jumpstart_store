@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"prod",
+				"product"
+			],
+			[
 				"pass",
 				"password_digest"
 			],
@@ -13,7 +17,7 @@
 			],
 			[
 				"qua",
-				"quantity_in_magazine"
+				"quantity_in_warehouse"
 			],
 			[
 				"quan",
@@ -54,10 +58,6 @@
 			[
 				"produ",
 				"product_users"
-			],
-			[
-				"prod",
-				"product_presenter"
 			],
 			[
 				"new",
@@ -547,8 +547,18 @@
 			"file": "app/presenters/product_presenter.rb",
 			"settings":
 			{
-				"buffer_size": 1262,
+				"buffer_size": 1210,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 319 files for \"quantity_for_user\"\n\n/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/helpers/products_helper.rb:\n   30    if product.users.include?(current_user)\n   31      text = content_tag :div, class: 'quantity' do\n   32:       \"#{product.quantity_for_user} in cart\"\n   33      end\n   34    end\n\n/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/presenters/product_presenter.rb:\n    3      extend TotalPrice\n    4      \n    5:     attr_accessor :product, :quantity_in_warehouse, :quantity_for_user\n    6  \n    7      def price\n    .\n   11      def initialize product, user=nil\n   12        @product = product\n   13:       @quantity_for_user = user ? product.product_users.all.find { |pu| pu.user_id == user.id }.try(:quantity) : 0\n   14        @quantity_in_warehouse = self.quantity - @product.product_users.quantity\n   15        return nil if product == nil\n\n/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/products/_product.html.haml:\n    3    .span7.title= link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} \n    4    .span1.price= \"$#{product.price}\"\n    5:   .span2.quantity= product.quantity_for_user\n    6    .span2.remove= link_to \"X\", remove_from_cart_path({user_id: current_user.id, product: product.id}), confirm: 'U cereal?'\n\n/home/kham/Projekty/Rails/jumpstart/New_store_flow/spec/models/presenters/product_presenter_spec.rb:\n   22      its(:title_param) {should eq('this-is-product') }\n   23  \n   24:     describe \"#quantity_for_user\" do\n   25        let(:product){  FactoryGirl.create(:product, quantity: 3) }\n   26        let(:user){ FactoryGirl.create(:user)}\n   27  \n   28:       it{ expect{user.add product: product}.to change{ ProductPresenter.new(product, user).quantity_for_user}.from(0).to(1)}\n   29      end\n   30    end\n\n6 matches across 4 files\n\n\nSearching 319 files for \"def quantity_for_user\"\n\n0 matches across 0 files\n\n\nSearching 319 files for \"quantity_for_user\"\n\n/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/helpers/products_helper.rb:\n   30    if product.users.include?(current_user)\n   31      text = content_tag :div, class: 'quantity' do\n   32:       \"#{product.quantity_for_user} in cart\"\n   33      end\n   34    end\n\n/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/presenters/product_presenter.rb:\n    3      extend TotalPrice\n    4      \n    5:     attr_accessor :product, :quantity_in_warehouse, :quantity_for_user\n    6  \n    7      def price\n    .\n   11      def initialize product, user=nil\n   12        @product = product\n   13:       @quantity_for_user = user ? product.product_users.all.find { |pu| pu.user_id == user.id }.try(:quantity) : 0\n   14        @quantity_in_warehouse = self.quantity - @product.product_users.quantity\n   15        return nil if product == nil\n\n/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/products/_product.html.haml:\n    3    .span7.title= link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} \n    4    .span1.price= \"$#{product.price}\"\n    5:   .span2.quantity= product.quantity_for_user\n    6    .span2.remove= link_to \"X\", remove_from_cart_path({user_id: current_user.id, product: product.id}), confirm: 'U cereal?'\n\n/home/kham/Projekty/Rails/jumpstart/New_store_flow/spec/models/presenters/product_presenter_spec.rb:\n   22      its(:title_param) {should eq('this-is-product') }\n   23  \n   24:     describe \"#quantity_for_user\" do\n   25        let(:product){  FactoryGirl.create(:product, quantity: 3) }\n   26        let(:user){ FactoryGirl.create(:user)}\n   27  \n   28:       it{ expect{user.add product: product}.to change{ ProductPresenter.new(product, user).quantity_for_user}.from(0).to(1)}\n   29      end\n   30    end\n\n6 matches across 4 files\n",
+			"settings":
+			{
+				"buffer_size": 3796,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
 			}
 		},
 		{
@@ -574,14 +584,42 @@
 				"buffer_size": 824,
 				"line_ending": "Unix"
 			}
+		},
+		{
+			"file": "app/views/products/index.html.haml",
+			"settings":
+			{
+				"buffer_size": 263,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "spec/features/user/administrator_spec.rb",
+			"settings":
+			{
+				"buffer_size": 11414,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/models/product_user.rb",
+			"settings":
+			{
+				"buffer_size": 1487,
+				"line_ending": "Unix"
+			}
 		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 159.0,
+		"height": 392.0,
 		"selected_items":
 		[
+			[
+				"reili",
+				"Indentation: Reindent Lines"
+			],
 			[
 				"gitcomi",
 				"Git: Commit"
@@ -589,10 +627,6 @@
 			[
 				"gitad",
 				"Git: Add..."
-			],
-			[
-				"reili",
-				"Indentation: Reindent Lines"
 			],
 			[
 				"git comi",
@@ -1270,6 +1304,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"quantity_for_user",
+			"def quantity_for_user",
+			"quantity_for_user",
 			"quantity_for",
 			"quantity",
 			"presentify",
@@ -1394,10 +1431,7 @@
 			"title_shor",
 			"many",
 			"big",
-			"41111",
-			"span6",
-			"order_some_products",
-			" "
+			"41111"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1428,7 +1462,7 @@
 	"groups":
 	[
 		{
-			"selected": 6,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -1443,8 +1477,8 @@
 						"selection":
 						[
 							[
-								296,
-								296
+								295,
+								295
 							]
 						],
 						"settings":
@@ -1471,8 +1505,8 @@
 						"selection":
 						[
 							[
-								110,
-								110
+								109,
+								109
 							]
 						],
 						"settings":
@@ -1499,8 +1533,8 @@
 						"selection":
 						[
 							[
-								207,
-								207
+								206,
+								206
 							]
 						],
 						"settings":
@@ -1518,15 +1552,15 @@
 					"file": "app/presenters/product_presenter.rb",
 					"settings":
 					{
-						"buffer_size": 1262,
+						"buffer_size": 1210,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								991,
-								991
+								324,
+								324
 							]
 						],
 						"settings":
@@ -1536,13 +1570,101 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 459.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
+					"settings":
+					{
+						"buffer_size": 3796,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										258,
+										275
+									],
+									[
+										503,
+										520
+									],
+									[
+										646,
+										663
+									],
+									[
+										1177,
+										1194
+									],
+									[
+										1518,
+										1535
+									],
+									[
+										1771,
+										1788
+									],
+									[
+										2195,
+										2212
+									],
+									[
+										2440,
+										2457
+									],
+									[
+										2583,
+										2600
+									],
+									[
+										3114,
+										3131
+									],
+									[
+										3455,
+										3472
+									],
+									[
+										3708,
+										3725
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								2597,
+								2597
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"output_tag": 3,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 935.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
 					"file": "app/models/product.rb",
 					"settings":
 					{
@@ -1553,8 +1675,8 @@
 						"selection":
 						[
 							[
-								2117,
-								2117
+								2116,
+								2116
 							]
 						],
 						"settings":
@@ -1564,13 +1686,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1122.0,
+						"translation.y": 1173.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 6,
 					"file": "app/models/sale.rb",
 					"settings":
 					{
@@ -1598,7 +1720,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": "app/views/products/_short.html.haml",
 					"settings":
 					{
@@ -1609,13 +1731,100 @@
 						"selection":
 						[
 							[
-								526,
-								526
+								689,
+								689
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/Haml/Syntaxes/Ruby Haml.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "app/views/products/index.html.haml",
+					"settings":
+					{
+						"buffer_size": 263,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								109,
+								109
+							]
+						],
+						"settings":
+						{
+							"rulers":
+							[
+								80
+							],
+							"syntax": "Packages/Haml/Syntaxes/Ruby Haml.tmLanguage",
+							"wrap_width": 80
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "spec/features/user/administrator_spec.rb",
+					"settings":
+					{
+						"buffer_size": 11414,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2057,
+								2057
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/RSpec/RSpec.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 204.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "app/models/product_user.rb",
+					"settings":
+					{
+						"buffer_size": 1487,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								789,
+								789
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
@@ -1677,6 +1886,26 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"prouser",
+				"app/models/product_user.rb"
+			],
+			[
+				"pruser",
+				"app/models/product_user.rb"
+			],
+			[
+				"propres",
+				"app/presenters/product_presenter.rb"
+			],
+			[
+				"admnspe",
+				"spec/features/user/administrator_spec.rb"
+			],
+			[
+				"prind",
+				"app/views/products/index.html.haml"
+			],
 			[
 				"prosho",
 				"app/views/products/_short.html.haml"
@@ -1978,10 +2207,6 @@
 				"app/models/session.rb"
 			],
 			[
-				"propres",
-				"app/presenters/product_presenter.rb"
-			],
-			[
 				"gemfi",
 				"Gemfile"
 			],
@@ -2024,10 +2249,6 @@
 			[
 				"totalpri",
 				"app/models/mixins/total_price.rb"
-			],
-			[
-				"prouser",
-				"app/models/product_user.rb"
 			],
 			[
 				"cart",
@@ -2176,18 +2397,6 @@
 			[
 				"ordercon",
 				"app/controllers/orders_controller.rb"
-			],
-			[
-				"userhe",
-				"spec/support/user_helper_spec.rb"
-			],
-			[
-				"usedi",
-				"app/views/users/edit.html.haml"
-			],
-			[
-				"lgg",
-				"spec/features/user/logged_user_spec.rb"
 			]
 		],
 		"width": 0.0
@@ -2197,6 +2406,10 @@
 		"height": 500.0,
 		"selected_items":
 		[
+			[
+				"ruby",
+				"/home/kham/Projekty/Ruby/rozne/Ruby.sublime-project"
+			],
 			[
 				"u",
 				"/home/kham/Projekty/Ruby/rozne/Ruby.sublime-project"

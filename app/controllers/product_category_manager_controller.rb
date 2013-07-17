@@ -2,13 +2,13 @@ class ProductCategoryManagerController < ApplicationController
   before_filter :authorize_admin
 
   def new
-    @product = Product.find(params[:product_id])
+    @product = Product.find(params[:id])
     @categories = Category.all 
-    render 'products/new_add_to_category'
+    render 'admin/products/new_add_to_category'
   end
   
   def join
-    @product = Product.find(params[:product_id])
+    @product = Product.find(params[:id])
     get_categories_names(params).each { |c| @product.add category: c }
 
     redirect_to product_path(@product) 
