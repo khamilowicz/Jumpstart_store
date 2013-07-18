@@ -1,14 +1,15 @@
 .table_header{
   margin-bottom: 2em;
 }
-.product_full{
-  .image{
 
-  }
+.product_full{
+  .image{}
+
   .carousel{
     width: 30em;
     height: 30em;
   }
+
   .row{
     &.top_title{}
     &.buttons{margin: 1em 0;}
@@ -20,6 +21,7 @@
 
   }
 }
+
 .product{
 
   .btn{
@@ -27,87 +29,136 @@
     a { color: white; }
   }
 
-  &.product_full{ .btn{ margin: 0;}}
-
-
-&.short{
-  // border: 1px solid black;
-  // padding: 0.5em;
-  // height: 15em;
-  margin-bottom: 1em;
-  margin-left: 0;
-  margin-right: 0.5em;
-  height: 37em;
-  .row{
-    // border-bottom: 1px solid gray;
-  }
-  .title{
-    min-height: 3em;
-  }
-  .price.discount{
-    font-weight: bold;
-  }
-  .remove{
-    text-align: right;
+  &.product_full{ 
+    .btn{ margin: 0;}
   }
 
-  .cart_btn{
-   -webkit-transition-duration: 1s;
+  &.short{
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0.5em;
+    height: 37em;
+
+    .row{}
+
+    .title{ min-height: 3em; }
+
+    .price.discount{ font-weight: bold; }
+    .quantity{ float: left; }
+    .remove{ float: right; }
+
+    .cart_btn{
+      -webkit-transition-duration: 1s;
       -moz-transition-duration: 1s;
-       -ms-transition-duration: 1s;
-        -o-transition-duration: 1s;
-           transition-duration: 1s;
-    &.many{height: 1em}
-    &.single{
-      height: 6em;
-      // font-size: 1em;
-      padding: 2em;
+      -ms-transition-duration: 1s;
+      -o-transition-duration: 1s;
+      transition-duration: 1s;
+      &.many{height: 1em; }
+      &.single{
+        height: 6em;
+        padding: 2em;
+      }
     }
   }
 }
 
-  .product_thumbnail{
-   width: 100%;
-   height: 100%;
-   padding-top: 1em;
-   padding-bottom: 1em;
-   background-color: white;
-   text-align: center;
+.product_thumbnail{
+  width: 100%;
+  height: 100%;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  background-color: white;
+  text-align: center;
 
-   img{
+  img{
     max-height: 14em;
     min-height: 14em;
-   }
-
- }
+  }
 }
 
-.product.inline{
-  .header{
-    font-weight: bold;
-    text-align: center;
-  }
-  .product{
+.products{
+
+  margin-bottom: 2em;
+
+& .product.inline:first-child{ height: 5em; }
+
+  .product.inline{
     border-bottom: 1px solid gray;
-    padding: 0.5em 0;
+    padding: 0.5em 0.1em;
+    height: 3em;
+    vertical-align: middle;
+
     .price{ text-align: center;}
-.quantity{ text-align: center;}
-.remove{ text-align: center;}
+    .quantity{ text-align: center;}
+    .remove{ text-align: center;}
+    position: relative;
+
+    form{
+      .fields{
+        .controls-row{
+          .title{
+            .info{
+              display: none;
+            }
+
+            &:hover{
+              .info{
+                margin: 0.3em;
+                padding: 1em;
+                position: absolute;
+                display: block;
+                top: 2em;
+                left: 6em;
+                background-color: white;
+                z-index: 2;
+                border: 1px solid black;
+                width: 30em;
+                .title{ font-weight: bold; }
+                .description{ margin-bottom: 0.6em; }
+                * { 
+                  display: block;
+                  margin: 0.3em 0;
+
+                  .label{}
+                  .value{ text-align: right; }
+                }
+              }
+            }
+          }
+          &.header{
+            * { font-weight: bold; }
+            font-weight: bold;
+            text-align: center;
+            position: relative;
+            top: -1.2em;
+          }
+          .btn{
+            position: relative;
+            top: -1.1em;
+          }
+          display: block;
+          *{ 
+            text-align: center;
+            display: inline-block; 
+
+          }
+        }
+      }
+    }
+
+    
   }
-  
 }
+
 @mixin product_form{
-  input#product_title{
-    width: 100%;
-  }
-  textarea#product_description{
-    width: 100%;
-  }
+  input#product_title{ width: 100%; }
+  textarea#product_description{ width: 100%; }
 }
-.new_product{
-  @include product_form;
+
+.new_product{ 
+  @include product_form ; 
 }
 
 .edit_product{
-  @include product_form;
+  @include product_form ;
 }

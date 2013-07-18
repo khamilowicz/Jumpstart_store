@@ -21,12 +21,11 @@ describe ProductPresenter do
     subject{ ProductPresenter.new FactoryGirl.build(:product, title: "this is product")}
     its(:title_param) {should eq('this-is-product') }
 
-    describe "#quantity_for" do
+    describe "#quantity_for_user" do
       let(:product){  FactoryGirl.create(:product, quantity: 3) }
-      let(:product_presenter){ ProductPresenter.new product }
       let(:user){ FactoryGirl.create(:user)}
 
-      it{ expect{user.add product: product}.to change{product_presenter.quantity_for(user)}.from(0).to(1)}
+      it{ expect{user.add product: product}.to change{ ProductPresenter.new(product, user).quantity_for_user}.from(0).to(1)}
     end
   end
 

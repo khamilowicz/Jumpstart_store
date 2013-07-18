@@ -2,10 +2,12 @@
 
 shared_examples_for "user" do
 
+  let(:current_user){User.first}
+
   subject{page}
 
   before(:each) do
-    @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 2, quantity: 3)
+    @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 2, quantity: 3), current_user
     @product =  @products.first
     visit '/products' 
   end
@@ -67,7 +69,7 @@ shared_examples_for "user" do
           visit product_path(@product)
         end
 
-        it {should have_review(@reviews.first)}
+        it {should have_review(@reviews.last)}
         it {within(".overall_note"){should have_note(1.5)}}
         it {within(".overall_note"){should_not have_note(3.5)}}
       end

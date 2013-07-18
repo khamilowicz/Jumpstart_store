@@ -1,9 +1,9 @@
-class SessionController < ApplicationController
+class SessionsController < ApplicationController
 	def new
 		@session = Session.new
 	end
 
-	def delete
+	def destroy
 		session[:current_user_id] = nil
 		clean_current_user_cache
 		redirect_to new_session_path, notice: "You are logged out"

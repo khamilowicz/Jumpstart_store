@@ -5,8 +5,8 @@ class Asset < ActiveRecord::Base
   has_attached_file :photo, :default_url => "/images/missing/missing.jpg"
 
   class << self
-    def photos_for item
-      item.assets.all.map(&:photo)
+    def photos
+      self.all.map(&:photo)
     end
   end
 end

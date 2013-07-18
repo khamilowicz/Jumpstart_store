@@ -23,7 +23,7 @@ class Product < ActiveRecord::Base
   has_many :category_products
   has_many :categories, through: :category_products
 
-  has_many :reviews
+  has_many :reviews, order: 'created_at desc'
   has_many :assets
 
   has_and_belongs_to_many :sales
@@ -35,6 +35,7 @@ class Product < ActiveRecord::Base
 
   delegate :rating, to: :reviews
   delegate :get_discount, to: :sales
+  delegate :photos, to: :assets
 
   class << self
 
@@ -97,7 +98,11 @@ class Product < ActiveRecord::Base
   end
 
   def out_of_stock?
-    self.quantity == self.product_users.quantity
+    self.quantity == self.in_carts
+  end
+
+  def in_carts
+    self.product_users.quantity
   end
 
   def swap_prepare
@@ -106,11 +111,7 @@ class Product < ActiveRecord::Base
     self.quantity -=1
   end
 
-  def photos
-    Asset.photos_for(self)
-  end
-
-  private
+   private
 
   def create_asset
     self.assets.create

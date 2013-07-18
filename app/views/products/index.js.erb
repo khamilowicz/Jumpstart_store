@@ -1,4 +1,4 @@
-$('.products').html("<%= j render partial: 'products/short', collection: presentify(@products), as: :product %>");
+$('.products').html("<%= j render partial: 'products/short', collection: presentify(@products, current_user), as: :product %>");
   $('.paginate').html("<%= j paginate @products, remote: true %>");
 
 

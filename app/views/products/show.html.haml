@@ -9,7 +9,7 @@
   .row.buttons
     %h2.btn.btn-primary.add_to_cart
       = link_to("Add to cart", add_to_cart_path({user_id: current_user.id, product: @product.id})) if @product.on_sale?
-    .span2=link_to 'Edit product', edit_product_path(@product) if current_user.admin?
+    .span2=link_to 'Edit product', edit_admin_product_path(@product) if current_user.admin?
     .span2.order_product= link_to_unless current_user.guest?, 'Order', '#'
   .row.overview
     .span6
@@ -21,8 +21,8 @@
       .row.categories
         Categories:
         = @product.list_categories
-        .add_to_category= link_to_if current_user.admin?, "Add to category", product_add_to_category_path(@product)
-  .row.review_bar
-    =render partial: 'reviews/new', locals: {product: @product.product, review: Review.new}
-  .row.reviews
-    =render @product.reviews
+        .add_to_category= link_to_if current_user.admin?, "Add to category", edit_admin_type_path(@product)
+  .row.review_bar.span12
+    .span12=render partial: 'reviews/new', locals: {product: @product.product, review: Review.new}
+  .row.reviews.span12
+    =render @product.reviews, product: @product

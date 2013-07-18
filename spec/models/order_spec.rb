@@ -21,7 +21,7 @@ describe Order do
     describe "has date of status change" do
       let!(:time_now){ Time.now}
       before do
-        Time.stub!(:now).and_return(time_now)
+        Time.stub(:now).and_return(time_now)
         subject.cancel
       end
       it{ subject.time_of_status_change.should eq(time_now)}

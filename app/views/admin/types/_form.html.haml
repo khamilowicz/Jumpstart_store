@@ -1,0 +1,22 @@
+.span12
+  .span12= render partial: 'info', locals: {type: @type} unless @type.empty?
+
+  .span12
+    = simple_form_for [:admin, @type] do |f|
+      = f.button :submit, "Submit"
+      .new_category_name.row
+        .span6= f.input :new_category_name, {placeholder: "Different...?"}
+      .row
+        .span6
+          = f.input :product do 
+            - @products.each do |p|
+              .line_chb.span12
+                .span10.label_form= f.label "product_#{p.id}", p.title
+                .span1
+                .span1.check_form= f.check_box "product[#{p.id}]", {id: "type_product_#{p.id}", checked: check_it(@type.product, p)}
+        .span6.category
+          = f.input :category do 
+            - @categories.each do |c|
+              .line_chb
+                .label_form= f.label "category_#{c.id}", c.name
+                .check_form= f.check_box "category[#{c.id}]", {id: "type_category_#{c.id}",checked: check_it(@type.category, c)}

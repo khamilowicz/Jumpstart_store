@@ -2,11 +2,16 @@
 .navbar
   .navbar-inner
     .brand=link_to "Shop", root_url
-    %ul.nav
-      %li=link_to current_user_presenter, user_path(current_user)
-      %li=link_to "Products", products_path
-      %li=link_to "My cart", cart_path
-      %li=link_to "Orders", orders_path
-      = render 'menu/admin_menu' if current_user_presenter.admin?
-    %ul.nav.pull-right
-      = render 'session/menu', log_in: current_user_presenter.guest?
+    %a.span6.btn.btn-primary.btn-navbar{data: {toggle: 'collapse', target: '.nav-collapse'}}
+      %span.icon-bar
+      %span.icon-bar
+      %span.icon-bar
+    .nav-collapse.collapse
+      %ul.nav
+        %li=link_to current_user_presenter, user_path(current_user)
+        %li=link_to "Products", products_path
+        %li=link_to "My cart", cart_path
+        %li=link_to "Orders", orders_path
+        = render 'menu/admin_menu' if current_user_presenter.admin?
+      %ul.nav.pull-right
+        = render 'sessions/menu', log_in: current_user_presenter.guest?

@@ -14,6 +14,9 @@ FactoryGirl.define do
 
     trait :guest do
       guest true
+      first_name ""
+      last_name ""
+      email ''
     end
 
     trait :logged do

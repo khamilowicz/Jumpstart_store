@@ -7,4 +7,4 @@
     %h4.span5= "Total for order: " + humanized_money_with_symbol( @cart.total_price)
   .span12.products.list
     =render 'products/table_header'
-    =render presentify(@cart.products) unless @cart.empty?
+    =render presentify(@cart.products, current_user) unless @cart.empty?
