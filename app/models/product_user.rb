@@ -31,8 +31,7 @@ class ProductUser < ActiveRecord::Base
 
     def quantity product=nil, user=nil
       if product && user
-        pu = ProductUser.where(product_id: product.id, user_id: user.id).first
-        pu.nil? ? 0 : pu.quantity
+        ProductUser.where(product_id: product.id, user_id: user.id).first.try(:quantity) || 0
       else
         quantity_all
       end 
@@ -52,6 +51,13 @@ class ProductUser < ActiveRecord::Base
 
   def empty?
     self.quantity == 0
+  end
+
+  def self.total_price
+    ## TODO: refactor this mess
+    self.includes(:product).all.inject(Money.new(0, 'USD')) do |sum, op|
+      sum += op.product.base_price*op.product.get_discount*op.quantity/100
+    end
   end
 
   private

@@ -17,6 +17,8 @@ describe User do
     it{should validate_presence_of(:first_name)}
     it{should validate_presence_of(:last_name)}
 
+    it{ should have_one(:address)}
+
   end
 
   context "who is guest" do
@@ -133,7 +135,7 @@ describe User do
 
         it "returns product to magazine" do
           expect{ subject.remove product: product_2
-            }.to change{product_2_presenter.quantity_in_magazine}.by(1)
+            }.to change{ProductPresenter.new(product_2).quantity_in_warehouse}.by(1)
           end
         end
       end

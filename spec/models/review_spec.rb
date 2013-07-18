@@ -14,7 +14,7 @@ describe "Review" do
     it{ should ensure_inclusion_of(:note).in_array([*1..5])}
     it{ should_not allow_value("I liked it very much").for(:note)}
 
-    its(:reviewer_name){should eq("John Smith")}
+it{ subject.reviewer.to_s.should eq("John Smith") }
 
     it{ should belong_to(:product)}
     it{ should validate_presence_of(:product)}

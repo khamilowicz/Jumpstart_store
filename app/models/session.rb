@@ -7,11 +7,7 @@ class Session
   class << self
     def authenticate params
       user = User.where(email: params[:email]).first
-      if user && user.authenticate(params[:password])
-        user
-      else 
-        nil
-      end
+      return user if user && user.authenticate(params[:password])
     end
   end
 

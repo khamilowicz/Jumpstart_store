@@ -1,5 +1,6 @@
 class CategoriesController < ApplicationController
 
+
  def index
  	@categories = Category.all
  end
@@ -7,7 +8,7 @@ class CategoriesController < ApplicationController
  def show
    @category = Category.find(params[:id])
    @products = @category.products.page params[:page]
-   @products_presenter = ProductPresenter.new_from_array @products
+   @products_presenter = ProductPresenter.new_from_array @products, current_user
 
    respond_to do |format|
     format.html { render 'products/index'}

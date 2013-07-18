@@ -10,9 +10,6 @@ describe Product do
   it{ should allow_value(1).for(:base_price)}
   it{ should have_and_belong_to_many(:sales)}
   it{ monetize(:base_price).should be_true}
-  # it{ should_not allow_value(1.101).for(:base_price)}
-  # it{ should_not allow_value(-1).for(:base_price).with_message("base_price_cents must be greater than 0 (-100)")}
-  # it{ should_not allow_value('some string').for(:base_price)}
   it{ should_not allow_value(nil).for(:base_price_cents)}
   it{ should respond_to(:quantity)}
   it{ FactoryGirl.create(:product).quantity.should eq(1)}
@@ -98,25 +95,29 @@ describe Product do
     describe "discounts" do
       let(:product){FactoryGirl.build(:product)}
       
-      it{ expect{product.on_discount 50}.to change{
-        product.discount
+      it{ expect{product.set_discount(50)}.to change{
+        product.get_discount
         }.from(100).to(50)
       }
 
-      it{ expect{product.on_discount 50; product.off_discount}.to_not change{
-        product.discount
+      it{ expect{product.set_discount 50; product.off_discount}.to_not change{
+        product.get_discount
         }.from(100)
       }
+
+      it{ expect{product.set_discount 50}.to change{
+        product.on_discount?
+        }.from(false).to(true)}
 
       describe "#off_discount" do
 
         before(:each) do
-          product.on_discount 50
+          product.set_discount 50
         end
 
         it{ 
           expect{ product.off_discount}.
-          to change{ product.discount}.
+          to change{ product.get_discount}.
           from(50).to(100)
         }
       end
@@ -124,26 +125,26 @@ describe Product do
       describe ".off_discount" do
         before(:each) do
           products = FactoryGirl.create_list(:product, 3)
-          products.each { |p| p.on_discount 50 }
+          products.each { |p| p.set_discount 50 }
         end
-        it{ 
+        it{ pending
           expect{ Product.off_discount}.
-          to change{ Product.discount }.
+          to change{ Product.get_discount }.
           from(50).to(100)
         }
-
       end
-
     end
 
     describe "for class" do
-      let(:products){FactoryGirl.create_list(:product, 3)}
+      let(:products){FactoryGirl.create_list(:product, 4)}
       before(:each) do
         products
-        Product.limit(2).on_discount 50
+        Product.limit(2).set_discount 50
       end
       it{ Product.limit(2).all.each{ |p| p.should be_on_discount}}
       it{ Product.last.should_not be_on_discount}
+      it{ Product.limit(2).should be_on_discount}
+      it{ Product.offset(2).should_not be_on_discount}
     end
   end
   describe "#users" do

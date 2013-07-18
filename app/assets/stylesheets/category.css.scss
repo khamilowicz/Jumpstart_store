@@ -26,3 +26,10 @@
     }
   }
 }
+.controls{
+  @include checkbox_area;
+}
+
+.line_chb{
+  border-bottom: 1px solid gray;
+}

@@ -1,3 +1,1 @@
-$('.products').html("<%= j render partial: 'products/inline', collection: @products, as: :product%>");
-jQuery(document).ready(function($) {
-});
+$('.products').html("<%= j render @products%>");

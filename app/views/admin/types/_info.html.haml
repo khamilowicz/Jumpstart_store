@@ -1,0 +1,9 @@
+.info.alert.alert-info
+  = "Added #{pluralize( type.product_size, 'product')} :"
+  - type.products.each do |product|
+    %ul
+      %li= link_to product.title, product_path(product)
+  to
+  - type.categories.each do |category|
+    %ul
+      %li= link_to category.name, category_path(category)

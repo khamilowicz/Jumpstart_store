@@ -1,8 +1,2 @@
-=simple_form_for @user, defaults: {required: true} do |f|
-  =f.input :first_name   
-  =f.input :last_name   
-  =f.input :email   
-  =f.input :password   
-  =f.input :password_confirmation   
-  =f.input :address
-  =f.button :submit
+Create user
+= render 'form', user: @user

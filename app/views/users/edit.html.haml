@@ -1,11 +1,2 @@
-=form_for @user do |f|
-  =render partial: 'menu/errors', locals: {object: @user}
-  =f.label :first_name
-  =f.text_field :first_name
-  =f.label :last_name
-  =f.text_field :last_name
-  =f.label :address
-  =f.text_area :address
-  =f.label :email
-  =f.text_field :email
-  =f.submit "Submit"
+%h3 Edit user
+= render 'form', user: @user

@@ -5,4 +5,4 @@
   .span12.form_order
     = render partial: 'payment', locals: {cart: @cart}
   .products
-    = render partial: 'products/inline', collection: @products, as: :product
+= render @products

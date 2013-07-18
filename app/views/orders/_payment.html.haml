@@ -1,9 +1,6 @@
-= form_tag create_orders_path, id: 'payment-form', method: :post do
+= form_for @order, id: 'payment-form', method: :post do |order|
   .payment-errors    
-  .row
-    .span6=label_tag :address, "Address"
-  .row
-    .span6=text_area_tag :address, current_user.address, {class: 'address', rows: 2}
+  = render partial: 'addresses/form', address: current_user.address, locals: {form: order}
   =fields_for 'transaction' do |f|
     =f.hidden_field 'card-amount-int', { class: 'card-amount-int', value: cart.total_price.cents.to_i}
     =f.hidden_field 'card-currency', {class: 'card-currency', value: cart.currency}
@@ -23,5 +20,5 @@
       .span6=f.label 'card-holdername', "Holder name"
     .row
       .span6=f.text_field :'card-holdername', {value: current_user_presenter.full_name }
-    =submit_tag 'Buy', class: 'submit-button btn btn-primary span4'
+    = order.submit 'Buy', class: 'submit-button btn btn-primary span4'
 =javascript_include_tag "pages/paymill"

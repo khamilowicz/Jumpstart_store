@@ -1,11 +1,13 @@
-# require "spec_helper"
+  require "spec_helper"
 
 shared_examples_for "user" do
+
+  let(:current_user){User.first}
 
   subject{page}
 
   before(:each) do
-    @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 2, quantity: 3)
+    @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 2, quantity: 3), current_user
     @product =  @products.first
     visit '/products' 
   end
@@ -42,7 +44,7 @@ shared_examples_for "user" do
         @discount = 50
         product = @products.first
         product.base_price = @price
-        product.on_discount @discount
+        product.set_discount @discount
         product.save
         visit products_path
       end
@@ -67,7 +69,7 @@ shared_examples_for "user" do
           visit product_path(@product)
         end
 
-        it {should have_review(@reviews.first)}
+        it {should have_review(@reviews.last)}
         it {within(".overall_note"){should have_note(1.5)}}
         it {within(".overall_note"){should_not have_note(3.5)}}
       end
@@ -152,25 +154,24 @@ shared_examples_for "user who can't" do
           visit cart_path
         end
 
-        it{ should have_no_content("#{@other_user.display_name} cart")}
+        it{ should have_no_content("#{@other_user}'s' cart")}
       end
 
       describe 'order' do 
         before(:each) do
           @order = @other_user.orders.new
           @order.transfer_products
-          @order.address = 'lala'
           @order.save
           visit order_path(@order)
         end
         it{ should have_content("not allowed")}
-        it{ should_not have_content(@other_user.display_name)}
+        it{ should_not have_content(@other_user.to_s)}
         it {should_not have_content("Order page")}
       end
     end
 
-
     it "view the administrator screens or use administrator functionality" do
+      pending "add lots of admin's paths"
       visit admin_dashboard_path
       should_not have_content("Administrator Dashboard")
     end

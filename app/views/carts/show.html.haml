@@ -1,9 +1,10 @@
-.heading
-  %h3= "#{current_user_presenter.display_name}'s' cart"
-.order_menu
-  -if current_user_presenter.guest?
-    "You need to log in to purchase products"
-  -else
-    =link_to 'Order', new_order_path, class: 'btn btn-primary'
-.products
-  =render partial: 'products/inline', collection: @products, as: :product
+.cart.span12
+  .heading.row
+    %h3.span12= "#{current_user_presenter}'s' cart"
+  .order_menu.row
+    .span3= order_link(current_user_presenter)
+    .span4
+    %h4.span5= "Total for order: " + humanized_money_with_symbol( @cart.total_price)
+  .span12.products.list
+    =render 'products/table_header'
+    =render presentify(@cart.products, current_user) unless @cart.empty?

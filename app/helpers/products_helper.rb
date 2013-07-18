@@ -10,42 +10,38 @@ module ProductsHelper
   end
 
   def adding_text product
-    if product.users.include?(current_user)
-      "Add more"
-    else
-      "Add to cart"
-    end
+    return 'Sorry, we have no more' if product.out_of_stock?
+    product.users.include?(current_user) ? "Add more" : "Add to cart"
   end
 
   def adding_class product
-   if product.users.include?(current_user)
-    'many'
-  else
-    'single' 
+    klass = []
+    klass << (product.belongs_to_user? ? 'many' : 'single')
+    klass << ( product.out_of_stock? ? 'disabled' : '')
+    klass.join(' ')
   end
-end
 
-def quantity product
-  text = ''
-  if product.users.include?(current_user)
-    text = content_tag :div, class: 'quantity' do
-      "#{product.quantity_for current_user} in cart"
+  def quantity product
+    if product.belongs_to_user?
+      text = content_tag :div, class: 'quantity' do
+        "#{product.quantity_for_user} in cart"
+      end
+    else
+      ''
     end
   end
-  text
-end
 
-def remove product
-  text = ''
-  if product.users.include?(current_user)
-    text = content_tag :div, class: 'remove' do
-      link_to "Remove from cart", remove_from_cart_user_product_path(current_user, product), remote: true 
+  def remove product
+    text = ''
+    if product.users.include?(current_user)
+      text = content_tag :div, class: 'remove' do
+        link_to "Remove from cart", remove_from_cart_path({user_id: current_user, product: product}), remote: true 
+      end
     end
+    text
   end
-  text
-end
 
-def saving_text product
-  "You pay only #{product.discount}%!" if product.on_discount?
-end
+  def saving_text product
+    "You pay only #{product.discount}%!" if product.on_discount?
+  end
 end

@@ -1,0 +1,6 @@
+-product_counter ||= nil
+.product.inline{class: product.title_param, id: product_counter}
+  .span7.title= link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} 
+  .span1.price= "$#{product.price}"
+  .span2.quantity= product.quantity_for_user
+  .span2.remove= link_to "X", remove_from_cart_path({user_id: current_user.id, product: product.id}), confirm: 'U cereal?'

@@ -27,13 +27,19 @@ describe Category do
   describe "add" do
    let(:product){ FactoryGirl.create(:product)}
 
-   before do
-    category.add product: product
-  end
+  it {expect{ category.add product: product}.
+    to change{ category.products.size}.by(1) }
 
   context "adds unique products" do
-    it {expect{ category.add product: product}.
+    it { category.add product: product
+      expect{ category.add product: product}.
     not_to change{ category.products.size} }
+  end
+
+  context "adds many products at a time" do
+    let(:other_product){ FactoryGirl.create(:product)}
+    it {expect{ category.add product: [product, other_product]}.
+    to change{ category.products.size}.by(2) }
   end
 
 end
@@ -58,11 +64,11 @@ describe "#products" do
       product_2.add category: "Category_2"
     end
 
-    subject{ Category.find_products_for("Category_1")}
+    subject{Category.get("Category_1").products}
 
     it{ should include(product_1, product_11)}
     it{ should_not include(product_2)}
-    it{ Category.find_products_for("Category_2").should include(product_2)}
+    it{ Category.get("Category_2").products.should include(product_2)}
   end
 end
 
@@ -123,20 +129,20 @@ describe "concerning putting on sale" do
 
   its(:products){ should_not be_empty}
 
-  its(:all_on_sale?){ should be_false}
-  it{ expect{ category.start_selling}.to change{category.all_on_sale?}.to(true)}
+  its(:on_sale?){ should be_false}
+  it{ expect{ category.start_selling}.to change{category.on_sale?}.to(true)}
   
   describe "category products" do
     let(:products){ category.products}
     
-    it{ expect{ products.each(&:start_selling)}.to change{category.all_on_sale?}.to(true)}
-    it{ expect{ products.first.start_selling}.to_not change{category.all_on_sale?}.to(true)}
+    it{ expect{ products.each(&:start_selling)}.to change{category.on_sale?}.to(true)}
+    it{ expect{ products.first.start_selling}.to_not change{category.on_sale?}.to(true)}
   end
 
-  describe "on_discount" do
+  describe "set_discount" do
     before {category.start_selling}
 
-    it{ expect{ category.on_discount 50}.to change{category.total_price}.from(product_price).to(product_price/2)}
+    it{ expect{ category.set_discount 50}.to change{category.total_price}.from(product_price).to(product_price/2)}
   end
 end
 end

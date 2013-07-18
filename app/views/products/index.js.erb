@@ -1,4 +1,4 @@
-$('.products').html("<%= j render partial: 'products/short', collection: @products_presenter, as: :product %>");
+$('.products').html("<%= j render partial: 'products/short', collection: presentify(@products, current_user), as: :product %>");
   $('.paginate').html("<%= j paginate @products, remote: true %>");
 
 
@@ -9,6 +9,10 @@ $(function() {
   // $('.cart_btn').bind('ajax:success', function() {
   //   $(this).button('reset');
   // });
+
+$('.cart_btn').on('click', function() {
+  $(this).css('height', '1em');
+});
 
   $(".product_thumbnail, .product .title a").on('mouseenter', update_big_image);
   $('li.category').removeClass("active");

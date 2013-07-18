@@ -15,7 +15,7 @@ class Review < ActiveRecord::Base
      end
    end
 
-   def reviewer_name
-    UserPresenter.new(user).display_name
+   def reviewer
+    UserPresenter.new(user)
   end
 end
