@@ -46,6 +46,6 @@ $(document).ready(function() {
 
   slogan_format("Best prices");
   $(window).scroll(change_slogan);
-  $(".product_thumbnail, .product .title a").on('mouseenter', update_big_image);
+  $(document).on('mouseenter', ".product_thumbnail, .product .title a", update_big_image  )
 
 });

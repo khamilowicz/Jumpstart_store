@@ -1,5 +1,0 @@
--if log_in
-  %li.session_link=link_to "Log in", new_session_path 
-  %li.signup_link= link_to "Sign up", new_user_path
--else
-  %li.session_link=link_to "Log out", session_path, method: :delete

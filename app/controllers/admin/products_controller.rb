@@ -1,6 +1,7 @@
 class Admin::ProductsController < ApplicationController
 
   before_filter :authorize_admin
+  layout 'admin_application'
   
   def index
     @products = Product.all

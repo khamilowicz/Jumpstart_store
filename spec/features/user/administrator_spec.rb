@@ -1,4 +1,4 @@
-require "spec_helper"
+  require "spec_helper"
 
 describe "Administrator" do
 
@@ -90,7 +90,7 @@ describe "Administrator" do
         @products = ProductPresenter.new_from_array FactoryGirl.create_list(:product, 4)
 
         @product = @products.first
-        visit add_to_category_admin_product_path(@product)
+        visit edit_admin_type_path(@product)
       end
 
       it "assign to more than one category" do
@@ -107,7 +107,7 @@ describe "Administrator" do
 
       describe "assigns many products to many categories" do
         before do
-          visit manage_categories_path
+          visit new_admin_type_path
 
           @products[0,2].each do |product|
             check product.title

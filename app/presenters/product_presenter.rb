@@ -1,17 +1,30 @@
   class ProductPresenter
 
+    # include ActiveModel::Conversion
+    extend ActiveModel::Naming
+
     extend TotalPrice
     
-    attr_accessor :product, :quantity_in_warehouse, :quantity_for_user
+    attr_accessor :product, :quantity_in_warehouse, :quantity_for_user 
+
+    def belongs_to_user?
+      @belongs_to_user || @product.users.include?(@user)
+    end
 
     def price
       @product.base_price*@product.get_discount/100
     end
 
+    def currency
+      @product.base_price.currency
+    end
+
     def initialize product, user=nil
       @product = product
-      @quantity_for_user = ProductUser.quantity(product, user)
+      @user = user
+      @quantity_for_user = ProductUser.quantity(product, @user)
       @quantity_in_warehouse = self.quantity - @product.product_users.quantity
+      @belongs_to_user = belongs_to_user?
       return nil if product == nil
     end
 

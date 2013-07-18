@@ -1,7 +1,7 @@
 module PresenterHelper
 
   def presentify *collection
-    #why first).first? active::relation.first, otherwise gives me relation instead of real thing
+    #why (collection.first).first? in case of active::relation, otherwise gives me relation instead of real thing
     klass = Array(collection.first).first.class.to_s + 'Presenter'
     if klass != 'NilClassPresenter' && klass.constantize
       method = 'new_from_array'
