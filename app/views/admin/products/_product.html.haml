@@ -1,23 +1,30 @@
 -product_counter ||= nil
 -head = true if product_counter.zero?
 .row.product.inline{class: product.title_param, id: product_counter}
-  = form_for product do |f|
+  = form_for [:admin, product] do |f|
     .fields
       -if head
         .controls.controls-row.header
           .span3
           .span1= f.label :on_sale 
           = f.label :price, class: 'span1'
+          .span1 Current price
           .span1 Currency
+          .span1 Discount
+          .span1 Sale
           = f.label :quantity, class: 'span1'
+          .span1
           = f.label :submit, class: 'span1'
       .controls-row
         .span3.title
           = link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} 
           = render partial: 'admin/products/info', locals: {product: product}
         .span1= f.check_box :on_sale
-        = f.text_field :price, class: 'span1'
+        = f.text_field :base_price, class: 'span1'
+        .span1= product.price
         .span1= product.currency
+        .span1= "#{product.get_discount}%"
+        .span1= link_to "Start", new_sale_path({product: product}), {class: 'btn btn-primary'}
         = f.number_field :quantity, class: 'span1'
+        .span1
         = f.submit 'OK', class: 'span1 btn btn-primary'
-  

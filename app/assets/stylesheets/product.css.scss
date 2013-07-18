@@ -78,6 +78,8 @@
 
 .products{
 
+  margin-bottom: 2em;
+
 & .product.inline:first-child{ height: 5em; }
 
   .product.inline{
@@ -106,7 +108,7 @@
                 position: absolute;
                 display: block;
                 top: 2em;
-                left: 2em;
+                left: 6em;
                 background-color: white;
                 z-index: 2;
                 border: 1px solid black;
@@ -127,6 +129,8 @@
             * { font-weight: bold; }
             font-weight: bold;
             text-align: center;
+            position: relative;
+            top: -1.2em;
           }
           .btn{
             position: relative;

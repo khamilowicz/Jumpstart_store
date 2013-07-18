@@ -3,6 +3,12 @@ class SalesController < ApplicationController
   before_filter :authorize_admin
   
   def new
+    @categories = Category.all
+    @products, @checked = if params[:product]
+      [[Product.find(params[:product])], true]
+    else
+      [ Product.all, false ]
+    end
   end
 
   def destroy

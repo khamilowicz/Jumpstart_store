@@ -36,7 +36,7 @@ function update_big_image(){
 };
 
 function change_slogan () {
- var chunk = $(document).height()/slogans.length;
+ var chunk = $(document).height()/(slogans.length + 1);
  $('.big_product_image .caption.title').remove();
  var slogan = slogans[parseInt(window.pageYOffset/chunk)];
  slogan_format(slogan);

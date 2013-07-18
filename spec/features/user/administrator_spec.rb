@@ -28,6 +28,9 @@
 
          describe "and modifies them" do 
            let(:product_2){ ProductPresenter.new FactoryGirl.build(:product)}
+
+          context "on product's page" do
+            
            before do
              visit edit_admin_product_path(1)
              create_new_product product_2
@@ -37,6 +40,21 @@
             should have_content("Successfully updated product")
             should_not have_short_product(product)
             should have_short_product(product_2)}
+          end
+
+          context "on all products' page" do
+            before(:each) do
+              product_2.save
+              visit '/admin/products'
+              fill_in "Quantity", with: 9
+              click_button 'OK'
+            end
+
+            it{
+            find_field("Quantity").value.should eq('9')
+            }
+            
+          end
           end
         end
 

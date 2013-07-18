@@ -46,6 +46,10 @@
       @product.categories.list_categories 
     end
 
+    def list_sales_with_discounts
+      @product.sales.pluck(:name).zip @product.sales.pluck(:discount)
+    end
+
     def to_param
       @product.to_param
     end 

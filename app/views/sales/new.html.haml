@@ -21,15 +21,15 @@
       .span1
       .span4.categories
         %h3 Category
-        - Category.all.each do |category|
+        - @categories.each do |category|
           .category
             .check_form= check_box_tag "categories[#{category.id}]", category.name
             .label_form= label_tag "categories[#{category.id}]", category.name
       .span1
       .span5.products
         %h3 Product
-        - Product.all.each do |product|
+        - @products.each do |product|
           .product
-            .check_form= check_box_tag "products[#{product.id}]", product.title
+            .check_form= check_box_tag "products[#{product.id}]", product.title, @checked
             .label_form= label_tag "products[#{product.id}]", product.title
       .span1

@@ -98,7 +98,11 @@ class Product < ActiveRecord::Base
   end
 
   def out_of_stock?
-    self.quantity == self.product_users.quantity
+    self.quantity == self.in_carts
+  end
+
+  def in_carts
+    self.product_users.quantity
   end
 
   def swap_prepare

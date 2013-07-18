@@ -4,7 +4,7 @@ class Admin::ProductsController < ApplicationController
   layout 'admin_application'
   
   def index
-    @products = Product.all
+    @products = Product.page params[:page]
   end
 
   def new
@@ -23,7 +23,7 @@ class Admin::ProductsController < ApplicationController
     end
 
     if @product.update_attributes(params[:product])
-      redirect_to products_path, notice: "Successfully updated product"
+      redirect_to admin_products_path, notice: "Successfully updated product"
     else
       redirect_to edit_admin_product_path(@product), notice: "Error"
     end

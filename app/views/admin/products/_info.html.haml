@@ -1,5 +1,5 @@
 .info
-  .title= product.title
+  .title= link_to product.title, product
   .description= product.description
   .discount
     .span6 Discount: 
@@ -10,3 +10,9 @@
   .categories
     .span6 Categories: 
     .span6.value= "#{product.list_categories}"
+  .sales
+    .sales2 Sales
+    .sales10
+      - product.list_sales_with_discounts.each do |name, discount|
+        .span6= name
+        .span6= "#{discount}%"
