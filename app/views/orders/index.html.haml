@@ -7,4 +7,4 @@
         = content_tag :div, class: status do
           = link_to status.capitalize, filter_orders_path({status: status}), remote: true
           = Order.count_by_status(status)
-  .orders=render partial: 'orders/inline', collection: @orders, as: :order
+  .orders=render partial: @orders

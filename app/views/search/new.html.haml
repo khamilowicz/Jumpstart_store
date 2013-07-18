@@ -1,19 +1,13 @@
 Search
-=form_for @search do |f|
-  =f.fields_for :email do |d|
-    =d.label :email
-    =d.text_field :email
+=simple_form_for @search do |f|
+  =f.simple_fields_for :email do |d|
+    =d.input :email
   =f.fields_for :status do |d|
-    =d.label :status
-    =d.select :status, Order::STATUSES.values.zip(Order::STATUSES.values), {include_blank: true}
+    =d.input :status, collection: Order::STATUSES.values, include_blank: true
   =f.fields_for :value do |d|
-    =d.label :value
-    =d.select :value, %w{less more equal}.zip(%w{less more equal}), {include_blank: true}
-    =d.label :total_value
-    =d.text_field :total_value, {include_blank: true}
+    =d.input :value, collection: %w{less more equal}, include_blank: true
+    =d.input :total_value, include_blank: true, as: :integer
   =f.fields_for :date do |d|
-    =d.label :date
-    =d.select :date, %w{before after at}.zip(%w{before after at}), {include_blank: true}
-    =d.label :date_value
-    =d.date_select :date_value
+    =d.input :date, collection: %w{before after at}, include_blank: true
+    =d.input :date_value, as: :date
   =f.submit "Search"

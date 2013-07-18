@@ -2,14 +2,14 @@ class UsersController < ApplicationController
   before_filter :ensure_not_guest, except: [:new, :create]
   before_filter :authorize_user_or_admin, only: [:show]
   before_filter :authorize_admin, only: [:index]
-  before_filter :authorize_user, except: [:new, :create, :show]
+  before_filter :authorize_user, except: [:new, :create, :show, :index]
 
   def show
     @user = UserPresenter.new User.find(params[:id])
   end
 
   def index
-    @users = User.all
+    @users = UserPresenter.new_from_array User.all
   end
 
   def edit
@@ -44,6 +44,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(params[:user])
+    binding.pry
 
     if @user.save
       # UserRegistration.registration_confirmation(@user).deliver

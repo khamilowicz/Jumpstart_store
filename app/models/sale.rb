@@ -3,75 +3,47 @@ class Sale < ActiveRecord::Base
   has_and_belongs_to_many :products
   has_and_belongs_to_many :categories
 
-  attr_reader :products_id
   attr_accessible :name, :discount
 
-  validates_numericality_of :discount, greater_than: 0, less_than: 100
-  validates_presence_of :discount
+  validates :discount, numericality: {greater_than: 0, less_than: 100 }, presence: true
 
-  def self.new_from_params params
-    unless params[:name_from_select].blank?
-      dis = Sale.where(name: params[:name_from_select]).first
-      dis.discount = params[:discount] if params[:discount]
-      dis.products << Product.find(params[:products].keys) if params[:products]
-      dis.categories << Category.find(params[:categories].keys) if params[:categories]
-    else
-      categories_id = params[:categories].keys if params[:categories]
-      products_id = params[:products].keys if params[:products]
-      name = params[:name] if params[:name]
-      discount = params[:discount].to_i
+  class << self
 
-      dis = self.new.construct( discount, name, products_id, categories_id)
+    def new_from_params params
+      sale = self.where(name: params[:name_from_select])
+      .first_or_initialize 
+
+      sale.discount = params[:discount]
+
+      products_id = params[:products] ? params[:products].keys : []
+
+      if params[:categories]
+        categories_id = params[:categories].keys
+        products_id << CategoryProduct.where(category_id: categories_id).pluck(:product_id)
+        sale.categories << Category.find(categories_id) 
+      end
+
+      sale.products << Product.find(products_id)
+      sale.name = params[:name] unless params[:name].blank?
+      sale.save
+      sale
     end
-    dis.save
-    dis
-  end
 
-  def self.get_discount
-    self.minimum(:discount) || 100
-  end
-
-  def self.attach product, percent, name=nil
-    if name
-      dis = Sale.where(name: name).first_or_initialize
-    else
-      dis = self.new
+    def get_discount
+      self.minimum(:discount) || 100
     end
-    dis.discount = percent
-    dis.name = name
-    dis.products << product
-    dis.save
-    dis
-  end
 
-  def self.detach product, identifier
-    product.sales.delete get_by_identifier(identifier).all
-  end
+    def set_discount percent, name=nil
+      self.create(discount: percent, name: name)
+    end
 
-  def self.on_discount percent, name=nil
-    dis = self.new
-    dis.discount = percent
-    dis.name = name
-    dis.save
-    dis
-  end
-
-  def self.get_by_identifier identifier
-    discount_o = self.where(id: identifier.id) if identifier.kind_of?(Sale)
-    discount_o = self.where(name: identifier) if identifier.kind_of?(String)
-    discount_o = self.where(discount: identifier) if identifier.kind_of?(Fixnum)
-    discount_o = self.scoped if identifier.nil?
-    discount_o
-  end
-
-  def construct discount, name, products_id, categories_id
-    s = Sale.new
-    s.name = name
-    s.discount = discount
-    s.products << Product.find(products_id) if products_id
-    s.categories << Category.find(categories_id) if categories_id
-    s.save
-    s
+    def get_by_identifier identifier
+      case identifier.class
+      when String then self.where(name: identifier)
+      when Fixnum then self.where(discount: identifier)
+      else self.scoped
+      end
+    end
   end
 
   def remove params={}

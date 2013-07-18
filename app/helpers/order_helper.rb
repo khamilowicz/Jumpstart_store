@@ -9,4 +9,12 @@ module OrderHelper
       link_to "Mark as shipped", order_change_status_path(order, {status: 'ship'}) 
     end
   end
+
+  def order_link user
+      if user.guest?
+        "You need to log in to purchase products"
+      else
+        link_to 'Order', new_order_path, class: 'btn btn-primary'
+      end
+  end
 end

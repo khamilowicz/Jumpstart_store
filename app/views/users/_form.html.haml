@@ -1,0 +1,15 @@
+=simple_form_for user, defaults: {required: true} do |form|
+  .controls.controls-row
+    .span5
+      =form.input :first_name   
+      =form.input :last_name   
+  .controls.controls-row
+    .span5
+      =form.input :email   
+  .controls.controls-row
+    .span5
+      =form.input :password   
+      =form.input :password_confirmation
+  =render partial: 'addresses/form', address: (user.address || user.build_address), locals: {form: form}
+  =form.button :submit, class: 'btn btn-primary'
+  =link_to 'Cancel', user_path(user), class: 'btn'

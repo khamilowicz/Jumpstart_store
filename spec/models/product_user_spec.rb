@@ -117,4 +117,17 @@ describe "#remove" do
     }
   end
 end
+
+describe ".total_price" do
+  before(:each) do
+    @user = FactoryGirl.create(:user)
+    @products = FactoryGirl.create_list(:product, 3, base_price: 100)
+    @products.each do |product|
+      @user.add product: product
+    end
+  end
+  it "should description" do
+    @user.product_users.total_price.should eq(Money.new(300, 'USD'))
+  end
+end
 end

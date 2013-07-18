@@ -12,3 +12,28 @@
     }
   }
 }
+.reviews{
+  .review{
+ margin: 0.25em 0;
+ border-bottom: 1px solid #CCCCCC;
+ padding-bottom: 0.6em;
+    .reviewer_row{
+      float: right;
+      display: block;
+      margin-bottom: 0.5em;
+        text-align: right;
+      .reviewer{
+      }
+      .date{
+      }
+    }
+   
+    .title_row{
+      margin: 1.5em 0;
+      .title{
+      font-size: 1.4em;
+
+      }
+    }
+  }
+}

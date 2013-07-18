@@ -1,13 +1,14 @@
 @mixin checkbox_area{
  .check_form {
-  display: inline-block;
+  float: right;
   input{
-    margin-bottom: 5px;
+    // margin-bottom: 5px;
   }
 }
 .label_form {
-  margin-left: 1em;
+  padding: 0.2em 0;
+  overflow: hidden;
   display: inline-block;
-
+  margin-left: 1em;
 }
 }

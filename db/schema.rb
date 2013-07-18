@@ -11,7 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130710194617) do
+ActiveRecord::Schema.define(:version => 20130715114156) do
+
+  create_table "addresses", :force => true do |t|
+    t.string  "country"
+    t.string  "city"
+    t.integer "zip_code"
+    t.string  "street"
+    t.integer "house_nr"
+    t.integer "door_nr"
+    t.integer "user_id"
+    t.integer "order_id"
+  end
 
   create_table "assets", :force => true do |t|
     t.integer  "product_id"
@@ -43,16 +54,18 @@ ActiveRecord::Schema.define(:version => 20130710194617) do
   create_table "order_products", :force => true do |t|
     t.integer  "order_id"
     t.integer  "product_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.integer  "quantity"
+    t.integer  "discount",            :default => 100
+    t.integer  "base_price_cents",    :default => 0,     :null => false
+    t.string   "base_price_currency", :default => "USD", :null => false
   end
 
   create_table "orders", :force => true do |t|
     t.integer  "user_id"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
-    t.text     "address"
     t.string   "status",             :default => "pending"
     t.datetime "status_change_date"
     t.integer  "price_cents",        :default => 0,         :null => false
@@ -117,7 +130,6 @@ ActiveRecord::Schema.define(:version => 20130710194617) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "password_digest"
-    t.string   "address"
     t.boolean  "activated",       :default => false
   end
 

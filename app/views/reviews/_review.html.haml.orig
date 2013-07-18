@@ -1,9 +1,0 @@
-.review
-  .reviewer=review.reviewer_name
-  .title=review.title
-  .body=review.body
-<<<<<<< HEAD
-  = note_in_stars(review.note)
-=======
-  =note_in_stars(review.note)
->>>>>>> FETCH_HEAD

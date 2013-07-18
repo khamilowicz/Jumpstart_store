@@ -21,7 +21,7 @@ describe Order do
     describe "has date of status change" do
       let!(:time_now){ Time.now}
       before do
-        Time.stub!(:now).and_return(time_now)
+        Time.stub(:now).and_return(time_now)
         subject.cancel
       end
       it{ subject.time_of_status_change.should eq(time_now)}
@@ -32,64 +32,59 @@ describe Order do
    let!(:order_can){ create_order }
    let!(:order_sent){ create_order }
 
-   before do
+  before do
     order_can.cancel
-    order_sent.is_sent
+    order_sent.ship
   end
 
   it{ Order.all.should include(order_can, order_sent)}
 
   it{
-    Order.find_by_status(:shipped).
-    should include(order_sent)
+    found = Order.find_by_status(:shipped)
+    found.should include(order_sent)
+    found.should_not include(order_can)
   }
-  it{
-    Order.find_by_status(:shipped).
-    should_not include(order_can)
-  }
+  # it{
+  #   Order.find_by_status(:shipped).
+  # }
 end
 
 describe "total  price and total discount" do
   let(:price){ Money.parse("$1")}
   let(:total_price){ price*3}
   let(:products){FactoryGirl.create_list(:product,3, quantity: 2, base_price: price.cents)}
-  
+   
   it{ 
-    build_order(products).total_price.should == price*3
-    products.each{|p| p.on_discount 50}
-    build_order(products).total_price.should == price*3/2
+     expect{ products.each{|p| p.set_discount 50}}.
+    to change{ build_order(products).total_price}.
+    from(price*3).to(price*3/2)
   }
 
   it{ 
-    expect{ products.each{|p| p.on_discount 50}}.
+    expect{ products.each{|p| p.set_discount 50}}.
     to change{ build_order(products).total_discount}.
-    from(0).
-    to(50)
+    from(0).to(50)
   }
   it{ 
-    expect{ products.each{|p| p.on_discount 50}}.
-    to change{ build_order(products).has_discount?}.
-    from(false).
-    to(true)
+    expect{ products.each{|p| p.set_discount 50}}.
+    to change{ build_order(products).on_discount?}.
+    from(false).to(true)
   }
   describe "doesn't change after saving order" do
-    before(:each) do
-      @order = create_order(products)
-      @order.save
-    end
+    let(:order_saved){create_order products }
 
     it{
-      expect{ products.each{|p| p.on_discount 50}}.
-      to_not change{ @order.total_price }
+      expect{ products.each{|p| p.set_discount 50}}.
+      to_not change{ order_saved.total_price }
     }
 
     it{ 
-      expect{ products.each{|p| p.on_discount 50}}.
-      to_not change{ @order.total_discount}
+      expect{ products.each{|p| p.set_discount 50}}.
+      to_not change{ order_saved.total_discount}
     }
     it{ 
-      expect{ products.each{|p| p.on_discount 50}}.
-      to_not change{ @order.has_discount?}
+      expect{ products.each{|p| p.set_discount 50}}.
+      to_not change{ order_saved.on_discount?}
     } 
   end
 end
@@ -103,12 +98,11 @@ describe "products" do
 
   describe "transfer" do
     before { order.transfer_products}
-    subject{ order.products.first}
+    subject{ order.order_products.first}
 
     it{ user.products.should be_empty}
     it{ order.products.map(&:title).should include(product.title)}
 
-    it{ should be_kind_of(OrderProduct)}
     its(:quantity){should_not eq(3)}
     its(:quantity){should eq(1)}
   end
@@ -132,28 +126,28 @@ context "searching" do
       order_price_10.save
     end
 
-    it{order_price_30.total_price.should eq(price_10*3)}
-    it{order_price_10.total_price.should eq(price_5*2)}
+    it{order_price_30.total_price.should eq(price_10*3)
+      order_price_10.total_price.should eq(price_5*2)}
 
     describe "more" do
       subject{ Order.find_by_value('more', '$20')}
 
-      it{ should include(order_price_30) }
-      it{ should_not include(order_price_10) }
+      it{ should include(order_price_30)
+          should_not include(order_price_10) }
     end
 
     describe "less" do
       subject{ Order.find_by_value('less', '$20')}
 
-      it{ should_not include(order_price_30) }
-      it{ should include(order_price_10) }
+      it{ should_not include(order_price_30)
+          should include(order_price_10) }
     end
 
     describe "equal" do
       subject{ Order.find_by_value('equal', '$10')}
 
-      it{ should_not include(order_price_30) }
-      it{ should include(order_price_10) }
+      it{ should_not include(order_price_30)
+          should include(order_price_10) }
     end
   end
 
@@ -162,8 +156,9 @@ context "searching" do
     let(:order_earlier){ FactoryGirl.create(:order, created_at: Date.new(2008, 10, 10)) }
     subject{ Order.find_by_date('after', "2010", "10", "10") }
     
-    it{should include(order_later)}
-    it{should_not include(order_earlier)}
+    it{
+      should include(order_later)
+    should_not include(order_earlier)}
   end
 
   describe ".find_by_email" do
@@ -178,8 +173,8 @@ context "searching" do
     end
 
     subject{ Order.find_by_email(user.email)}
-    it{ should include(order)}
-    it{ should_not include(order_2)}
+    it{ should include(order)
+    should_not include(order_2)}
   end
 end
 
@@ -188,8 +183,8 @@ describe ".count_by_status" do
     FactoryGirl.create(:order, status: 'pending')
     FactoryGirl.create_list(:order, 2, status: 'cancelled')
   end
-  it{ Order.count_by_status('pending').should eq(1)}
-  it{ Order.count_by_status('cancelled').should eq(2)}
+  it{ Order.count_by_status('pending').should eq(1)
+  Order.count_by_status('cancelled').should eq(2)}
   
 end
 end

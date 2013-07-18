@@ -23,17 +23,19 @@ class Product < ActiveRecord::Base
   has_many :category_products
   has_many :categories, through: :category_products
 
-  has_many :reviews
+  has_many :reviews, order: 'created_at desc'
   has_many :assets
 
   has_and_belongs_to_many :sales
 
   after_create :create_asset
-  before_save :set_discount
+  before_save :save_total_discount
 
   accepts_nested_attributes_for :assets, :sales
 
   delegate :rating, to: :reviews
+  delegate :get_discount, to: :sales
+  delegate :photos, to: :assets
 
   class << self
 
@@ -49,51 +51,58 @@ class Product < ActiveRecord::Base
       self.update_all(on_sale: false)
     end
 
-    def on_discount discount, name=nil
-      self.all.each do|product|
-        product.on_discount discount, name
+    def set_discount discount, name=nil
+      self.all.each do |product|
+        product.set_discount discount, name
       end
+    end
+
+    def get_discount 
+      self.all.map{|product| product.get_discount }.min
     end
 
     def off_discount identifier=nil
       #identifier - sale obj, name or percent. if nil - every sale
-      self.sales.off_discount identifier
+      # self.sales.off_discount identifier, self
+      # self.all.each { |p| p.sales.off_discount identifier, self }
     end
   end
 
   def add param 
-    add_review param[:review] if param[:review]
-    add_to_category param[:category] if param[:category]
-    add_photos param[:photos] if param[:photos]
+    param.each do |name, items|
+      self.send "add_#{name}", items
+    end 
+  end
+  
+  {'start_selling' => true, 'retire' => false}.each do |name, on_sale_value|
+    define_method name do 
+      self.on_sale = on_sale_value
+      self.save
+    end
   end
 
-  def start_selling
-    self.on_sale = true; self.save
+  def set_discount percent, name=nil
+    self.sales << Sale.set_discount( percent, name); self.save
   end
 
-  def retire
-    self.on_sale = false; self.save
-  end
-
-  def on_discount percent, name=nil
-    Sale.attach(self, percent, name)
-    self.save
+  def self.on_discount?
+    self.joins(:sales).count > 0
   end
 
   def on_discount?
-    self.sales.any?
+    self.sales.count > 0
   end
 
   def off_discount identifier=nil
-    Sale.detach(self, identifier)
-  end
-
-  def discount
-    self.sales.get_discount
+    self.sales.destroy_all
   end
 
   def out_of_stock?
-    self.quantity == self.product_users.quantity
+    self.quantity == self.in_carts
+  end
+
+  def in_carts
+    self.product_users.quantity
   end
 
   def swap_prepare
@@ -102,21 +111,13 @@ class Product < ActiveRecord::Base
     self.quantity -=1
   end
 
-  def photo
-    self.assets.all.sample.photo
-  end
-
-  def photos
-    Asset.photos_for(self)
-  end
-
   private
 
   def create_asset
     self.assets.create
   end
 
-  def add_to_category category
+  def add_category category
     Category.get(category).add product: self
   end
 
@@ -130,8 +131,7 @@ class Product < ActiveRecord::Base
     end
   end
 
-  def set_discount
-    # self.discount= is a column in db, and self.discount is calculated
-    self.discount = self.discount || 100
+  def save_total_discount
+    self.discount = self.get_discount || 100
   end
 end

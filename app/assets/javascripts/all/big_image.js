@@ -36,7 +36,7 @@ function update_big_image(){
 };
 
 function change_slogan () {
- var chunk = $(document).height()/slogans.length;
+ var chunk = $(document).height()/(slogans.length + 1);
  $('.big_product_image .caption.title').remove();
  var slogan = slogans[parseInt(window.pageYOffset/chunk)];
  slogan_format(slogan);
@@ -46,6 +46,5 @@ $(document).ready(function() {
 
   slogan_format("Best prices");
   $(window).scroll(change_slogan);
-  $(".product_thumbnail, .product .title a").on('mouseenter', update_big_image);
-
+  $(document).on('mouseenter', ".product_thumbnail, .product .title a", update_big_image  )
 });

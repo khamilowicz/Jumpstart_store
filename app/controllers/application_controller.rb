@@ -3,7 +3,15 @@ class ApplicationController < ActionController::Base
 
 	private
 
-	def current_user
+  def clean_current_user_cache
+    @current_user = nil
+  end
+
+  def current_user
+    @current_user ||= current_user_get
+  end
+
+	def current_user_get
 		return make_guest unless session[:current_user_id]
 		User.where(id: session[:current_user_id]).first || make_guest
 	end

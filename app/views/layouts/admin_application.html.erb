@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NewStore - admin</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+
+<script type="text/javascript" src="https://bridge.paymill.com/"></script>
+
+<body>
+
+  <div class="admin_header">Admin dashboard</div>  
+  <%- if flash[:notice] %>
+  <div class="notice alert alert-block alert-success fade in">
+    <%= flash[:notice] %>
+    <a class="close" data-dismiss="alert" href="#">&times;</a>
+  </div>
+  <%- end %>
+
+  <% if flash[:errors] %>
+  <div class="errors alert alert-block alert-error fade in">
+    <%= flash[:errors] %>
+    <a class="close" data-dismiss="alert" href="#">&times;</a>
+  </div>
+  <% end %>
+
+
+  <div class="container">
+    <%= render 'menu/top_bar' %>
+    <%= content_for(:category_bar) %>
+    <div class="row-fluid">
+      <%= yield %>
+    </div>
+  </div>
+  <div class="footer">
+    <%= render 'menu/footer' %>
+  </div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-class SearchQuery < Struct.new(:name, :params); end
+SearchQuery = Struct.new(:name, :params)
 
 class Search
 

@@ -4,6 +4,7 @@ gem 'rails', '3.2.13'
 gem 'money-rails'
 gem 'simple_form'
 gem 'kaminari'
+gem 'country_select'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -51,6 +52,8 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
 gem 'capistrano'
+gem 'bullet'
+gem 'meta_request'
 end
 
 gem 'launchy'
