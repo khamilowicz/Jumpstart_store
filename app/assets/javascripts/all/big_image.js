@@ -47,5 +47,4 @@ $(document).ready(function() {
   slogan_format("Best prices");
   $(window).scroll(change_slogan);
   $(document).on('mouseenter', ".product_thumbnail, .product .title a", update_big_image  )
-
 });

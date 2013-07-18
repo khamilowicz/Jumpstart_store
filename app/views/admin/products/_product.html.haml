@@ -14,7 +14,7 @@
       .controls-row
         .span3.title
           = link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} 
-          = render partial: 'info', locals: { product: product}
+          = render partial: 'admin/products/info', locals: {product: product}
         .span1= f.check_box :on_sale
         = f.text_field :price, class: 'span1'
         .span1= product.currency
