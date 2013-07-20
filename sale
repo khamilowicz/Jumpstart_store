@@ -1,0 +1,24 @@
+
+[1mFrom:[0m /home/kham/Projekty/Rails/Jumpstart_store/app/models/sale.rb @ line 16 Sale.new_from_params:
+
+    [1;34m12[0m: [1;31mdef[0m [1;34mnew_from_params[0m params
+    [1;34m13[0m:   sale = [1;36mself[0m.where([35mname[0m: params[[1;32m:name_from_select[0m])
+    [1;34m14[0m:   .first_or_initialize 
+    [1;34m15[0m: 
+ => [1;34m16[0m:   binding.pry
+    [1;34m17[0m:   sale.discount = params[[1;32m:discount[0m] [1;31mif[0m sale.new_record?
+    [1;34m18[0m: 
+    [1;34m19[0m:   products_id = params[[1;32m:products[0m] ? params[[1;32m:products[0m].keys : []
+    [1;34m20[0m: 
+    [1;34m21[0m:   [1;31mif[0m params[[1;32m:categories[0m].presence
+    [1;34m22[0m:     categories_id = params[[1;32m:categories[0m].keys
+    [1;34m23[0m:     products_id << [1;34m[4mCategoryProduct[0m.where([35mcategory_id[0m: categories_id).pluck([1;32m:product_id[0m)
+    [1;34m24[0m:     sale.categories << [1;34m[4mCategory[0m.find(categories_id) 
+    [1;34m25[0m:   [1;31mend[0m
+    [1;34m26[0m: 
+    [1;34m27[0m:   sale.products << [1;34m[4mProduct[0m.find(products_id)
+    [1;34m28[0m:   sale.name = params[[1;32m:name[0m] [1;31munless[0m params[[1;32m:name[0m].blank?
+    [1;34m29[0m:   sale.save
+    [1;34m30[0m:   sale
+    [1;34m31[0m: [1;31mend[0m
+

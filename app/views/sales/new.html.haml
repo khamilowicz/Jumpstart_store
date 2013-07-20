@@ -1,6 +1,7 @@
 %h3 Sales
 .new_sales
   =form_tag sales_path do
+    = render 'menu/errors', object: @sale if @sale
     .row
       .span1
       .span11

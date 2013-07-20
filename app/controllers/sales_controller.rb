@@ -37,6 +37,8 @@ class SalesController < ApplicationController
       flash[:notice] = "Successfully created sale"
       redirect_to sales_path
     else
+      @categories = Category.all
+      @products = Product.all
       flash[:errors] = "Something went wrong"
       render :new
     end

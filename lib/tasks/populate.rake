@@ -14,14 +14,14 @@ namespace :db do
       )
     admin.activated = true
     admin.promote_to_admin
-    admin.address = Address.create(
-      country: Faker::Lorem.word,
-      city: Faker::Lorem.word,
-      zip_code: rand(89999) + 10000,
-      street: Faker::Lorem.word,
-      house_nr: rand(100),
-      door_nr: rand(100)
-      )
+      admin.address = Address.create(
+        country: Faker::Lorem.word,
+        city: Faker::Lorem.word,
+        zip_code: rand(89999) + 10000,
+        street: Faker::Lorem.word,
+        house_nr: rand(100),
+        door_nr: rand(100)
+        )
     admin.save
 
     40.times do 
