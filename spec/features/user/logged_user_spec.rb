@@ -27,7 +27,6 @@
 
       it "change his profile data" do
         click_link user.to_s
-        # page.should_not have_content("Email"), "#{page.find("body").native}"
 
         click_link "Edit profile"
         fill_address "Other address"
@@ -185,7 +184,7 @@
           page.should have_review(review_edited)
           page.should_not have_review(review)
 
-          Delorean.jump(16*60) do
+          Delorean.jump(16.minutes) do
             visit product_path(purchased_product)
             page.should_not have_link "Edit review"
             page.should have_review(review_edited)

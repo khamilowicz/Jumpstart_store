@@ -16,86 +16,108 @@ describe Category do
   end
 
   describe "categories" do
-   let!(:c1){Category.get("C_1")}
-   let!(:c2){Category.get("C_2")}
-   let!(:c3){Category.get("C_3")} 
+   let!(:c1){Category.new name: "C_1"}
+   let!(:c2){Category.new name: "C_2"}
+   let!(:c3){Category.new name: "C_3"}
+   
+   before(:each) do 
+
+    c1.stub(:valid?){true}
+    c2.stub(:valid?){true}
+    c3.stub(:valid?){true}
+    c1.save
+    c2.save
+    c3.save
+   end
+
 
    describe "class.list_categories" do
     it{ Category.list_categories.should include("C_1, C_2, C_3") }
   end
 
+  let(:product){Product.new}
+  before(:each){ product.stub(:valid?){true}}
+
   describe "add" do
-   let(:product){ FactoryGirl.create(:product)}
 
-  it {expect{ category.add product: product}.
-    to change{ category.products.size}.by(1) }
+   it {expect{ category.add product: product}.
+   to change{ category.products.size}.by(1) }
 
-  context "adds unique products" do
+   context "adds unique products" do
     it { category.add product: product
       expect{ category.add product: product}.
-    not_to change{ category.products.size} }
-  end
-
-  context "adds many products at a time" do
-    let(:other_product){ FactoryGirl.create(:product)}
-    it {expect{ category.add product: [product, other_product]}.
-    to change{ category.products.size}.by(2) }
-  end
-
-end
-
-describe "#products" do
-
-  let(:product){FactoryGirl.create(:product)}
-  before{ c1.add product: product}
-
-  subject{ c1.products}
-
-  it{ should include(product)}
-
-  describe "finds products by category" do
-    let(:product_1){FactoryGirl.create(:product)}
-    let(:product_11){FactoryGirl.create(:product)}
-    let(:product_2){FactoryGirl.create(:product)}
-
-    before do
-      product_1.add category: "Category_1"
-      product_11.add category: "Category_1"
-      product_2.add category: "Category_2"
+      not_to change{ category.products.size} }
     end
 
-    subject{Category.get("Category_1").products}
+    context "adds many products at a time" do
+      let(:other_product){ Product.new}
+      before(:each){ other_product.stub(:valid?){ true}}
 
-    it{ should include(product_1, product_11)}
-    it{ should_not include(product_2)}
-    it{ Category.get("Category_2").products.should include(product_2)}
+      it {expect{ category.add product: [product, other_product]}.
+      to change{ category.products.size}.by(2) }
+    end
+
   end
-end
 
-describe "#products_for_user" do
-  let(:user){ FactoryGirl.create(:user)}
-  let(:products){ FactoryGirl.create_list(:product, 3)}
-  
-  before(:each) do
-    user.add product: products[0]
-    user.add product: products[1]
-    category.add product: products[1]
-    category.add product: products[2]
+  describe "#products" do
+
+    before{ c1.add product: product}
+    subject{ c1.products}
+
+    it{ should include(product)}
+
+    describe "finds products by category" do
+
+      let(:product_1){ Product.new}
+      let(:product_11){ Product.new}
+      let(:product_2){ Product.new}
+
+      before(:each) do
+        product_1.stub(:valid?){ true}
+        product_11.stub(:valid?){ true}
+        product_2.stub(:valid?){ true}
+
+        product_1.add category: "Category_1"
+        product_11.add category: "Category_1"
+        product_2.add category: "Category_2"
+      end
+
+      subject{Category.get("Category_1").products}
+
+      it{ should include(product_1, product_11)}
+      it{ should_not include(product_2)}
+      it{ Category.get("Category_2").products.should include(product_2)}
+    end
   end
-  it{ user.products.should include(*products[0,2])}
-  it{ user.products.should_not include(products[2])}
 
-  it{ category.products.should include(*products[1,2])}
-  it{ category.products.should_not include(products[0])}
+  describe "#products_for_user" do
+   
+    let(:user){ FactoryGirl.create(:user)}
+    let(:products){ FactoryGirl.create_list(:product, 3)}
 
-  it{ category.products_for_user(user).should include(products[1])}
-  it{ category.products_for_user(user).should_not include(products[0], products[2])}
-end
+    before(:each) do
+
+      user.add product: products[0]
+      user.add product: products[1]
+      category.add product: products[1]
+      category.add product: products[2]
+    end
+
+    it{ user.products.should include(*products[0,2])}
+    it{ user.products.should_not include(products[2])}
+
+    it{ category.products.should include(*products[1,2])}
+    it{ category.products.should_not include(products[0])}
+
+    it{ category.products_for_user(user).should include(products[1])}
+    it{ category.products_for_user(user).should_not include(products[0], products[2])}
+  end
 end
 
 describe "total price" do
 
   let!(:category){ Category.get 'total price'}
+ 
   let!(:product_1){ FactoryGirl.build(:product, base_price: 100)}
   let!(:product_2){ FactoryGirl.build(:product, base_price: 200)}
 
@@ -117,6 +139,7 @@ describe "concerning putting on sale" do
 
   let(:category_name){ "Category name"}
   let(:category){Category.get(category_name)}
+  
   let(:product_price){ Money.parse("$4")}
 
   before do

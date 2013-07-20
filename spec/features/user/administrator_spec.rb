@@ -29,32 +29,32 @@
          describe "and modifies them" do 
            let(:product_2){ ProductPresenter.new FactoryGirl.build(:product)}
 
-          context "on product's page" do
-            
-           before do
-             visit edit_admin_product_path(1)
-             create_new_product product_2
-           end
+           context "on product's page" do
 
-           it {    
-            should have_content("Successfully updated product")
-            should_not have_short_product(product)
-            should have_short_product(product_2)}
-          end
+             before do
+               visit edit_admin_product_path(1)
+               create_new_product product_2
+             end
 
-          context "on all products' page" do
-            before(:each) do
-              product_2.save
-              visit '/admin/products'
-              fill_in "Quantity", with: 9
-              click_button 'OK'
+             it {    
+              should have_content("Successfully updated product")
+              should_not have_short_product(product)
+              should have_short_product(product_2)}
             end
 
-            it{
-            find_field("Quantity").value.should eq('9')
-            }
-            
-          end
+            context "on all products' page" do
+              before(:each) do
+                product_2.save
+                visit '/admin/products'
+                fill_in "Quantity", with: 9
+                click_button 'OK'
+              end
+
+              it{
+                find_field("Quantity").value.should eq('9')
+              }
+
+            end
           end
         end
 
@@ -327,20 +327,17 @@ context "he may" do
  context "search order using a builder-style interface (like Google’s 'Advanced Search;) allowing them to specify any of these:" do
   before(:each) do
 
-    product_11 ||= ProductPresenter.new FactoryGirl.create(:product, base_price: 1100)
-    product_9 ||= ProductPresenter.new  FactoryGirl.create(:product, base_price: 900)
-    unless @pending_order
-      @pending_order = create_order [product_11.product]
-      @pending_order.created_at = Date.new(2011, 10,10)
-      @pending_order.save
-    end
+    product_11 = FactoryGirl.create(:product, base_price: 1100)
+    product_9 = FactoryGirl.create(:product, base_price: 900)
+
+    @pending_order = build_better_order [product_11], current_user
+    @pending_order.created_at = Date.new(2011, 10,10)
+    @pending_order.save
     
-    unless @cancelled_order
-      @cancelled_order = create_order [product_9.product]
-      @cancelled_order.created_at = Date.new(2008, 10,10)
-      @cancelled_order.cancel
-      @cancelled_order.save
-    end
+    @cancelled_order = build_better_order [product_9], current_user
+    @cancelled_order.created_at = Date.new(2008, 10,10)
+    @cancelled_order.cancel
+    @cancelled_order.save
 
     click_link 'Search'
   end
@@ -349,31 +346,35 @@ context "he may" do
     select('pending', from: 'search[status][status]')
     click_button "Search"
     page.should have_short_order(@pending_order), "#{page.find('body').native}"
-  end
+  # end
 
-  it 'Order total (drop-down for >, <, = and a text field for dollar-with-cents)' do
-    fill_in('search[value][total_value]', with: '$10')
-    select('more', :from => 'search[value][value]')
-    click_button "Search"
-    page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
-    page.should have_short_order(@pending_order), "#{page.find('body').native}"
-  end
+  # it 'Order total (drop-down for >, <, = and a text field for dollar-with-cents)' do
+  click_link 'Search'
+  fill_in('search[value][total_value]', with: '$10')
+  select('more', :from => 'search[value][value]')
+  click_button "Search"
+  page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
+  page.should have_short_order(@pending_order), "#{page.find('body').native}"
+  # end
 
-  it 'Order date (drop-down for >, <, = and a text field for a date)' do
-    select("after", from: 'search[date][date]')
-    select('2010', from: 'search[date][date_value(1i)]')
-    select('October', from: 'search[date][date_value(2i)]')
-    select('10', from: 'search[date][date_value(3i)]')
-    click_button "Search"
-    page.should have_short_order(@pending_order), "#{page.find('body').native}"
-    page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
-  end
-  it 'Email address of purchaser' do 
-    fill_in(:email, with: @pending_order.user.email)
-    click_button "Search"
-    page.should have_short_order(@pending_order), "#{page.find('body').native}"
-    page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
-  end
+  # it 'Order date (drop-down for >, <, = and a text field for a date)' do
+  click_link 'Search'
+  select("after", from: 'search[date][date]')
+  select('2010', from: 'search[date][date_value(1i)]')
+  select('October', from: 'search[date][date_value(2i)]')
+  select('10', from: 'search[date][date_value(3i)]')
+  click_button "Search"
+  page.should have_short_order(@pending_order), "#{page.find('body').native}"
+  page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
+  # end
+
+  # it 'Email address of purchaser' do 
+  click_link 'Search'
+  fill_in(:email, with: @pending_order.user.email)
+  click_button "Search"
+  page.should have_short_order(@pending_order), "#{page.find('body').native}"
+  page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
+end
 end
 end
 end

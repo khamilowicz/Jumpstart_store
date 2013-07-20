@@ -1,16 +1,41 @@
-# require "spec_helper"
+require "spec_helper"
 
-def build_order products=nil
-  products = FactoryGirl.create_list(:product, 1) unless products
-  user = FactoryGirl.create(:user)
-  products.each do |product|
-    user.add product: product
-  end
-  order = user.orders.build
+# def build_order products=nil
+#   products = FactoryGirl.create_list(:product, 1) unless products
+#   user = FactoryGirl.create(:user)
+#   products.each do |product|
+#     user.add product: product
+#   end
+#   order = user.orders.build
+#   order.address = user.address
+#   order.transfer_products
+#   order
+# end
+
+def build_better_order products, user
+  order = Order.new
+  order.user = user
   order.address = user.address
-  order.transfer_products
+  order.save
+  products.each do |product|
+    order.add product: product
+  end
+  order.save
   order
 end
+
+def build_order products=nil
+ products = FactoryGirl.create_list(:product, 1) unless products
+ order = Order.new
+ order.stub(valid?: true, user: double('User'))
+ order.save
+ products.each do |product|
+  order.add product: product
+end 
+order
+
+end
+
 
 def create_order products=nil
   order = build_order(products)

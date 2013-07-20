@@ -15,8 +15,17 @@ describe ProductUser do
     its(:quantity){ should eq(0)}
   end
 
-  let(:product){ FactoryGirl.create(:product, quantity: 2)}
-  let(:user){ FactoryGirl.create(:user)}
+  let(:product){ Product.new}
+  let(:user){ User.new}
+
+  before(:each) do
+    product.stub(:quantity){2}
+    product.stub(:valid?){true}
+    product.save
+
+    user.stub(:valid?){true}
+    user.save
+  end
 
   describe ".add" do
     before(:each) do
@@ -67,8 +76,19 @@ describe ProductUser do
   }
 
   describe ".quantity_all" do
-    let(:user_2){ FactoryGirl.create(:user)}
-    let(:product_2){ FactoryGirl.create(:product)}
+    let(:user_2){ User.new}
+    let(:product_2){ Product.new}
+    # let(:user_2){ FactoryGirl.create(:user)}
+    # let(:product_2){ FactoryGirl.create(:product)}
+
+
+    before(:each) do
+      product_2.stub(:valid?){true}
+      product_2.save
+
+      user_2.stub(:valid?){true}
+      user.save
+    end
     before(:each) do
       ProductUser.add product, user_2
       ProductUser.add product_2, user_2
@@ -120,14 +140,16 @@ end
 
 describe ".total_price" do
   before(:each) do
-    @user = FactoryGirl.create(:user)
     @products = FactoryGirl.create_list(:product, 3, base_price: 100)
     @products.each do |product|
-      @user.add product: product
+      pu = ProductUser.new 
+      pu.product = product
+      pu.quantity = 1
+      pu.save
     end
   end
   it "should description" do
-    @user.product_users.total_price.should eq(Money.new(300, 'USD'))
+    ProductUser.total_price.should eq(Money.new(300, 'USD'))
   end
 end
 end

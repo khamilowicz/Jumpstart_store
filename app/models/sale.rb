@@ -16,7 +16,6 @@ class Sale < ActiveRecord::Base
       sale.discount = params[:discount] if sale.new_record?
 
       products_id = params[:products] ? params[:products].keys : []
-      binding.pry
 
       if params[:categories].presence
         categories_id = params[:categories].keys

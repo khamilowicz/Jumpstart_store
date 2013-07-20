@@ -1,22 +1,24 @@
 require "spec_helper"
 
 describe Sale do
-  it{should respond_to(:discount)}
+  it{ should respond_to(:discount)}
   it{ should validate_presence_of(:discount)}
-  it{should respond_to(:name)}
-  it{should have_and_belong_to_many(:products)}
-  it{should validate_numericality_of(:discount)}
+  it{ should respond_to(:name)}
+  it{ should have_and_belong_to_many(:products)}
+  it{ should validate_numericality_of(:discount)}
   it{ should_not allow_value(100).for(:discount)}
   it{ should_not allow_value(0).for(:discount)}
 
-  let(:products){ FactoryGirl.create_list(:product, 2)}
+  # let(:products){ FactoryGirl.create_list(:product, 2)}
 
   describe "creation" do
 
     describe "for product" do
 
       before(:each) do
-        @product = FactoryGirl.create(:product)
+        @product = Product.new
+        @product.stub(:valid?){ true}
+        @product.save
         @product.set_discount 10, 'sale'
       end
 
@@ -71,7 +73,7 @@ describe Sale do
 end
 
 describe "created from params" do
-
+  let(:products){ FactoryGirl.create_list(:product, 2)}
   context "for products" do
 
     before(:each) do
@@ -100,7 +102,7 @@ describe "created from params" do
 end
 end
 context "for categories" do
-
+  let(:products){ FactoryGirl.create_list(:product, 2)}
   before(:each) do
     @categories_hash = {}
     products.first.add category: "Category one"

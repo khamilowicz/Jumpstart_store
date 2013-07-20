@@ -3,10 +3,12 @@ require 'spec_helper'
 describe Cart do
 	describe ".remove_product" do
 		let(:user){ FactoryGirl.create(:user)}
-		let(:product){ FactoryGirl.create(:product, :on_sale)}
+		let(:product){ Product.new}
 		subject{ user.cart}
 
-		before(:each) do
+		before :each do 
+			product.on_sale = true
+			product.stub(valid?: true)
 			user.add product: product
 		end
 
