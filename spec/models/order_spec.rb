@@ -203,13 +203,11 @@ context "searching" do
       order_1.stub(valid?: true)
       order_1.save
       2.times do 
-      order_2 = Order.new
-      order_2.cancel
-      order_2.stub(valid?: true)
-      order_2.save
-    end
-      # FactoryGirl.create(:order, status: 'pending')
-      # FactoryGirl.create_list(:order, 2, status: 'cancelled')
+        order_2 = Order.new
+        order_2.cancel
+        order_2.stub(valid?: true)
+        order_2.save
+      end
     end
     it{ Order.count_by_status('pending').should eq(1)
       Order.count_by_status('cancelled').should eq(2)
