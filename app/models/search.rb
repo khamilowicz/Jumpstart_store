@@ -1,7 +1,8 @@
-SearchQuery = Struct.new(:name, :params)
 
 class Search
 
+  SearchQuery = Struct.new(:name, :params)
+  
   include ActiveModel::Conversion
   include ActiveModel::Validations
   extend ActiveModel::Naming
