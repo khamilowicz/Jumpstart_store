@@ -102,6 +102,8 @@ shared_examples_for "user" do
       click_link @categories.last 
     end 
 
+    it{ Category.get(@categories.last).products.should include(*@products.map(&:product))}
+
     it {should have_short_product(@products.last), "#{page.find("body").native}"}
     it {should have_short_product(@products.first)}
   end

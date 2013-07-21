@@ -520,101 +520,26 @@
 	"buffers":
 	[
 		{
-			"file": "app/models/order_product.rb",
-			"settings":
-			{
-				"buffer_size": 876,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "spec/models/address_spec.rb",
-			"settings":
-			{
-				"buffer_size": 1052,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "spec/models/cart_spec.rb",
-			"settings":
-			{
-				"buffer_size": 686,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "spec/models/category_spec.rb",
-			"settings":
-			{
-				"buffer_size": 4330,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/home/kham/.zshrc",
-			"settings":
-			{
-				"buffer_size": 2136,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/home/kham/.bashrc",
-			"settings":
-			{
-				"buffer_size": 4026,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "spec/models/order_spec.rb",
-			"settings":
-			{
-				"buffer_size": 5205,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "require 'spec_helper'\n\ndescribe Product do\n\n  include MoneyRails::TestHelpers\n\n  it{ should validate_presence_of(:title)}\n  it{ should validate_uniqueness_of(:title)}\n  it{ should validate_presence_of(:description)}\n  it{ should allow_value(1).for(:base_price)}\n  it{ should have_and_belong_to_many(:sales)}\n  it{ monetize(:base_price).should be_true}\n  it{ should_not allow_value(nil).for(:base_price_cents)}\n  it{ should respond_to(:quantity)}\n  it{ Product.new.tap{|p| p.stub(valid?: true)}.quantity.should eq(1)}\n  it{ should have_many(:reviews)}\n  it{ should respond_to(:rating)}\n\n\n  describe \"existing with\" do \n    let(:product){ Product.new.tap{|p| p.stub(valid?: true); p.save}}\n    subject{ product}\n\n    context \"concerning categories\" do\n\n      before(:each) do\n        subject.add category: \"Category_1\"\n      end\n\n      describe \"#add_to_category\" do\n        its(:categories){should include(Category.get \"Category_1\")}\n      end\n\n    end\n\n    describe \"assets\" do\n\n      its(:assets){ should_not be_empty}\n      it{ product.assets.first.should_not be_nil}\n\n      describe \"photos\" do\n        it{should respond_to(:photos)}\n        its(:photos){ should have(1).item}\n      end\n    end\n\n    context \"concerning reviews\" do\n\n      its(:rating){should eq(0)}\n\n      describe \"reviews\" do\n        let(:review_1){Review.new(note: 5 ).tap{|p| p.stub(valid?: true)}}\n        let(:review_2){Review.new(note: 1 ).tap{|p| p.stub(valid?: true)}}\n        let(:review_3){Review.new(note: 5 ).tap{|p| p.stub(valid?: true)}}\n\n        it{ expect{ \n          subject.add review: review_1}\n          .to change{subject.rating}.from(0).to(5)\n        }\n\n        it{ expect{ \n          subject.add review: review_2\n          subject.add review: review_1}\n          .to change{subject.rating}.from(0).to(3)\n        }\n\n        it{ expect{ \n          subject.add review: review_1\n          subject.add review: review_2\n          subject.add review: review_3\n          }.to change{subject.rating}.from(0).to(3.5)\n        }\n      end\n    end\n\n    describe \".on_sale\" do\n      before(:each){ product.on_sale = false}\n\n      it{ should_not be_on_sale }\n      it{ expect{ subject.start_selling}.to change{subject.on_sale?}.from(false).to(true)}\n      it{ subject.start_selling; expect{ subject.retire}.to change{subject.on_sale?}.from(true).to(false)}\n\n      describe \".find_on_sale\" do\n        subject{Product}\n\n        before(:each){ product.save}\n        its(:find_on_sale){ should_not include(product)}\n        its(:find_on_sale){ product.start_selling; should include(product)}\n      end\n\n      describe \"for class\" do\n        before(:each) do\n          product.destroy\n          Product.new.tap{|p| p.stub(valid?: true); p.start_selling}.save\n        end\n        it{ Product.on_sale?.should be_true}\n      end\n    end\n\n    describe \".start_selling\" do\n      before(:each) do\n        Product.new.tap{|p| p.stub(valid?: true)}.save\n      end\n      it{ expect{Product.start_selling}.to change{ Product.on_sale?}.from(false).to(true)}\n    end\n\n    describe \"discounts\" do\n      let(:product){FactoryGirl.build(:product)}\n\n      it{ expect{product.set_discount(50)}.to change{\n        product.get_discount\n        }.from(100).to(50)\n      }\n\n      it{ expect{product.set_discount 50; product.off_discount}.to_not change{\n        product.get_discount\n        }.from(100)\n      }\n\n      it{ expect{product.set_discount 50}.to change{\n        product.on_discount?\n        }.from(false).to(true)}\n\n        describe \"#off_discount\" do\n\n          before(:each) do\n            product.set_discount 50\n          end\n\n          it{ \n            expect{ product.off_discount}.\n            to change{ product.get_discount}.\n            from(50).to(100)\n          }\n        end\n\n        describe \".off_discount\" do\n          before(:each) do\n            products = FactoryGirl.create_list(:product, 3)\n            products.each { |p| p.set_discount 50 }\n          end\n          it{ pending\n            expect{ Product.off_discount}.\n            to change{ Product.get_discount }.\n            from(50).to(100)\n          }\n        end\n      end\n\n      describe \"for class\" do\n        let(:products){FactoryGirl.create_list(:product, 4)}\n        before(:each) do\n          products\n          Product.limit(2).set_discount 50\n        end\n        it{ Product.limit(2).all.each{ |p| p.should be_on_discount}}\n        it{ Product.last.should_not be_on_discount}\n        it{ Product.limit(2).should be_on_discount}\n        it{ Product.offset(2).should_not be_on_discount}\n      end\n    end\n    describe \"#users\" do\n\n\n      let(:product){FactoryGirl.create(:product)}\n      let(:user){ User.new}\n      before(:each){ user.stub(:valid?){true}; user.save}\n      subject{product}\n\n      its(:users){ should be_empty}\n      its(:users){ user.add product: product; should include(user)}\n    end\n\n    describe \"#total_price\" do\n      let(:user){ User.new}\n      let(:products){ FactoryGirl.create_list(:product, 5, base_price: 1)}\n      \n      before(:each) do\n        user.stub(:valid?){true}\n        user.save\n        products.each do |p|\n          user.add product: p\n        end\n      end\n      subject{ user.products}\n      its(:total_price){ should eq(Money.new(5, \"USD\"))}\n    end\n  end",
-			"file": "spec/models/product_spec.rb",
-			"file_size": 5254,
-			"file_write_time": 1374344168000000,
-			"settings":
-			{
-				"buffer_size": 5251,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "spec/models/product_user_spec.rb",
-			"settings":
-			{
-				"buffer_size": 3246,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "spec/models/review_spec.rb",
-			"settings":
-			{
-				"buffer_size": 1071,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "spec/models/sale_spec.rb",
-			"settings":
-			{
-				"buffer_size": 3209,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "spec/support/user_helper_spec.rb",
 			"settings":
 			{
 				"buffer_size": 2751,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/kham/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+			"settings":
+			{
+				"buffer_size": 571,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/kham/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+			"settings":
+			{
+				"buffer_size": 97,
 				"line_ending": "Unix"
 			}
 		},
@@ -645,21 +570,15 @@
 			}
 		},
 		{
-			"contents": "SearchQuery = Struct.new(:name, :params)\n\nclass Search\n\n  include ActiveModel::Conversion\n  include ActiveModel::Validations\n  extend ActiveModel::Naming\n\n  attr_accessor :searched\n\n  def initialize params=nil\n    if params\n      @searched = []\n      params.each do |name, search_params|\n        unless search_params.values.first.blank?\n          @searched << SearchQuery.new(name, search_params.values) \n        end\n      end\n    end\n  end\n\n  def persisted?; false; end\n\n  def find \n    Search.find self\n  end\n\n  class << self\n\n    def find params\n      find_order params\n    end\n\n    def find_order search\n      order = Order.scoped\n      search.searched.each do |query|\n        order = order.send \"find_by_#{query.name}\", *query.params\n      end\n      order.all\n    end\n  end\nend",
 			"file": "app/models/search.rb",
-			"file_size": 782,
-			"file_write_time": 1374254681000000,
 			"settings":
 			{
-				"buffer_size": 782,
+				"buffer_size": 787,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "# require \"simplecov\"\n# SimpleCov.start\nrequire 'rubygems'\n#uncomment the following line to use spork with the debugger\n#require 'spork/ext/ruby-debug'\n\n  # Loading more in this block will cause your tests to run faster. However,\n  # if you change any configuration or code from libraries loaded here, you'll\n  # need to restart spork for it take effect.\n\n\n# --- Instructions ---\n# Sort the contents of this file into a Spork.prefork and a Spork.each_run\n# block.\n#\n# The Spork.prefork block is run only once when the spork server is started.\n# You typically want to place most of your (slow) initializer code in here, in\n# particular, require'ing any 3rd-party gems that you don't normally modify\n# during development.\n#\n# The Spork.each_run block is run each time you run your specs.  In case you\n# need to load files that tend to change during development, require them here.\n# With Rails, your application modules are loaded automatically, so sometimes\n# this block can remain empty.\n#\n# Note: You can modify files loaded *from* the Spork.each_run block without\n# restarting the spork server.  However, this file itself will not be reloaded,\n# so if you change any of the code inside the each_run block, you still need to\n# restart the server.  In general, if you have non-trivial code in this file,\n# it's advisable to move it into a separate file so you can easily edit it\n# without restarting spork.  (For example, with RSpec, you could move\n# non-trivial code into a file spec/support/my_helper.rb, making sure that the\n# spec/support/* files are require'd from inside the each_run block.)\n#\n# Any code that is left outside the two blocks will be run during preforking\n# *and* during each_run -- that's probably not what you want.\n#\n# These instructions should self-destruct in 10 seconds.  If they don't, feel\n# free to delete them.\n\n\n\n\n# This file is copied to spec/ when you run 'rails generate rspec:install'\nENV[\"RAILS_ENV\"] ||= 'test'\nrequire File.expand_path(\"../../config/environment\", __FILE__)\nrequire 'rspec/rails'\n# require 'rspec/autorun\nrequire \"capybara/rails\"\nrequire 'capybara/rspec'\nrequire \"money-rails/test_helpers\"\n# require \"factory_girl_rails\"\n# Requires supporting ruby files with custom matchers and macros, etc,\n# in spec/support/ and its subdirectories.\nDir[Rails.root.join(\"spec/support/**/*.rb\")].each {|f| require f}\n\nRSpec.configure do |config|\n  # ## Mock Framework\n  #\n  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:\n  #\n  # config.mock_with :mocha\n  # config.mock_with :flexmock\n  # config.mock_with :rr\n\n  config.before(:all) do\n    DeferredGarbageCollection.start\n  end\n\n  config.after(:all) do\n    DeferredGarbageCollection.reconsider\n  end\n\n  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures\n  config.fixture_path = \"#{::Rails.root}/spec/fixtures\"\n\n  # If you're not using ActiveRecord, or you'd prefer not to run each of your\n  # examples within a transaction, remove the following line or assign false\n  # instead of true.\n  config.use_transactional_fixtures = true\n\n  # If true, the base class of anonymous controllers will be inferred\n  # automatically. This will be the default behavior in future versions of\n  # rspec-rails.\n  config.infer_base_class_for_anonymous_controllers = false\n\n  # Run specs in random order to surface order dependencies. If you find an\n  # order dependency and want to debug it, you can fix the order by providing\n  # the seed, which is printed after each run.\n  #     --seed 1234\n  config.order = \"random\"\nend\n\n\n  # This code will be run each time you run your specs.\n\n",
 			"file": "spec/spec_helper.rb",
-			"file_size": 3608,
-			"file_write_time": 1374254681000000,
 			"settings":
 			{
 				"buffer_size": 3608,
@@ -1190,7 +1109,10 @@
 	},
 	"console":
 	{
-		"height": 139.0
+		"height": 139.0,
+		"history":
+		[
+		]
 	},
 	"distraction_free":
 	{
@@ -1203,14 +1125,23 @@
 	},
 	"file_history":
 	[
+		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/sale_spec.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/review_spec.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/product_user_spec.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/product_spec.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/order_spec.rb",
+		"/home/kham/.zshrc",
+		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/category_spec.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/cart_spec.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/order_product.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/address_spec.rb",
+		"/home/kham/.bashrc",
 		"/home/kham/.config/sublime-text-2/Packages/User/RubyTest.sublime-settings",
 		"/home/kham/.config/sublime-text-2/Packages/RubyTest/RubyTest.sublime-settings",
 		"/home/kham/Projekty/Rails/Jumpstart_store/db/schema.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/db/migrate/20130720210740_add_index_to_everything.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/db/migrate/20130720210740_add_index_to_addresses.rb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/cart_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/order.rb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/order_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/session_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/category.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/product.rb",
@@ -1222,7 +1153,6 @@
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/support/user_helper_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/features/user/administrator_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/cart.rb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/product_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/user_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/{:locations=>{\"./spec/models/user_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/{:locations=>{\"./spec/models/product_spec.rb",
@@ -1230,20 +1160,15 @@
 		"/home/kham/.config/sublime-text-2/Packages/User/Default (Linux).sublime-keymap",
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/search_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/sale.rb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/sale_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/factories/reviews.rb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/review_spec.rb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/product_user_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/review.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/product_user.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/user.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/mixins/transfer_products.rb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/address_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/factories/orders.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/factories/users.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/order_product_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/products/_table_header.html.haml",
-		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/category_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/menu/_errors.html.erb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/presenters/user_presenter_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/Gemfile",
@@ -1327,10 +1252,7 @@
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/categories/show.html.haml",
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/product_category_manager/_info.html.haml",
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/product_category_manager/new_join_many.html.haml",
-		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/config/routes.rb",
-		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/controllers/product_category_manager_controller.rb",
-		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/models/product_category_manager.rb",
-		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/models/product_user.rb"
+		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/config/routes.rb"
 	],
 	"find":
 	{
@@ -1531,319 +1453,13 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 2,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "app/models/order_product.rb",
-					"settings":
-					{
-						"buffer_size": 876,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								628,
-								628
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "spec/models/address_spec.rb",
-					"settings":
-					{
-						"buffer_size": 1052,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1046,
-								1046
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 204.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "spec/models/cart_spec.rb",
-					"settings":
-					{
-						"buffer_size": 686,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								71,
-								71
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 51.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "spec/models/category_spec.rb",
-					"settings":
-					{
-						"buffer_size": 4330,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3697,
-								3697
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2296.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "/home/kham/.zshrc",
-					"settings":
-					{
-						"buffer_size": 2136,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2009,
-								2009
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 765.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "/home/kham/.bashrc",
-					"settings":
-					{
-						"buffer_size": 4026,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4026,
-								4026
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1802.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "spec/models/order_spec.rb",
-					"settings":
-					{
-						"buffer_size": 5205,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3133,
-								3133
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2187.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "spec/models/product_spec.rb",
-					"settings":
-					{
-						"buffer_size": 5251,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1907,
-								1907
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2958.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "spec/models/product_user_spec.rb",
-					"settings":
-					{
-						"buffer_size": 3246,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3166,
-								3166
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2448.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "spec/models/review_spec.rb",
-					"settings":
-					{
-						"buffer_size": 1071,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								797,
-								797
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 306.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "spec/models/sale_spec.rb",
-					"settings":
-					{
-						"buffer_size": 3209,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3046,
-								3046
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1836.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 11,
 					"file": "spec/support/user_helper_spec.rb",
+					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 2751,
@@ -1870,7 +1486,62 @@
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 1,
+					"file": "/home/kham/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 571,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								569,
+								569
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/home/kham/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 97,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								94,
+								94
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 8073,
@@ -2086,8 +1757,9 @@
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 4,
 					"file": "spec/models/search_spec.rb",
+					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 1884,
@@ -2114,8 +1786,9 @@
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 5,
 					"file": "spec/features/user/administrator_spec.rb",
+					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 12286,
@@ -2142,11 +1815,12 @@
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 6,
 					"file": "app/models/search.rb",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 782,
+						"buffer_size": 787,
 						"regions":
 						{
 						},
@@ -2170,8 +1844,9 @@
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 7,
 					"file": "spec/spec_helper.rb",
+					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 3608,
@@ -2239,6 +1914,7 @@
 	{
 		"height": 329.0
 	},
+	"project": "new_flow.sublime-project",
 	"replace":
 	{
 		"height": 64.0
@@ -2249,6 +1925,10 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"spec",
+				"spec/models/address_spec.rb"
+			],
 			[
 				"speche",
 				"spec/spec_helper.rb"
@@ -2756,10 +2436,6 @@
 			[
 				"ware",
 				"app/models/managers/warehouse.rb"
-			],
-			[
-				"produse",
-				"app/models/product_user.rb"
 			]
 		],
 		"width": 0.0
@@ -2804,10 +2480,24 @@
 		],
 		"width": 380.0
 	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
 	"show_minimap": false,
 	"show_open_files": true,
 	"show_tabs": true,
-	"side_bar_visible": true,
+	"side_bar_visible": false,
 	"side_bar_width": 265.0,
-	"status_bar_visible": true
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
 }

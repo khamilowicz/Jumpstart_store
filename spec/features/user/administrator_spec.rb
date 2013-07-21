@@ -2,89 +2,90 @@
 
   describe "Administrator" do
 
-    let(:user){ UserPresenter.new FactoryGirl.create(:user, :admin) }
 
-    before do
-      visit '/'
-      login user
-    end
+    let(:user){ current_user}
+    before(:each) do
+     @current_user =  UserPresenter.new FactoryGirl.create(:user, :admin)
+     visit '/'
+     login user
+   end
 
-    subject {page}
-    context "managing products" do
-      describe "creates product" do
+   subject {page}
+   context "managing products" do
+    describe "creates product" do
 
-        let(:product){ ProductPresenter.new FactoryGirl.build(:product), user}
+      let(:product){ ProductPresenter.new FactoryGirl.build(:product), user}
 
-        before do
-          visit new_admin_product_path
-          create_new_product product
-        end
-
-        it{
-         product.should_not be_nil
-         should have_content("Successfully created product")
-         should have_short_product(product)
-         click_link product.title; should have_link("Edit product")}
-
-         describe "and modifies them" do 
-           let(:product_2){ ProductPresenter.new FactoryGirl.build(:product)}
-
-           context "on product's page" do
-
-             before do
-               visit edit_admin_product_path(1)
-               create_new_product product_2
-             end
-
-             it {    
-              should have_content("Successfully updated product")
-              should_not have_short_product(product)
-              should have_short_product(product_2)}
-            end
-
-            context "on all products' page" do
-              before(:each) do
-                product_2.save
-                visit '/admin/products'
-                fill_in "Quantity", with: 9
-                click_button 'OK'
-              end
-
-              it{
-                find_field("Quantity").value.should eq('9')
-              }
-
-            end
-          end
-        end
-
-        describe "creates categories" do 
-         before(:each) do
-          @category_name = "Category_1"
-          @product = ProductPresenter.new FactoryGirl.create(:product)
-          add_to_category @product.product, @category_name
-          visit '/categories'
-          click_link @category_name
-        end
-
-        it{ 
-          should have_content(@category_name)
-          should have_short_product(@product)
-        }
+      before do
+        visit new_admin_product_path
+        create_new_product product
       end
 
-      describe "browse all products" do
-        let(:product_on_sale){ ProductPresenter.new FactoryGirl.create(:product, quantity: 5)}
-        let(:product_not_on_sale){ProductPresenter.new  FactoryGirl.create(
-          :product, 
-          quantity: 5, 
-          on_sale: false
-          )}
+      it{
+       product.should_not be_nil
+       should have_content("Successfully created product")
+       should have_short_product(product)
+       click_link product.title; should have_link("Edit product")}
 
-        before(:each) do
-          product_on_sale
-          product_not_on_sale
-          visit '/admin/products'
+       describe "and modifies them" do 
+         let(:product_2){ ProductPresenter.new FactoryGirl.build(:product)}
+
+         context "on product's page" do
+
+           before do
+             visit edit_admin_product_path(1)
+             create_new_product product_2
+           end
+
+           it {    
+            should have_content("Successfully updated product")
+            should_not have_short_product(product)
+            should have_short_product(product_2)}
+          end
+
+          context "on all products' page" do
+            before(:each) do
+              product_2.save
+              visit '/admin/products'
+              fill_in "Quantity", with: 9
+              click_button 'OK'
+            end
+
+            it{
+              find_field("Quantity").value.should eq('9')
+            }
+
+          end
+        end
+      end
+
+      describe "creates categories" do 
+       before(:each) do
+        @category_name = "Category_1"
+        @product = ProductPresenter.new FactoryGirl.create(:product)
+        add_to_category @product.product, @category_name
+        visit '/categories'
+        click_link @category_name
+      end
+
+      it{ 
+        should have_content(@category_name)
+        should have_short_product(@product)
+      }
+    end
+
+    describe "browse all products" do
+      let(:product_on_sale){ ProductPresenter.new FactoryGirl.create(:product, quantity: 5)}
+      let(:product_not_on_sale){ProductPresenter.new  FactoryGirl.create(
+        :product, 
+        quantity: 5, 
+        on_sale: false
+        )}
+
+      before(:each) do
+        product_on_sale
+        product_not_on_sale
+        visit '/admin/products'
           # save_and_open_page
         end
 

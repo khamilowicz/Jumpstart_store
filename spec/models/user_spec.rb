@@ -3,7 +3,7 @@ require 'spec_helper'
 describe User do
 
   context "who is registered" do
-    it{should respond_to(:address)}
+    
 
     it{ should validate_confirmation_of(:password)}
 
@@ -14,6 +14,7 @@ describe User do
     it{should validate_presence_of(:first_name)}
     it{should validate_presence_of(:last_name)}
 
+    it{should respond_to(:address)}
     it{ should have_one(:address)}
     it{ 
       should ensure_length_of(:nick).

@@ -57,7 +57,12 @@ def order_some_products_for_real products
 end
 
 def current_user
+ user = @current_user
  user.kind_of?(UserPresenter) ? user.user : user
+end
+
+def current_user=user
+  @current_user = user
 end
 
 def order_some_products products
