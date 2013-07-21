@@ -51,7 +51,7 @@ end
 
 describe "total  price and total discount" do
   let(:price){ Money.parse("$1")}
-  let(:total_price){ price*3}
+  let(:total_price){ price*2}
   let(:products){ []}
 
   before :each do 
@@ -62,36 +62,31 @@ describe "total  price and total discount" do
     end
   end
 
-  it{ 
-    expect{ products.each{|p| p.set_discount 50}}.
-    to change{ build_order(products).total_price}.
-    from(price*2).to(price*2/2)
-  }
+  let(:order){build_order products}
 
-  it{ 
-    expect{ products.each{|p| p.set_discount 50}}.
-    to change{ build_order(products).total_discount}.
-    from(0).to(50)
-  }
-  it{ 
-    expect{ products.each{|p| p.set_discount 50}}.
-    to change{ build_order(products).on_discount?}.
-    from(false).to(true)
-  }
+ it{ order.total_price.should eq(total_price)} 
+ it{ order.total_discount.should eq(0)} 
+ it{ order.on_discount?.should eq(false)} 
+ it "calls total_price on order_products" do
+  order.save
+  OrderProduct.should_receive(:total_price)
+  order.total_price
+ end
+
   describe "doesn't change after saving order" do
     let(:order_saved){create_order products }
 
     it{
-      expect{ products.each{|p| p.set_discount 50}}.
+      expect{ products.first.set_discount 50}.
       to_not change{ order_saved.total_price }
     }
 
     it{ 
-      expect{ products.each{|p| p.set_discount 50}}.
+      expect{ products.first.set_discount 50}.
       to_not change{ order_saved.total_discount}
     }
     it{ 
-      expect{ products.each{|p| p.set_discount 50}}.
+      expect{ products.first.set_discount 50}.
       to_not change{ order_saved.on_discount?}
     } 
   end

@@ -27,7 +27,6 @@ describe Cart do
 
 			before(:each) do
 				order.transfer_products
-				order.save
 			end
 			it{ order.products.should have(1).item}
 			its(:products){ should_not include(product)}

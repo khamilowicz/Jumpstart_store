@@ -15,7 +15,8 @@ describe "search" do
       order_pending.save 
     end
 
-    subject{Search.find(Search.new({status: {status: 'pending'}}))}
+    # subject{Search.find(Search.new({status: {status: 'pending'}}))}
+    subject{Search.new({status: {status: 'pending'}}).find}
 
     it{ should include(order_pending)}
     it{ should_not include(order_cancel)}
@@ -35,7 +36,7 @@ describe "search" do
     end
 
     def search_find param
-      Search.find(Search.new({value: {value: param, total_value: "100"}}))
+      Search.new({value: {value: param, total_value: "100"}}).find
     end
 
     it{
@@ -55,14 +56,14 @@ describe "search" do
       order.created_at = Date.new(2010, 10, 10);
       order.save}
       
-      subject{ Search.find( Search.new(
+      subject{ Search.new(
         {date: {
           date: 'before', 
           :'date_value(1i)' => '2011',
           :'date_value(2i)' => '10',
           :'date_value(3i)' => '10'
           }}
-          ))
+          ).find
     }
     it{should include(order)}
   end

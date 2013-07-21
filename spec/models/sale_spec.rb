@@ -9,8 +9,6 @@ describe Sale do
   it{ should_not allow_value(100).for(:discount)}
   it{ should_not allow_value(0).for(:discount)}
 
-  # let(:products){ FactoryGirl.create_list(:product, 2)}
-
   describe "creation" do
 
     describe "for product" do
@@ -117,7 +115,7 @@ context "for categories" do
 
   it{
     expect{ make_category_sale}
-    .to change{ Product.find(products.first.id).on_discount?}
+    .to change{ products.first.on_discount?}
     .from(false).to(true)  
   }
   it{

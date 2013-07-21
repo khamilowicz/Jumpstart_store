@@ -65,8 +65,8 @@ describe Product do
         }
 
         it{ expect{ 
-          subject.add review: review_1; 
-          subject.add review: review_2;
+          subject.add review: review_1
+          subject.add review: review_2
           subject.add review: review_3
           }.to change{subject.rating}.from(0).to(3.5)
         }

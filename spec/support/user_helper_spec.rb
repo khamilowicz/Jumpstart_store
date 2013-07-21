@@ -1,17 +1,5 @@
 require "spec_helper"
 
-# def build_order products=nil
-#   products = FactoryGirl.create_list(:product, 1) unless products
-#   user = FactoryGirl.create(:user)
-#   products.each do |product|
-#     user.add product: product
-#   end
-#   order = user.orders.build
-#   order.address = user.address
-#   order.transfer_products
-#   order
-# end
-
 def build_better_order products, user
   order = Order.new
   order.user = user
@@ -35,7 +23,6 @@ end
 order
 
 end
-
 
 def create_order products=nil
   order = build_order(products)

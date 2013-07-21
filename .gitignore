@@ -19,6 +19,5 @@
 # Ignore coverage results
 /coverage
 
-New_store_flow.sublime-project
-New_store_flow.sublime-workspace
-New_store_flow.sublime-workspace.orig
+/new_flow.sublime-project
+/new_flow.sublime-workspace

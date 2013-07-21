@@ -78,9 +78,6 @@ describe ProductUser do
   describe ".quantity_all" do
     let(:user_2){ User.new}
     let(:product_2){ Product.new}
-    # let(:user_2){ FactoryGirl.create(:user)}
-    # let(:product_2){ FactoryGirl.create(:product)}
-
 
     before(:each) do
       product_2.stub(:valid?){true}
@@ -148,7 +145,7 @@ describe ".total_price" do
       pu.save
     end
   end
-  it "should description" do
+  it "calculates total price of all product_users" do
     ProductUser.total_price.should eq(Money.new(300, 'USD'))
   end
 end

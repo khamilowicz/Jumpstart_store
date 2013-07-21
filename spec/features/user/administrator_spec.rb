@@ -152,7 +152,7 @@
       visit edit_admin_product_path(@product)
       uncheck :on_sale
       find("form input[name='commit']").click
-      Product.find(@product.id).should_not be_on_sale
+      @product.reload.should_not be_on_sale
     end
 
     context "sees a listing of all orders" do
