@@ -33,38 +33,35 @@ class OrdersController < ApplicationController
 	end
 
 	def create
-		if PaymillManager.transaction(current_user, params[:paymillToken], current_user.cart.currency)
-			@order = current_user.orders.build do |order|
-				order.address = params[:address]
-			end
-			@order.transfer_products
-			@order.pay
-		end
+		user, paymillToken = current_user, params[:paymillToken]
+		currency, address = current_user.cart.currency, params[:address]
+		payManager = PaymillManager.new
 
-		if @order.save
-			render :show, notice: "Order is processed"
-		else
-			flash[:errors] = "Something went wrong"
-			redirect_to '/cart'
-		end
+		if ( payManager.transaction(user, paymillToken, currency) &&
+			OrderConstructor.construct(user, address).save )
+		render :show, notice: "Order is processed"
+	else 
+		flash[:errors] = payManager.error_message
+	render :new	
 	end
+end
 
-	def index
-		@orders = current_user.admin? ? Order.all : current_user.orders
+def index
+	@orders = current_user.admin? ? Order.all : current_user.orders
+end
+
+def show
+	@order = Order.find(params[:id])
+	@user = UserPresenter.new @order.user
+	@order_products = ProductPresenter.new_from_array @order.order_products, current_user
+end
+
+private
+
+def authorize_user
+	unless current_user.admin?
+		user_id = Order.joins(:user).find(params[:order_id] || params[:id]).user.id
+		redirect_to(new_session_path, :notice => "You are not allowed to see other user's order") unless current_user.id == user_id
 	end
-
-	def show
-		@order = Order.find(params[:id])
-		@user = UserPresenter.new @order.user
-		@order_products = ProductPresenter.new_from_array @order.order_products, current_user
-	end
-
-	private
-
-	def authorize_user
-		unless current_user.admin?
-			user_id = Order.joins(:user).find(params[:order_id] || params[:id]).user.id
-			redirect_to(new_session_path, :notice => "You are not allowed to see other user's order") unless current_user.id == user_id
-		end
-	end
+end
 end

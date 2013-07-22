@@ -88,18 +88,60 @@ describe OrdersController do
   end
 
   describe "create" do
-    it "should description"
+    before(:each) do
+      @current_user = current_user_is_normal
+    end
+
+    it "calls paymill manager to do transaction" do
+      PaymillManager.any_instance.stub(:transaction){true}
+      PaymillManager.any_instance.should_receive(:transaction)
+      .with(@current_user, '123432', @current_user.cart.currency)
+
+      post :create, paymillToken: '123432'
+    end
+
+    it "returns to order creation page if paying 
+    goes wrong, giving message" do
+    PaymillManager.any_instance.stub(:transaction){false}
+    PaymillManager.any_instance.stub(:error_message){'custom message'}
+
+    post :create, paymillToken: '123432'
+
+    response.should render_template(:new)
+    controller.flash[:errors].should match /custom message/
   end
 
-  describe ".index" do
-    it "should description"
+  it "returns to order creation page if order saving goes wrong, giving message" do
+    PaymillManager.any_instance.stub(:transaction){true} 
+    Order.any_instance.stub(:save){false}
+    post :create, paymillToken: '123432'
+    response.should render_template(:new)
+  end
+end
+
+describe ".index" do
+  it "shows all orders for current user who is normal" do
+    current_user = current_user_is_normal
+    order_for_user, order_for_other = FactoryGirl.build_list(:order, 2)
+    current_user.orders << order_for_user
+    get :index
+    assigns(:orders).should include(order_for_user)
+    assigns(:orders).should_not include(order_for_other)
   end
 
-  describe ".show" do
-    it "should description"
+  it "shows all orders in system for admin" do 
+    current_user_is_admin
+    FactoryGirl.create_list(:order,2)
+    get :index
+    assigns(:orders).should eq(Order.all)
   end
+end
 
-  describe "filters" do
-    it "should description"
-  end
+describe ".show" do
+  it "should description"
+end
+
+describe "filters" do
+  it "should description"
+end
 end
