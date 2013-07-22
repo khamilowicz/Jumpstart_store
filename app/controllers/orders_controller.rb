@@ -5,7 +5,8 @@ class OrdersController < ApplicationController
 	before_filter :authorize_admin, except: [:create, :new, :show, :index]
 
 	def new
-		@products = current_user.cart.products
+		# @products = current_user.cart.products
+		@products = current_user.products
 		@cart = current_user.cart
 		@order = current_user.orders.new
 	end

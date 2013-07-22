@@ -161,7 +161,6 @@ describe Product do
     end
     describe "#users" do
 
-
       let(:product){FactoryGirl.create(:product)}
       let(:user){ User.new}
       before(:each){ user.stub(:valid?){true}; user.save}

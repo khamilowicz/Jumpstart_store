@@ -17,8 +17,8 @@ class Product < ActiveRecord::Base
 
   belongs_to :order
 
-  has_many :product_users
-  has_many :users, through: :product_users
+  has_many :list_items
+  has_many :users, through: :list_items, source: :holder, source_type: "User"
 
   has_many :category_products
   has_many :categories, through: :category_products
@@ -109,6 +109,10 @@ class Product < ActiveRecord::Base
     self.quantity +=1
     yield
     self.quantity -=1
+  end
+
+  def on_sale?
+    self.on_sale && ListItem.where_product(self).sum(:quantity) < self.quantity
   end
 
   private

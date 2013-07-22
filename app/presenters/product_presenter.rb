@@ -22,8 +22,9 @@
     def initialize product, user=nil
       @product = product
       @user = user
-      @quantity_for_user = ProductUser.quantity(product, @user)
-      @quantity_in_warehouse = self.quantity - @product.product_users.quantity
+      @quantity_for_user = 0
+      @quantity_for_user = @user.where_product(@product).quantity_all if @user
+      @quantity_in_warehouse = self.quantity - @product.list_items.quantity_all
       @belongs_to_user = belongs_to_user?
       return nil if product == nil
     end

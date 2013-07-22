@@ -1,5 +1,7 @@
 class Cart
 
+
+
   def initialize user
     @user = user
   end
@@ -12,9 +14,13 @@ class Cart
     not products.any?
   end
 
-	def products
-    @user.products.joins(:product_users).where(product_users: {in_cart: true}).uniq
-	end
+  def products
+    @user.products
+  end
+
+	# def products
+    # @user.products.joins(:product_users).where(product_users: {in_cart: true}).uniq
+	# end
 
   def total_price
     @user.product_users.total_price

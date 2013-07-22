@@ -92,25 +92,25 @@ describe Category do
 
   describe "#products_for_user" do
    
-    let(:user){ FactoryGirl.create(:user)}
-    let(:products){ FactoryGirl.create_list(:product, 3)}
+    # let(:user){ FactoryGirl.create(:user)}
+    # let(:products){ FactoryGirl.create_list(:product, 3)}
 
-    before(:each) do
+    # before(:each) do
 
-      user.add product: products[0]
-      user.add product: products[1]
-      category.add product: products[1]
-      category.add product: products[2]
-    end
+    #   user.add product: products[0]
+    #   user.add product: products[1]
+    #   category.add product: products[1]
+    #   category.add product: products[2]
+    # end
 
-    it{ user.products.should include(*products[0,2])}
-    it{ user.products.should_not include(products[2])}
+    # it{ user.products.should include(*products[0,2])}
+    # it{ user.products.should_not include(products[2])}
 
-    it{ category.products.should include(*products[1,2])}
-    it{ category.products.should_not include(products[0])}
+    # it{ category.products.should include(*products[1,2])}
+    # it{ category.products.should_not include(products[0])}
 
-    it{ category.products_for_user(user).should include(products[1])}
-    it{ category.products_for_user(user).should_not include(products[0], products[2])}
+    # it{ category.products_for_user(user).should include(products[1])}
+    # it{ category.products_for_user(user).should_not include(products[0], products[2])}
   end
 end
 

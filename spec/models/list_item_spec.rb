@@ -7,9 +7,9 @@ describe ListItem do
 	it{ should validate_numericality_of(:quantity)}
 	it{ should_not allow_value(0).for(:quantity)}
 	it{ should_not allow_value(-1).for(:quantity)}
+	it{ should_not allow_value(1.5).for(:quantity)}
 
 	context "instance" do
-
 
 		let(:product){ mock_model('Product')}
 		let(:list_item){ ListItem.new}
@@ -112,5 +112,4 @@ describe ListItem do
 			end
 		end
 	end
-end
 end

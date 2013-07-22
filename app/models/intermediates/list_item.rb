@@ -8,9 +8,13 @@ class ListItem < ActiveRecord::Base
 	belongs_to :product
 	belongs_to :holder, polymorphic: true
 
-	validates_numericality_of :quantity, greater_than: 0
+	validates_numericality_of :quantity, greater_than: 0, only_integer: true
 
 	scope :where_product, ->(product){ where(product_id: product.id) }
+
+	def self.quantity_all
+		self.sum :quantity
+	end
 
 	def self.add params
 		list_item = self.where_product(params[:product]).first
