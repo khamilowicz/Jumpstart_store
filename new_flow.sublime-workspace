@@ -4,6 +4,34 @@
 		"selected_items":
 		[
 			[
+				"sle",
+				"self"
+			],
+			[
+				"rai",
+				"raise_error"
+			],
+			[
+				"list",
+				"list_item"
+			],
+			[
+				"li",
+				"list_item"
+			],
+			[
+				"sel",
+				"self"
+			],
+			[
+				"sho",
+				"should"
+			],
+			[
+				"any",
+				"any_instance"
+			],
+			[
 				"pro",
 				"products"
 			],
@@ -472,10 +500,6 @@
 				"date_of_purchase"
 			],
 			[
-				"sho",
-				"should"
-			],
-			[
 				"should",
 				"should_not"
 			],
@@ -490,115 +514,41 @@
 			[
 				"sum",
 				"sum_of_notes"
-			],
-			[
-				"for",
-				"forward_port"
-			],
-			[
-				"to",
-				"to_json"
-			],
-			[
-				"impo",
-				"important_border"
-			],
-			[
-				"resp",
-				"response"
-			],
-			[
-				"la",
-				"latitude"
-			],
-			[
-				"lef",
-				"left_shadow"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "spec/controllers/carts_controller_spec.rb",
+			"file": "app/models/intermediates/list_item.rb",
 			"settings":
 			{
-				"buffer_size": 631,
+				"buffer_size": 606,
+				"line_ending": "Unix",
+				"name": "class ListItem < ActiveRecord::Base"
+			}
+		},
+		{
+			"file": "db/migrate/20130722181053_add_product_id_to_list_item.rb",
+			"settings":
+			{
+				"buffer_size": 266,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "app/views/layouts/admin_application.html.erb",
+			"file": "db/migrate/20130720210740_add_index_to_everything.rb",
 			"settings":
 			{
-				"buffer_size": 984,
+				"buffer_size": 969,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "NewStore::Application.routes.draw do\n\n  resources :sessions, only: [:new, :create, :destroy]\n\n  get 'search' => 'search#new', as: 'search'\n  post 'search' => 'search#show', as: 'searches'\n  post 'search_product' => 'search#new_product', as: 'search_product'\n\n  resources :orders, except: [:create] do\n    collection do\n      post '/create' => \"orders#create\", as: 'create'\n      get '/filter' => 'orders#filter', as: 'filter'\n      post '/new' => 'orders#new'\n    end\n    get '/change_status' => 'orders#change_status', as: 'change_status'\n  end\n\n  resources :products, only: [:index, :show] do\n    resources :reviews, only: [:edit, :update, :create]\n  end\n\n  resources :sales\n\n  namespace :admin do\n    resources :types\n    resources :products\n  end\n\n  get '/cart' => 'carts#show'\n\n\n  resources :users do\n    member do\n      get '/cart' => 'carts#show', as: 'cart'\n    end\n  end\n\n  get 'add_to_cart' => 'product_cart_manager#join'\n  get 'remove_from_cart' => 'product_cart_manager#destroy'\n\n  resources :categories, only: [:index, :show]\n  root to: 'products#index'\n\nend\n",
-			"file": "config/routes.rb",
-			"file_size": 1072,
-			"file_write_time": 130189185333826012,
+			"file": "db/migrate/20130722180527_create_table_list_items.rb",
 			"settings":
 			{
-				"buffer_size": 1072,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "spec/controllers/orders_controller_spec.rb",
-			"settings":
-			{
-				"buffer_size": 2767,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/controllers/orders_controller.rb",
-			"settings":
-			{
-				"buffer_size": 1835,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/views/admin/types/_form.html.haml",
-			"settings":
-			{
-				"buffer_size": 936,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/views/admin/types/new.html.haml",
-			"settings":
-			{
-				"buffer_size": 92,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/views/admin/types/edit.html.haml",
-			"settings":
-			{
-				"buffer_size": 92,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/views/sales/_sale.html.haml",
-			"settings":
-			{
-				"buffer_size": 305,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/models/order_product.rb",
-			"settings":
-			{
-				"buffer_size": 874,
+				"buffer_size": 202,
 				"line_ending": "Unix"
 			}
 		},
@@ -606,7 +556,7 @@
 			"file": "db/schema.rb",
 			"settings":
 			{
-				"buffer_size": 5830,
+				"buffer_size": 6161,
 				"line_ending": "Unix"
 			}
 		},
@@ -617,14 +567,86 @@
 				"buffer_size": 1484,
 				"line_ending": "Unix"
 			}
+		},
+		{
+			"file": "spec/models/list_item_spec.rb",
+			"settings":
+			{
+				"buffer_size": 1580,
+				"line_ending": "Unix"
+			}
 		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 264.0,
+		"height": 392.0,
 		"selected_items":
 		[
+			[
+				"rei",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"reili",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"genmig",
+				"RubyTest: Generate Rails Migration"
+			],
+			[
+				"rspec",
+				"Set Syntax: RSpec"
+			],
+			[
+				"gen",
+				"RubyTest: Generate Rails Model"
+			],
+			[
+				"insl",
+				"Package Control: Install Package"
+			],
+			[
+				"gitffs",
+				"Git-flow: Feature Start"
+			],
+			[
+				"gitfff",
+				"Git-flow: Feature Finish"
+			],
+			[
+				"gifff",
+				"Git-flow: Feature Finish"
+			],
+			[
+				"gitfloff",
+				"Git-flow: Feature Finish"
+			],
+			[
+				"giflff",
+				"Git-flow: Feature Finish"
+			],
+			[
+				"gitstat",
+				"Git: Status"
+			],
+			[
+				"git add",
+				"Git: Quick Add"
+			],
+			[
+				"gitad",
+				"Git: Quick Add"
+			],
+			[
+				"rieli",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"reil",
+				"Indentation: Reindent Lines"
+			],
 			[
 				"remo",
 				"Package Control: Remove Package"
@@ -658,28 +680,8 @@
 				"Git: Status"
 			],
 			[
-				"rei",
-				"Indentation: Reindent Lines"
-			],
-			[
-				"reili",
-				"Indentation: Reindent Lines"
-			],
-			[
 				"reli",
 				"Indentation: Reindent Lines"
-			],
-			[
-				"rieli",
-				"Indentation: Reindent Lines"
-			],
-			[
-				"insl",
-				"Package Control: Install Package"
-			],
-			[
-				"rspec",
-				"Set Syntax: RSpec"
 			],
 			[
 				"dele",
@@ -692,10 +694,6 @@
 			[
 				"in",
 				"Package Control: Install Package"
-			],
-			[
-				"reil",
-				"Indentation: Reindent Lines"
 			],
 			[
 				"bas",
@@ -762,10 +760,6 @@
 				"RubyTest: Run Single Test"
 			],
 			[
-				"giflff",
-				"Git Flow: Feature Finish"
-			],
-			[
 				"gemf",
 				"Git: Open Modified Files"
 			],
@@ -800,14 +794,6 @@
 			[
 				"gitcomi",
 				"Git: Commit"
-			],
-			[
-				"gitad",
-				"Git: Add..."
-			],
-			[
-				"git add",
-				"Git: Add..."
 			],
 			[
 				"colo",
@@ -928,10 +914,6 @@
 			[
 				"rienli",
 				"Indentation: Reindent Lines"
-			],
-			[
-				"gitfff",
-				"Git Flow: Feature Finish"
 			],
 			[
 				"gitco",
@@ -1112,33 +1094,9 @@
 			[
 				"git coa",
 				"Git: Custom Command"
-			],
-			[
-				"gitcomma",
-				"Git: Custom Command"
-			],
-			[
-				"git cu",
-				"Git: Custom Command"
-			],
-			[
-				"grap",
-				"Git: Graph All"
-			],
-			[
-				"gitcommi",
-				"Git: Commit"
-			],
-			[
-				"gitcommit",
-				"Git: Commit"
-			],
-			[
-				"graph",
-				"Git: Graph All"
 			]
 		],
-		"width": 530.0
+		"width": 513.0
 	},
 	"console":
 	{
@@ -1158,6 +1116,25 @@
 	},
 	"file_history":
 	[
+		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/list_item_spec.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/order_product.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/db/migrate/20130722181703_add_quantity_to_list_item.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/app/workers/order_constructor.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/product_user.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/db/schema.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/sales/_sale.html.haml",
+		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/admin/types/edit.html.haml",
+		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/admin/types/new.html.haml",
+		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/admin/types/_form.html.haml",
+		"/home/kham/Projekty/Rails/Jumpstart_store/config/routes.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/layouts/admin_application.html.erb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/spec/controllers/carts_controller_spec.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/spec/controllers/orders_controller_spec.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/app/controllers/orders_controller.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/db/migrate/20130722180527_create_table_list_items.rb",
+		"/home/kham/.config/sublime-text-3/Packages/SublimeGit/SublimeGit.sublime-settings",
+		"/home/kham/.config/sublime-text-3/Packages/User/SublimeGit.sublime-settings",
+		"/home/kham/Projekty/Rails/Jumpstart_store/app/workers/paymill_manager.rb",
 		"/home/kham/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
 		"/home/kham/.config/sublime-text-3/Packages/FindKeyConflicts/FindKeyConflicts.sublime-settings",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/order.rb",
@@ -1169,7 +1146,6 @@
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/reviews/update_reviews.js",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/sales/_inline_product.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/sales/_products_list.html.haml",
-		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/sales/_sale.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/sales/index.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/sales/index.js.erb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/sales/new.html.haml",
@@ -1184,17 +1160,13 @@
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/users/index.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/users/new.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/users/show.html.haml",
-		"/home/kham/Projekty/Rails/Jumpstart_store/app/workers/paymill_manager.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/workers/session.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/lib/tasks/populate.rake",
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/controllers/categories_controller_spec.rb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/spec/controllers/orders_controller_spec.rb",
 		"/home/kham/.config/sublime-text-3/Packages/TrailingSpaces/trailing_spaces.sublime-settings",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/cart.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/category.rb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/order_product.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/product.rb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/product_user.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/review.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/sale.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/models/search.rb",
@@ -1214,7 +1186,6 @@
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/controllers/application_controller.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/controllers/carts_controller.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/controllers/categories_controller.rb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/app/controllers/orders_controller.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/controllers/product_cart_manager_controller.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/controllers/products_controller.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/controllers/reviews_controller.rb",
@@ -1223,7 +1194,6 @@
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/controllers/sessions_controller.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/controllers/users_controller.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/config/environments/development.rb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/config/routes.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/db/migrate/20130521094259_create_category_products.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/admin/products/_info.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/admin/products/_product.html.haml",
@@ -1232,16 +1202,12 @@
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/admin/products/index.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/admin/products/new.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/admin/types/_category.html.haml",
-		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/admin/types/_form.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/admin/types/_info.html.haml",
-		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/admin/types/edit.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/admin/types/index.html.haml",
-		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/admin/types/new.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/carts/show.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/categories/_category.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/categories/index.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/categories/show.js.erb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/layouts/admin_application.html.erb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/layouts/application.html.erb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/menu/_admin_menu.html.haml",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/menu/_big_product_image.html.haml",
@@ -1277,15 +1243,7 @@
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/features/user/guest_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/support/user_helper_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/support/rspec_custom_matchers.rb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/spec/support/user_shared_examples_spec.rb",
-		"/home/kham/Projekty/Rails/Jumpstart_store/spec/controllers/carts_controller_spec.rb",
-		"/home/kham/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
-		"/home/kham/Projekty/Rails/Jumpstart_store/spec/controllers/application_controller_spec.rb",
-		"/home/kham/.config/sublime-text-3/Packages/RubyTest/Default.sublime-keymap",
-		"/home/kham/.config/sublime-text-3/Packages/RubyTest/Default (Linux).sublime-keymap",
-		"/home/kham/.config/sublime-text-3/Packages/AdvancedNewFile/Default (Linux).sublime-keymap",
-		"/home/kham/.config/sublime-text-3/Packages/SideBarEnhancements/Default (Linux).sublime-keymap",
-		"/home/kham/Projekty/Rails/Jumpstart_store/{:locations=>{\"./spec/controllers/application_controller_spec.rb"
+		"/home/kham/Projekty/Rails/Jumpstart_store/spec/support/user_shared_examples_spec.rb"
 	],
 	"find":
 	{
@@ -1321,6 +1279,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"product",
 			"it",
 			"type",
 			" @",
@@ -1447,8 +1406,7 @@
 			"city",
 			"make_sale",
 			"save_and",
-			"commit",
-			"  "
+			"commit"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1492,60 +1450,27 @@
 			[
 				{
 					"buffer": 0,
-					"file": "spec/controllers/carts_controller_spec.rb",
+					"file": "app/models/intermediates/list_item.rb",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 631,
+						"buffer_size": 606,
 						"regions":
 						{
-							"bookmark_j":
-							{
-								"flags": 144,
-								"regions":
-								[
-									[
-										236,
-										236
-									]
-								]
-							},
-							"bookmark_m":
-							{
-								"flags": 144,
-								"regions":
-								[
-									[
-										390,
-										390
-									]
-								]
-							},
-							"bookmarks":
-							{
-								"flags": 144,
-								"icon": "bookmark",
-								"regions":
-								[
-								],
-								"scope": "bookmarks"
-							}
 						},
 						"selection":
 						[
 							[
-								236,
-								236
+								330,
+								330
 							]
 						],
 						"settings":
 						{
-							"history_list_is_closing": true,
-							"syntax": "Packages/RSpec/RSpec.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"auto_name": "class ListItem < ActiveRecord::Base",
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
 						},
-						"translation.x": 0.0,
+						"translation.x": 54.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
@@ -1553,26 +1478,24 @@
 				},
 				{
 					"buffer": 1,
-					"file": "app/views/layouts/admin_application.html.erb",
+					"file": "db/migrate/20130722181053_add_product_id_to_list_item.rb",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 984,
+						"buffer_size": 266,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								182,
-								182
+								249,
+								249
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Rails/HTML (Rails).tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1582,40 +1505,11 @@
 				},
 				{
 					"buffer": 2,
-					"file": "config/routes.rb",
+					"file": "db/migrate/20130720210740_add_index_to_everything.rb",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1072,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								599,
-								599
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 102.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "spec/controllers/orders_controller_spec.rb",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2767,
+						"buffer_size": 969,
 						"regions":
 						{
 						},
@@ -1628,9 +1522,36 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/RSpec/RSpec.tmLanguage",
-							"tab_size": 2,
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 4,
 							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "db/migrate/20130722180527_create_table_list_items.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 202,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1640,39 +1561,11 @@
 				},
 				{
 					"buffer": 4,
-					"file": "app/controllers/orders_controller.rb",
+					"file": "db/schema.rb",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1835,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								906,
-								906
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "app/views/admin/types/_form.html.haml",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 936,
+						"buffer_size": 6161,
 						"regions":
 						{
 						},
@@ -1685,116 +1578,6 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/Rails/Ruby Haml.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "app/views/admin/types/new.html.haml",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 92,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								80,
-								80
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Rails/Ruby Haml.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "app/views/admin/types/edit.html.haml",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 92,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								92,
-								92
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Rails/Ruby Haml.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "app/views/sales/_sale.html.haml",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 305,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								305,
-								305
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Rails/Ruby Haml.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "app/models/order_product.rb",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 874,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								134,
-								134
-							]
-						],
-						"settings":
-						{
 							"syntax": "Packages/Ruby/Ruby.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
@@ -1806,36 +1589,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 10,
-					"file": "db/schema.rb",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5830,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2277,
-								2277
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 757.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 11,
+					"buffer": 5,
 					"file": "app/models/product_user.rb",
 					"semi_transient": false,
 					"settings":
@@ -1847,8 +1601,8 @@
 						"selection":
 						[
 							[
-								123,
-								123
+								1017,
+								1017
 							]
 						],
 						"settings":
@@ -1858,7 +1612,41 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 549.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 6,
+					"file": "spec/models/list_item_spec.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1580,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1493,
+								1493
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/RSpec/RSpec.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 13.0,
+						"translation.y": 379.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1883,11 +1671,18 @@
 				0,
 				1,
 				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
 			]
 		],
 		"cols":
 		[
 			0.0,
+			0.5,
 			1.0
 		],
 		"rows":
@@ -1899,13 +1694,21 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 419.0
+		"height": 629.0
 	},
 	"output.git":
 	{
 		"height": 329.0
 	},
 	"output.git-commit":
+	{
+		"height": 112.0
+	},
+	"output.git-flow-feature-finish":
+	{
+		"height": 112.0
+	},
+	"output.git-flow-feature-start":
 	{
 		"height": 112.0
 	},
@@ -1921,6 +1724,70 @@
 		"selected_items":
 		[
 			[
+				"lisspe",
+				"spec/models/list_item_spec.rb"
+			],
+			[
+				"addquanlis",
+				"db/migrate/20130722181703_add_quantity_to_list_item.rb"
+			],
+			[
+				"addqualis",
+				"db/migrate/20130722181703_add_quantity_to_list_item.rb"
+			],
+			[
+				"orderpro",
+				"app/models/order_product.rb"
+			],
+			[
+				"prouser",
+				"app/models/product_user.rb"
+			],
+			[
+				"shcem",
+				"db/schema.rb"
+			],
+			[
+				"lisite",
+				"db/migrate/20130722180527_create_table_list_items.rb"
+			],
+			[
+				"addever",
+				"db/migrate/20130720210740_add_index_to_everything.rb"
+			],
+			[
+				"addproid",
+				"db/migrate/20130722181053_add_product_id_to_list_item.rb"
+			],
+			[
+				"schema",
+				"db/schema.rb"
+			],
+			[
+				"migcrlis",
+				"db/migrate/20130722180527_create_table_list_items.rb"
+			],
+			[
+				"ordcons",
+				"app/workers/order_constructor.rb"
+			],
+			[
+				"paym",
+				"app/workers/paymill_manager.rb"
+			],
+			[
+				"ordconspe",
+				"spec/controllers/orders_controller_spec.rb"
+			],
+			[
+				"orcons",
+				"app/workers/order_constructor.rb"
+			],
+			[
+				"ordcon",
+				"app/controllers/orders_controller.rb"
+			],
+			[
 				"userespe",
 				"spec/mailers/user_registration_spec.rb"
 			],
@@ -1935,10 +1802,6 @@
 			[
 				"prouse",
 				"app/models/product_user.rb"
-			],
-			[
-				"schema",
-				"db/schema.rb"
 			],
 			[
 				"ordpro",
@@ -1959,10 +1822,6 @@
 			[
 				"ordco",
 				"app/controllers/orders_controller.rb"
-			],
-			[
-				"ordcon",
-				"spec/controllers/orders_controller_spec.rb"
 			],
 			[
 				"order",
@@ -2063,10 +1922,6 @@
 			[
 				"ordecon",
 				"app/controllers/orders_controller.rb"
-			],
-			[
-				"ordconspe",
-				"spec/controllers/orders_controller_spec.rb"
 			],
 			[
 				"cart",
@@ -2379,58 +2234,6 @@
 			[
 				"admapp",
 				"app/views/layouts/admin_application.html.erb"
-			],
-			[
-				"proon",
-				"app/controllers/admin/products_controller.rb"
-			],
-			[
-				"layadm",
-				"app/views/layouts/admin_application.html.erb"
-			],
-			[
-				"admproprod",
-				"app/views/admin/products/_product.html.haml"
-			],
-			[
-				"prodcss",
-				"app/assets/stylesheets/product.css.scss"
-			],
-			[
-				"form",
-				"app/views/addresses/_form.html.haml"
-			],
-			[
-				"menadm",
-				"app/views/menu/_admin_menu.html.haml"
-			],
-			[
-				"menu",
-				"app/views/menu/_top_bar.html.haml"
-			],
-			[
-				"presen",
-				"app/helpers/presenter_helper.rb"
-			],
-			[
-				"type",
-				"app/models/type.rb"
-			],
-			[
-				"typecon",
-				"app/controllers/admin/types_controller.rb"
-			],
-			[
-				"typ",
-				"app/models/type.rb"
-			],
-			[
-				"cateshow",
-				"app/views/categories/show.js.erb"
-			],
-			[
-				"admis",
-				"spec/features/user/administrator_spec.rb"
 			]
 		],
 		"width": 0.0
