@@ -1,6 +1,6 @@
 class OrderProduct < ActiveRecord::Base
 
-  belongs_to :order 
+  belongs_to :order
   belongs_to :product
 
   monetize :base_price_cents
@@ -35,7 +35,7 @@ class OrderProduct < ActiveRecord::Base
     self.minimum(:discount) != 100
   end
 
-  def add product 
+  def add product
     self.product = product
     self.base_price = product.base_price
     self.discount = product.get_discount

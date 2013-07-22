@@ -1,6 +1,6 @@
 .row
   .span12.product.inline.row{class: product.title_param}
-    .span6.title= link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} 
+    .span6.title= link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }}
     .span1.base_price= "$#{product.base_price}"
     .span1.price= "$#{product.price}"
     .span1.discount= "#{product.discount}%"

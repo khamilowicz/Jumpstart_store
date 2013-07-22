@@ -13,8 +13,8 @@ class Order < ActiveRecord::Base
 
 	STATUSES = {
 		:cancel 		=> 'cancelled',
-		:pay 				=> 'paid', 
-		:ship 			=> 'shipped', 
+		:pay 				=> 'paid',
+		:ship 			=> 'shipped',
 		:return 		=> 'returned',
 		:is_pending => 'pending'
 	}
@@ -30,14 +30,14 @@ class Order < ActiveRecord::Base
 
 	scope :find_by_status, ->(status){ where(status: status)}
 	scope :find_by_email, ->(email){ joins(:user).where(users: {email: email})}
-	scope :find_by_date, ->(sign_word, year, month, day){ 
-		where("created_at #{COMPARISONS[sign_word]} ?", Date.new(year.to_i,month.to_i,day.to_i)) 
+	scope :find_by_date, ->(sign_word, year, month, day){
+		where("created_at #{COMPARISONS[sign_word]} ?", Date.new(year.to_i,month.to_i,day.to_i))
 	}
-	scope :find_by_value, ->(sign_word, value){ 
+	scope :find_by_value, ->(sign_word, value){
 		where("price_cents #{COMPARISONS[sign_word]} ?", Money.parse(value).cents)
 	}
 
-	def self.count_by_status status;  self.where(status: status).count; end 
+	def self.count_by_status status;  self.where(status: status).count; end
 
 	alias_attribute :date_of_purchase, :created_at
 	alias_attribute :time_of_status_change, :status_change_date
@@ -87,7 +87,7 @@ class Order < ActiveRecord::Base
 
 	def set_price_and_discount
 		self.price = total_price_without_discount
-		self.discount = total_discount 
+		self.discount = total_discount
 	end
 
 	def update_status_date

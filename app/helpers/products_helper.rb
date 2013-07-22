@@ -35,7 +35,7 @@ module ProductsHelper
     text = ''
     if product.users.include?(current_user)
       text = content_tag :div, class: 'remove' do
-        link_to "Remove from cart", remove_from_cart_path({user_id: current_user, product: product}), remote: true 
+        link_to "Remove from cart", remove_from_cart_path({user_id: current_user, product: product}), remote: true
       end
     end
     text

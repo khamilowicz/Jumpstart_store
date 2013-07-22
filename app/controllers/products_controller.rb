@@ -5,7 +5,7 @@ class ProductsController < ApplicationController
 		@products = Product.find_on_sale.page params[:page]
 	end
 
-	
+
 	def show
 		@product = ProductPresenter.new Product.includes(:reviews, reviews: :user).find(params[:id]), current_user
 	end

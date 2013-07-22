@@ -25,23 +25,23 @@
     session[:current_user_id] = user.id
     user
   end
-  
+
   def ensure_not_guest
     if current_user.guest?
      flash[:errors] =  "You are not allowed see this content. Log in first"
      redirect_to new_session_path
    end
  end
- 
+
  def authorize_admin
   unless current_user.admin?
    flash[:notice] = "You are not allowed to see this content"
    redirect_to root_url
- end 
+ end
 end
 
 def authorize_user
-  unless current_user.id.to_s == params[:id] 
+  unless current_user.id.to_s == params[:id]
     flash[:notice] = "You are not allowed to see this content"
     redirect_to root_url
   end

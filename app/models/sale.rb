@@ -11,7 +11,7 @@ class Sale < ActiveRecord::Base
 
     def new_from_params params
       sale = self.where(name: params[:name_from_select])
-      .first_or_initialize 
+      .first_or_initialize
 
       sale.discount = params[:discount] if sale.new_record?
 
@@ -20,7 +20,7 @@ class Sale < ActiveRecord::Base
       if params[:categories].presence
         categories_id = params[:categories].keys
         products_id << CategoryProduct.where(category_id: categories_id).pluck(:product_id)
-        sale.categories << Category.find(categories_id) 
+        sale.categories << Category.find(categories_id)
       end
 
       sale.products << Product.find(products_id)

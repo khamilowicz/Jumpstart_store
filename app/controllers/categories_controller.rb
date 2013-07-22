@@ -10,7 +10,7 @@ class CategoriesController < ApplicationController
 
    if @category.nil?
     flash[:errors] = "Category doesn't exist"
-    redirect_to categories_path 
+    redirect_to categories_path
   else
    @products = @category.products.page params[:page]
    respond_to do |format|

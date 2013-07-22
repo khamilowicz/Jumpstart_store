@@ -1,4 +1,4 @@
-class Cart 
+class Cart
 
   def initialize user
     @user = user

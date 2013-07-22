@@ -1,5 +1,5 @@
 module TypeHelper
-  
+
   def collection_from_known collection, known
     collection.map{|c| known.include?(c) ? [true, c] : [false, c]}
   end

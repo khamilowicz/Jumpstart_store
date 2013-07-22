@@ -1,7 +1,7 @@
 class SalesController < ApplicationController
 
   before_filter :authorize_admin
-  
+
   def new
     @categories = Category.all
     @products, @checked = if params[:product]
@@ -16,7 +16,7 @@ class SalesController < ApplicationController
     @sale.remove unless params[:product]
     if params[:product]
       product = Product.find(params[:product])
-      @sale.remove product: product 
+      @sale.remove product: product
     end
     @sales = Sale.all
 

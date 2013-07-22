@@ -21,7 +21,7 @@ describe OrdersController do
     end
 
     it "redirects guests to login page" do
-      get :new 
+      get :new
       response.should redirect_to(new_session_path)
     end
   end
@@ -29,7 +29,7 @@ describe OrdersController do
   describe ".change_status" do
     before(:each) do
       FactoryGirl.create(:order)
-    end 
+    end
     it "doesn't allow non-admin users" do
       current_user_is_normal
       get :change_status, order_id: 1
@@ -45,7 +45,7 @@ describe OrdersController do
       before(:each) do
         current_user_is_admin
       end
-      it "to change status"  do 
+      it "to change status"  do
         current_user_is_admin
         get :change_status, order_id: 1, status: 'cancel'
         response.should redirect_to(orders_path)
@@ -76,7 +76,7 @@ describe OrdersController do
       response.should render_template(:index)
     end
 
-    it "returns only orders with given status" do 
+    it "returns only orders with given status" do
       order_pending = FactoryGirl.create(:order)
       current_user_is_admin
       order_cancelled = FactoryGirl.create(:order, status: 'cancelled')
@@ -88,7 +88,7 @@ describe OrdersController do
   end
 
   describe "create" do
-    it "should description" 
+    it "should description"
   end
 
   describe ".index" do
@@ -100,6 +100,6 @@ describe OrdersController do
   end
 
   describe "filters" do
-    it "should description" 
+    it "should description"
   end
 end

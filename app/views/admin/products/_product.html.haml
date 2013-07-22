@@ -6,7 +6,7 @@
       -if head
         .controls.controls-row.header
           .span3
-          .span1= f.label :on_sale 
+          .span1= f.label :on_sale
           = f.label :price, class: 'span1'
           .span1 Current price
           .span1 Currency
@@ -17,7 +17,7 @@
           = f.label :submit, class: 'span1'
       .controls-row
         .span3.title
-          = link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }} 
+          = link_to product.title, product_path(product), {data: {photo: product.photo.url, title: product.title }}
           = render partial: 'admin/products/info', locals: {product: product}
         .span1= f.check_box :on_sale
         = f.text_field :base_price, class: 'span1'

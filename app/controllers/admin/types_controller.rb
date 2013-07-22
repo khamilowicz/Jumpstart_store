@@ -3,7 +3,7 @@ class Admin::TypesController < ApplicationController
   def new
     @type = Type.new
     @products = Product.all
-    @categories = Category.all 
+    @categories = Category.all
   end
 
   def create
@@ -11,7 +11,7 @@ class Admin::TypesController < ApplicationController
     @type.join
 
 @categories = Category.all
-    render 'index', notice: 'Successfully categorized products' 
+    render 'index', notice: 'Successfully categorized products'
   end
 
   def edit
@@ -27,7 +27,7 @@ class Admin::TypesController < ApplicationController
     @type.join
 
 @categories = Category.all
-    render 'index', notice: 'Successfully categorized products' 
+    render 'index', notice: 'Successfully categorized products'
   end
 
   def destroy
@@ -37,7 +37,7 @@ class Admin::TypesController < ApplicationController
   private
 
   def get_categories_names params
-    categories = []  
+    categories = []
     categories += params[:categories].values  if params[:categories]
     categories << params[:new_category] unless params[:new_category].blank?
     categories

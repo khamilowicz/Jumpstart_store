@@ -34,7 +34,7 @@ class OrdersController < ApplicationController
 
 	def create
 		if PaymillManager.transaction(current_user, params[:paymillToken], current_user.cart.currency)
-			@order = current_user.orders.build do |order| 
+			@order = current_user.orders.build do |order|
 				order.address = params[:address]
 			end
 			@order.transfer_products

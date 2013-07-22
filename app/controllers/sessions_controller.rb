@@ -11,8 +11,8 @@ class SessionsController < ApplicationController
 
 	def create
 		user = Session.authenticate params[:session]
-		
-		if user 
+
+		if user
 			User.transfer_products from: current_user, to: user
 			session[:current_user_id] = user.id
 			redirect_to root_url, notice: "Successfully logged in"

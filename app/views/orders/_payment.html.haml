@@ -1,5 +1,5 @@
 = form_for @order, id: 'payment-form', method: :post do |order|
-  .payment-errors    
+  .payment-errors
   = render partial: 'addresses/form', address: current_user.address, locals: {form: order}
   =fields_for 'transaction' do |f|
     =f.hidden_field 'card-amount-int', { class: 'card-amount-int', value: cart.total_price.cents.to_i}
@@ -10,7 +10,7 @@
     .row
       .span6=f.text_field 'card-number', {placeholder: 4111111111111111}
       .span6=f.text_field 'card-cvc', {placeholder: 123}
-    .row  
+    .row
       .span6=f.label 'card-expiry-month', "Expiry month"
       .span6=f.label 'card-expiry-year', "Expiry year"
     .row
