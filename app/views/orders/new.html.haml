@@ -5,4 +5,4 @@
   .span12.form_order
     = render partial: 'payment', locals: {cart: @cart}
   .products
-= render @products
+= render presentify(@products, current_user)

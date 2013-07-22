@@ -5,9 +5,18 @@ describe "search" do
  context "finds orders by" do
   context "status" do
 
-    let(:order_pending ){ create_order}
-    let(:order_cancel){order = create_order; order.cancel; order}
-    subject{Search.find(Search.new({status: {status: 'pending'}}))}
+    let(:order_pending ){ Order.new}
+    let(:order_cancel ){ Order.new }
+    before(:each) do
+      order_cancel.status = 'cancelled'
+      order_pending.stub(:valid?){true}
+      order_cancel.stub(:valid?){true}
+      order_cancel.save
+      order_pending.save 
+    end
+
+    # subject{Search.find(Search.new({status: {status: 'pending'}}))}
+    subject{Search.new({status: {status: 'pending'}}).find}
 
     it{ should include(order_pending)}
     it{ should_not include(order_cancel)}
@@ -26,32 +35,37 @@ describe "search" do
       order_over_100.save
     end
 
-    it{ order_over_100.price.should == Money.parse("$110")}
-    it{ order_below_100.price.should == Money.parse("$90")}
-
-
     def search_find param
-      Search.find(Search.new({value: {value: param, total_value: "100"}}))
+      Search.new({value: {value: param, total_value: "100"}}).find
     end
 
-    it{search_find("more").should include(order_over_100)}
-    it{search_find("less").should include(order_below_100)}
-    it{search_find("more").should_not include(order_below_100)}
-    it{search_find("less").should_not include(order_over_100)}
+    it{
+      order_over_100.price.should == Money.parse("$110")
+      order_below_100.price.should == Money.parse("$90")
+      search_find("more").should include(order_over_100)
+      search_find("less").should include(order_below_100)
+      search_find("more").should_not include(order_below_100)
+      search_find("less").should_not include(order_over_100)
+    }
   end
 
   context "date" do
-    let(:order){ FactoryGirl.create(:order, created_at: Date.new(2010, 10, 10))}
-    subject{ Search.find( Search.new(
-      {date: {
-        date: 'before', 
-        :'date_value(1i)' => '2011',
-        :'date_value(2i)' => '10',
-        :'date_value(3i)' => '10'
-        }}
-        ))
-  }
-  it{should include(order)}
-end
+    let(:order){ Order.new}
+    before(:each){ 
+      order.stub(:valid?){true}; 
+      order.created_at = Date.new(2010, 10, 10);
+      order.save}
+      
+      subject{ Search.new(
+        {date: {
+          date: 'before', 
+          :'date_value(1i)' => '2011',
+          :'date_value(2i)' => '10',
+          :'date_value(3i)' => '10'
+          }}
+          ).find
+    }
+    it{should include(order)}
+  end
 end
 end

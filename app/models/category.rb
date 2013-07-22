@@ -25,7 +25,7 @@ class Category < ActiveRecord::Base
     self.products << param[:product]
   end
 
-  def products_for_user user 
+  def products_for_user user
     self.products.joins(:product_users).where(product_users: {user_id: user.id})
   end
 end

@@ -21,7 +21,7 @@ describe Address do
   it{ should belong_to(:user)} 
 
   describe "to_s" do
-    let(:address){ Address.create({
+    let(:address){ Address.new({
       country: "USA",
       city: "Washington",
       zip_code: "80130",
@@ -33,8 +33,8 @@ describe Address do
       it{ "#{address}".should eq("USA 80-130 Washington Pensylwania 10/15")}
     end
 
-    describe "factory" do
-      let(:address){FactoryGirl.build(:address)}
-      it{ "#{address}".should eq("USA 80-130 Washington Pensylwania 10/15")}
-    end
+    # describe "factory" do
+    #   let(:address){FactoryGirl.build(:address)}
+    #   it{ "#{address}".should eq("USA 80-130 Washington Pensylwania 10/15")}
+    # end
   end

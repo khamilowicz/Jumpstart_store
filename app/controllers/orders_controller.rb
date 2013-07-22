@@ -1,39 +1,40 @@
 class OrdersController < ApplicationController
 
 	before_filter :ensure_not_guest
-	before_filter :authorize_user, except: [:new, :create, :index]
-	before_filter :authorize_admin, except: [:filter, :create, :new, :show, :index]
+	before_filter :authorize_user, except: [:new, :create, :index, :filter]
+	before_filter :authorize_admin, except: [:create, :new, :show, :index]
 
 	def new
-		@products = ProductPresenter.new_from_array current_user.cart.products, current_user
+		@products = current_user.cart.products
 		@cart = current_user.cart
 		@order = current_user.orders.new
 	end
 
 	def change_status
-		order = Order.find(params[:order_id])
-		order.set_status params[:status]
+		@order = Order.find(params[:order_id])
 
-		if order.save
+		if Order::STATUSES.keys.include? params.fetch(:status).to_sym
+			@order.set_status params[:status]
+			@order.save
 			@orders = Order.all
-			redirect_to orders_path, notice: "Successfully updated order status to '#{order.status}'"
+			redirect_to orders_path, notice: "Successfully updated order status to '#{@order.status}'"
 		else
 			flash[:error] = "Something went wrong"
-			render :change_status
+			redirect_to order_path(@order)
 		end
 	end
 
 	def filter
 		@orders = Order.find_by_status(params[:status])
 		respond_to do |format|
-			format.html {render 'index'}
+			format.html {render :index}
 			format.js {render :index}
 		end
 	end
 
 	def create
 		if PaymillManager.transaction(current_user, params[:paymillToken], current_user.cart.currency)
-			@order = current_user.orders.build do |order| 
+			@order = current_user.orders.build do |order|
 				order.address = params[:address]
 			end
 			@order.transfer_products
@@ -63,7 +64,7 @@ class OrdersController < ApplicationController
 	def authorize_user
 		unless current_user.admin?
 			user_id = Order.joins(:user).find(params[:order_id] || params[:id]).user.id
-			redirect_to(root_url, :notice => "You are not allowed to see other user's order") unless current_user.id == user_id
+			redirect_to(new_session_path, :notice => "You are not allowed to see other user's order") unless current_user.id == user_id
 		end
 	end
 end

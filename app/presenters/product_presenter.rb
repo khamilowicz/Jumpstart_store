@@ -4,8 +4,8 @@
     extend ActiveModel::Naming
 
     extend TotalPrice
-    
-    attr_accessor :product, :quantity_in_warehouse, :quantity_for_user 
+
+    attr_accessor :product, :quantity_in_warehouse, :quantity_for_user
 
     def belongs_to_user?
       @belongs_to_user || @product.users.include?(@user)
@@ -43,7 +43,7 @@
     end
 
     def list_categories
-      @product.categories.list_categories 
+      @product.categories.list_categories
     end
 
     def list_sales_with_discounts
@@ -52,7 +52,7 @@
 
     def to_param
       @product.to_param
-    end 
+    end
 
     def photo
       @product.photos.last
@@ -61,7 +61,7 @@
     def title_param
       @product.title.parameterize
     end
-    
+
     def title_shorter
       title = @product.title
       title.length > 25 ? title[0,25] + '...' : title

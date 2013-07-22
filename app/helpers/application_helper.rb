@@ -7,7 +7,7 @@ module ApplicationHelper
 			note.ceil.times{ |n| stars[n] = content_tag( :i, class: %w{icon-star star full}, id: n) do; end }
 
 			if note != note.floor
-				stars[note.ceil] = content_tag( :i, class: %w{icon-plus star half}) do; end 
+				stars[note.ceil] = content_tag( :i, class: %w{icon-plus star half}) do; end
 			end
 			raw stars.join
 		end

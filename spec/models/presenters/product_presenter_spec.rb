@@ -2,7 +2,8 @@ require "spec_helper"
 
 describe ProductPresenter do
 
-  let(:product){ FactoryGirl.create(:product)}
+  # let(:product){ FactoryGirl.create(:product)}
+  let(:product){ Product.new }
   let(:product_presenter){ ProductPresenter.new product}
   subject{ product_presenter }
 
@@ -10,6 +11,7 @@ describe ProductPresenter do
   describe "#list_categories" do
 
     before(:each) do
+      product.stub(:valid? => true)
       product.add category: 'C_1'
       product.add category: 'C_2'
     end
@@ -18,35 +20,42 @@ describe ProductPresenter do
 
   its(:title){ should eq(product.title)}
   describe "#title_param" do
-    subject{ ProductPresenter.new FactoryGirl.build(:product, title: "this is product")}
-    its(:title_param) {should eq('this-is-product') }
-
-    describe "#quantity_for_user" do
-      let(:product){  FactoryGirl.create(:product, quantity: 3) }
-      let(:user){ FactoryGirl.create(:user)}
-
-      it{ expect{user.add product: product}.to change{ ProductPresenter.new(product, user).quantity_for_user}.from(0).to(1)}
+    before :each do
+      product.title = "this is product"
     end
+
+    its(:title_param) {should eq('this-is-product') }
+  end
+
+  describe "#quantity_for_user" do
+    let(:product){  FactoryGirl.build(:product, quantity: 3) }
+    let(:user){ FactoryGirl.create(:user)}
+
+    it{ expect{user.add product: product}.to change{ ProductPresenter.new(product, user).quantity_for_user}.from(0).to(1)}
   end
 
   describe "price" do
-    let(:product){ProductPresenter.new FactoryGirl.create(:product)}
+    let(:price){ Money.new(100, "USD")}
 
-    it{ (product.price + product.price).cents.should eq(200) }
-    it{ (product.price + product.price).should eq(Money.new(200, "USD")) }
-  end
+    before :each do
+      product.base_price = price
+    end
 
-  describe "discounts" do
+    it{ (product_presenter.price + product_presenter.price).cents.should eq(200) }
+    it{ (product_presenter.price + product_presenter.price).should eq(Money.new(200, "USD")) }
+
+    describe "discounts" do
     let(:product){ ProductPresenter.new FactoryGirl.build(:product)}
-    
-    it{ expect{product.set_discount 50; product.save}.to change{
-      product.price
-      }.from(product.base_price).to(product.base_price/2)
+
+    it{ expect{product_presenter.set_discount 50; product_presenter.save}.to change{
+      product_presenter.price
+      }.from(product_presenter.base_price).to(product_presenter.base_price/2)
     }
 
-    it{ expect{product.set_discount 50; product.off_discount}.to_not change{
-      product.price
-      }.from(product.base_price).to(product.base_price/2)
+    it{ expect{product_presenter.set_discount 50; product_presenter.off_discount}.to_not change{
+      product_presenter.price
+      }.from(product_presenter.base_price).to(product_presenter.base_price/2)
     }
   end
+end
 end

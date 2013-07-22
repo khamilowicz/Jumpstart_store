@@ -1,6 +1,6 @@
-SearchQuery = Struct.new(:name, :params)
-
 class Search
+
+  SearchQuery = Struct.new(:name, :params)
 
   include ActiveModel::Conversion
   include ActiveModel::Validations
@@ -13,7 +13,7 @@ class Search
       @searched = []
       params.each do |name, search_params|
         unless search_params.values.first.blank?
-          @searched << SearchQuery.new(name, search_params.values) 
+          @searched << SearchQuery.new(name, search_params.values)
         end
       end
     end
@@ -21,7 +21,7 @@ class Search
 
   def persisted?; false; end
 
-  def find 
+  def find
     Search.find self
   end
 

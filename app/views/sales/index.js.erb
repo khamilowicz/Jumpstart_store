@@ -2,7 +2,7 @@ $('.sales').html("<%= j render(@sales) %>");
 $('.footer').html("<%= j render 'menu/footer' %>");
 
 $(function() {
- 
+
   $('.product > .remove.product > a').on( 'click', function() {
 
    $(this).closest('.product').slideUp();

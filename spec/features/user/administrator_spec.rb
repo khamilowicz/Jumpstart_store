@@ -2,35 +2,36 @@
 
   describe "Administrator" do
 
-    let(:user){ UserPresenter.new FactoryGirl.create(:user, :admin) }
 
-    before do
-      visit '/'
-      login user
-    end
+    let(:user){ current_user}
+    before(:each) do
+     @current_user =  UserPresenter.new FactoryGirl.create(:user, :admin)
+     visit '/'
+     login user
+   end
 
-    subject {page}
-    context "managing products" do
-      describe "creates product" do
+   subject {page}
+   context "managing products" do
+    describe "creates product" do
 
-        let(:product){ ProductPresenter.new FactoryGirl.build(:product), user}
+      let(:product){ ProductPresenter.new FactoryGirl.build(:product), user}
 
-        before do
-          visit new_admin_product_path
-          create_new_product product
-        end
+      before do
+        visit new_admin_product_path
+        create_new_product product
+      end
 
-        it{
-         product.should_not be_nil
-         should have_content("Successfully created product")
-         should have_short_product(product)
-         click_link product.title; should have_link("Edit product")}
+      it{
+       product.should_not be_nil
+       should have_content("Successfully created product")
+       should have_short_product(product)
+       click_link product.title; should have_link("Edit product")}
 
-         describe "and modifies them" do 
-           let(:product_2){ ProductPresenter.new FactoryGirl.build(:product)}
+       describe "and modifies them" do 
+         let(:product_2){ ProductPresenter.new FactoryGirl.build(:product)}
 
-          context "on product's page" do
-            
+         context "on product's page" do
+
            before do
              visit edit_admin_product_path(1)
              create_new_product product_2
@@ -51,40 +52,40 @@
             end
 
             it{
-            find_field("Quantity").value.should eq('9')
+              find_field("Quantity").value.should eq('9')
             }
-            
-          end
+
           end
         end
-
-        describe "creates categories" do 
-         before(:each) do
-          @category_name = "Category_1"
-          @product = ProductPresenter.new FactoryGirl.create(:product)
-          add_to_category @product.product, @category_name
-          visit '/categories'
-          click_link @category_name
-        end
-
-        it{ 
-          should have_content(@category_name)
-          should have_short_product(@product)
-        }
       end
 
-      describe "browse all products" do
-        let(:product_on_sale){ ProductPresenter.new FactoryGirl.create(:product, quantity: 5)}
-        let(:product_not_on_sale){ProductPresenter.new  FactoryGirl.create(
-          :product, 
-          quantity: 5, 
-          on_sale: false
-          )}
+      describe "creates categories" do 
+       before(:each) do
+        @category_name = "Category_1"
+        @product = ProductPresenter.new FactoryGirl.create(:product)
+        add_to_category @product.product, @category_name
+        visit '/categories'
+        click_link @category_name
+      end
 
-        before(:each) do
-          product_on_sale
-          product_not_on_sale
-          visit '/admin/products'
+      it{ 
+        should have_content(@category_name)
+        should have_short_product(@product)
+      }
+    end
+
+    describe "browse all products" do
+      let(:product_on_sale){ ProductPresenter.new FactoryGirl.create(:product, quantity: 5)}
+      let(:product_not_on_sale){ProductPresenter.new  FactoryGirl.create(
+        :product, 
+        quantity: 5, 
+        on_sale: false
+        )}
+
+      before(:each) do
+        product_on_sale
+        product_not_on_sale
+        visit '/admin/products'
           # save_and_open_page
         end
 
@@ -152,7 +153,7 @@
       visit edit_admin_product_path(@product)
       uncheck :on_sale
       find("form input[name='commit']").click
-      Product.find(@product.id).should_not be_on_sale
+      @product.reload.should_not be_on_sale
     end
 
     context "sees a listing of all orders" do
@@ -327,20 +328,17 @@ context "he may" do
  context "search order using a builder-style interface (like Google’s 'Advanced Search;) allowing them to specify any of these:" do
   before(:each) do
 
-    product_11 ||= ProductPresenter.new FactoryGirl.create(:product, base_price: 1100)
-    product_9 ||= ProductPresenter.new  FactoryGirl.create(:product, base_price: 900)
-    unless @pending_order
-      @pending_order = create_order [product_11.product]
-      @pending_order.created_at = Date.new(2011, 10,10)
-      @pending_order.save
-    end
+    product_11 = FactoryGirl.create(:product, base_price: 1100)
+    product_9 = FactoryGirl.create(:product, base_price: 900)
+
+    @pending_order = build_better_order [product_11], current_user
+    @pending_order.created_at = Date.new(2011, 10,10)
+    @pending_order.save
     
-    unless @cancelled_order
-      @cancelled_order = create_order [product_9.product]
-      @cancelled_order.created_at = Date.new(2008, 10,10)
-      @cancelled_order.cancel
-      @cancelled_order.save
-    end
+    @cancelled_order = build_better_order [product_9], current_user
+    @cancelled_order.created_at = Date.new(2008, 10,10)
+    @cancelled_order.cancel
+    @cancelled_order.save
 
     click_link 'Search'
   end
@@ -349,31 +347,35 @@ context "he may" do
     select('pending', from: 'search[status][status]')
     click_button "Search"
     page.should have_short_order(@pending_order), "#{page.find('body').native}"
-  end
+  # end
 
-  it 'Order total (drop-down for >, <, = and a text field for dollar-with-cents)' do
-    fill_in('search[value][total_value]', with: '$10')
-    select('more', :from => 'search[value][value]')
-    click_button "Search"
-    page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
-    page.should have_short_order(@pending_order), "#{page.find('body').native}"
-  end
+  # it 'Order total (drop-down for >, <, = and a text field for dollar-with-cents)' do
+  click_link 'Search'
+  fill_in('search[value][total_value]', with: '$10')
+  select('more', :from => 'search[value][value]')
+  click_button "Search"
+  page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
+  page.should have_short_order(@pending_order), "#{page.find('body').native}"
+  # end
 
-  it 'Order date (drop-down for >, <, = and a text field for a date)' do
-    select("after", from: 'search[date][date]')
-    select('2010', from: 'search[date][date_value(1i)]')
-    select('October', from: 'search[date][date_value(2i)]')
-    select('10', from: 'search[date][date_value(3i)]')
-    click_button "Search"
-    page.should have_short_order(@pending_order), "#{page.find('body').native}"
-    page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
-  end
-  it 'Email address of purchaser' do 
-    fill_in(:email, with: @pending_order.user.email)
-    click_button "Search"
-    page.should have_short_order(@pending_order), "#{page.find('body').native}"
-    page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
-  end
+  # it 'Order date (drop-down for >, <, = and a text field for a date)' do
+  click_link 'Search'
+  select("after", from: 'search[date][date]')
+  select('2010', from: 'search[date][date_value(1i)]')
+  select('October', from: 'search[date][date_value(2i)]')
+  select('10', from: 'search[date][date_value(3i)]')
+  click_button "Search"
+  page.should have_short_order(@pending_order), "#{page.find('body').native}"
+  page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
+  # end
+
+  # it 'Email address of purchaser' do 
+  click_link 'Search'
+  fill_in(:email, with: @pending_order.user.email)
+  click_button "Search"
+  page.should have_short_order(@pending_order), "#{page.find('body').native}"
+  page.should_not have_short_order(@cancelled_order), "#{page.find('body').native}"
+end
 end
 end
 end

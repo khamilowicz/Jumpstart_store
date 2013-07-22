@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130715114156) do
+ActiveRecord::Schema.define(:version => 20130720210740) do
 
   create_table "addresses", :force => true do |t|
     t.string  "country"
@@ -24,6 +24,9 @@ ActiveRecord::Schema.define(:version => 20130715114156) do
     t.integer "order_id"
   end
 
+  add_index "addresses", ["order_id"], :name => "addresses_order_id_ix"
+  add_index "addresses", ["user_id"], :name => "addresses_user_id_ix"
+
   create_table "assets", :force => true do |t|
     t.integer  "product_id"
     t.datetime "created_at",         :null => false
@@ -35,6 +38,8 @@ ActiveRecord::Schema.define(:version => 20130715114156) do
     t.text     "description"
   end
 
+  add_index "assets", ["product_id"], :name => "assets_product_id_ix"
+
   create_table "categories", :force => true do |t|
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
@@ -45,6 +50,9 @@ ActiveRecord::Schema.define(:version => 20130715114156) do
     t.integer "category_id"
     t.integer "sale_id"
   end
+
+  add_index "categories_sales", ["category_id"], :name => "cat_sal_category_id_ix"
+  add_index "categories_sales", ["sale_id"], :name => "cat_sal_product_id_ix"
 
   create_table "category_products", :force => true do |t|
     t.integer "category_id"
@@ -61,6 +69,8 @@ ActiveRecord::Schema.define(:version => 20130715114156) do
     t.integer  "base_price_cents",    :default => 0,     :null => false
     t.string   "base_price_currency", :default => "USD", :null => false
   end
+
+  add_index "order_products", ["order_id"], :name => "ord_pro_order_id_ix"
 
   create_table "orders", :force => true do |t|
     t.integer  "user_id"
@@ -84,6 +94,9 @@ ActiveRecord::Schema.define(:version => 20130715114156) do
     t.integer  "quantity",   :default => 0
   end
 
+  add_index "product_users", ["product_id"], :name => "pro_use_product_id_ix"
+  add_index "product_users", ["user_id"], :name => "pro_use_user_id_ix"
+
   create_table "products", :force => true do |t|
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
@@ -98,10 +111,15 @@ ActiveRecord::Schema.define(:version => 20130715114156) do
     t.string   "base_price_currency", :default => "USD", :null => false
   end
 
+  add_index "products", ["order_id"], :name => "products_order_id_ix"
+
   create_table "products_sales", :force => true do |t|
     t.integer "product_id"
     t.integer "sale_id"
   end
+
+  add_index "products_sales", ["product_id"], :name => "pro_sal_product_id_ix"
+  add_index "products_sales", ["sale_id"], :name => "pro_sal_sale_id_ix"
 
   create_table "reviews", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -112,6 +130,9 @@ ActiveRecord::Schema.define(:version => 20130715114156) do
     t.integer  "user_id"
     t.integer  "product_id"
   end
+
+  add_index "reviews", ["product_id"], :name => "reviews_product_id_ix"
+  add_index "reviews", ["user_id"], :name => "reviews_user_id_ix"
 
   create_table "sales", :force => true do |t|
     t.integer  "discount"

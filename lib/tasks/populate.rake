@@ -1,4 +1,4 @@
-namespace :db do 
+namespace :db do
   desc 'Erase and fill database'
   task :populate => :environment do
     require 'faker'
@@ -14,17 +14,17 @@ namespace :db do
       )
     admin.activated = true
     admin.promote_to_admin
-    admin.address = Address.create(
-      country: Faker::Lorem.word,
-      city: Faker::Lorem.word,
-      zip_code: rand(89999) + 10000,
-      street: Faker::Lorem.word,
-      house_nr: rand(100),
-      door_nr: rand(100)
-      )
+      admin.address = Address.create(
+        country: Faker::Lorem.word,
+        city: Faker::Lorem.word,
+        zip_code: rand(89999) + 10000,
+        street: Faker::Lorem.word,
+        house_nr: rand(100),
+        door_nr: rand(100)
+        )
     admin.save
 
-    40.times do 
+    40.times do
       Product.create!(
         title: Faker::Lorem.sentence(rand(4)+1),
         description: Faker::Lorem.paragraph(3),
@@ -59,7 +59,7 @@ namespace :db do
       user = User.new(
         first_name: Faker::Name.first_name,
         last_name: Faker::Name.last_name,
-        email: Faker::Internet.email, 
+        email: Faker::Internet.email,
         password: password,
         password_confirmation: password,
         )
@@ -75,11 +75,11 @@ namespace :db do
       user.save
     end
 
-    5.times do 
+    5.times do
       Category.create!(
         name: "#{Faker::Lorem.word}"
         )
-    end 
+    end
 
     Category.all.each do |category|
       Product.all.sample(11).each do |product|

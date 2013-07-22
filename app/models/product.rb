@@ -57,7 +57,7 @@ class Product < ActiveRecord::Base
       end
     end
 
-    def get_discount 
+    def get_discount
       self.all.map{|product| product.get_discount }.min
     end
 
@@ -68,14 +68,14 @@ class Product < ActiveRecord::Base
     end
   end
 
-  def add param 
+  def add param
     param.each do |name, items|
       self.send "add_#{name}", items
-    end 
+    end
   end
-  
+
   {'start_selling' => true, 'retire' => false}.each do |name, on_sale_value|
-    define_method name do 
+    define_method name do
       self.on_sale = on_sale_value
       self.save
     end

@@ -1,5 +1,5 @@
 class CreateCategoryProducts < ActiveRecord::Migration
-  def change 
+  def change
   	create_table :category_products do |t|
   		t.integer :category_id
   		t.integer :product_id

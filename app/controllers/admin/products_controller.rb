@@ -2,7 +2,7 @@ class Admin::ProductsController < ApplicationController
 
   before_filter :authorize_admin
   layout 'admin_application'
-  
+
   def index
     @products = Product.page params[:page]
   end
@@ -18,7 +18,7 @@ class Admin::ProductsController < ApplicationController
   def update
     @product = Product.find(params[:id])
     if params[:assets]
-      @photos = params[:assets][:photos] 
+      @photos = params[:assets][:photos]
       @product.add photos: @photos
     end
 
@@ -37,7 +37,7 @@ class Admin::ProductsController < ApplicationController
 
     if product.save
       if params[:assets]
-        @photos = params[:assets][:photos] 
+        @photos = params[:assets][:photos]
         product.add photos: @photos
       end
       redirect_to products_path, notice: "Successfully created product"

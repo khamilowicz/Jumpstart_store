@@ -45,7 +45,7 @@ config.active_record.auto_explain_threshold_in_seconds = 0.5
     user_name:            ENV['GMAIL_USER_NAME'],
     password:            ENV['GMAIL_PASSWORD'],
     authentication:       'plain',
-    enable_starttls_auto: true 
+    enable_starttls_auto: true
   }
 
   config.after_initialize do

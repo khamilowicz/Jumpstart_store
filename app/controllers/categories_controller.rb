@@ -6,13 +6,17 @@ class CategoriesController < ApplicationController
  end
 
  def show
-   @category = Category.find(params[:id])
-   @products = @category.products.page params[:page]
-   @products_presenter = ProductPresenter.new_from_array @products, current_user
+  @category = Category.where(id: params[:id]).first
 
+   if @category.nil?
+    flash[:errors] = "Category doesn't exist"
+    redirect_to categories_path
+  else
+   @products = @category.products.page params[:page]
    respond_to do |format|
     format.html { render 'products/index'}
     format.js
   end
+end
 end
 end
