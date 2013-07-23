@@ -88,7 +88,7 @@
           order.products.each do |product|
             within('.products'){
               should have_selector('.product', text: product.title)
-              should have_selector(".product .quantity", text: @quantity_of_products_in_order.to_s)
+              should have_selector(".product .quantity", text: @quantity_of_products_in_order.to_s), "#{page.find('.product').native}"
             }
           end
           # end

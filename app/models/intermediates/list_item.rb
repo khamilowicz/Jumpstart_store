@@ -1,4 +1,3 @@
-
 class ListItem < ActiveRecord::Base
 
 	DiffrentProductAssignment = Class.new(Exception)
@@ -9,8 +8,11 @@ class ListItem < ActiveRecord::Base
 	belongs_to :holder, polymorphic: true
 
 	validates_numericality_of :quantity, greater_than: 0, only_integer: true
+	validates_numericality_of :discount, greater_than: -1, only_integer: true
 
 	scope :where_product, ->(product){ where(product_id: product.id) }
+
+delegate :base_price, to: :product
 
 	def self.quantity_all
 		self.sum :quantity
@@ -45,6 +47,22 @@ class ListItem < ActiveRecord::Base
 			end
 		end
 
+		def on_discount?
+			self.discount > 0
+		end
+
+		def self.on_discount?
+			self.all.any?{|d| d.on_discount?}
+		end
+
+		def self.total_price sth=nil
+			self.all.map(&:total_price).reduce(:+) || Money.new(0, 'USD')
+		end
+
+		def total_price par=nil
+			self.product.base_price*self.quantity*(1 - self.discount/100)
+		end
+
 		private
 
 		def remove_product product_x
@@ -56,6 +74,7 @@ class ListItem < ActiveRecord::Base
 		def add_product item
 			if self.product == nil
 				self.product = item
+				self.discount = item.discount
 			elsif self.product == item
 				self.quantity += 1
 			else

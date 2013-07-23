@@ -32,7 +32,7 @@ class SalesController < ApplicationController
 
   def create
     @sale = Sale.new_from_params params
-
+# binding.pry
     if @sale.save
       flash[:notice] = "Successfully created sale"
       redirect_to sales_path

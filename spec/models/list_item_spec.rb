@@ -8,11 +8,43 @@ describe ListItem do
 	it{ should_not allow_value(0).for(:quantity)}
 	it{ should_not allow_value(-1).for(:quantity)}
 	it{ should_not allow_value(1.5).for(:quantity)}
+	it{ should validate_numericality_of(:discount)}
+	it{ should allow_value(0).for(:discount)}
+	it{ should_not allow_value(-1).for(:discount)}
+	it{ should_not allow_value(1.5).for(:discount)}
 
 	context "instance" do
 
 		let(:product){ mock_model('Product')}
 		let(:list_item){ ListItem.new}
+
+		context "with discount" do
+			describe "#on_discount?" do
+				it "return true when discount > 0" do
+					list_item.should_not be_on_discount
+					list_item.discount = 1
+					list_item.should be_on_discount
+				end
+			end
+
+			describe "#discount" do
+				it "is the same as product's but doesn't change" do
+					product.stub(:discount){10}
+					list_item.add product: product
+					list_item.discount.should eq(10)
+					product.stub(:discount){20}
+					list_item.discount.should eq(10)
+				end
+			end	
+		end
+
+	describe "#total_price" do
+	  it "returns total price of product, considering its quantity" do
+	  	product = FactoryGirl.create(:product, discount: 10)
+	  	2.times{ list_item.add product: product }
+	  	list_item.total_price.should eq(product.total_price*2)
+	  end
+	end
 
 		describe "#add" do
 			context "product" do

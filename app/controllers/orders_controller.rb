@@ -54,7 +54,7 @@ end
 def show
 	@order = Order.find(params[:id])
 	@user = UserPresenter.new @order.user
-	@order_products = ProductPresenter.new_from_array @order.order_products, current_user
+	@order_products = ProductPresenter.new_from_array @order.products, @order
 end
 
 private

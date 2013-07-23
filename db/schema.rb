@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130722181703) do
+ActiveRecord::Schema.define(:version => 20130722223239) do
 
   create_table "addresses", :force => true do |t|
     t.string  "country"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(:version => 20130722181703) do
     t.string  "holder_type"
     t.integer "product_id"
     t.integer "quantity",    :default => 1
+    t.integer "discount",    :default => 0
   end
 
   add_index "list_items", ["holder_id"], :name => "list_item_holder_idx"
@@ -114,7 +115,7 @@ ActiveRecord::Schema.define(:version => 20130722181703) do
     t.text     "description"
     t.string   "photo"
     t.boolean  "on_sale",             :default => false
-    t.integer  "discount",            :default => 100
+    t.integer  "discount",            :default => 0
     t.integer  "order_id"
     t.integer  "quantity",            :default => 1
     t.integer  "base_price_cents",    :default => 0,     :null => false

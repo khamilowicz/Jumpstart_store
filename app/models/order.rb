@@ -2,8 +2,10 @@
 class Order < ActiveRecord::Base
 
 	belongs_to :user
-	has_many :order_products
-	has_many :products, through: :order_products
+
+	has_many :list_items, as: :holder
+	has_many :products, through: :list_items
+
 	has_one :address
 	has_one :address
 	accepts_nested_attributes_for :address
@@ -37,12 +39,13 @@ class Order < ActiveRecord::Base
 		where("price_cents #{COMPARISONS[sign_word]} ?", Money.parse(value).cents)
 	}
 
-	def self.count_by_status status;  self.where(status: status).count; end
+	def self.count_by_status status;  
+		self.where(status: status).count; end
 
 	alias_attribute :date_of_purchase, :created_at
 	alias_attribute :time_of_status_change, :status_change_date
 
-	delegate :total_price, :on_discount?, to: :order_products
+	delegate :total_price, :on_discount?, :where_product, to: :list_items
 
 	before_save :set_price_and_discount
 
@@ -57,7 +60,7 @@ class Order < ActiveRecord::Base
 	end
 
 	def total_discount
-		return 100 if total_price_without_discount.cents.zero?
+		return 0 if total_price_without_discount.cents.zero?
 		(total_price_without_discount.cents - total_price.cents)*100/total_price_without_discount.cents
 	end
 
@@ -76,7 +79,7 @@ class Order < ActiveRecord::Base
 	end
 
 	def add param
-		self.order_products.new.add(param[:product]).save if param[:product]
+		self.list_items.add param
 	end
 
 	private

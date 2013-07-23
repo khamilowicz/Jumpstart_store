@@ -1,6 +1,8 @@
 class Product < ActiveRecord::Base
 
-  extend TotalPrice
+  # extend TotalPrice
+
+  NO_PRICE = Money.new(0, 'USD')
 
   paginates_per 9
 
@@ -36,6 +38,7 @@ class Product < ActiveRecord::Base
   delegate :rating, to: :reviews
   delegate :get_discount, to: :sales
   delegate :photos, to: :assets
+  delegate :quantity_all, to: :list_items
 
   class << self
 
@@ -57,8 +60,12 @@ class Product < ActiveRecord::Base
       end
     end
 
+    def total_price par=nil
+      self.all.collect{|p| p.total_price par}.reduce(:+) || NO_PRICE
+    end
+
     def get_discount
-      self.all.map{|product| product.get_discount }.min
+      self.all.map{|product| product.get_discount }.max
     end
 
     def off_discount identifier=nil
@@ -66,6 +73,11 @@ class Product < ActiveRecord::Base
       # self.sales.off_discount identifier, self
       # self.all.each { |p| p.sales.off_discount identifier, self }
     end
+  end
+
+  def total_price par=nil
+     return self.base_price || NO_PRICE  if par == 'base'
+     return self.base_price*(1 - self.discount.to_f/100) || NO_PRICE
   end
 
   def add param
@@ -82,7 +94,7 @@ class Product < ActiveRecord::Base
   end
 
   def set_discount percent, name=nil
-    self.sales << Sale.set_discount( percent, name); self.save
+    self.sales << Sale.set_discount(percent, name); save
   end
 
   def self.on_discount?
@@ -94,7 +106,7 @@ class Product < ActiveRecord::Base
   end
 
   def off_discount identifier=nil
-    self.sales.destroy_all
+    self.sales.destroy_all; save
   end
 
   def out_of_stock?
@@ -102,13 +114,7 @@ class Product < ActiveRecord::Base
   end
 
   def in_carts
-    self.product_users.quantity
-  end
-
-  def swap_prepare
-    self.quantity +=1
-    yield
-    self.quantity -=1
+    self.list_items.quantity_all
   end
 
   def on_sale?
@@ -136,6 +142,6 @@ class Product < ActiveRecord::Base
   end
 
   def save_total_discount
-    self.discount = self.get_discount || 100
+    self.discount = self.get_discount || 0
   end
 end
