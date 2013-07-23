@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Cart do
 	describe ".remove_product" do
 		let(:user){ FactoryGirl.create(:user)}
+		# let(:user){ FactoryGirl.create(:user)}
 		let(:product){ Product.new}
 		subject{ user.cart}
 

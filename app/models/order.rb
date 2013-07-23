@@ -7,7 +7,6 @@ class Order < ActiveRecord::Base
 	has_many :products, through: :list_items
 
 	has_one :address
-	has_one :address
 	accepts_nested_attributes_for :address
 	monetize :price_cents
 
