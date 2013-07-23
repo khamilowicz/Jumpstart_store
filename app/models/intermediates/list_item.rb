@@ -4,6 +4,22 @@ class ListItem < ActiveRecord::Base
 	Empty = Class.new(Exception)
 	ProductNotPresent = Class.new(Exception)
 
+	CURRENCY = 'USD'
+
+	##TODO Come up with sth to synchronize those values (instance eval ?)
+	QUERY_PRICE_WITH_DISCOUNT = 'list_items.quantity * products.base_price_cents * ( 1.0 - list_items.discount/100.0)'
+
+	def total_price
+		Money.new instance_eval query_to_eval, CURRENCY
+	end
+
+	def query_to_eval
+		QUERY_PRICE_WITH_DISCOUNT.gsub(/list_items/, 'self').gsub(/products/, 'self.product')	
+	end
+	# def total_price par=nil
+	# 	self.quantity*self.product.base_price*(1 - self.discount/100.0)
+	# end
+
 	belongs_to :product
 	belongs_to :holder, polymorphic: true
 
@@ -12,7 +28,7 @@ class ListItem < ActiveRecord::Base
 
 	scope :where_product, ->(product){ where(product_id: product.id) }
 
-delegate :base_price, to: :product
+	delegate :base_price, to: :product
 
 	def self.quantity_all
 		self.sum :quantity
@@ -56,13 +72,10 @@ delegate :base_price, to: :product
 		end
 
 		def self.total_price sth=nil
-			# self.all.map(&:total_price).reduce(:+) || Money.new(0, 'USD')
-      Money.new(self.joins(:product).sum('list_items.quantity*products.base_price_cents * ( 1.0 - list_items.discount/100.0)'), 'USD')
+			# self.all.map(&:total_price).reduce(:+) || Money.new(0, CURRENCY)
+			Money.new(self.joins(:product).sum(QUERY_PRICE_WITH_DISCOUNT), CURRENCY)
 		end
 
-		def total_price par=nil
-			self.product.base_price*self.quantity*(1 - self.discount.to_f/100)
-		end
 
 		private
 

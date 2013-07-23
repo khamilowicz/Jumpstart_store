@@ -2,7 +2,13 @@ class Product < ActiveRecord::Base
 
   # extend TotalPrice
 
-  NO_PRICE = Money.new(0, 'USD')
+  CURRENCY = 'USD'
+  NO_PRICE = Money.new(0, CURRENCY)
+  QUERY_PRICE_WITH_DISCOUNT = 'products.base_price_cents * ( 1.0 - products.discount/100.0)'
+  
+  def discount_price_calc
+    self.base_price*(1 - self.discount/100.0) || NO_PRICE
+  end
 
   paginates_per 9
 
@@ -62,87 +68,85 @@ class Product < ActiveRecord::Base
 
     def total_price par=nil
       # self.all.reduce(NO_PRICE){|sum, p| sum += p.total_price par} 
-      Money.new(self.sum('products.base_price_cents * ( 1.0 - products.discount/100.0)'), 'USD')
+      Money.new(self.sum(QUERY_PRICE_WITH_DISCOUNT), CURRENCY)
     end
 
     def get_discount
       self.all.map{|product| product.get_discount }.max
     end
-
-    def off_discount identifier=nil
-      #identifier - sale obj, name or percent. if nil - every sale
-      # self.sales.off_discount identifier, self
-      # self.all.each { |p| p.sales.off_discount identifier, self }
-    end
   end
 
   def total_price par=nil
-     return self.base_price || NO_PRICE  if par == 'base'
-     return self.base_price*(1 - self.discount.to_f/100) || NO_PRICE
-  end
+   return self.base_price || NO_PRICE if par == 'base'
+   return self.discount_price_calc
+ end
 
-  def add param
-    param.each do |name, items|
-      self.send "add_#{name}", items
-    end
+ def add param
+  param.each do |name, items|
+    self.send "add_#{name}", items
   end
+end
 
-  {'start_selling' => true, 'retire' => false}.each do |name, on_sale_value|
-    define_method name do
-      self.on_sale = on_sale_value
-      self.save
-    end
+{'start_selling' => true, 'retire' => false}.each do |name, on_sale_value|
+  define_method name do
+    self.on_sale = on_sale_value
+    self.save
   end
+end
 
-  def set_discount percent, name=nil
-    self.sales << Sale.set_discount(percent, name); save
+def set_discount percent, name=nil
+  self.sales << Sale.set_discount(percent, name); save
+end
+
+def self.on_discount?
+  self.joins(:sales).count > 0
+end
+
+def on_discount?
+  self.sales.count > 0
+end
+
+def off_discount identifier=nil
+  self.sales.destroy_all; save
+end
+
+def out_of_stock?
+  self.quantity == self.in_carts
+end
+
+def in_carts
+  self.list_items.quantity_all
+end
+
+def on_sale?
+  self.on_sale && any_left_in_warehouse?
+end
+
+def any_left_in_warehouse?
+ ListItem.where_product(self).sum(:quantity) < self.quantity 
+end
+
+private
+
+def create_asset
+  self.assets.create
+end
+
+def add_category category
+  Category.get(category).add product: self
+end
+
+def add_review review
+  reviews << review
+end
+
+def add_photos photos
+  photos.each do |photo|
+    self.assets.create({photo: photo})
   end
+end
 
-  def self.on_discount?
-    self.joins(:sales).count > 0
-  end
-
-  def on_discount?
-    self.sales.count > 0
-  end
-
-  def off_discount identifier=nil
-    self.sales.destroy_all; save
-  end
-
-  def out_of_stock?
-    self.quantity == self.in_carts
-  end
-
-  def in_carts
-    self.list_items.quantity_all
-  end
-
-  def on_sale?
-    self.on_sale && ListItem.where_product(self).sum(:quantity) < self.quantity
-  end
-
-  private
-
-  def create_asset
-    self.assets.create
-  end
-
-  def add_category category
-    Category.get(category).add product: self
-  end
-
-  def add_review review
-    reviews << review
-  end
-
-  def add_photos photos
-    photos.each do |photo|
-      self.assets.create({photo: photo})
-    end
-  end
-
-  def save_total_discount
-    self.discount = self.get_discount || 0
-  end
+def save_total_discount
+  self.discount = self.get_discount || 0
+end
 end
