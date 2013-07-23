@@ -3,7 +3,7 @@ class Order < ActiveRecord::Base
 
 	belongs_to :user
 
-	has_many :list_items, as: :holder
+	has_many :list_items, as: :holder, include: :product
 	has_many :products, through: :list_items
 
 	has_one :address

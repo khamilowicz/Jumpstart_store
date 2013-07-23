@@ -61,7 +61,8 @@ class Product < ActiveRecord::Base
     end
 
     def total_price par=nil
-      self.all.collect{|p| p.total_price par}.reduce(:+) || NO_PRICE
+      # self.all.reduce(NO_PRICE){|sum, p| sum += p.total_price par} 
+      Money.new(self.sum('products.base_price_cents * ( 1.0 - products.discount/100.0)'), 'USD')
     end
 
     def get_discount

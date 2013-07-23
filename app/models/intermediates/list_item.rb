@@ -56,11 +56,12 @@ delegate :base_price, to: :product
 		end
 
 		def self.total_price sth=nil
-			self.all.map(&:total_price).reduce(:+) || Money.new(0, 'USD')
+			# self.all.map(&:total_price).reduce(:+) || Money.new(0, 'USD')
+      Money.new(self.joins(:product).sum('list_items.quantity*products.base_price_cents * ( 1.0 - list_items.discount/100.0)'), 'USD')
 		end
 
 		def total_price par=nil
-			self.product.base_price*self.quantity*(1 - self.discount/100)
+			self.product.base_price*self.quantity*(1 - self.discount.to_f/100)
 		end
 
 		private

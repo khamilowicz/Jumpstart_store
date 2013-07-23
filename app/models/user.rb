@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
 	validates_presence_of :password, on: :create, unless: :guest?
 	validates :password, confirmation: true
 
-	has_many :list_items, as: :holder
+	has_many :list_items, as: :holder, include: :product
 	has_many :products, through: :list_items
 	has_many :orders
 

@@ -1,9 +1,6 @@
   class ProductPresenter
 
-    # include ActiveModel::Conversion
     extend ActiveModel::Naming
-
-    extend TotalPrice
 
     attr_accessor :product, :quantity_in_warehouse, :quantity_for_user
     def belongs_to_user?
