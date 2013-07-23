@@ -1,35 +1,40 @@
   class ProductPresenter
 
-    # include ActiveModel::Conversion
     extend ActiveModel::Naming
 
-    extend TotalPrice
-
     attr_accessor :product, :quantity_in_warehouse, :quantity_for_user
-
     def belongs_to_user?
-      @belongs_to_user || @product.users.include?(@user)
+      @belongs_to_user || @product.users.include?(@holder)
+    end
+
+    def quantity_for_user
+      @quantity_for_holder
     end
 
     def price
-      @product.base_price*@product.get_discount/100
+      @product.base_price*(1 - @product.get_discount.to_f/100)
     end
 
     def currency
       @product.base_price.currency
     end
 
-    def initialize product, user=nil
+    def quantity
+      @quantity_for_holder
+    end
+
+    def initialize product, holder=nil
       @product = product
-      @user = user
-      @quantity_for_user = ProductUser.quantity(product, @user)
-      @quantity_in_warehouse = self.quantity - @product.product_users.quantity
+      @holder = holder
+      @quantity_for_holder = 0
+      @quantity_for_holder = @holder.where_product(@product).quantity_all if @holder
+      @quantity_in_warehouse = self.quantity - @product.list_items.quantity_all
       @belongs_to_user = belongs_to_user?
       return nil if product == nil
     end
 
-    def self.new_from_array products, user=nil
-      Array(products).map { |p| self.new p, user }
+    def self.new_from_array products, holder=nil
+      Array(products).map { |p| self.new p, holder }
     end
 
     def method_missing(name, *args, &block)

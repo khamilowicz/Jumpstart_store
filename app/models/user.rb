@@ -16,11 +16,12 @@ class User < ActiveRecord::Base
 	validates_presence_of :password, on: :create, unless: :guest?
 	validates :password, confirmation: true
 
-	has_many :product_users
-	has_many :products, through: :product_users
+	has_many :list_items, as: :holder, include: :product
+	has_many :products, through: :list_items
 	has_many :orders
 
 	delegate :empty?, to: :cart, prefix: true
+	delegate :where_product, to: :list_items
 
 	class << self
 
@@ -49,10 +50,10 @@ class User < ActiveRecord::Base
 	private
 
 	def add_product product
-		ProductUser.add product, self if product.on_sale?
+		self.list_items.add product: product if product.on_sale?
 	end
 
 	def remove_product product
-		ProductUser.remove product, self
+		self.list_items.remove product: product 
 	end
 end

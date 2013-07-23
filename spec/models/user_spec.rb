@@ -3,7 +3,6 @@ require 'spec_helper'
 describe User do
 
   context "who is registered" do
-    
 
     it{ should validate_confirmation_of(:password)}
 
@@ -57,41 +56,40 @@ describe User do
 
 
       describe ".add product:" do
+        let(:user){@user}
+
         its(:products){should be_empty}
         it{ 
-          subject.add product: product 
-          subject.products.
+          user.add product: product 
+          user.products.
           should include(product)
         }
 
         it{ 
-          subject.add product: product_not_on_sale
-          subject.products.
+          user.add product: product_not_on_sale
+          user.products.
           should_not include(product_not_on_sale)
         }
 
         it{ 
-          expect{ subject.add product: product}.
-          to change{ ProductUser.quantity subject, product}.
-          from(0).
-          to(1)
+          user.add product: product
+          user.where_product(product)
+          .first.quantity.should eq(1)
         }
 
         it{ 
-          expect{ subject.add product: product_not_on_sale}.
-          to_not change{ProductUser.quantity subject, product_not_on_sale}.
-          by(1)
+          user.add product: product_not_on_sale
+          user.where_product(product_not_on_sale)
+          .first.should be_nil
         }
 
         it "cannot add products beyond its quantity" do
           product.quantity.times{
-            expect{ subject.add product: product }.
-            to change{ ProductUser.quantity subject, product}.
-            by(1)
+           user.add product: product 
           }
-          expect{ subject.add product: product }.
-          to_not change{ ProductUser.quantity subject, product}.
-          by(1)
+          expect{ user.add product: product }.
+          to_not change{ user.where_product(product)
+          .first.quantity}
         end
       end
 
@@ -105,8 +103,10 @@ describe User do
         its(:products){should include(product, product_2)}
 
         describe ".cart" do
-          it{ subject.cart.products.should_not include(product_3)}
-          it{ subject.cart.products.should include(product, product_2)}
+          it{ subject.products.should_not include(product_3)}
+          it{ subject.products.should include(product, product_2)}
+          # it{ subject.cart.products.should_not include(product_3)}
+          # it{ subject.cart.products.should include(product, product_2)}
         end
 
         describe ".transfer_products" do
@@ -125,8 +125,10 @@ describe User do
 
           its(:products){should_not include(product)}
           its(:products){should include(product_2)}
-          it{ subject.cart.products.should_not include(product_3, product)}
-          it{ subject.cart.products.should include(product_2)}
+          it{ subject.products.should_not include(product_3, product)}
+          it{ subject.products.should include(product_2)}
+          # it{ subject.cart.products.should_not include(product_3, product)}
+          # it{ subject.cart.products.should include(product_2)}
 
           describe "many times" do
 

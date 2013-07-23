@@ -45,16 +45,18 @@ describe ProductPresenter do
     it{ (product_presenter.price + product_presenter.price).should eq(Money.new(200, "USD")) }
 
     describe "discounts" do
-    let(:product){ ProductPresenter.new FactoryGirl.build(:product)}
+    let(:product){ ProductPresenter.new FactoryGirl.create(:product)}
 
-    it{ expect{product_presenter.set_discount 50; product_presenter.save}.to change{
+    it{ expect{product_presenter.set_discount 50}.to change{
       product_presenter.price
       }.from(product_presenter.base_price).to(product_presenter.base_price/2)
     }
 
-    it{ expect{product_presenter.set_discount 50; product_presenter.off_discount}.to_not change{
+    it{ 
+      product_presenter.set_discount 50;
+      expect{ product_presenter.off_discount}.to change{
       product_presenter.price
-      }.from(product_presenter.base_price).to(product_presenter.base_price/2)
+      }.from(product_presenter.base_price/2).to(product_presenter.base_price)
     }
   end
 end

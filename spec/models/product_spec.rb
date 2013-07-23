@@ -109,12 +109,12 @@ describe Product do
 
       it{ expect{product.set_discount(50)}.to change{
         product.get_discount
-        }.from(100).to(50)
+        }.from(0).to(50)
       }
 
       it{ expect{product.set_discount 50; product.off_discount}.to_not change{
         product.get_discount
-        }.from(100)
+        }.from(0)
       }
 
       it{ expect{product.set_discount 50}.to change{
@@ -130,7 +130,7 @@ describe Product do
           it{ 
             expect{ product.off_discount}.
             to change{ product.get_discount}.
-            from(50).to(100)
+            from(50).to(0)
           }
         end
 
@@ -161,7 +161,6 @@ describe Product do
     end
     describe "#users" do
 
-
       let(:product){FactoryGirl.create(:product)}
       let(:user){ User.new}
       before(:each){ user.stub(:valid?){true}; user.save}
@@ -172,17 +171,17 @@ describe Product do
     end
 
     describe "#total_price" do
-      let(:user){ User.new}
-      let(:products){ FactoryGirl.create_list(:product, 5, base_price: 1)}
-      
-      before(:each) do
-        user.stub(:valid?){true}
-        user.save
-        products.each do |p|
-          user.add product: p
-        end
+      let(:product){FactoryGirl.create(:product, base_price: 100, discount: 0)}
+      it "should description" do
+        product.discount.should eq(0)
+        product.total_price.should eq(Money.parse("$1"))
+        
       end
-      subject{ user.products}
-      its(:total_price){ should eq(Money.new(5, "USD"))}
+    end
+
+    describe ".total_price" do
+      let!(:products){ FactoryGirl.create_list(:product, 2, base_price: 1, discount: 0)}
+      subject{ Product.total_price}
+      it{ should eq(Money.new(2, "USD"))}
     end
   end

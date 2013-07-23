@@ -223,7 +223,7 @@
         should have_selector(".order .purchaser", text: @user.full_name)
         should have_selector(".order .purchaser", text: @user.email)
         should have_link(@product.title)
-        should have_selector( ".products .product .quantity", text: @product.quantity.to_s)
+        should have_selector( ".products .product .quantity", text: '1')
         should have_selector( ".products .product .price", text: @product.price.to_s)
         should have_selector('.order .total_price', text: @order.total_price.to_s )
         should have_selector('.order .status', text: @order.status )

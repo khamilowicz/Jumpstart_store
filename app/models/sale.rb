@@ -30,7 +30,7 @@ class Sale < ActiveRecord::Base
     end
 
     def get_discount
-      self.minimum(:discount) || 100
+      self.maximum(:discount) || 0
     end
 
     def set_discount percent, name=nil

@@ -10,12 +10,11 @@ FactoryGirl.define do
 
     ignore do
      base_price 100
-     discount 100
+     discount 0
    end
 
    after(:build) do |product, evaluator|
     product.base_price = Money.new(evaluator.base_price, "USD")
-    product.discount discount if evaluator.discount != 100
   end
 
   trait :with_photo do

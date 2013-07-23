@@ -89,37 +89,14 @@ describe Category do
       it{ Category.get("Category_2").products.should include(product_2)}
     end
   end
-
-  describe "#products_for_user" do
-   
-    let(:user){ FactoryGirl.create(:user)}
-    let(:products){ FactoryGirl.create_list(:product, 3)}
-
-    before(:each) do
-
-      user.add product: products[0]
-      user.add product: products[1]
-      category.add product: products[1]
-      category.add product: products[2]
-    end
-
-    it{ user.products.should include(*products[0,2])}
-    it{ user.products.should_not include(products[2])}
-
-    it{ category.products.should include(*products[1,2])}
-    it{ category.products.should_not include(products[0])}
-
-    it{ category.products_for_user(user).should include(products[1])}
-    it{ category.products_for_user(user).should_not include(products[0], products[2])}
-  end
 end
 
 describe "total price" do
 
   let!(:category){ Category.get 'total price'}
  
-  let!(:product_1){ FactoryGirl.build(:product, base_price: 100)}
-  let!(:product_2){ FactoryGirl.build(:product, base_price: 200)}
+  let!(:product_1){ FactoryGirl.create(:product, base_price: 100)}
+  let!(:product_2){ FactoryGirl.create(:product, base_price: 200)}
 
   it{
    expect{ category.add product: product_1 }.
@@ -164,6 +141,7 @@ describe "concerning putting on sale" do
 
   describe "set_discount" do
     before {category.start_selling}
+    let(:products){ category.products}
 
     it{ expect{ category.set_discount 50}.to change{category.total_price}.from(product_price).to(product_price/2)}
   end

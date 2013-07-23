@@ -3,7 +3,6 @@ require 'spec_helper'
 describe Order do
 
   it{ should belong_to(:user)}
-  it{ should have_many(:order_products)}
   it{ should validate_presence_of(:address)}
   it{ should respond_to(:date_of_purchase) }
   it{ should respond_to(:price)}
@@ -52,24 +51,16 @@ end
 describe "total  price and total discount" do
   let(:price){ Money.parse("$1")}
   let(:total_price){ price*2}
-  let(:products){ []}
-
-  before :each do 
-    2.times do 
-      product = Product.new
-      product.stub(quantity: 2, base_price: price, valid?: true)
-      products << product
-    end
-  end
+  let(:products){ FactoryGirl.create_list(:product, 2)}
 
   let(:order){build_order products}
 
  it{ order.total_price.should eq(total_price)} 
  it{ order.total_discount.should eq(0)} 
  it{ order.on_discount?.should eq(false)} 
- it "calls total_price on order_products" do
+ it "calls total_price on list_items" do
   order.save
-  OrderProduct.should_receive(:total_price)
+  ListItem.should_receive(:total_price)
   order.total_price
  end
 
@@ -103,7 +94,7 @@ describe "products" do
 end
 
 describe "transfer" do
-  before { order.save; order.transfer_products}
+  before { order.transfer_products}
 
   it{ user.products.should be_empty}
   it{ order.products.should_not be_empty}

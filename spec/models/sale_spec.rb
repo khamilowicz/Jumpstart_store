@@ -26,16 +26,16 @@ describe Sale do
       its(:name){should eq('sale')}
       its(:discount){should eq(10)}
 
-      describe "#get_discount" do
+      describe "#get_discount is always maximum discount from all sales" do
         it{ @product.sales.get_discount.should eq(10)}
         it{
           expect{@product.set_discount 9}
-          .to change{@product.sales.get_discount}
-          .from(10).to(9)
+          .to_not change{@product.sales.get_discount}
         }
         it{
           expect{@product.set_discount 13}
-          .to_not change{@product.sales.get_discount}
+          .to change{@product.sales.get_discount}
+          .from(10).to(13)
         }
 
       end
@@ -45,7 +45,7 @@ describe Sale do
         it{ expect{
          subject.remove(product: @product); @product.save}.
          to change{ @product.discount}.
-         from(10).to(100)
+         from(10).to(0)
        }
        it{ expect{
         subject.remove }.
@@ -66,7 +66,7 @@ describe Sale do
     end
 
     it{ @products.each { |product| product.get_discount.should eq(50) }}
-    it{ @product_not_in_category.discount.should eq(100)}
+    it{ @product_not_in_category.discount.should eq(0)}
   end
 end
 
@@ -95,7 +95,7 @@ describe "created from params" do
   it{
     expect{ make_sale}
     .to change{ products.first.get_discount}
-    .from(100).to(50)  
+    .from(0).to(50)  
   }
 end
 end
