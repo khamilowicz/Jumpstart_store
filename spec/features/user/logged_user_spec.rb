@@ -2,14 +2,17 @@
 
  describe "logged user" do
 
+ 
+
   subject{page}
   let(:user){ @current_user}
 
   before do
    @current_user =  UserPresenter.new FactoryGirl.create(:user)
+   
 
+   fast_login user
    visit '/'
-   login user
  end
 
  it_behaves_like 'user'
@@ -128,9 +131,9 @@
           it "they can still access the product page" do
             should have_content(product.title)
             should have_content(product.description)
-          end
+          # end
 
-          it "they cannot add it to a new cart" do 
+          # it "they cannot add it to a new cart" do 
             should_not have_link "Add to cart"
           end
         end

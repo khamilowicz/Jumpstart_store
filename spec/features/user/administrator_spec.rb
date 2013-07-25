@@ -6,8 +6,8 @@
     let(:user){ current_user}
     before(:each) do
      @current_user =  UserPresenter.new FactoryGirl.create(:user, :admin)
+     fast_login user
      visit '/'
-     login user
    end
 
    subject {page}
@@ -91,13 +91,13 @@
 
         it "as a list" do
           page.should have_content( product_on_sale.title)
-        end
+        # end
 
-        it "both on sale and not" do
+        # it "both on sale and not" do
           page.should have_content( product_not_on_sale.title)
-        end
+        # end
 
-        it "with its quantity in stock" do
+        # it "with its quantity in stock" do
           page.should have_content("Quantity")
           find_field("Quantity").value.should eq('5')
         end

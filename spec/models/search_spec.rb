@@ -15,7 +15,6 @@ describe "search" do
       order_pending.save 
     end
 
-    # subject{Search.find(Search.new({status: {status: 'pending'}}))}
     subject{Search.new({status: {status: 'pending'}}).find}
 
     it{ should include(order_pending)}

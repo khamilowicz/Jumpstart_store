@@ -38,6 +38,7 @@ group :test, :development do
   gem 'pry-rails'
   gem 'pry-plus'
   gem 'pry-stack_explorer'
+  gem 'rack_session_access'
 end
 
 group :test do

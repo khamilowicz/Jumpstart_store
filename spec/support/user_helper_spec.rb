@@ -44,6 +44,9 @@ def login user
   fill_in 'Password', with: user.password
   click_button "Sign in"
 end
+ def fast_login log_user
+    page.set_rack_session current_user_id: log_user.id 
+  end
 
 def order_some_products_for_real products
   add_products_to_cart products

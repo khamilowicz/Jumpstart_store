@@ -5,38 +5,32 @@ class Search
   include ActiveModel::Conversion
   include ActiveModel::Validations
   extend ActiveModel::Naming
+  def persisted?; false; end
 
   attr_accessor :searched
 
-  def initialize params=nil
-    if params
-      @searched = []
-      params.each do |name, search_params|
-        unless search_params.values.first.blank?
-          @searched << SearchQuery.new(name, search_params.values)
-        end
-      end
+  def initialize params={}
+    @searched = []
+    parse_searchable params
+  end
+
+  def parse_searchable params
+    params.delete_if{|n, sp| skip? sp}.each do |name, search_params|
+      searched << SearchQuery.new(name, search_params.values)
     end
   end
 
-  def persisted?; false; end
-
-  def find
-    Search.find self
+  def skip? params
+    params.values.first.blank?
   end
 
-  class << self
-
-    def find params
-      find_order params
+  def find_order
+    order = Order.scoped
+    searched.each do |query|
+      order = order.send "find_by_#{query.name}", *query.params
     end
-
-    def find_order search
-      order = Order.scoped
-      search.searched.each do |query|
-        order = order.send "find_by_#{query.name}", *query.params
-      end
-      order.all
-    end
+    order.all
   end
+
+  alias_method :find, :find_order
 end

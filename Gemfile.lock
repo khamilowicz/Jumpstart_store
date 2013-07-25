@@ -220,6 +220,9 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    rack_session_access (0.1.1)
+      builder (>= 2.0.0)
+      rack (>= 1.0.0)
     rails (3.2.13)
       actionmailer (= 3.2.13)
       actionpack (= 3.2.13)
@@ -337,6 +340,7 @@ DEPENDENCIES
   pry-plus
   pry-rails
   pry-stack_explorer
+  rack_session_access
   rails (= 3.2.13)
   rspec-rails
   sass-rails (~> 3.2.3)

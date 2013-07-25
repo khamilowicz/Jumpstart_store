@@ -14,9 +14,15 @@ describe "guest" do
       visit '/cart'
     end
 
-    it { should have_content("Guest")}
-    it { should have_link("Log in")}
-    it { should_not have_link("Log out")}
+    it {
+     should have_content("Guest")
+    # }
+    # it { 
+      should have_link("Log in")
+    # }
+    # it { 
+      should_not have_link("Log out")
+    }
   end
   
   it "can't checkout" do 
@@ -40,10 +46,17 @@ describe "guest" do
       login @user 
     end
     
-    it { should have_content( "Successfully logged in")}
-    it { should have_content("#{@user}")}
-    it { should_not have_link("Log in")}
-    it { should have_link("Log out")}
+    it { should have_content( "Successfully logged in")
+    # }
+    # it {
+     should have_content("#{@user}")
+   # }
+   #  it {
+     should_not have_link("Log in")
+   # }
+   #  it {
+     should have_link("Log out")}
+     
     it "which doesn't clear the cart" do
       visit '/cart'
       should have_short_product(@product)

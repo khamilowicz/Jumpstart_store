@@ -76,7 +76,6 @@ class ListItem < ActiveRecord::Base
 			Money.new self.joins(:product).sum(QUERY_PRICE_WITH_DISCOUNT), CURRENCY
 		end
 
-
 		private
 
 		def remove_product product_x
