@@ -3,6 +3,7 @@ var PAYMILL_PUBLIC_KEY = '22916269435eef4b426e05604ce8cc89';
 $(document).ready(function() {
   
   $("#payment-form").submit(function(event) {
+    console.log("form submitted");
     event.preventDefault();
     // Deactivate submit button to avoid further clicks
     $('.submit-button').attr("disabled", "disabled");
@@ -22,6 +23,7 @@ $(document).ready(function() {
 });
 
 function PaymillResponseHandler(error, result) {
+  console.log("ResponseHandler");
 
    $('#transaction_card-number').val(' '); // required, ohne Leerzeichen und Bindestriche
     $('#transaction_card-expiry-month').val(' '); // required

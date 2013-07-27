@@ -5,7 +5,7 @@ class Cart
   end
 
   def currency
-    self.total_price.currency
+    self.total_price.currency.iso_code
   end
 
   def empty?

@@ -6,11 +6,11 @@ NewStore::Application.routes.draw do
   post 'search' => 'search#show', as: 'searches'
   post 'search_product' => 'search#new_product', as: 'search_product'
 
-  resources :orders, except: [:create] do
+  resources :orders, except: [] do
     collection do
-      post '/create' => "orders#create", as: 'create'
+      # post '/create' => "orders#create", as: 'create'
       get '/filter' => 'orders#filter', as: 'filter'
-      post '/new' => 'orders#new'
+      get '/new' => 'orders#new'
     end
     get '/change_status' => 'orders#change_status', as: 'change_status'
   end

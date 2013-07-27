@@ -519,51 +519,11 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "spec/models/order_spec.rb",
-			"settings":
-			{
-				"buffer_size": 5205,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/controllers/orders_controller.rb",
-			"settings":
-			{
-				"buffer_size": 1844,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/workers/order_constructor.rb",
-			"settings":
-			{
-				"buffer_size": 187,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "spec/controllers/orders_controller_spec.rb",
-			"settings":
-			{
-				"buffer_size": 3431,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "config/routes.rb",
-			"settings":
-			{
-				"buffer_size": 1072,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 201.0,
+		"height": 33.0,
 		"selected_items":
 		[
 			[
@@ -1079,7 +1039,7 @@
 				"Git: Delete Branch"
 			]
 		],
-		"width": 530.0
+		"width": 449.0
 	},
 	"console":
 	{
@@ -1099,6 +1059,12 @@
 	},
 	"file_history":
 	[
+		"/home/kham/Projekty/Rails/Jumpstart_store/config/routes.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/spec/controllers/orders_controller_spec.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/order_spec.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/app/workers/order_constructor.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/app/controllers/orders_controller.rb",
+		"/home/kham/Projekty/Rails/Jumpstart_store/New_store_flow.sublime-project",
 		"/home/kham/Projekty/Rails/Jumpstart_store/Gemfile",
 		"/home/kham/Projekty/Rails/Jumpstart_store/spec/models/address_spec.rb",
 		"/home/kham/Projekty/Rails/Jumpstart_store/bootstrap_and_overrides.css",
@@ -1111,7 +1077,6 @@
 		"/home/kham/.config/sublime-text-3/Packages/RubyTest/Default (Linux).sublime-keymap",
 		"/home/kham/Projekty/Rails/Jumpstart_store/config.rb",
 		"/home/kham/.config/sublime-text-3/Packages/User/Ruby.sublime-build",
-		"/home/kham/Projekty/Rails/Jumpstart_store/New_store_flow.sublime-project",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/assets/stylesheets/_formMixins.scss",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/assets/stylesheets/category.css.scss",
 		"/home/kham/Projekty/Rails/Jumpstart_store/app/views/admin/products/_product.html.haml",
@@ -1221,12 +1186,7 @@
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/users/edit.html.haml",
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/Gemfile",
 		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/users/_form.html.haml",
-		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/assets/javascripts/all/user.js",
-		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/carts/show.js.erb",
-		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/assets/stylesheets/big_picture.css.scss",
-		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/views/orders/_short.html.haml",
-		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/assets/stylesheets/home.css.scss",
-		"/home/kham/.config/sublime-text-2/Packages/Default/Default (Linux).sublime-keymap"
+		"/home/kham/Projekty/Rails/jumpstart/New_store_flow/app/assets/javascripts/all/user.js"
 	],
 	"find":
 	{
@@ -1423,157 +1383,13 @@
 	"groups":
 	[
 		{
-			"selected": 1,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "spec/models/order_spec.rb",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5205,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								524,
-								524
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/RSpec/RSpec.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "app/controllers/orders_controller.rb",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1844,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1262,
-								1262
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 402.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "app/workers/order_constructor.rb",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 187,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								122,
-								122
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		},
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 3,
-					"file": "spec/controllers/orders_controller_spec.rb",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3431,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2840,
-								2840
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/RSpec/RSpec.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1629.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "config/routes.rb",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1072,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -1622,6 +1438,22 @@
 	"output.git":
 	{
 		"height": 329.0
+	},
+	"output.git-commit":
+	{
+		"height": 112.0
+	},
+	"output.git-flow-feature-start":
+	{
+		"height": 112.0
+	},
+	"output.git-flow-init":
+	{
+		"height": 0.0
+	},
+	"output.git-init":
+	{
+		"height": 112.0
 	},
 	"project": "New_store_flow.sublime-project",
 	"replace":
@@ -2155,6 +1987,18 @@
 		"selected_items":
 		[
 			[
+				"ne",
+				"~/Projekty/Rails/Jumpstart_store/new_flow.sublime-project"
+			],
+			[
+				"e",
+				"~/Projekty/Rails/Jumpstart_store/new_flow.sublime-project"
+			],
+			[
+				"",
+				"~/Projekty/Rails/Jumpstart_store/new_flow.sublime-project"
+			],
+			[
 				"ruby",
 				"/home/kham/Projekty/Ruby/rozne/Ruby.sublime-project"
 			],
@@ -2165,10 +2009,6 @@
 			[
 				"ru",
 				"/home/kham/Projekty/Ruby/rozne/Ruby.sublime-project"
-			],
-			[
-				"",
-				"/home/kham/Projekty/Rails/spree_shop/spree_shop.sublime-project"
 			],
 			[
 				"flow",

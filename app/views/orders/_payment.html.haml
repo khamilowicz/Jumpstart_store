@@ -1,6 +1,6 @@
-= form_for @order, id: 'payment-form', method: :post do |order|
+= form_for @order, html: {id: 'payment-form', method: :post} do |order|
   .payment-errors
-  = render partial: 'addresses/form', address: current_user.address, locals: {form: order}
+  =render partial: 'addresses/form', address: (current_user.address || current_user.build_address), locals: {form: order}
   =fields_for 'transaction' do |f|
     =f.hidden_field 'card-amount-int', { class: 'card-amount-int', value: cart.total_price.cents.to_i}
     =f.hidden_field 'card-currency', {class: 'card-currency', value: cart.currency}

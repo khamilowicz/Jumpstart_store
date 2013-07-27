@@ -34,16 +34,23 @@ class OrdersController < ApplicationController
 	end
 
 	def create
+
 		user, paymillToken = current_user, params[:paymillToken]
 		currency, address = current_user.cart.currency, params[:address]
 		payManager = PaymillManager.new
 
 		if ( payManager.transaction(user, paymillToken, currency) &&
 			OrderConstructor.construct(user, address).save )
-		render :show, notice: "Order is processed"
+		@orders = current_user.orders.all
+		flash[:notice] =  "Order is processed"
+
+		redirect_to orders_path
 	else 
+		@products = current_user.products
+		@cart = current_user.cart
+		@order = current_user.orders.new
 		flash[:errors] = payManager.error_message
-	render :new	
+		render :new	
 	end
 end
 
