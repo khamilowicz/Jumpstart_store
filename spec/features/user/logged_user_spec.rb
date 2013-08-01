@@ -2,7 +2,7 @@
 
  describe "logged user" do
 
- 
+
 
   subject{page}
   let(:user){ @current_user}
@@ -53,6 +53,15 @@
 
       it{should have_short_product( products.first) }
       it{ should have_selector('.total', text: "Total for order: $3")}
+    end
+    
+    it "order some products for real" do 
+      response = double(response_code: 20000)
+      Paymill::Transaction.stub(:create){response}
+      expect{ order_some_products_for_real products }
+      .to change{ current_user.orders.count}
+      .by(1)
+      page.should have_content("Order is processed")
     end
 
     context "after placing it" do
@@ -134,24 +143,24 @@
           # end
 
           # it "they cannot add it to a new cart" do 
-            should_not have_link "Add to cart"
-          end
+          should_not have_link "Add to cart"
         end
       end
     end
+  end
 
-    describe "Place a 'Two-Click' order from any active product page." do
-      before(:each) do
-        visit product_path(products.first)
-      end
-      it "The first click asks 'Place an order for ‘X’? and if you then click 'OK', the order is completed." do
-        pending
-        should have_button("Order")
-        click_button("Order")
-        user.orders.last.products.last.product.should eq(products.first)
-      end
+  describe "Place a 'Two-Click' order from any active product page." do
+    before(:each) do
+      visit product_path(products.first)
+    end
+    it "The first click asks 'Place an order for ‘X’? and if you then click 'OK', the order is completed." do
+      pending
+      should have_button("Order")
+      click_button("Order")
+      user.orders.last.products.last.product.should eq(products.first)
     end
   end
+end
 end
 
 context "on products he has purchased" do

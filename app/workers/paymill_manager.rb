@@ -8,7 +8,6 @@ class PaymillManager
       description: description
     }
     trans = Paymill::Transaction.create(par)
-    binding.pry
     trans.response_code == 20000 ? true : false
   end
 
