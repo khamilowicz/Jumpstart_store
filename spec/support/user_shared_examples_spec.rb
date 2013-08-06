@@ -12,6 +12,22 @@
       visit '/products' 
     end
 
+    context "can search product by title and description" do
+      let(:title){ Product.first.title}
+      let(:title_not_present){Product.last.title}
+      before(:each) do
+        visit '/'
+        within(".navbar-form"){
+          fill_in 'search', with: title
+          click_button 'Search'
+        }
+      end
+      it{
+        should have_content(title)
+        should have_no_content(title_not_present)
+      }
+    end
+
     context "while browsing products" do
 
       it {should have_short_product(@products.first)}

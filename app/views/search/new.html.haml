@@ -1,13 +1,14 @@
 Search
-=simple_form_for @search do |f|
-  =f.simple_fields_for :email do |d|
-    =d.input :email
-  =f.fields_for :status do |d|
-    =d.input :status, collection: Order::STATUSES.values, include_blank: true
-  =f.fields_for :value do |d|
-    =d.input :value, collection: %w{less more equal}, include_blank: true
-    =d.input :total_value, include_blank: true, as: :integer
-  =f.fields_for :date do |d|
-    =d.input :date, collection: %w{before after at}, include_blank: true
-    =d.input :date_value, as: :date
-  =f.submit "Search"
+.search
+  =simple_form_for @search do |f|
+    =f.simple_fields_for :email do |d|
+      =d.input :email
+    =f.fields_for :status do |d|
+      =d.input :status, collection: Order::STATUSES.values, include_blank: true
+    =f.fields_for :value do |d|
+      =d.input :value, collection: %w{less more equal}, include_blank: true
+      =d.input :total_value, include_blank: true, as: :integer
+    =f.fields_for :date do |d|
+      =d.input :date, collection: %w{before after at}, include_blank: true
+      =d.input :date_value, as: :date
+    =f.submit "Search"

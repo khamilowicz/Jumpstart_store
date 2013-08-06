@@ -46,6 +46,9 @@ class Product < ActiveRecord::Base
   delegate :photos, to: :assets
   delegate :quantity_all, to: :list_items
 
+  include PgSearch
+  pg_search_scope :search_by_title_or_description, against: [:title, :description]
+
   class << self
 
     def start_selling

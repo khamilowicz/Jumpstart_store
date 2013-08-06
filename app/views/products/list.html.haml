@@ -1,0 +1,6 @@
+.products
+  - if @products.empty?
+    Nothing found
+  - else
+    =render 'products/table_header'
+    =render presentify(@products)

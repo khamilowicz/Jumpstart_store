@@ -11,24 +11,26 @@ describe CategoriesController do
   end
 
   describe ".show" do
+    let(:id){Category.first.id}
+
     it "returns category for given id, product" do
       product = FactoryGirl.create(:product)
       product.add category: "Some category"
 
-      get :show, id: 1
+      get :show, id: id
       assigns(:category).should be_a(Category)
       assigns(:products).should include(product)
     end
 
     it "renders product index page" do
       FactoryGirl.create(:category)
-      get :show, id: 1
+      get :show, id: id
       response.should render_template('products/index')
       
     end
 
     it "returns to category index page if there is no given category" do
-      get :show, id: 1
+      get :show, id: 0
       response.should redirect_to(categories_path)
     end
   end

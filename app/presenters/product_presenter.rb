@@ -60,7 +60,7 @@
     end
 
     def photo
-      @product.photos.last
+      @product.photos.first
     end
 
     def title_param

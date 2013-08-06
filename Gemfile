@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+# source 'https://production.cf.rubygems.org'
 
 gem 'rails', '3.2.14'
 gem 'money-rails'
@@ -22,13 +23,13 @@ group :assets do
   gem 'less-rails'
   gem 'uglifier'
   # gem 'compass-rails'
-  gem 'twitter-bootstrap-rails'
 end
+  gem 'twitter-bootstrap-rails'
 
 gem 'faker'
 group :test, :development do
   gem 'zeus'
-  gem 'sqlite3'
+  # gem 'sqlite3'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'capybara'
@@ -37,7 +38,6 @@ group :test, :development do
   gem 'guard-livereload'
   gem 'pry-rails'
   gem 'pry-plus'
-  gem 'pry-stack_explorer'
   gem 'rack_session_access'
 end
 
@@ -45,16 +45,16 @@ group :test do
   gem 'shoulda-matchers'
 end
 
-group :production do
-  gem 'pg'
-end
+gem 'pg'
+gem 'pg_search'
+
 
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-gem 'capistrano'
-gem 'bullet'
-gem 'meta_request'
+  gem 'capistrano'
+  gem 'bullet'
+  gem 'meta_request'
 end
 
 gem 'launchy'

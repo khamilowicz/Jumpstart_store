@@ -4,7 +4,7 @@ class Admin::ProductsController < ApplicationController
   layout 'admin_application'
 
   def index
-    @products = Product.page params[:page]
+    @products = Product.unscoped.page params[:page]
   end
 
   def new

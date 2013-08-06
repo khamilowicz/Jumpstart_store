@@ -30,14 +30,17 @@ describe OrdersController do
     before(:each) do
       FactoryGirl.create(:order)
     end
+
+    let(:id){ Order.first.id}
+
     it "doesn't allow non-admin users" do
       current_user_is_normal
-      get :change_status, order_id: 1
+      get :change_status, order_id: id
       response.should redirect_to(new_session_path)
     end
 
     it "doesn't allow guests" do
-      get :change_status, order_id: 1
+      get :change_status, order_id: id
       response.should redirect_to(new_session_path)
     end
 
@@ -46,15 +49,16 @@ describe OrdersController do
         current_user_is_admin
       end
       it "to change status"  do
+
         current_user_is_admin
-        get :change_status, order_id: 1, status: 'cancel'
+        get :change_status, order_id: id, status: 'cancel'
         response.should redirect_to(orders_path)
         Order.first.status.should match /cancelled/
       end
 
       it "to be redirected to order page if something goes wrong" do
-        get :change_status, order_id: 1, status: 'somethingwrong'
-        response.should redirect_to(order_path(1))
+        get :change_status, order_id: id, status: 'somethingwrong'
+        response.should redirect_to(order_path(id))
         Order.first.status.should match /pending/
       end
     end

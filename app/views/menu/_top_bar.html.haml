@@ -13,5 +13,11 @@
         %li=link_to "My cart", cart_path
         %li=link_to "Orders", orders_path
         = render 'menu/admin_menu' if current_user_presenter.admin?
+        .span1
+        %li
+          =form_tag(search_product_path, class: 'navbar-form') do
+            .input-append
+              = text_field_tag :search, nil, {class: 'span2', placeholder: 'Find product'}
+              = submit_tag 'Search', {class: 'btn'}
       %ul.nav.pull-right
         = render 'sessions/menu', log_in: current_user_presenter.guest?

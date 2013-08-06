@@ -4,7 +4,7 @@ NewStore::Application.routes.draw do
 
   get 'search' => 'search#new', as: 'search'
   post 'search' => 'search#show', as: 'searches'
-  post 'search_product' => 'search#new_product', as: 'search_product'
+  post 'search_product' => 'search#product', as: 'search_product'
 
   resources :orders, except: [] do
     collection do

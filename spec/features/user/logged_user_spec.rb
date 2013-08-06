@@ -35,7 +35,7 @@
 
       click_link "Edit profile"
       fill_address "Other address"
-      find("form input[name='commit']").click
+      find(".main_content form input[name='commit']").click
       page.should have_content("Update successfull")
       page.should have_content("Other address") 
     end

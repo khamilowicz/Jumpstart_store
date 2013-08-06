@@ -78,7 +78,7 @@ def order_some_products products
 end
 
 def add_a_review review 
-  within(".new_review"){
+  within(".main_content"){
     fill_in 'review[title]', with: review.title
     fill_in 'review[body]', with: review.body
     fill_in( 'review_note', with: review.note.to_s)
@@ -92,12 +92,15 @@ def some_photo
 end 
 
 def create_new_product product
+  within(".main_content"){
+
   fill_in "Title", with: product.title
   fill_in "Description", with: product.description
   fill_in "Base price", with: product.price
   attach_file("assets_photos", some_photo)
 
   find('form input[name="commit"]').click
+  }
   # click_button "Create Product"
 end
 
