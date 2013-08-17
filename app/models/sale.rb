@@ -10,7 +10,7 @@ class Sale < ActiveRecord::Base
   class << self
 
     def new_from_params params
-      sale = self.where(name: params[:name_from_select])
+      sale = where(name: params[:name_from_select])
       .first_or_initialize
 
       sale.discount = params[:discount] if sale.new_record?
@@ -30,18 +30,18 @@ class Sale < ActiveRecord::Base
     end
 
     def get_discount
-      self.maximum(:discount) || 0
+      maximum(:discount) || 0
     end
 
     def set_discount percent, name=nil
-      self.create(discount: percent, name: name)
+      create(discount: percent, name: name)
     end
 
     def get_by_identifier identifier
       case identifier.class
-      when String then self.where(name: identifier)
-      when Fixnum then self.where(discount: identifier)
-      else self.scoped
+      when String then where(name: identifier)
+      when Fixnum then where(discount: identifier)
+      else scoped
       end
     end
   end
@@ -54,6 +54,6 @@ class Sale < ActiveRecord::Base
  private
 
  def remove_product product
-  self.products.delete product
+  products.delete product
 end
 end

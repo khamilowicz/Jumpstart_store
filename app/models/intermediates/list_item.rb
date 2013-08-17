@@ -31,24 +31,24 @@ class ListItem < ActiveRecord::Base
 	delegate :base_price, to: :product
 
 	def self.quantity_all
-		self.sum :quantity
+		sum :quantity
 	end
 
 	def self.add params
-		list_item = self.where_product(params[:product]).first
-			list_item ||= self.new # if there is one, it is increased, if none, new is created
+		list_item = where_product(params[:product]).first
+			list_item ||= new # if there is one, it is increased, if none, new is created
 			list_item.add params
 			list_item.save
 		end
 
 		def self.remove params
-			list_item = self.where_product(params[:product]).first
+			list_item = where_product(params[:product]).first
 			raise ProductNotPresent unless list_item 
 			list_item.remove params
 			list_item.save
 
 		rescue Empty
-			self.delete list_item
+			delete list_item
 		end
 
 		def remove params
@@ -64,31 +64,31 @@ class ListItem < ActiveRecord::Base
 		end
 
 		def on_discount?
-			self.discount > 0
+			discount > 0
 		end
 
 		def self.on_discount?
-			self.all.any?{|d| d.on_discount?}
+			all.any?{|d| d.on_discount?}
 		end
 
 		def self.total_price sth=nil
-			# self.all.map(&:total_price).reduce(:+) || Money.new(0, CURRENCY)
-			Money.new self.joins(:product).sum(QUERY_PRICE_WITH_DISCOUNT), CURRENCY
+			# all.map(&:total_price).reduce(:+) || Money.new(0, CURRENCY)
+			Money.new joins(:product).sum(QUERY_PRICE_WITH_DISCOUNT), CURRENCY
 		end
 
 		private
 
 		def remove_product product_x
-			raise ProductNotPresent unless self.product == product_x
+			raise ProductNotPresent unless product == product_x
 			self.quantity -= 1
-			raise Empty if self.quantity == 0
+			raise Empty if quantity == 0
 		end
 
 		def add_product item
-			if self.product == nil
+			if product == nil
 				self.product = item
 				self.discount = item.discount
-			elsif self.product == item
+			elsif product == item
 				self.quantity += 1
 			else
 				raise DiffrentProductAssignment

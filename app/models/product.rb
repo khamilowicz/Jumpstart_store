@@ -52,87 +52,87 @@ class Product < ActiveRecord::Base
   class << self
 
     def start_selling
-      self.update_all(on_sale: true);
+      update_all(on_sale: true);
     end
 
     def on_sale?
-      self.where(on_sale: true).count == self.count
+      where(on_sale: true).count == count
     end
 
     def retire
-      self.update_all(on_sale: false)
+      update_all(on_sale: false)
     end
 
     def set_discount discount, name=nil
-      self.all.each do |product|
+      all.each do |product|
         product.set_discount discount, name
       end
     end
 
     def total_price par=nil
-      # self.all.reduce(NO_PRICE){|sum, p| sum += p.total_price par} 
-      Money.new(self.sum(QUERY_PRICE_WITH_DISCOUNT), CURRENCY)
+      # all.reduce(NO_PRICE){|sum, p| sum += p.total_price par} 
+      Money.new(sum(QUERY_PRICE_WITH_DISCOUNT), CURRENCY)
     end
 
     def get_discount
-      self.all.map{|product| product.get_discount }.max
+      all.map{|product| product.get_discount }.max
     end
   end
 
   def total_price par=nil
-   return self.base_price || NO_PRICE if par == 'base'
-   return self.discount_price_calc
+   return base_price || NO_PRICE if par == 'base'
+   return discount_price_calc
  end
 
  def add param
   param.each do |name, items|
-    self.send "add_#{name}", items
+    send "add_#{name}", items
   end
 end
 
 {'start_selling' => true, 'retire' => false}.each do |name, on_sale_value|
   define_method name do
     self.on_sale = on_sale_value
-    self.save
+    save
   end
 end
 
 def set_discount percent, name=nil
-  self.sales << Sale.set_discount(percent, name); save
+  sales << Sale.set_discount(percent, name); save
 end
 
 def self.on_discount?
-  self.joins(:sales).count > 0
+  joins(:sales).count > 0
 end
 
 def on_discount?
-  self.sales.count > 0
+  sales.count > 0
 end
 
 def off_discount identifier=nil
-  self.sales.destroy_all; save
+  sales.destroy_all; save
 end
 
 def out_of_stock?
-  self.quantity == self.in_carts
+  quantity == in_carts
 end
 
 def in_carts
-  self.list_items.quantity_all
+  list_items.quantity_all
 end
 
 def on_sale?
-  self.on_sale && any_left_in_warehouse?
+  on_sale && any_left_in_warehouse?
 end
 
 def any_left_in_warehouse?
- ListItem.where_product(self).sum(:quantity) < self.quantity 
+ ListItem.where_product(self).sum(:quantity) < quantity 
 end
 
 private
 
 def create_asset
-  self.assets.create
+  assets.create
 end
 
 def add_category category
@@ -145,11 +145,11 @@ end
 
 def add_photos photos
   photos.each do |photo|
-    self.assets.create({photo: photo})
+    assets.create({photo: photo})
   end
 end
 
 def save_total_discount
-  self.discount = self.get_discount || 0
+  self.discount = get_discount || 0
 end
 end
