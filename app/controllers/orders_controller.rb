@@ -8,8 +8,10 @@ class OrdersController < ApplicationController
 		# @products = current_user.cart.products
 		@products = current_user.products
 		@cart = current_user.cart
-		@order = current_user.orders.new
+		@order = current_user.orders.new 
+		@order.address = current_user.address
 	end
+
 
 	def change_status
 		@order = Order.find(params[:order_id])

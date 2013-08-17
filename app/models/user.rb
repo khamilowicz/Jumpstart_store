@@ -5,9 +5,9 @@ class User < ActiveRecord::Base
 	has_secure_password
 
 	has_one :address
-	accepts_nested_attributes_for :address
 
 	attr_accessible :first_name, :last_name, :email, :password, :password_confirmation, :address_attributes
+	accepts_nested_attributes_for :address
 
 	validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, unless: :guest?
 	validates_uniqueness_of :email, unless: :guest?
