@@ -12,4 +12,3 @@
       =form.input :password_confirmation
   =render partial: 'addresses/form', locals: {form: form, address: (user.address || user.build_address)}
   =form.button :submit, class: 'btn btn-primary'
-  -# =link_to 'Cancel', user_path(user), class: 'btn'
